@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshCczmDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshCczm" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="car_assess_value" property="carAssessValue" jdbcType="NUMERIC" />
+    <result column="pledge_flag" property="pledgeFlag" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="vehicle_brand" property="vehicleBrand" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_id, dict_customer_type, car_assess_value, pledge_flag, dict_check_type, vehicle_brand,
+    dict_source_type, create_by, create_time, modify_by, modify_time
+  </sql>
+  
+  <!-- 保存车产信息 -->
+  <insert id="insertCczm" parameterType="com.creditharmony.approve.document.entity.ZlshCczm" >
+    insert into jk.t_jk_zlsh_cczm (id, loan_code, r_id, 
+      dict_customer_type, car_assess_value, pledge_flag, 
+      dict_check_type,vehicle_brand, dict_source_type, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{carAssessValue,jdbcType=NUMERIC}, #{pledgeFlag,jdbcType=VARCHAR}, 
+      #{dictCheckType,jdbcType=VARCHAR},#{vehicleBrand,jdbcType=VARCHAR},#{dictSourceType,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP},#{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <!-- 修改车产证明信息 -->
+  <update id="updateCczm" parameterType="com.creditharmony.approve.document.entity.ZlshCczm" >
+    update jk.t_jk_zlsh_cczm
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      r_id = #{rId,jdbcType=NUMERIC},
+      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      car_assess_value = #{carAssessValue,jdbcType=NUMERIC},
+      pledge_flag = #{pledgeFlag,jdbcType=VARCHAR},
+      dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  
+  <select id="findZlshCczms" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="BaseResultMap">
+    SELECT 
+    a.id, a.loan_code, a.r_id,a.car_assess_value,a.pledge_flag,a.dict_check_type, 
+    b.label as dictCustomerType
+    FROM jk.t_jk_zlsh_cczm a
+    LEFT JOIN jk.t_gl_dict b
+    ON type='jk_loan_man_flag' and value=a.DICT_CUSTOMER_TYPE
+    WHERE loan_code = #{loanCode} and dict_check_type=#{checkType}
+  </select>
+  
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.document.entity.ZlshCczm" >
+    insert into jk.t_jk_zlsh_cczm
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="carAssessValue != null" >
+        car_assess_value,
+      </if>
+      <if test="pledgeFlag != null" >
+        pledge_flag,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="vehicleBrand != null">
+        vehicle_brand,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="carAssessValue != null" >
+        #{carAssessValue,jdbcType=NUMERIC},
+      </if>
+      <if test="pledgeFlag != null" >
+        #{pledgeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBrand != null">
+        #{vehicleBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.document.entity.ZlshCczm" >
+    update jk.t_jk_zlsh_cczm
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        r_id = #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="carAssessValue != null" >
+        car_assess_value = #{carAssessValue,jdbcType=NUMERIC},
+      </if>
+      <if test="pledgeFlag != null" >
+        pledge_flag = #{pledgeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBrand != null">
+        vehicle_brand = #{vehicleBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+	<!-- 获取所有车产证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshCczm" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		from jk.t_jk_zlsh_cczm
+		WHERE loan_code = #{loanCode}
+			<if test="dictCustomerType != null" >
+				and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null">
+				and R_ID = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCheckType != null">
+				and DICT_CHECK_TYPE = #{dictCheckType,jdbcType=VARCHAR}
+			</if>
+			order by  create_time
+	</select>
+     <!-- 删除车产证明-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_cczm
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

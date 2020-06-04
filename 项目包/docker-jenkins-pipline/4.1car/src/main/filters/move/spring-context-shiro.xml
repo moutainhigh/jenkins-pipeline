@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+	default-lazy-init="true">
+
+	<description>Shiro Configuration</description>
+
+    <!-- 加载配置属性文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:application.properties" />
+	
+	<!-- Shiro权限过滤过滤器定义 -->
+	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				/ws/** = anon
+				/wsdl/** = anon
+				/static/** = anon
+				${adminPath}/cas = cas
+				${adminPath}/login = authc
+				${adminPath}/logout = logout
+				${adminPath}/** = user
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 安全认证过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="${adminPath}/login" />
+		<property name="successUrl" value="${adminPath}?login" />
+		<property name="filters">
+            <map>
+                <entry key="cas" value-ref="casFilter"/>
+                <entry key="authc" value-ref="customFormAuthenticationFilter"/>
+            </map>
+        </property>
+		<property name="filterChainDefinitions">
+			<ref bean="shiroFilterChainDefinitions"/>
+		</property>
+	</bean>
+	
+	<!-- CAS认证过滤器 -->  
+	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">  
+		<property name="failureUrl" value="${adminPath}/login"/>
+	</bean>
+	
+	<!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+    
+    <bean id="customAuthorizingRealm" class="com.creditharmony.approve.security.custom.CustomAuthorizingRealm">
+        <property name="credentialsMatcher" ref="customCredentialsMatcher"/>
+        <property name="cacheManager" ref="customShiroCacheManager"/>
+    </bean>
+	
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="customAuthorizingRealm"/>
+        <property name="sessionManager" ref="defaultWebSessionManager"/>
+        <property name="cacheManager" ref="customShiroCacheManager"/>
+    </bean>
+    
+    <bean id="customShiroCacheManager" class="com.creditharmony.core.security.shiro.cache.CustomShiroCacheManager">
+        <property name="shiroCacheManager" ref="jedisShiroCacheManager"/>
+    </bean>
+    
+    <bean id="jedisShiroCacheManager" class="com.creditharmony.core.security.shiro.cache.JedisShiroCacheManager">
+        <property name="jedisCluster" ref="jedisCluster"/>
+    </bean>
+    
+    <bean id="sessionDAO" class="com.creditharmony.core.security.shiro.session.CustomShiroSessionDAO">
+        <property name="shiroSessionRepository" ref="jedisShiroSessionRepository"/>
+    </bean>
+
+    <bean id="jedisShiroSessionRepository" class="com.creditharmony.core.security.shiro.session.JedisShiroSessionRepository">
+        <property name="jedisCluster" ref="jedisCluster"/>
+    </bean>
+    
+    <!-- 自定义的shiro session 监听器 -->
+    <bean id="customSessionListener" class="com.creditharmony.core.security.shiro.listener.CustomSessionListener">
+        <property name="shiroSessionRepository" ref="jedisShiroSessionRepository"/>
+    </bean>
+    
+    <!-- default web session manager,session expire time 20 minutes -->
+    <bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="${session.timeout}"/>
+        <property name="sessionDAO" ref="sessionDAO"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+        <property name="sessionListeners">
+            <list>
+                <ref bean="customSessionListener"/>
+            </list>
+        </property>
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <property name="deleteInvalidSessions" value="true"/>
+    </bean>
+    
+    <bean id="sessionValidationScheduler"
+          class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+        <property name="sessionManager" ref="defaultWebSessionManager"/>
+        <property name="interval" value="${session.validate.timespan}"/>
+    </bean>
+
+	<!-- 指定本系统SESSIONID, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
+		当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+	    <constructor-arg name="name" value="approve.session.id"/>
+	</bean>
+	
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	
+	<!-- AOP式方法级权限检查  -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    	<property name="securityManager" ref="securityManager"/>
+	</bean>
+	
+</beans>

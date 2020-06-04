@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCreditClearedDetailDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCreditClearedDetail" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="info_summary" property="infoSummary" jdbcType="VARCHAR" />
+    <result column="loan" property="loan" jdbcType="NUMERIC" />
+    <result column="trade_financing" property="tradeFinancing" jdbcType="NUMERIC" />
+    <result column="factoring" property="factoring" jdbcType="NUMERIC" />
+    <result column="notes_discounted" property="notesDiscounted" jdbcType="NUMERIC" />
+    <result column="bank_acceptance" property="bankAcceptance" jdbcType="NUMERIC" />
+    <result column="letter_credit" property="letterCredit" jdbcType="NUMERIC" />
+    <result column="letter_guarantee" property="letterGuarantee" jdbcType="NUMERIC" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, info_summary, loan, trade_financing, factoring, notes_discounted, 
+    bank_acceptance, letter_credit, letter_guarantee, sort, create_by, create_time, modify_by, 
+    modify_time
+  </sql>
+  
+  <insert id="insertCreditCreditClearedDetail" parameterType="com.creditharmony.approve.credit.entity.CreditCreditClearedDetail" >
+    insert into jk.t_jk_credit_credit_cleared_detail (id, loan_code, info_summary, 
+      loan, trade_financing, factoring, 
+      notes_discounted, bank_acceptance, letter_credit, 
+      letter_guarantee, sort, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{infoSummary,jdbcType=VARCHAR}, 
+      #{loan,jdbcType=NUMERIC}, #{tradeFinancing,jdbcType=NUMERIC}, #{factoring,jdbcType=NUMERIC}, 
+      #{notesDiscounted,jdbcType=NUMERIC}, #{bankAcceptance,jdbcType=NUMERIC}, #{letterCredit,jdbcType=NUMERIC}, 
+      #{letterGuarantee,jdbcType=NUMERIC}, #{sort,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditCreditClearedDetail" >
+    update jk.t_jk_credit_credit_cleared_detail
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSummary != null" >
+        info_summary = #{infoSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="loan != null" >
+        loan = #{loan,jdbcType=NUMERIC},
+      </if>
+      <if test="tradeFinancing != null" >
+        trade_financing = #{tradeFinancing,jdbcType=NUMERIC},
+      </if>
+      <if test="factoring != null" >
+        factoring = #{factoring,jdbcType=NUMERIC},
+      </if>
+      <if test="notesDiscounted != null" >
+        notes_discounted = #{notesDiscounted,jdbcType=NUMERIC},
+      </if>
+      <if test="bankAcceptance != null" >
+        bank_acceptance = #{bankAcceptance,jdbcType=NUMERIC},
+      </if>
+      <if test="letterCredit != null" >
+        letter_credit = #{letterCredit,jdbcType=NUMERIC},
+      </if>
+      <if test="letterGuarantee != null" >
+        letter_guarantee = #{letterGuarantee,jdbcType=NUMERIC},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<!-- 根据借款编号查询 -->
+	<select id="getByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			jk.t_jk_credit_credit_cleared_detail
+		where
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+			order by sort
+	</select>
+</mapper>

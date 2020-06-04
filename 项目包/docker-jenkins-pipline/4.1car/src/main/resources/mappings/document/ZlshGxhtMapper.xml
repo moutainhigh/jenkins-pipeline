@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshGxhtDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshGxht" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="gxht_signed_type" property="gxhtSignedType" jdbcType="VARCHAR" />
+    <result column="gxht_company_name" property="gxhtCompanyName" jdbcType="VARCHAR" />
+    <result column="dict_contract_type" property="dictContractType" jdbcType="VARCHAR" />
+    <result column="gxht_contract_amount" property="gxhtContractAmount" jdbcType="NUMERIC" />
+    <result column="gxht_contract_deadline" property="gxhtContractDeadline" jdbcType="TIMESTAMP" />
+    <result column="dict_settlement_type" property="dictSettlementType" jdbcType="VARCHAR" />
+    <result column="company_tel" property="companyTel" jdbcType="VARCHAR" />
+    <result column="dict_tel_source" property="dictTelSource" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="edit_remark" property="editRemark" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_customer_coborrower_id, dict_customer_type, gxht_signed_type, gxht_company_name, dict_contract_type, 
+    gxht_contract_amount, gxht_contract_deadline, dict_settlement_type, dict_tel_source, company_tel,
+    dict_check_type, edit_remark , dict_check_type,create_by, create_time, modify_by, modify_time
+  </sql>
+    <resultMap id="myResultMap" type="com.creditharmony.approve.document.entity.ex.ContractEx" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="NUMERIC" />
+    <result column="gxht_signed_type" property="gxhtSignedType" jdbcType="VARCHAR" />
+    <result column="gxht_company_name" property="gxhtCompanyName" jdbcType="VARCHAR" />
+    <result column="dict_contract_type" property="dictContractType" jdbcType="VARCHAR" />
+    <result column="gxht_contract_amount" property="gxhtContractAmount" jdbcType="NUMERIC" />
+    <result column="gxht_contract_deadline" property="gxhtContractDeadline" jdbcType="TIMESTAMP" />
+    <result column="dict_settlement_type" property="dictSettlementType" jdbcType="VARCHAR" />
+    <result column="dict_tel_source" property="dictTelSource" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+ 	 <collection property="dhzhGxhtDhxx" resultMap="myResult" javaType="java.util.ArrayList"></collection>            
+  </resultMap>
+      <resultMap id="myResult" type="com.creditharmony.approve.phone.entity.DhzhGxhtDhxx">
+            <result column="gxht_tel" property="gxhtTel"/>
+            <result column="gxht_assess_result" property="gxhtAssessResult"/>  
+            <result column="gxht_remark" property="gxhtRemark"/>  
+    </resultMap>
+
+  <!--gxht_assess_result  0 1 2 正常 异常 无效  -->
+
+  <select id="findContractExs" resultType="com.creditharmony.approve.document.entity.ZlshGxht" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+  SELECT a.id,a.loan_code,a.gxht_company_name,a.gxht_signed_type,a.gxht_contract_amount,a.dict_settlement_type,a.gxht_contract_deadline,
+		f.label as dict_customer_type
+  FROM jk.T_JK_ZLSH_GXHT a
+  LEFT JOIN jk.t_gl_dict f
+  ON f.type='jk_loan_man_flag' and f.value=a.DICT_CUSTOMER_TYPE
+  WHERE a.loan_code=#{loanCode} 
+    and a.dict_check_type=#{checkType} 
+  </select>
+  
+  <!-- 保存购销合同 -->
+  <insert id="insertGxht" parameterType="com.creditharmony.approve.document.entity.ZlshGxht" >
+    insert into jk.t_jk_zlsh_gxht (id, loan_code, r_customer_coborrower_id, 
+      dict_customer_type, gxht_signed_type, gxht_company_name, 
+      dict_contract_type, gxht_contract_amount, gxht_contract_deadline, 
+      dict_settlement_type, company_tel, dict_tel_source, dict_check_type,
+      edit_remark, dict_source_type, create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{gxhtSignedType,jdbcType=VARCHAR}, #{gxhtCompanyName,jdbcType=VARCHAR}, 
+      #{dictContractType,jdbcType=VARCHAR}, #{gxhtContractAmount,jdbcType=NUMERIC}, #{gxhtContractDeadline,jdbcType=TIMESTAMP}, 
+      #{dictSettlementType,jdbcType=VARCHAR}, #{companyTel,jdbcType=VARCHAR}, #{dictTelSource,jdbcType=VARCHAR}, 
+      #{dictCheckType,jdbcType=VARCHAR}, #{editRemark,jdbcType=VARCHAR}, #{dictSourceType,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <!-- 修改购销合同 -->
+	<update id="updateGxht" parameterType="com.creditharmony.approve.document.entity.ZlshGxht" >
+	update jk.t_jk_zlsh_gxht
+	<set >
+		<if test="gxhtSignedType != null" >
+			gxht_signed_type = #{gxhtSignedType,jdbcType=VARCHAR},
+		</if>
+		<if test="gxhtCompanyName != null" >
+			gxht_company_name = #{gxhtCompanyName,jdbcType=VARCHAR},
+		</if>
+		<if test="dictContractType != null" >
+			dict_contract_type = #{dictContractType,jdbcType=VARCHAR},
+		</if>
+		<if test="gxhtContractAmount != null" >
+			gxht_contract_amount = #{gxhtContractAmount,jdbcType=NUMERIC},
+		</if>
+		<if test="gxhtContractDeadline != null" >
+			gxht_contract_deadline = #{gxhtContractDeadline,jdbcType=TIMESTAMP},
+		</if>
+		<if test="dictSettlementType != null" >
+			dict_settlement_type = #{dictSettlementType,jdbcType=VARCHAR},
+		</if>
+		<if test="companyTel != null" >
+			company_tel = #{companyTel,jdbcType=VARCHAR},
+		</if>
+		<if test="dictTelSource != null" >
+			dict_tel_source = #{dictTelSource,jdbcType=VARCHAR},
+		</if>
+		<if test="dictCheckType != null" >
+			dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+		</if>
+		<if test="editRemark != null" >
+			edit_remark = #{editRemark,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyBy != null" >
+			modify_by = #{modifyBy,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyTime != null" >
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		</if>
+	</set>
+	where id = #{id,jdbcType=NUMERIC}
+	</update>
+  
+    <!-- 获取购销合同资料证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshGxht" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		from jk.t_jk_zlsh_gxht
+		WHERE loan_code = #{loanCode}
+			<if test="dictCustomerType != null" >
+				and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null">
+				and R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCheckType != null">
+				and DICT_CHECK_TYPE = #{dictCheckType,jdbcType=VARCHAR}
+			</if>
+			order by create_time
+  </select>
+     <!-- 删除购销合同资料证明-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_gxht
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhGxhtDhxxDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckBusiContractEx" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_gxht_id" property="rGxhtId" jdbcType="NUMERIC" />
+    <result column="gxht_tel" property="gxhtTel" jdbcType="VARCHAR" />
+    <result column="gxht_assess_result" property="gxhtAssessResult" jdbcType="VARCHAR" />
+    <result column="gxht_remark" property="gxhtRemark" jdbcType="VARCHAR" />
+    <result column="dict_tel_source" property="dictTelSource" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="createTime" jdbcType="TIMESTAMP" />
+    <collection property="dhlyxx" resultMap="dhly" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  
+  <resultMap id="dhly" type="com.creditharmony.approve.phone.entity.DhzhDhlyxx">
+  	<result column="ly_id" property="id" jdbcType="VARCHAR" />
+  	<result column="r_gx_id" property="rGxId" jdbcType="VARCHAR" />
+  	<result column="dhlyxx_tel" property="dhlyxxTel" jdbcType="VARCHAR" />
+    <result column="dhlyxx_call_time" property="dhlyxxCallTime" jdbcType="TIMESTAMP" />
+    <result column="dhlyxx_answer_state" property="dhlyxxAnswerState" jdbcType="VARCHAR" />
+    <result column="dhlyxx_answer_inf" property="dhlyxxAnswerInf" jdbcType="VARCHAR" />
+    <result column="dict_voice_source" property="dictVoiceSource" jdbcType="VARCHAR" />
+    <result column="file_path" property="dhlyxxFilePath" jdbcType="VARCHAR" />
+	<result column="dhlyxx_remark" property="dhlyxxRemark" jdbcType="VARCHAR" />
+  </resultMap>  
+	
+	<select id="findListByLoanCode" resultMap="BaseResultMap" parameterType="java.util.Map">
+	select
+		ht.gxht_company_name,
+    	a.id,
+    	a.r_gxht_id,
+    	a.gxht_tel,
+    	a.gxht_assess_result,
+    	a.gxht_remark,
+    	b.id as ly_id,
+  		b.r_gx_id,
+  		b.dhlyxx_tel,
+  		b.dhlyxx_call_time,
+  		b.dhlyxx_answer_state,
+  		b.dhlyxx_answer_inf,  		
+  		b.dict_voice_source,
+  		b.file_path,
+  		b.dhlyxx_remark      	      	
+      from t_jk_zlsh_gxht ht
+      	left join jk.t_jk_dhzh_gxht_dhxx a on a.r_gxht_id=ht.id
+      	left join jk.t_jk_dhzh_dhlyxx b ON a.id = b.r_gx_id		
+	where 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and ht.loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and ht.dict_customer_type = #{dictCustomerType}
+		</if>
+		<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+			and ht.r_customer_coborrower_id = #{rCustomerCoborrowerId}
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and ht.dict_check_type = #{dictCheckType}
+		</if>
+		order by a.create_time, b.create_time
+	</select>	
+	
+		
+  <insert id="insert" parameterType="com.creditharmony.approve.phone.entity.DhzhGxhtDhxx" >
+    insert into jk.t_jk_dhzh_gxht_dhxx (id, r_gxht_id, gxht_tel, 
+      gxht_assess_result, gxht_remark, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=NUMERIC}, #{rGxhtId,jdbcType=NUMERIC}, #{gxhtTel,jdbcType=VARCHAR}, 
+      #{gxhtAssessResult,jdbcType=VARCHAR}, #{gxhtRemark,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhGxhtDhxx" >
+    insert into jk.t_jk_dhzh_gxht_dhxx
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rGxhtId != null" >
+        r_gxht_id,
+      </if>
+      <if test="gxhtTel != null" >
+        gxht_tel,
+      </if>
+      <if test="gxhtAssessResult != null" >
+        gxht_assess_result,
+      </if>
+      <if test="gxhtRemark != null" >
+        gxht_remark,
+      </if>
+      <if test="dictTelSource != null">
+        dict_tel_source,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="createTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rGxhtId != null" >
+        #{rGxhtId,jdbcType=NUMERIC},
+      </if>
+      <if test="gxhtTel != null" >
+        #{gxhtTel,jdbcType=VARCHAR},
+      </if>
+      <if test="gxhtAssessResult != null" >
+        #{gxhtAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="gxhtRemark != null" >
+        #{gxhtRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null">
+        #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+	
+  <update id="updateSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhGxhtDhxx" >
+    update jk.t_jk_dhzh_gxht_dhxx
+    <set >
+      <if test="gxhtTel != null" >
+        gxht_tel = #{gxhtTel,jdbcType=VARCHAR},
+      </if>
+      <if test="gxhtAssessResult != null" >
+        gxht_assess_result = #{gxhtAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="gxhtRemark != null" >
+        gxht_remark = #{gxhtRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null">
+        dict_tel_source = #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>		
+  
+    <update id="updateSelectiveByRid" parameterType="com.creditharmony.approve.phone.entity.DhzhGxhtDhxx" >
+    update jk.t_jk_dhzh_gxht_dhxx
+    <set >
+      <if test="gxhtTel != null" >
+        gxht_tel = #{gxhtTel,jdbcType=VARCHAR},
+      </if>
+      <if test="gxhtRemark != null" >
+        gxht_remark = #{gxhtRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null">
+        dict_tel_source = #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where r_gxht_id = #{rGxhtId}
+  </update>  
+	<delete id="deleteByRid" parameterType="java.lang.String" >
+		DELETE 
+			from jk.t_jk_dhzh_gxht_dhxx
+		WHERE r_gxht_id = #{rId,jdbcType=VARCHAR}
+  </delete>
+</mapper>

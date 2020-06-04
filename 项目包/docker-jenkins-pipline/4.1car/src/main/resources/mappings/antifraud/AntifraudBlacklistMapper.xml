@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudBlacklistDao" >
+  <sql id="Base_Column_List" >
+    id,
+    loan_code, 
+    dict_mark_type, 
+    dict_blacklist_type, 
+    blacklist_msg, 
+    blacklist_risk_msg, 
+    blacklist_relation, 
+    create_by, 
+    create_time,
+    modify_by, 
+    modify_time
+  </sql>
+  
+  <select id="getAntifraudBlacklist" parameterType="java.util.Map" resultType="com.creditharmony.approve.antifraud.entity.ex.AntifraudBlacklistEx" >
+	select 
+	    black.id,
+	    black.loan_code_now, 
+	    black.rules_code, 
+	    black.loan_code, 
+	    black.dict_mark_type, 
+		dict.label as dict_blacklist_type, 
+		black.blacklist_msg, 
+		black.blacklist_risk_msg, 
+		black.blacklist_relation,
+		black.add_black_type,
+		to_afraud.to_afraud_flag,
+		r.refuse_resion
+	from 
+		jk.t_jk_antifraud_blacklist black
+	left join
+		t_gl_dict dict 
+	on 
+		black.dict_blacklist_type = dict.value and type = 'jk_afraud_list_type'
+	FULL JOIN 
+	(
+		
+		select 
+			blac.loan_code as acode,count(judge.loan_code) as to_afraud_flag
+			
+		from 
+			t_jk_antifraud_blacklist blac
+		left join
+			t_jk_antifraud_judge judge 
+		on
+			blac.loan_code = judge.loan_code 
+		where  
+			blac.rules_code =  #{rulesCode} and blac.loan_code_now =  #{loanCode}
+		group by blac.loan_code
+		
+	) as to_afraud
+	on black.loan_code = to_afraud.acode
+	FULL JOIN 
+	(
+		select 
+			judge.loan_code,
+			concat(dict.label,'/',refuse.refuse_name) as refuse_resion
+		from 
+			t_jk_antifraud_judge judge
+		left join 
+			t_gl_dict dict 
+		on
+			judge.dict_case_result = dict.value and type = 'jk_black_grey_list'
+		left join 
+			t_gl_refuse refuse 
+		on
+			judge.dict_judge_second_code = refuse.refuse_code 
+		where judge.loan_code in
+
+			(
+			select 
+			
+				blac.loan_code
+			from 
+				t_jk_antifraud_judge judge 
+				
+			left join
+				t_jk_antifraud_blacklist blac
+			on
+				blac.loan_code_now = judge.loan_code 
+			where judge.loan_code= #{loanCode}
+			group by blac.loan_code
+			)
+	) as r
+	on r.loan_code = black.loan_code
+	where 
+		rules_code =  #{rulesCode}
+	and 
+		loan_code_now =  #{loanCode}
+		
+  </select>  
+</mapper>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.internet.dao.PrivateNetworkCheckDao">
+
+	<resultMap id="BaseResultMap"
+		type="com.creditharmony.approve.internet.entity.PrivateNetworkCheck">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+		<result column="dict_check_type" property="dictCheckType"
+			jdbcType="VARCHAR" />
+		<result column="rel_id" property="relId" jdbcType="VARCHAR" />
+		<result column="dict_customer_type" property="dictCustomerType"
+			jdbcType="VARCHAR" />
+		<result column="check_type" property="checkType" jdbcType="VARCHAR" />
+		<result column="config_id" property="configId" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="flag" property="flag" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="work_id" property="workId" jdbcType="VARCHAR" />
+		<result column="dict_source_type" property="dictSourceType"
+			jdbcType="VARCHAR" />
+		<result column="relationship" property="relationship" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<delete id="deleteByRelId" parameterType="java.lang.String">
+		DELETE FROM
+		JK.T_JK_PRIVATE_NETWORK_CHECK
+		WHERE CONTENT = #{1} AND WORK_ID=#{0}
+	</delete>
+	<!-- 保存专网信息核查信息 -->
+	<insert id="insertNetwork" parameterType="java.util.Map">
+		insert into jk.t_jk_private_network_check
+		(id,loan_code,dict_check_type,rel_id,dict_customer_type,check_type,
+		config_id,result,remark,content,flag,create_by,create_time,modify_by,modify_time,name,work_id,relationship)
+		values
+		<foreach collection="netWorks" item="item" index="index"
+			separator=",">
+			(#{item.id,jdbcType=VARCHAR},#{item.loanCode,jdbcType=VARCHAR},#{item.dictCheckType,jdbcType=VARCHAR},
+			#{item.relId,jdbcType=VARCHAR},#{item.dictCustomerType,jdbcType=VARCHAR},#{item.checkType,jdbcType=VARCHAR},
+			#{item.configId,jdbcType=VARCHAR},#{item.result,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},
+			#{item.content,jdbcType=VARCHAR},#{item.flag,jdbcType=VARCHAR},#{item.createBy,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=TIMESTAMP},#{item.modifyBy,jdbcType=VARCHAR},#{item.modifyTime,jdbcType=TIMESTAMP},
+			#{item.name,jdbcType=VARCHAR},#{item.workId,jdbcType=VARCHAR},#{item.relationship,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	<!-- 查询对应的专网核查信息 -->
+	<select id="findList" resultMap="BaseResultMap"
+		parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+		SELECT
+		A.ID,B.URL AS CONFIG_ID,B.NETNAME AS
+		REL_ID,A.RESULT,A.REMARK,A.CONTENT,A.FLAG,A.NAME,A.RELATIONSHIP
+		FROM
+		JK.T_JK_PRIVATE_NETWORK_CHECK A
+		LEFT JOIN
+		JK.T_JK_PRIVATE_NETWORK_CONFIG B ON A.CONFIG_ID = B.ID
+		WHERE 1=1
+		<if test="loanCode != null and loanCode != ''">
+			AND A.LOAN_CODE = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			AND A.DICT_CUSTOMER_TYPE = #{type}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			AND A.DICT_CHECK_TYPE = #{checkType}
+		</if>
+		<if test="relId != null and relId != ''">
+			AND A.REL_ID = #{relId}
+		</if>
+		ORDER BY A.FLAG DESC,A.CONTENT
+	</select>
+	<update id="updateNetworks">
+		<foreach collection="netWorks" item="item" index="index">
+			update jk.t_jk_private_network_check
+			<set>
+				<if test="item.loanCode != null">
+					loan_code = #{item.loanCode,jdbcType=VARCHAR},
+				</if>
+				<if test="item.modifyTime != null">
+					modify_time = #{item.modifyTime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="item.modifyBy != null">
+					modify_by = #{item.modifyBy,jdbcType=VARCHAR},
+				</if>
+				<if test="item.createTime != null">
+					create_time = #{item.createTime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="item.createBy != null">
+					create_by = #{item.createBy,jdbcType=VARCHAR},
+				</if>
+				<if test="item.flag != null">
+					flag = #{item.flag,jdbcType=VARCHAR},
+				</if>
+				<if test="item.content != null">
+					content = #{item.content,jdbcType=VARCHAR},
+				</if>
+				<if test="item.remark != null">
+					remark = #{item.remark,jdbcType=VARCHAR},
+				</if>
+				<if test="item.result != null">
+					result = #{item.result,jdbcType=VARCHAR},
+				</if>
+				<if test="item.configId != null">
+					config_id = #{item.configId,jdbcType=VARCHAR},
+				</if>
+				<if test="item.checkType != null">
+					check_type = #{item.checkType,jdbcType=VARCHAR},
+				</if>
+				<if test="item.dictCustomerType != null">
+					dict_customer_type =
+					#{item.dictCustomerType,jdbcType=VARCHAR},
+				</if>
+				<if test="item.relId != null">
+					rel_id = #{item.relId,jdbcType=VARCHAR},
+				</if>
+				<if test="item.dictCheckType != null">
+					dict_check_type =
+					#{item.dictCheckType,jdbcType=VARCHAR},
+				</if>
+			</set>
+			where id=#{item.id,jdbcType=VARCHAR};
+		</foreach>
+	</update>
+	<update id="updateByCodeName"
+		parameterType="com.creditharmony.approve.phone.entity.ex.TelAuditWorkEx">
+		UPDATE JK.T_JK_PRIVATE_NETWORK_CHECK
+		<set>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnitname != null">
+				CONTENT = #{workUnitname,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE LOAN_CODE=#{loanCode} AND WORK_ID=#{id} AND REL_ID =
+		#{rCustomerCoborrowerId}
+	</update>
+	<select id="findListByCodeType" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		id,loan_code,dict_check_type,rel_id,dict_customer_type,check_type,
+		config_id,result,remark,content,flag,name,work_id,dict_source_type,relationship
+		from jk.t_jk_private_network_check a
+		where 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and a.dict_check_type = #{checkType}
+		</if>
+		order by a.FLAG DESC,a.CONTENT
+	</select>
+	<insert id="insertNetList"
+		parameterType="com.creditharmony.approve.internet.entity.PrivateNetworkCheck">
+		insert into jk.t_jk_private_network_check
+		(id,loan_code,dict_check_type,rel_id,dict_customer_type,check_type,config_id,result,
+		remark,content,flag,create_by,create_time,modify_by,modify_time,name,work_id,dict_source_type,relationship)
+		values
+		<foreach collection="privateNets" item="item" index="index"
+			separator=",">
+			(#{item.id,jdbcType=VARCHAR},#{item.loanCode,jdbcType=VARCHAR},#{item.dictCheckType,jdbcType=VARCHAR},
+			#{item.relId,jdbcType=VARCHAR},#{item.dictCustomerType,jdbcType=VARCHAR},#{item.checkType,jdbcType=VARCHAR},
+			#{item.configId,jdbcType=VARCHAR},#{item.result,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},
+			#{item.content,jdbcType=VARCHAR},#{item.flag,jdbcType=VARCHAR},#{item.createBy,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=TIMESTAMP},#{item.modifyBy,jdbcType=VARCHAR},#{item.modifyTime,jdbcType=TIMESTAMP},
+			#{item.name,jdbcType=VARCHAR},#{item.workId,jdbcType=VARCHAR},#{item.dictSourceType,jdbcType=VARCHAR},#{item.relationship,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	<delete id="deleteByRelIdNew" parameterType="java.lang.String">
+		DELETE FROM
+		JK.T_JK_PRIVATE_NETWORK_CHECK
+		WHERE work_id = #{0}
+	</delete>
+	<update id="updateNetworksNew"
+		parameterType="com.creditharmony.approve.internet.entity.PrivateNetworkCheck">
+		update jk.t_jk_private_network_check
+		<set>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="relationship != null">
+				relationship = #{relationship,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where work_id = #{workId,jdbcType=VARCHAR} and loan_code =
+		#{loanCode,jdbcType=VARCHAR} and dict_customer_type =
+		#{dictCustomerType,jdbcType=VARCHAR} and rel_id =
+		#{relId,jdbcType=VARCHAR} and dict_check_type =
+		#{dictCheckType,jdbcType=VARCHAR}
+	</update>
+	<select id="findListByWorkId" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		id,loan_code,dict_check_type,rel_id,dict_customer_type,check_type,
+		config_id,result,remark,content,flag,name,work_id,dict_source_type,relationship
+		from jk.t_jk_private_network_check a
+		where a.loan_code = #{loanCode}
+		and a.work_id = #{workId}
+	</select>
+
+</mapper>

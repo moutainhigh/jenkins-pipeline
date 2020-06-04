@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntiFraudCompletedListDao">
+	<resultMap id="entityMap" type="com.creditharmony.approve.verify.entity.ex.VerifyListEx">
+		<result property="loanCode" column="LOAN_CODE" jdbcType="VARCHAR"/>
+		<result property="applyId" column="APPLY_ID" jdbcType="VARCHAR"/>
+		<result property="loanCustomerName" column="LOAN_CUSTOMER_NAME" jdbcType="VARCHAR"/>
+		<result property="customerCertNum" column="CUSTOMER_CERT_NUM" jdbcType="VARCHAR"/>
+		<result property="province" column="PROVINCE" jdbcType="VARCHAR"/>
+		<result property="provinceName" column="PROVINCENAME" jdbcType="VARCHAR"/>
+		<result property="city" column="CITY" jdbcType="VARCHAR"/>
+		<result property="cityName" column="CITYNAME" jdbcType="VARCHAR"/>
+		<result property="loanTermOrgId" column="LOANTERMORGID" jdbcType="VARCHAR"/>
+		<result property="orgName" column="ORG_NAME" jdbcType="VARCHAR"/>
+		<result property="productType" column="PRODUCT_TYPE" jdbcType="VARCHAR"/>
+		<result property="productTypeName" column="PRODUCTTYPENAME" jdbcType="VARCHAR"/>
+		<result property="loanUrgentFlag" column="LOAN_URGENT_FLAG" jdbcType="VARCHAR"/>
+		<result property="loanApplyAmount" column="LOAN_APPLY_AMOUNT" jdbcType="NUMERIC"/>
+		<result property="auditAmount" column="AUDIT_AMOUNT" jdbcType="NUMERIC"/><!-- 批复金额 -->
+		<result property="outtoLoanTime" column="OUTTO_LOAN_TIME" jdbcType="TIMESTAMP"/>
+		<result property="transactorTime" column="LOAN_AUDIT_TIME" jdbcType="TIMESTAMP"/>
+		<result property="dictLoanStatus" column="DICT_LOAN_STATUS" jdbcType="VARCHAR"/>
+		<result property="transactorCode" column="TRANSACTOR_CODE" jdbcType="VARCHAR"/>
+		<result property="coborroweCount" column="COBORROWE_COUNT" jdbcType="VARCHAR"/>
+		<result property="offendSalesName" column="SALES_NAME"/>
+		<result property="loanTeamEmpcode" column="TEAM_NAME"/>
+		<result property="loanMonths" column="LOAN_MONTHS"/>
+		<result property="result" column="RESULT"/>
+		<result property="judgeTime" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+		<result property="loanInfoOldOrNewFlag" column="loaninfo_oldornew_flag" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 反欺诈 专员 查询已办列表 -->
+	<select id="queryList" resultMap="entityMap">
+		SELECT AR.ID,P.PRODUCT_NAME PRODUCTTYPENAME,D.LABEL LOAN_URGENT_FLAG,PC1.AREA_NAME PROVINCENAME,
+			   PC2.AREA_NAME CITYNAME,LCO.COUNT COBORROWE_COUNT,D4.LABEL DICT_LOAN_STATUS,
+			   CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,
+			   O.NAME ORG_NAME,LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.MODIFY_TIME,LI.OUTTO_LOAN_TIME,
+			   LI.APPLY_ID,LI.LOAN_MONTHS,LC.CUSTOMER_CERT_NUM,LI.LOAN_APPLY_AMOUNT,LI.loaninfo_oldornew_flag,
+			   AR.TRANSACTOR_CODE,U1.NAME SALES_NAME,U2.NAME TEAM_NAME
+		FROM ( SELECT * FROM JK.T_JK_AUDIT_RECORD WHERE TRANSACTOR_CODE =#{transactorCode,jdbcType=VARCHAR} AND OPERATE_STEP = '8') AR
+		LEFT JOIN JK.T_JK_LOAN_INFO LI ON AR.LOAN_CODE = LI.LOAN_CODE
+		LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON LI.LOAN_CODE = LC.LOAN_CODE
+		LEFT JOIN JK.T_JK_LOAN_COBORROWER LCO ON LCO.LOAN_CODE = AR.LOAN_CODE
+		LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID
+		LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+		LEFT JOIN JK.T_GL_DICT D ON D.VALUE = LI.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag'
+		LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = AR.OPERATE_RESULT AND D2.TYPE = 'jk_check_result'
+		LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = AR.OPERATE_STEP AND D3.TYPE = 'jk_check_type'
+		LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+		LEFT JOIN JK.T_GL_USER U1 ON U1.ID=LI.LOAN_MANAGERCODE
+		LEFT JOIN JK.T_GL_USER U2 ON U2.ID=LI.LOAN_TEAM_MANAGERCODE
+		<where>
+		    1=1
+			<if test="loanCustomerName != null and loanCustomerName != ''">
+				AND LI.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+			</if>
+			<if test="customerCertNum != null and customerCertNum != ''">
+				AND lc.CUSTOMER_CERT_NUM like CONCAT(CONCAT('%',#{customerCertNum,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="productType != null and productType != ''">
+				AND p.PRODUCT_CODE = #{productType,jdbcType=VARCHAR}
+			</if>
+			<if test="province != null and province != ''">
+				AND pc1.AREA_NAME = #{province,jdbcType=VARCHAR}
+				<if test="city != null and city != ''">
+					AND pc2.AREA_NAME = #{city,jdbcType=VARCHAR}
+				</if>
+			</if>
+			<if test="loanTermOrgId != null and loanTermOrgId != ''">
+					AND li.LOAN_TEAM_ORGID = #{loanTermOrgId,jdbcType=VARCHAR}
+				</if>
+			<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+				AND <![CDATA[ li.OUTTO_LOAN_TIME >= #{minCustomerIntoTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+				AND <![CDATA[ li.OUTTO_LOAN_TIME <= #{maxCustomerIntoTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+				AND U2.NAME LIKE CONCAT('%',#{loanTeamEmpcode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="offendSalesName != null and offendSalesName != ''">
+				AND U1.NAME LIKE CONCAT('%',#{offendSalesName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="loanCode != null and loanCode != ''">
+				AND AR.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="orgName != null and orgName != ''">
+					AND O.NAME = #{orgName}
+			</if>	
+		</where>
+		GROUP BY AR.ID,P.PRODUCT_NAME,D.LABEL,PC1.AREA_NAME,PC2.AREA_NAME,D2.LABEL,LI.OUTTO_LOAN_TIME,
+		         O.NAME,LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.MODIFY_TIME,AR.TRANSACTOR_CODE,D3.LABEL,D4.LABEL,
+		         LI.APPLY_ID,LI.LOAN_MONTHS,LI.loaninfo_oldornew_flag,LC.CUSTOMER_CERT_NUM,LI.LOAN_APPLY_AMOUNT,U1.NAME,U2.NAME
+		<if test="orderBy != null and orderBy != '' ">
+			ORDER BY ${orderBy} NULLS LAST
+		</if>	
+	</select>
+	<!-- 反欺诈 经理   查询所有 反欺诈 已办列表 -->
+	<select id="queryAllList" resultMap="entityMap">
+		SELECT AR.ID,P.PRODUCT_NAME PRODUCTTYPENAME,D.LABEL LOAN_URGENT_FLAG,PC1.AREA_NAME PROVINCENAME,
+			   PC2.AREA_NAME CITYNAME,LCO.COUNT COBORROWE_COUNT,D4.LABEL DICT_LOAN_STATUS,
+			   CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,
+			   O.NAME ORG_NAME,LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.MODIFY_TIME,LI.OUTTO_LOAN_TIME,
+			   LI.APPLY_ID,LI.LOAN_MONTHS,LC.CUSTOMER_CERT_NUM,LI.LOAN_APPLY_AMOUNT,LI.loaninfo_oldornew_flag,
+			   AR.TRANSACTOR_CODE,U1.NAME SALES_NAME,U2.NAME TEAM_NAME,U3.NAME as TRANSACTOR_NAME
+		FROM (
+				<foreach collection="orgIds" item="orgId" separator="UNION ALL">
+					SELECT 
+						ID,LOAN_CODE,OPERATE_STEP,OPERATE_RESULT,MODIFY_TIME,TRANSACTOR_CODE
+    				FROM 
+    					JK.T_JK_AUDIT_RECORD
+    				WHERE 
+    					ORG_CODE=#{orgId} AND OPERATE_STEP='8'
+		        </foreach>
+			 ) AR
+		LEFT JOIN JK.T_JK_LOAN_INFO LI ON AR.LOAN_CODE = LI.LOAN_CODE
+		LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON LI.LOAN_CODE = LC.LOAN_CODE
+		LEFT JOIN JK.T_JK_LOAN_COBORROWER LCO ON LCO.LOAN_CODE = AR.LOAN_CODE
+		LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID
+		LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+		LEFT JOIN JK.T_GL_DICT D ON D.VALUE = LI.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag'
+		LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = AR.OPERATE_RESULT AND D2.TYPE = 'jk_check_result'
+		LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = AR.OPERATE_STEP AND D3.TYPE = 'jk_check_type'
+		LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+		LEFT JOIN JK.T_GL_USER U1 ON U1.ID=LI.LOAN_MANAGERCODE
+		LEFT JOIN JK.T_GL_USER U2 ON U2.ID=LI.LOAN_TEAM_MANAGERCODE
+		LEFT JOIN JK.T_GL_USER U3 ON U3.ID=AR.TRANSACTOR_CODE
+		<where>
+		    1=1
+			<if test="loanCustomerName != null and loanCustomerName != ''">
+				AND LI.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+			</if>
+			<if test="customerCertNum != null and customerCertNum != ''">
+				AND lc.CUSTOMER_CERT_NUM like CONCAT(CONCAT('%',#{customerCertNum,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="productType != null and productType != ''">
+				AND p.PRODUCT_CODE = #{productType,jdbcType=VARCHAR}
+			</if>
+			<if test="province != null and province != ''">
+				AND pc1.AREA_NAME = #{province,jdbcType=VARCHAR}
+				<if test="city != null and city != ''">
+					AND pc2.AREA_NAME = #{city,jdbcType=VARCHAR}
+				</if>
+			</if>
+			<if test="loanTermOrgId != null and loanTermOrgId != ''">
+					AND li.LOAN_TEAM_ORGID = #{loanTermOrgId,jdbcType=VARCHAR}
+				</if>
+			<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+				AND <![CDATA[ li.OUTTO_LOAN_TIME >= #{minCustomerIntoTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+				AND <![CDATA[ li.OUTTO_LOAN_TIME <= #{maxCustomerIntoTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+				AND U2.NAME LIKE CONCAT('%',#{loanTeamEmpcode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="offendSalesName != null and offendSalesName != ''">
+				AND U1.NAME LIKE CONCAT('%',#{offendSalesName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="loanCode != null and loanCode != ''">
+				AND AR.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="transactorName != null and transactorName != ''">
+				AND U3.NAME = #{transactorName,jdbcType=VARCHAR}
+			</if>
+			<if test="orgName != null and orgName != ''">
+					AND O.NAME = #{orgName}
+			</if>
+		</where>
+		GROUP BY AR.ID,P.PRODUCT_NAME,D.LABEL,PC1.AREA_NAME,PC2.AREA_NAME,D2.LABEL,LI.OUTTO_LOAN_TIME,
+		         O.NAME,LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.MODIFY_TIME,AR.TRANSACTOR_CODE,D3.LABEL,D4.LABEL,
+		         LI.APPLY_ID,LI.LOAN_MONTHS,LC.CUSTOMER_CERT_NUM,LI.LOAN_APPLY_AMOUNT,LI.loaninfo_oldornew_flag,
+		         U1.NAME,U2.NAME,U3.NAME
+		<if test="orderBy != null and orderBy != '' ">
+			ORDER BY ${orderBy} NULLS LAST
+		</if>	
+	</select>	
+</mapper>

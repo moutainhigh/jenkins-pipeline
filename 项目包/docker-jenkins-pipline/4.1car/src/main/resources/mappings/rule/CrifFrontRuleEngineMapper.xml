@@ -1,0 +1,1420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.rule.dao.CrifFrontRuleEngineDao" >  
+
+
+<resultMap id="crifFrontPersonalMap" type="com.creditharmony.adapter.bean.in.crif.CrifFrontPersonalInBean" >
+    <result column="Role_" property="role" jdbcType="VARCHAR" />
+    <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="Return_flg" property="returnFlg" jdbcType="VARCHAR" />
+    <result column="Age" property="age" jdbcType="VARCHAR" />
+    <result column="Id_num" property="idNum" jdbcType="VARCHAR" />
+    <result column="Num_of_loan_industry" property="numOfLoanIndustry" jdbcType="VARCHAR" />
+    <result column="Industry" property="industry" jdbcType="VARCHAR" />
+    <result column="House_province" property="houseProvince" jdbcType="VARCHAR" />
+    <result column="House_city" property="houseCity" jdbcType="VARCHAR" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="count_flg" property="overdue30CountFlg" jdbcType="VARCHAR" />
+    <result column="Overdue_6_times_l6" property="overdue6TimesL6" jdbcType="VARCHAR" />
+    <result column="Relate_overdue_30_count_flg" property="relateOverdue30CountFlg" jdbcType="VARCHAR" />
+    <result column="Relate_overdue_6_times_l6" property="relateOverdue6TimesL6" jdbcType="VARCHAR" />
+    <result column="Total_income" property="totalIncome" jdbcType="VARCHAR" />
+    <result column="Total_expense" property="totalExpense" jdbcType="VARCHAR" />
+    <result column="Monthly_repayment_ability" property="monthlyRepaymentAbility" jdbcType="VARCHAR" />
+    <result column="Income" property="income" jdbcType="VARCHAR" />
+    <result column="Family_income" property="familyIncome" jdbcType="VARCHAR" />
+    <result column="last_reject_date" property="lastRejectDate" jdbcType="VARCHAR" />
+    <result column="Unsetteled_loan_c" property="unsetteledLoanC" jdbcType="VARCHAR" />
+    <result column="Unsetteled_loan" property="unsetteledLoan" jdbcType="VARCHAR" />
+    <result column="Employ_year" property="employYear" jdbcType="VARCHAR" />
+    <result column="Marriage_status" property="marriageStatus" jdbcType="VARCHAR" />
+    <result column="Parents_contact_flg" property="parentsContactFlg" jdbcType="VARCHAR" />
+    <result column="Credit_inquire_times_l2" property="creditInquireTimesL2" jdbcType="VARCHAR" />
+    <result column="Credit_inquire_times_own" property="creditInquireTimesOwn" jdbcType="VARCHAR" />
+    <result column="Credit_type" property="creditType" jdbcType="VARCHAR" />
+    <result column="Credit_Date" property="creditDate" jdbcType="VARCHAR" />
+    <result column="Credit_flg" property="creditFlg" jdbcType="VARCHAR" />
+    <result column="dict_customer_diff" property="customerType" jdbcType="VARCHAR" />
+ </resultMap>
+ 
+ 
+ <resultMap id="crifFrontMap" type="com.creditharmony.adapter.bean.in.crif.CrifFrontInBean" >
+    <result column="AppNo" property="appNo" jdbcType="VARCHAR" />
+    <result column="App_date" property="appDate" jdbcType="VARCHAR" />
+    <result column="App_amt" property="appAmt" jdbcType="VARCHAR" />
+    <result column="Product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="app_Age" property="appAge" jdbcType="VARCHAR" />
+    <result column="app_Marriage_Status" property="appMarriageStatus" jdbcType="VARCHAR" />
+    <result column="app_Education" property="appEducation" jdbcType="VARCHAR" />
+    <result column="app_Gender" property="appGender" jdbcType="VARCHAR" />
+    <result column="app_Estate_Situation" property="appEstateSituation" jdbcType="VARCHAR" />
+    <result column="app_CcAging_Earliest" property="appCcAgingEarliest" jdbcType="VARCHAR" />
+    <result column="app_LoanAging" property="appLoanAging" jdbcType="VARCHAR" />
+    <result column="app_CcAging_Lastest" property="appCcAgingLastest" jdbcType="VARCHAR" />
+    <result column="app_Loan_App_Num" property="appLoanAppNum" jdbcType="VARCHAR" />
+    <result column="app_Inquire_Times" property="appInquireTimes" jdbcType="VARCHAR" />
+    <result column="app_UtilizationCc" property="appUtilizationCc" jdbcType="VARCHAR" />
+    <result column="app_Overdue_Count" property="appOverdueCount" jdbcType="VARCHAR" />
+    <result column="app_Credit_Inquire_TimesL6" property="appCreditInquireTimesL6" jdbcType="VARCHAR" />
+    <result column="app_Loan_CcFlg" property="appLoanCcFlg" jdbcType="VARCHAR" />
+    <result column="app_Guarantor_FaFlg" property="appGuarantorFaFlg" jdbcType="VARCHAR" />
+    <result column="app_Guarantor_RFlg" property="appGuarantorRFlg" jdbcType="VARCHAR" />
+    <result column="app_Guarantor_flg" property="appGuarantorFlg" jdbcType="VARCHAR" />
+    <result column="app_Guarantor_figure" property="appGuarantorFigure" jdbcType="VARCHAR" />
+    <result column="app_Company_income" property="appCompanyIncome" jdbcType="VARCHAR" />
+    <result column="app_Company_registration_year" property="appCompanyRegistrationYear" jdbcType="VARCHAR" />
+    <result column="app_Estate_provide_flg" property="appEstateProvideFlg" jdbcType="VARCHAR" />
+    <result column="app_loan_terms" property="appLoanTerms" jdbcType="VARCHAR" />
+    <result column="app_Tol_period" property="appTolPeriod" jdbcType="VARCHAR" />
+    <result column="app_Ins_paymeny_type" property="appInsPaymenyType" jdbcType="VARCHAR" />
+    <result column="app_Ins_paymeny_amt_y" property="appInsPaymenyAmtY" jdbcType="VARCHAR" />
+    <result column="app_Ins_effect_y" property="appInsEffectY" jdbcType="VARCHAR" />
+    <result column="app_Ins_status" property="appInsStatus" jdbcType="VARCHAR" />
+    <result column="app_ins_remaining_months" property="appInsRemainingMonths" jdbcType="VARCHAR" />
+<!--<collection property="personalInfos" resultMap="CrifFrontPersonalMap" javaType="java.util.ArrayList"></collection>
+ --> 
+ </resultMap>
+ 
+<!-- 前置策略数据 -->
+<select id="getCrifFrontInfo" resultMap="crifFrontMap" parameterType="java.util.Map" >
+  	select
+		 i.loan_code AppNo,
+		 <!-- 业务编号 -->
+		 i.outto_loan_time App_date,
+		 <!-- 申请日期 -->
+		 i.loan_apply_amount App_amt,
+		 <!-- 申请金额 -->
+		 i.product_type Product_type,
+		 <!-- 借款产品类型 -->
+		 <!-- '' app_Age,
+		 申请人年龄
+		 '' app_Marriage_Status, 删除字段-->
+		 <!-- 申请人婚姻状况 --> 
+		  b.DICT_EDUCATION app_Education,
+		 <!-- 学历 -->
+		  lc.CUSTOMER_SEX  app_Gender,
+		 <!-- 性别 -->
+		 '' app_Estate_Situation,
+		 <!-- 房产状况 -->
+		 '' app_CcAging_Earliest,
+		 <!-- 最早的贷记卡账龄(月) -->
+		<!--  (
+			select
+				(
+					case
+						when max( monthTillQuery ) is not null then max( monthTillQuery )
+						else - 1
+					end
+				) as earliestLoanMonth
+			from
+				(
+					select
+						loan.id as newId,
+						(
+							extract(
+								day
+							from
+								si.QUERY_TIME - loan.ISSUE_DAY
+							) / 30
+						) as monthTillQuery
+					from
+						T_JK_CREDIT_REPORT_SIMPLE si join T_JK_CREDIT_LOAN_INFO loan on
+						si.id = loan.relation_id
+					where
+						si.loan_code = i.loan_code
+						and si.r_customer_coborrower_id = lc.id
+						and si.del_flag = '0'
+				union all select
+						loan.id as newId,
+						(
+							extract(
+								day
+							from
+								de.QUERY_TIME - loan.RELEASE_DAY
+							) / 30
+						) as monthTillQuery
+					from
+						T_JK_CREDIT_REPORT_DETAILED de join T_JK_CREDIT_LOAN_DETAILED_ONE loan on
+						de.id = loan.relation_id
+					where
+						de.loan_code = i.loan_code
+						and de.r_customer_coborrower_id = lc.id
+						and de.del_flag = '0'
+				)
+			) app_LoanAging, -->
+		 	round((
+
+select
+			(
+				case
+					when max( monthTillQuery ) is not null then max( monthTillQuery )
+					else - 1
+				end
+			) as earliestLoanMonth
+		from
+			(
+				select
+					loan.id as newId,
+					(
+						extract(
+							day
+						from
+							si.QUERY_TIME - loan.ISSUE_DAY
+						) / 30
+					) as monthTillQuery
+				from
+					T_JK_CREDIT_REPORT_SIMPLE si join T_JK_CREDIT_LOAN_INFO loan on
+					si.id = loan.relation_id
+				where
+					si.loan_code = i.loan_code
+					and si.r_customer_coborrower_id = lc.id
+					and si.del_flag = '0'
+			union all select
+					loan.id as newId,
+					(
+						extract(
+							day
+						from
+							de.QUERY_TIME - loan.RELEASE_DAY
+						) / 30
+					) as monthTillQuery
+				from
+					T_JK_CREDIT_REPORT_DETAILED de join T_JK_CREDIT_LOAN_DETAILED_ONE loan on
+					de.id = loan.relation_id
+				where
+					de.loan_code = i.loan_code
+					and de.r_customer_coborrower_id = lc.id
+					and de.del_flag = '0'
+			)
+	) :: numeric,2)	app_LoanAging,
+		 <!-- 最早贷款账龄(月) -->
+		 '' app_CcAging_Lastest,
+		 <!-- 最近的贷记卡账龄(月) -->
+		 (
+			select
+				count( id ) as count
+			from
+				(
+					select
+						a.id
+					from
+						t_jk_credit_query_record a join t_jk_credit_report_simple b on
+						a.relation_id = b.id
+						and a.query_type in('4')
+					where
+						b.loan_code = i.loan_code
+						and b.r_customer_coborrower_id = c.id
+						and b.del_flag = '0'
+				union all select
+						a.id
+					from
+						t_jk_credit_query_record a join t_jk_credit_report_detailed b on
+						a.relation_id = b.id
+						and a.query_type in('4')
+					where
+						b.loan_code = i.loan_code
+						and b.r_customer_coborrower_id = c.id
+						and b.del_flag = '0'
+				)
+		 )  app_Loan_App_Num,
+		 <!-- 贷款审批查询次数 -->
+		 (
+			select
+				count( id ) as b
+			from
+				(
+					select
+						a.id
+					from
+						t_jk_credit_query_record a join t_jk_credit_report_simple b on
+						a.relation_id = b.id
+						and a.query_type in(
+							'7',
+							'15',
+							'16'
+						)
+					where
+						b.loan_code = i.loan_code
+						and b.r_customer_coborrower_id = c.id
+						and b.del_flag = '0'
+				union all select
+						a.id
+					from
+						t_jk_credit_query_record a join t_jk_credit_report_detailed b on
+						a.relation_id = b.id
+						and a.query_type in(
+							'7',
+							'15',
+							'16'
+						)
+					where
+						b.loan_code = i.loan_code
+						and b.r_customer_coborrower_id = c.id
+						and b.del_flag = '0'
+				)
+		 ) app_Inquire_Times,
+		 <!-- 本人查询次数 -->
+		 '' app_UtilizationCc,
+		 <!-- 正常贷记卡额度使用率 -->
+		 (
+			select
+				(
+					detailCount + simpleCount
+				) as overDueCount
+			from
+				(
+					select
+						(
+							select
+								count( two.id ) as detailCount
+							from
+								T_JK_CREDIT_REPORT_DETAILED de join t_JK_CREDIT_LOAN_DETAILED_ONE one on
+								de.id = one.relation_id join T_JK_CREDIT_LOAN_DETAILED_TWO two on
+								one.id = two.relation_id
+							where
+								two.OVERDUE_NO_TOTAL > 0
+								and de.loan_code = i.id
+								and de.r_customer_coborrower_id = c.id
+								and de.del_flag = '0'
+						),
+						(
+							select
+								count( info.id ) as simpleCount
+							from
+								T_JK_CREDIT_REPORT_SIMPLE si join T_JK_CREDIT_LOAN_INFO info on
+								si.id = info.relation_id
+							where
+								info.OVERDUE_NO > 0
+								and si.loan_code = i.id
+								and si.r_customer_coborrower_id = c.id
+								and si.del_flag = '0'
+						)
+				)
+		 ) app_Overdue_Count,
+		 <!-- 发生过逾期的贷款个数 -->
+		 (
+			select
+				sum( queryCount )
+			from
+				(
+					select
+						count( 1 ) queryCount
+					from
+						jk.T_JK_CREDIT_REPORT_SIMPLE crs,
+						jk.T_JK_CREDIT_QUERY_RECORD cqr
+					where
+						crs.id = cqr.relation_id
+						and crs.dict_customer_type = '1'
+						and crs.del_flag = '0'
+						and crs.r_customer_coborrower_id = c.id
+						and query_type in(
+							'1',
+							'4'
+						)
+						and cqr.query_day >= oracle.add_months(
+							now(),
+							- 6
+						)
+				union all select
+						count( 1 ) queryCount
+					from
+						jk.T_JK_CREDIT_REPORT_DETAILED crs,
+						jk.T_JK_CREDIT_QUERY_RECORD cqr
+					where
+						crs.id = cqr.relation_id
+						and crs.dict_customer_type = '1'
+						and crs.del_flag = '0'
+						and crs.r_customer_coborrower_id = c.id
+						and query_type in(
+							'1',
+							'4'
+						)
+						and cqr.query_day >= oracle.add_months(
+							now(),
+							- 6
+						)
+				)
+		)  app_Credit_Inquire_TimesL6,
+		 <!-- 最近6个月贷款审批或信用卡审批征信查询次数 -->
+	 	 (
+			select
+				(
+					case
+						when(
+							simpleCreditCount + simpleLoanCount + detailCreditCount + detailLoanCount
+						) > 0 then 'Y'
+						else 'N'
+					end
+				) as newCreditFlag
+			from
+				(
+					select
+						(
+							select
+								count( credit.id ) as simpleCreditCount
+							from
+								T_JK_CREDIT_REPORT_SIMPLE si join T_JK_CREDIT_CARD_INFO credit on
+								si.id = credit.relation_id
+							where
+								credit.ISSUE_DAY >(
+									si.QUERY_TIME - 180
+								)
+								and si.loan_code = i.loan_code
+								and si.r_customer_coborrower_id = c.id
+								and si.del_flag = '0'
+						),
+						(
+							select
+								count( loan.id ) as simpleLoanCount
+							from
+								T_JK_CREDIT_REPORT_SIMPLE si join T_JK_CREDIT_LOAN_INFO loan on
+								si.id = loan.relation_id
+							where
+								loan.ISSUE_DAY >(
+									si.QUERY_TIME - 180
+								)
+								and si.loan_code = i.loan_code
+								and si.r_customer_coborrower_id = c.id
+								and si.del_flag = '0'
+						),
+						(
+							select
+								count( credit.id ) as detailCreditCount
+							from
+								T_JK_CREDIT_REPORT_DETAILED de join T_JK_CREDIT_CARD_DETAILED_ONE credit on
+								de.id = credit.relation_id
+							where
+								credit.ACCOUNT_DAY >(
+									de.QUERY_TIME - 180
+								)
+								and de.loan_code = i.loan_code
+								and de.r_customer_coborrower_id = c.id
+								and de.del_flag = '0'
+						),
+						(
+							select
+								count( loan.id ) as detailLoanCount
+							from
+								T_JK_CREDIT_REPORT_DETAILED de join T_JK_CREDIT_LOAN_DETAILED_ONE loan on
+								de.id = loan.relation_id
+							where
+								loan.RELEASE_DAY >(
+									de.QUERY_TIME - 180
+								)
+								and de.loan_code = i.loan_code
+								and de.r_customer_coborrower_id = c.id
+								and de.del_flag = '0'
+						)
+				)
+		 ) app_Loan_CcFlg, 
+		 <!-- 近6个月是否获得贷款或贷记卡 -->
+		 '' app_Guarantor_FaFlg,
+		 <!-- 有无法人保证人 -->
+		  case
+		(
+			select
+				count( 1 )
+			from
+				jk.T_JK_LOAN_MATE t
+			where
+				t.loan_code = i.loan_code
+		)
+		when 0 then 'N'
+		else 'Y'
+		end app_Guarantor_RFlg,
+		<!-- 有无配偶保证人 -->
+		 case
+				(
+					select
+						count( 1 )
+					from
+						jk.t_jk_loan_coborrower c
+					where
+						c.loan_code = i.loan_code
+				)
+		 when 0 then 'N'
+				else 'Y'
+			    end app_Guarantor_flg,
+		 <!-- 有无保证人 -->
+		 '' app_Guarantor_figure,
+		 <!-- 保证人影像资料是否为空 -->
+		 '' app_Company_income,
+		 <!-- 企业税前营业收入 -->
+		 '' app_Company_registration_year,
+		 <!-- 企业年限 -->
+		 '' app_Estate_provide_flg,
+		 <!-- 有无提供房产证明 -->
+		 i.loan_months app_loan_terms,
+		 <!-- 借款期数 -->
+		 '' app_Tol_period,
+		 <!-- 总缴费年限 -->
+		 '' app_Ins_paymeny_type,
+		 <!-- 保单缴费方式 -->
+		 '' app_Ins_paymeny_amt_y,
+		 <!-- 年缴保费金额 -->
+		 '' app_Ins_effect_y,
+		 <!-- 保单已生效年限 -->
+		 '' app_Ins_status,
+		 <!-- 保单状态 -->
+		 '' app_ins_remaining_months 
+		 <!-- 保单剩余有效期限(月) -->
+	from
+			jk.t_jk_loan_info i,
+			jk.t_jk_loan_customer lc,
+			jk.t_jk_loan_company c,
+			jk.t_jk_dhzh_brhs b
+	where
+			i.loan_code = c.loan_code
+			and i.loan_code = b.loan_code
+			and i.loan_code = lc.loan_code
+			and b.dict_customer_type =  #{customterType}
+			and c.dict_r_customter_type =  #{customterType}
+			and i.loan_code = #{loanCode}<!-- 'JK2016081200000348'	 -->
+</select>  
+
+<!-- 前置策略-个人信息-保证人 -->
+<select id="getCrifFrontGuarantorInfo" resultMap="crifFrontPersonalMap" parameterType="java.util.Map">
+	 select
+	     lc.loan_code,
+		 'G' Role_,
+		 <!-- 角色 -->
+	 	 '中国' Nationality,
+		 <!-- 国籍 -->
+		 'N' Return_flg,
+		 <!-- 是否退回后变更保证人 -->
+		 round(( cast( substr( now() :: varchar, 1, 10 ) as date ) - cast( SUBSTR( lc.cobo_cert_num, 7, 8 ) as date ) ) / 365 :: numeric, 2 ) as Age,
+		 <!-- 年龄 -->
+		 lc.cobo_cert_num Id_num,
+		 <!-- 身份证号码 -->
+		 '' Num_of_loan_industry,
+		 <!-- 同业借贷数量 -->
+		 '' Industry,
+		 <!-- 行业 -->
+		 lc.cobo_household_province House_province,
+		 <!-- 户籍所在省 -->
+		 lc.cobo_household_city House_city,
+		 <!-- 户籍城市 -->
+		 lc.cobo_liveing_province Province,
+		 <!-- 工作/居住所在省 -->
+		 lc.cobo_liveing_city City,
+		 <!-- 工作/居住所在城市 -->
+		 '' Overdue_30_count_flg,
+		 <!-- 是否在我司累计逾期天数超过30天（不含） -->
+		 '' Overdue_6_times_l6,
+		 <!-- 近6个月逾期6天以上（不含）的次数 -->
+		 '' Relate_overdue_30_count_flg,
+		 <!-- 关联的历史申请人逾期天数超过30天 -->
+		 '' Relate_overdue_6_times_l6,
+		 <!-- 关联的历史申请人逾期6天以上的次数 -->
+		 '' Total_income,
+		 <!-- 总收入 -->
+		 '' Total_expense,
+		 <!-- 总负债 -->
+		 '' Monthly_repayment_ability,
+		 <!-- 自述月还能力 -->
+		 cm.comp_salary Income,
+		 <!-- 客户自述收入 -->
+		 '' Family_income,
+		 <!-- 家庭收入 -->
+		 '' last_reject_date,
+		 <!-- 上次申请拒绝时间 -->
+		  (
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaidAsCoborrow
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a
+						where
+							a.loan_code in(
+								select
+									loan_code
+								from
+									t_jk_loan_coborrower
+								where
+									cobo_cert_num =(
+										select
+											cobo_cert_num
+										from
+											t_jk_loan_coborrower
+										where
+											loan_code = lc.loan_code
+									)
+							)
+							and a.loan_code != lc.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan_c, 
+			<!-- 是否为他人的保证人在我司已有借款尚未结清 -->
+		    (
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaid
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a left join t_jk_loan_customer b on
+							a.loan_code = b.loan_code
+						where
+							b.customer_cert_num in (
+								select
+									customer_cert_num
+								from
+									t_jk_loan_coborrower
+								where
+									loan_code = lc.loan_code
+							)
+							and b.loan_code != lc.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan, 
+			<!-- 是否在我司已有借款尚未结清（包含房借、车借) -->
+		    cm.comp_work_experience Employ_year,
+			<!-- 在此单位工作年限 -->
+		    lc.dict_marry_status Marriage_status,
+			<!-- 婚姻状况 -->
+		    decode(
+				  (
+					select
+						jc.contact_name
+					from
+						jk.t_jk_contact jc
+					where
+						jc.loan_code = lc.loan_code
+						and jc.r_customer_coborrower_id = '1'
+						and jc.loan_customter_type = '0'
+						and jc.contact_relation = '0'
+				),
+				'',
+				'N',
+				null,
+				'N',
+				'Y'
+			) Parents_contact_flg,
+			<!-- 有无父母联系方式 -->
+		    (
+						select
+		 					count( 1 )
+						from
+		 				jk.T_JK_CREDIT_REPORT_SIMPLE crs,
+		 					jk.T_JK_CREDIT_QUERY_RECORD cqr
+		 				where
+		 					crs.id = cqr.relation_id
+		 					and crs.dict_customer_type = '1'
+		 					and crs.r_customer_coborrower_id = lc.id
+		 					and query_type in(
+		 						'1',
+		 						'4'
+							)
+		 					and cqr.query_day >= oracle.add_months(
+								now(),
+		 					- 2
+		 					)
+					) Credit_inquire_times_l2, 
+		  '' Credit_inquire_times_l2,
+		  <!-- 最近2个月贷款审批或信用卡审批征信查询次数 -->
+		  (
+				select
+					count( 1 )
+				from
+					jk.T_JK_CREDIT_REPORT_SIMPLE crs,
+					jk.T_JK_CREDIT_QUERY_RECORD cqr
+				where
+					crs.id = cqr.relation_id
+					and crs.dict_customer_type = '1'
+					and crs.r_customer_coborrower_id = lc.id
+			) Credit_inquire_times_own,
+		    <!-- 本人征信查询次数 -->
+		    decode(
+				  (
+					select
+						count( 1 )
+					from
+						jk.T_JK_CREDIT_REPORT_SIMPLE crs
+					where
+						crs.dict_customer_type = '1'
+						and del_flag = '0'
+						and crs.loan_code = lc.loan_code
+				  ),
+				'0',
+				'1',
+				'0'
+			) Credit_type,
+		   <!-- 征信信息类型 -->
+			(select  max(query_time)  from
+				(select 
+					si.query_time 
+				from
+					t_jk_loan_coborrower lb
+					left join T_JK_CREDIT_REPORT_SIMPLE si on
+					si.loan_code = lb.loan_code
+					and si.r_customer_coborrower_id = lb.id
+					and si.del_flag = '0'
+				where
+					lb.loan_code = lc.loan_code
+				
+				union all
+				
+				select 
+					de.query_time 
+				from
+					t_jk_loan_coborrower lb
+					left join T_JK_CREDIT_REPORT_DETAILED de on
+					de.loan_code = lb.loan_code
+					and de.r_customer_coborrower_id = lb.id
+					and de.del_flag = '0'
+				where
+					lb.loan_code = lc.loan_code)
+		  ) Credit_Date,
+		   <!-- 征信报告日期-->
+		  (
+				select
+					(
+						case
+							when min( count ) > 0 then 'N'
+							else 'Y'
+						end
+					) as noCreditReport
+				from
+					(
+						select
+							count( si.id ) + count( de.id ) as count
+						from
+							t_jk_loan_customer jlc left join T_JK_CREDIT_REPORT_SIMPLE si on
+							si.loan_code = jlc.loan_code
+							and si.r_customer_coborrower_id = jlc.id
+							and si.del_flag = '0' left join T_JK_CREDIT_REPORT_DETAILED de on
+							de.loan_code = jlc.loan_code
+							and de.r_customer_coborrower_id = jlc.id
+							and de.del_flag = '0'
+						where
+							jlc.loan_code = lc.loan_code
+					union all select
+							count( si.id ) + count( de.id ) as count
+						from
+							t_jk_loan_coborrower lb left join T_JK_CREDIT_REPORT_SIMPLE si on
+							si.loan_code = lb.loan_code
+							and si.r_customer_coborrower_id = lb.id
+							and si.del_flag = '0' left join T_JK_CREDIT_REPORT_DETAILED de on
+							de.loan_code = lb.loan_code
+							and de.r_customer_coborrower_id = lb.id
+							and de.del_flag = '0'
+						where
+							lb.loan_code = lc.loan_code
+						group by
+							lb.id
+					)
+			) Credit_flg, 
+			<!-- 征信是否空白 -->
+			lc.dict_customer_diff
+			<!-- 客户类型 -->
+	 from
+		   jk.t_jk_loan_coborrower lc,
+		   jk.t_jk_loan_company cm
+	 where
+		   lc.loan_code = cm.loan_code
+		   and cm.dict_r_customter_type = #{customterType}<!-- '1' -->	
+		   and lc.loan_code = #{loanCode} <!-- 'JK2016081200000348' -->
+	order by lc.id
+	limit 1
+</select> 
+<!-- 前置策略-个人信息-简版贷款信息 -->
+<select id="getCrifFrontShortLoanInfo" resultType="com.creditharmony.adapter.bean.in.crif.CrifFrontLoanSimpleInBean" parameterType="java.util.Map">
+  	select
+		rs.loan_code,
+		cdt.OVERDUE_NO  plOverdueTimesL60S<!-- PL_overdue_times_l60_s -->,
+		<!-- 贷款单笔5年内累计逾期次数 -->
+		cdt.ACCOUNT_STATUS plAccountStatusS<!-- PL_account_status_s -->,
+		<!-- 贷款账户状态 -->
+		cdt.OVERDUE_FOR_NO plDue90TimesL60S<!-- Pl_due_90_times_l60_s -->,
+		<!-- 贷款5年内出现90天以上的逾期次数 -->
+		cdt.SETTLE_DAY  plSetteledDateS<!-- PL_setteled_date_s -->,
+		<!-- 贷款结清日期 -->
+		cdt.ISSUE_DAY plDateS<!-- PL_date_s  -->
+		<!-- 贷款放款日期 -->
+	from
+		t_jk_credit_report_simple rs,
+		T_JK_CREDIT_LOAN_INFO CDT
+	where
+		rs.id = CDT.RELATION_ID
+		and rs.dict_customer_type = #{customterType}<!-- '1'	 -->
+		and rs.loan_code = #{loanCode}<!-- 'JK2016060200000078' -->
+</select>
+<!-- 前置策略-个人信息-简版信用卡信息 -->
+<select id="getCrifFrontShortCreditCardInfo"  resultType="com.creditharmony.adapter.bean.in.crif.CrifFrontCreditSimpleInBean" parameterType="java.util.Map" >
+	select rs.loan_code,
+		ci.ACCOUNT_STATUS ccAccountStatusS<!-- CC_account_status_s -->,
+		<!-- 信用卡账户状态 -->
+		ci.OVERDUE_FOR_NO ccDue90TimesL60S<!-- CC_due_90_times_l60_s -->,
+		<!-- 信用卡5年内出现90天以上的逾期次数 -->
+		ci.CANCELLATION_DAY ccAccountCancelDateS<!-- CC_account_cancel_date_s -->,
+		<!-- 信用卡销户日期 -->
+		ci.ISSUE_DAY ccAccountOpenDateS<!-- CC_account_open_date_s -->,
+		<!-- 信用卡开户日期 -->
+		ci.OVERDUE_NO ccOverdueTimesL60S<!-- CC_overdue_times_l60_s --> 
+		<!--信用卡单张5年内累计逾期次数 -->
+	from
+		t_jk_credit_report_simple rs,
+		T_JK_CREDIT_CARD_INFO ci
+	where
+		rs.id = ci.relation_id
+		and rs.dict_customer_type = #{customterType}<!-- '1'	 -->
+		and rs.loan_code = #{loanCode} <!--  'JK2016081200000348'-->
+</select>
+<!-- 前置策略-个人信息-详版贷款信息 -->
+<select id="getCrifFrontDetailLoanInfo" resultType="com.creditharmony.adapter.bean.in.crif.CrifFrontLoanDetailInBean" parameterType="java.util.Map" >
+	select
+		rs.loan_code,
+		ACCOUNT_STATUS plAccountStatusDd<!-- PL_account_status_dd -->,
+		<!-- 贷款账户状态 -->
+		ldt.current_overdue  plAccountStatusD<!-- PL_account_status_d -->,
+		<!-- 贷款当前逾期期数 -->
+		(
+				select
+					max( cycle_value )
+				from
+					T_JK_CREDIT_CYCLE_RECORD ccr
+				where
+					ccr.relation_id = ldt.id
+					and ccr.cycle_value not in(
+						'N',
+						'C',
+						'G',
+						'D',
+						'Z',
+						'*',
+						'/',
+						'#'
+					)
+			) plOverdueStatusMaxL24D<!-- PL_overdue_status_max_l24_d -->,
+		<!-- 贷款单张近24个月最大期数 -->
+		(
+				select
+					count( cycle_value )
+				from
+					T_JK_CREDIT_CYCLE_RECORD ccr
+				where
+					ccr.relation_id = ldt.id
+					and ccr.cycle_value not in(
+						'N',
+						'C',
+						'*',
+						'/',
+						'#'
+					)
+			) plOverdueTimesL24D<!-- PL_overdue_times_l24_d -->,
+		 <!-- 贷款单张近24个月逾期次数 -->
+		 DECODE(
+				(
+					select
+						count( cycle_value )
+					from
+						T_JK_CREDIT_CYCLE_RECORD ccr
+					where
+						ccr.relation_id = ldt.id
+						and ccr.cycle_value in(
+							'D',
+							'G',
+							'Z'
+						)
+				),
+				'0',
+				'N',
+				'Y'
+			) plPaymentDGZD<!-- PL_payment_DGZ_d -->,
+		 <!-- 单笔贷款还款记录是否出现D，G，Z -->
+		 cdo.level_class plAccountStyleD<!-- PL_account_style_d --> 
+		 <!-- 贷款5级分类 -->
+	from
+		t_jk_credit_report_detailed rs,
+		T_JK_CREDIT_LOAN_DETAILED_ONE cdo,
+		T_JK_CREDIT_LOAN_DETAILED_TWO ldt
+	where
+		rs.id = cdo.RELATION_ID
+		and cdo.id = ldt.RELATION_ID
+		and rs.dict_customer_type = #{customterType}<!-- '1' -->
+		and rs.loan_code = #{loanCode}<!-- 'JK2016060100000030' -->
+</select>
+<!-- 前置策略-个人信息-详版信用卡信息 -->
+<select id="getCrifFrontDetailCreditCardInfo" resultType="com.creditharmony.adapter.bean.in.crif.CrifFrontCreditDetailInBean" parameterType="java.util.Map" >
+	select
+		rs.loan_code,
+		CDT.id,
+		cdo.ACCOUNT_STATUS ccAccountStatusDd<!-- CC_account_status_dd -->,
+		<!-- 信用卡账户状态 -->
+		cdo.CURRENT_OVERDUE ccAccountStatusD<!-- CC_account_status_d -->,
+		<!-- 信用卡当前逾期期数 -->
+		decode(
+			(select
+				count( cycle_value )
+			from
+				T_JK_CREDIT_CYCLE_RECORD ccr
+			where
+				ccr.relation_id = cdo.id
+				and ccr.cycle_value ='G'),
+			'0',
+			'N',
+			'Y'
+		) ccAccountGFlg<!-- CC_account_g_flg -->,
+		<!-- 信用卡还款记录字段是否出现Ｇ -->
+		(
+				select
+					max( cycle_value )
+				from
+					T_JK_CREDIT_CYCLE_RECORD ccr
+				where
+					ccr.relation_id = cdo.id
+					and ccr.cycle_value not in(
+						'N',
+						'C',
+						'G',
+						'D',
+						'Z',
+						'*',
+						'/',
+						'#'
+					)
+		) ccOverdueStatusMaxL24D<!-- CC_overdue_status_max_l24_d -->,
+		<!-- 信用卡单张近24个月最大逾期期数 -->
+		(
+				select
+					count( cycle_value )
+				from
+					T_JK_CREDIT_CYCLE_RECORD ccr
+				where
+					ccr.relation_id = cdo.id
+					and ccr.cycle_value not in(
+						'N',
+						'C',
+						'*',
+						'/',
+						'#'
+					)
+		) ccOverdueTimesL24D<!-- CC_overdue_times_l24_d --> 
+		<!-- 信用卡单张近24个月逾期次数 -->
+	from
+		t_jk_credit_report_detailed rs,
+		t_jk_credit_card_detailed_one CDT,
+		T_JK_CREDIT_CARD_DETAILED_TWO cdo
+	where
+		rs.id = CDT.RELATION_ID
+		and CDT.id = cdo.RELATION_ID
+		and rs.dict_customer_type = #{customterType}<!-- '1' -->
+		and rs.loan_code = #{loanCode}<!-- 'JK2016062000000055' -->
+</select>
+<!-- 前置策略-个人信息-配偶 -->
+<select id="getCrifFrontMateInfo"  resultMap="crifFrontPersonalMap" parameterType="java.util.Map" >
+	select
+		lc.loan_code,
+		'S' Role_,
+		<!-- 角色 -->
+	 	'中国' Nationality,
+		<!-- 国籍 -->
+		'N' Return_flg,
+		<!-- 是否退回后变更保证人 -->
+		 round(( cast( substr( now() :: varchar, 1, 10 ) as date ) - cast( SUBSTR( lc.mate_cert_num, 7, 8 ) as date ) ) / 365 :: numeric, 2 ) as Age,
+		<!-- 年龄 -->
+		 lc.mate_cert_num Id_num,
+		<!-- 身份证号码 -->
+		 '' Num_of_loan_industry,
+		<!-- 同业借贷数量 -->
+		 '' Industry,
+		<!-- 行业 -->
+		 '' House_province,
+		<!-- 户籍所在省 -->
+		 '' House_city,
+		<!-- 户籍城市 -->
+		 '' Province,
+		<!-- 工作/居住所在省 -->
+		 '' City,
+		<!-- 工作/居住所在城市 -->
+		 '' Overdue_30_count_flg,
+		<!-- 是否在我司累计逾期天数超过30天（不含） -->
+		 '' Overdue_6_times_l6,
+		<!-- 近6个月逾期6天以上（不含）的次数 -->
+		 '' Relate_overdue_30_count_flg,
+		<!-- 关联的历史申请人逾期天数超过30天 -->
+		 '' Relate_overdue_6_times_l6,
+		<!-- 关联的历史申请人逾期6天以上的次数 -->
+		 '' Total_income,
+		<!-- 总收入 -->
+		 '' Total_expense,
+		<!-- 总负债 -->
+		 '' Monthly_repayment_ability,
+		<!-- 自述月还能力 -->
+		 cm.comp_salary Income,
+		<!-- 客户自述收入 -->
+		 '' Family_income,
+		<!-- 家庭收入 -->
+		 '' last_reject_date,
+		<!-- 上次申请拒绝时间 -->
+		(
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaidAsCoborrow
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a
+						where
+							a.loan_code in(
+								select
+									loan_code
+								from
+									t_jk_loan_coborrower
+								where
+									cobo_cert_num =(
+										select
+											mate_cert_num
+										from
+											t_jk_loan_mate
+										where
+											loan_code = lc.loan_code
+									)
+							)
+							and a.loan_code != lc.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan_c,
+			<!-- 是否为他人的保证人在我司已有借款尚未结清 -->
+		    (
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaid
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a left join t_jk_loan_customer b on
+							a.loan_code = b.loan_code
+						where
+							b.customer_cert_num in (
+								select
+									mate_cert_num
+								from
+									t_jk_loan_mate
+								where
+									loan_code = lc.loan_code
+							)
+							and b.loan_code != lc.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan, 
+			<!-- 是否在我司已有借款尚未结清（包含房借、车借) -->
+		 cm.comp_work_experience Employ_year,
+			<!-- 在此单位工作年限 -->
+		 '1' Marriage_status,
+			<!-- 婚姻状况 -->
+		 'N' Parents_contact_flg,
+			<!-- 有无父母联系方式 -->
+		 '' Credit_inquire_times_l2,
+			<!-- 最近2个月贷款审批或信用卡审批征信查询次数 -->
+		'' Credit_inquire_times_own,
+			<!-- 本人征信查询次数 -->
+		 '' Credit_type,
+			<!-- 征信信息类型 -->
+		'' Credit_Date,
+	       <!-- 征信报告日期-->
+		'N' Credit_flg 
+		    <!-- 征信是否空白 -->
+	from
+		jk.t_jk_loan_mate lc,
+		jk.t_jk_loan_company cm
+	where
+		lc.loan_code = cm.loan_code
+		and cm.dict_r_customter_type =  #{customterType}  <!--  2 -->
+		and lc.loan_code = #{loanCode}<!-- 'JK2016081200000348' -->
+</select>
+<!-- 前置策略-个人信息-申请人-->
+<select id="getCrifFrontAppInfo" resultMap="crifFrontPersonalMap" parameterType="java.util.Map" >
+	select
+		cu.loan_code,
+		'M' Role_,
+		<!-- 角色 -->
+	 	'中国' Nationality,
+		<!-- 国籍 -->
+		decode(
+				(
+					select
+						count( 1 )
+					from
+						jk.t_jk_changer_info ci
+					where
+						ci.change_type = '1'
+						and change_result = '1'
+						and ci.apply_id = cu.apply_id
+				),
+				'0',
+				'N',
+				'Y'
+			) Return_flg,
+		 <!-- 是否退回后变更保证人 -->
+		 round(( cast( substr( now() :: varchar, 1, 10 ) as date ) - cast( SUBSTR( customer_cert_num, 7, 8 ) as date ) ) / 365 :: numeric, 2 ) as Age,
+		 <!-- 年龄 -->
+		 cu.customer_cert_num Id_num,
+		 <!-- 身份证号码 -->
+		 '' Num_of_loan_industry,
+		 <!-- 同业借贷数量 -->
+		 '' Industry,
+		 <!-- 行业 -->
+		 cu.customer_register_province House_province,
+		 <!-- 户籍所在省 -->
+		 cu.customer_register_city House_city,
+		 <!-- 户籍城市 -->
+		 cu.customer_live_province Province,
+		 <!-- 工作/居住所在省 -->
+		 cu.customer_live_city City,
+		 <!-- 工作/居住所在城市 -->
+		 '' Overdue_30_count_flg,
+		 <!-- 是否在我司累计逾期天数超过30天（不含） -->
+		 '' Overdue_6_times_l6,
+		 <!-- 近6个月逾期6天以上（不含）的次数 -->
+		 '' Relate_overdue_30_count_flg,
+		 <!-- 关联的历史申请人逾期天数超过30天 -->
+		 '' Relate_overdue_6_times_l6,
+		 <!-- 关联的历史申请人逾期6天以上的次数 -->
+		 '' Total_income,
+		 <!-- 总收入 -->
+		 '' Total_expense,
+		 <!-- 总负债 -->
+		 '' Monthly_repayment_ability,
+		 <!-- 自述月还能力 -->
+		 cm.comp_salary Income,
+		 <!-- 客户自述收入 -->
+		 '' Family_income,
+		 <!-- 家庭收入 -->
+		 '' last_reject_date,
+		 <!-- 上次申请拒绝时间 -->
+		(
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaidAsCoborrow
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a
+						where
+							a.loan_code in(
+								select
+									loan_code
+								from
+									t_jk_loan_coborrower
+								where
+									cobo_cert_num =(
+										select
+											customer_cert_num
+										from
+											t_jk_loan_customer
+										where
+											loan_code = cu.loan_code
+									)
+							)
+							and a.loan_code != cu.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan_c,
+		<!-- 是否为他人的保证人在我司已有借款尚未结清 -->
+		 (
+				select
+					(
+						case
+							when count > 0 then 'Y'
+							else 'N'
+						end
+					) as hisLoanUnpaid
+				from
+					(
+						select
+							count( a.id ) as count
+						from
+							t_jk_loan_info a left join t_jk_loan_customer b on
+							a.loan_code = b.loan_code
+						where
+							b.customer_cert_num =(
+								select
+									customer_cert_num
+								from
+									t_jk_loan_customer
+								where
+									loan_code = cu.loan_code
+							)
+							and b.loan_code != cu.loan_code
+							and not(
+								a.dict_loan_status in(
+									'81',
+									'74',
+									'89',
+									'90',
+									'91',
+									'92',
+									'54',
+									'55',
+									'56',
+									'57',
+									'97',
+									'8',
+									'101'
+								)
+							)
+					)
+			) Unsetteled_loan, 
+		 <!-- 是否在我司已有借款尚未结清（包含房借、车借) -->
+		 cm.comp_work_experience Employ_year,
+		 <!-- 在此单位工作年限 -->
+		 cu.dict_marry_status Marriage_status,
+		 <!-- 婚姻状况 -->
+		 decode(
+				(
+					select
+						jc.contact_name
+					from
+						jk.t_jk_contact jc
+					where
+						jc.loan_code = cu.loan_code
+						and jc.r_customer_coborrower_id = '0'
+						and jc.loan_customter_type = '0'
+						and jc.contact_relation = '0'
+				),
+				'',
+				'N',
+				null,
+				'N',
+				'Y'
+			) Parents_contact_flg,
+			<!-- 有无父母联系方式 -->
+		 <!-- (
+						select
+		 					count( 1 )
+		 				from
+		 				jk.T_JK_CREDIT_REPORT_SIMPLE crs,
+							jk.T_JK_CREDIT_QUERY_RECORD cqr
+						where
+		 					crs.id = cqr.relation_id
+		 					and crs.dict_customer_type = '0'
+		 					and crs.r_customer_coborrower_id = cu.id
+		 					and query_type in(
+								'1',
+		 						'4'
+							)
+		 					and cqr.query_day >= oracle.add_months(
+							now(),
+		 						- 2
+		 					)
+		 			) Credit_inquire_times_l2, -->
+		 '' Credit_inquire_times_l2,
+		<!-- 最近2个月贷款审批或信用卡审批征信查询次数 -->
+		(
+				select
+					count( 1 )
+				from
+					jk.T_JK_CREDIT_REPORT_SIMPLE crs,
+					jk.T_JK_CREDIT_QUERY_RECORD cqr
+				where
+					crs.id = cqr.relation_id
+					and crs.dict_customer_type = '0'
+					and crs.r_customer_coborrower_id = cu.id
+			) Credit_inquire_times_own,
+		 <!-- 本人征信查询次数 -->
+		 decode(
+				(
+					select
+						count( 1 )
+					from
+						jk.T_JK_CREDIT_REPORT_SIMPLE crs
+					where
+						crs.dict_customer_type = '0'
+						and del_flag = '0'
+						and crs.loan_code = cu.loan_code
+				),
+				'0',
+				'1',
+				'0'
+		) Credit_type,
+		<!-- 征信信息类型 -->
+		(select  max(query_time)  from
+			(select 
+				si.query_time 
+			from
+				jk.t_jk_loan_customer  lc
+				left join T_JK_CREDIT_REPORT_SIMPLE si on
+				si.loan_code = lc.loan_code
+				and si.r_customer_coborrower_id = lc.id
+				and si.del_flag = '0'
+			where
+				lc.loan_code = cu.loan_code
+			
+			union all
+			
+			select 
+				de.query_time 
+			from
+				jk.t_jk_loan_customer lb
+				left join T_JK_CREDIT_REPORT_DETAILED de on
+				de.loan_code = lb.loan_code
+				and de.r_customer_coborrower_id = lb.id
+				and de.del_flag = '0'
+			where
+				lb.loan_code = cu.loan_code)
+		) Credit_Date,
+	   	<!-- 征信报告日期-->
+		(
+				select
+					(
+						case
+							when min( count ) > 0 then 'N'
+							else 'Y'
+						end
+					) as noCreditReport
+				from
+					(
+						select
+							count( si.id ) + count( de.id ) as count
+						from
+							t_jk_loan_customer lc left join T_JK_CREDIT_REPORT_SIMPLE si on
+							si.loan_code = lc.loan_code
+							and si.r_customer_coborrower_id = lc.id
+							and si.del_flag = '0' left join T_JK_CREDIT_REPORT_DETAILED de on
+							de.loan_code = lc.loan_code
+							and de.r_customer_coborrower_id = lc.id
+							and de.del_flag = '0'
+						where
+							lc.loan_code = cu.loan_code
+					union all select
+							count( si.id ) + count( de.id ) as count
+						from
+							t_jk_loan_coborrower lb left join T_JK_CREDIT_REPORT_SIMPLE si on
+							si.loan_code = lb.loan_code
+							and si.r_customer_coborrower_id = lb.id
+							and si.del_flag = '0' left join T_JK_CREDIT_REPORT_DETAILED de on
+							de.loan_code = lb.loan_code
+							and de.r_customer_coborrower_id = lb.id
+							and de.del_flag = '0'
+						where
+							lb.loan_code = cu.loan_code
+						group by
+							lb.id
+					)
+		) Credit_flg,
+		<!-- 征信是否空白 -->
+		cu.dict_customer_diff 
+		<!-- 客户类型 -->
+	from
+		jk.t_jk_loan_customer cu,
+		jk.t_jk_loan_company cm
+	where
+		cu.loan_code = cm.loan_code
+		and cm.dict_r_customter_type =  #{customterType} <!-- '0' -->
+		and cu.loan_code = #{loanCode}<!--'JK2016081200000348'  -->
+</select>
+</mapper>

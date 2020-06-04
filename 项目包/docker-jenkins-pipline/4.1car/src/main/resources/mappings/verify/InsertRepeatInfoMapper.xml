@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.InsertRepeatInfokDao" >
+<!-- 首次运行，插入电话信息 -->
+<insert id="insertPhoneInfoFirst" parameterType="java.lang.String">
+   INSERT INTO  jk.T_JK_PHONE_POOL (ID,LOAN_CODE,R_ID,R_NAME,RELATION,DICT_CUSTOMER_TYPE,PHONE,RESOURCE,INCREMENT_ID,REPEAT_VIEW_TYPE) 
+		select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,'1' as DICT_CUSTOMER_TYPE,cobo_mobile as phone,
+		'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'手机号码' as REPEAT_VIEW_TYPE
+		from jk.t_jk_loan_coborrower 
+		where (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(cobo_mobile,''))&lt;&gt;0
+		and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,
+		'1' as DICT_CUSTOMER_TYPE,cobo_mobile2 as phone,'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'手机号码' as repeat_view_type
+		from jk.t_jk_loan_coborrower 
+		where (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(cobo_mobile2,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,
+		'1' as DICT_CUSTOMER_TYPE,COBO_NOW_TEL as phone,'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'家庭固话' as repeat_view_type
+		from jk.t_jk_loan_coborrower 
+		where (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(COBO_NOW_TEL,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,CUSTOMER_NAME as R_NAME,'本人'  as RELATION,
+		'0' as DICT_CUSTOMER_TYPE,CUSTOMER_PHONE_FIRST as phone,'jk.T_JK_LOAN_CUSTOMER' as RESOURCE,id as increment_id,'手机号码' as repeat_view_type
+		from jk.T_JK_LOAN_CUSTOMER 
+		where char_length(COALESCE(CUSTOMER_PHONE_FIRST,''))&lt;&gt;0 and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,CUSTOMER_NAME as R_NAME,'本人'  as RELATION,
+		'0' as DICT_CUSTOMER_TYPE,CUSTOMER_PHONE_SECOND as phone,'jk.T_JK_LOAN_CUSTOMER' as RESOURCE,id as increment_id,'手机号码' as repeat_view_type
+		from jk.T_JK_LOAN_CUSTOMER 
+		where  char_length(COALESCE(CUSTOMER_PHONE_SECOND,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,CUSTOMER_NAME as R_NAME,'本人'  as RELATION,
+		'0' as DICT_CUSTOMER_TYPE,CUSTOMER_TEL as phone,'jk.T_JK_LOAN_CUSTOMER' as RESOURCE,id as increment_id,'家庭固话' as repeat_view_type
+		from jk.T_JK_LOAN_CUSTOMER 
+		where char_length(COALESCE(CUSTOMER_TEL,''))&lt;&gt;0 and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.r_customer_coborrower_id as r_id,a.MATE_NAME as R_NAME,
+		'家庭联系人-配偶'  as RELATION,a.LOAN_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,MATE_TEL as phone,
+		'jk.T_JK_LOAN_MATE' as RESOURCE,a.id as increment_id,'家庭联系人(配偶)手机号码' as repeat_view_type
+		from jk.T_JK_LOAN_MATE a
+		left join jk.t_gl_dict b on b.type='jk_loan_man_flag' and a.LOAN_CUSTOMTER_TYPE = b.value
+		where (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(MATE_TEL,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as r_id,a.CONTACT_NAME as R_NAME,
+		CONCAT(b.label,'-',c.label) as RELATION,a.LOAN_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,
+		CONTACT_MOBILE as phone,'jk.T_JK_CONTACT' as RESOURCE,a.id as increment_id,CONCAT(b.label,'(',c.label,')手机号码') as repeat_view_type
+		from jk.T_JK_CONTACT a
+		left join t_gl_dict b on b.type='jk_relation_type' and a.relation_type = b.value
+		left join t_gl_dict c on c.parent_id=b.id and a.CONTACT_RELATION = c.value
+		where (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(CONTACT_MOBILE,''))&lt;&gt;0 and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.R_ID as r_id,case when a.DICT_R_CUSTOMTER_TYPE='0' then b.CUSTOMER_NAME
+	    when  a.DICT_R_CUSTOMTER_TYPE='1' then c.COBO_NAME when a.DICT_R_CUSTOMTER_TYPE='2' then d.MATE_NAME end as R_NAME,
+		case when a.DICT_R_CUSTOMTER_TYPE='0' then '本人' when a.DICT_R_CUSTOMTER_TYPE='1' then '共借人' 
+	    when a.DICT_R_CUSTOMTER_TYPE='2' then '家庭联系人-配偶' end as RELATION,a.DICT_R_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,COMP_TEL as phone,
+		'jk.T_JK_LOAN_COMPANY' as RESOURCE,a.id as increment_id,
+		case when a.DICT_R_CUSTOMTER_TYPE='0' then '单位固话' when a.DICT_R_CUSTOMTER_TYPE='1' then '单位固话' 
+	    when a.DICT_R_CUSTOMTER_TYPE='2' then '家庭联系人(配偶)单位固话' end as repeat_view_type
+		from jk.T_JK_LOAN_COMPANY a
+		left join jk.T_JK_LOAN_CUSTOMER b on a.R_ID = b.id and a.DICT_R_CUSTOMTER_TYPE='0'
+		left join jk.T_JK_LOAN_COBORROWER c on a.R_ID = c.id and a.DICT_R_CUSTOMTER_TYPE='1'
+		left join jk.T_JK_LOAN_MATE d on a.R_ID = d.id and a.DICT_R_CUSTOMTER_TYPE='2'
+		where (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1') and char_length(COALESCE(COMP_TEL,''))&lt;&gt;0 
+		and a.loan_code=#{loanCode}
+	
+</insert>
+<!-- 非首次运行，插入电话信息 -->
+<insert id="insertPhoneInfoOther" parameterType="java.lang.String">
+   INSERT INTO  jk.T_JK_PHONE_POOL (ID,LOAN_CODE,R_ID,R_NAME,RELATION,DICT_CUSTOMER_TYPE,PHONE,RESOURCE,INCREMENT_ID,REPEAT_VIEW_TYPE) 
+        select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,'1' as DICT_CUSTOMER_TYPE,cobo_mobile as phone,
+		'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'手机号码' as repeat_view_type
+		from jk.t_jk_loan_coborrower 
+		where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(cobo_mobile,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,
+		'1' as DICT_CUSTOMER_TYPE,cobo_mobile2 as phone,'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'手机号码' as repeat_view_type
+		from jk.t_jk_loan_coborrower 
+		where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(cobo_mobile2,''))&lt;&gt;0 and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,loan_code,id as r_id,cobo_name as R_NAME,'共借人'  as RELATION,
+		'1' as DICT_CUSTOMER_TYPE,COBO_NOW_TEL as phone,'jk.t_jk_loan_coborrower' as RESOURCE,id as increment_id,'家庭固话' as repeat_view_type
+		from jk.t_jk_loan_coborrower 
+		where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(COBO_NOW_TEL,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.r_customer_coborrower_id as r_id,a.MATE_NAME as R_NAME,
+		'家庭联系人-配偶'  as RELATION,a.LOAN_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,MATE_TEL as phone,
+		'jk.T_JK_LOAN_MATE' as RESOURCE,a.id as increment_id,'家庭联系人(配偶)手机号码' as repeat_view_type
+		from jk.T_JK_LOAN_MATE a
+		left join jk.t_gl_dict b on b.type='jk_loan_man_flag' and a.LOAN_CUSTOMTER_TYPE = b.value
+		where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(MATE_TEL,''))&lt;&gt;0  and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as r_id,a.CONTACT_NAME as R_NAME,
+		CONCAT(b.label,'-',c.label) as RELATION,a.LOAN_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,
+		CONTACT_MOBILE as phone,'jk.T_JK_CONTACT' as RESOURCE,a.id as increment_id,CONCAT(b.label,'(',c.label,')手机号码') as repeat_view_type
+		from jk.T_JK_CONTACT a
+		left join t_gl_dict b on b.type='jk_relation_type' and a.relation_type = b.value
+		left join t_gl_dict c on c.parent_id=b.id and a.CONTACT_RELATION = c.value
+		where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and char_length(COALESCE(CONTACT_MOBILE,''))&lt;&gt;0 and loan_code=#{loanCode}
+		union all
+		select getuuid32() as id,a.loan_code,a.r_id,case when a.DICT_R_CUSTOMTER_TYPE='0' then b.CUSTOMER_NAME when 
+		a.DICT_R_CUSTOMTER_TYPE='1' then c.COBO_NAME when a.DICT_R_CUSTOMTER_TYPE='2' then d.MATE_NAME end as R_NAME,
+		case when a.DICT_R_CUSTOMTER_TYPE='0' then '本人' when a.DICT_R_CUSTOMTER_TYPE='1' then '共借人' 
+	    when a.DICT_R_CUSTOMTER_TYPE='2' then '家庭联系人-配偶' end as RELATION,a.DICT_R_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,COMP_TEL as phone,
+		'jk.T_JK_LOAN_COMPANY' as RESOURCE,a.id as increment_id,case when a.DICT_R_CUSTOMTER_TYPE='0' then '单位固话' when a.DICT_R_CUSTOMTER_TYPE='1' then '单位固话' 
+	    when a.DICT_R_CUSTOMTER_TYPE='2' then '家庭联系人(配偶)单位固话' end as repeat_view_type
+		from jk.T_JK_LOAN_COMPANY a
+		left join jk.T_JK_LOAN_CUSTOMER b on a.R_ID = b.id and a.DICT_R_CUSTOMTER_TYPE='0'
+		left join jk.T_JK_LOAN_COBORROWER c on a.R_ID = c.id and a.DICT_R_CUSTOMTER_TYPE='1'
+		left join jk.T_JK_LOAN_MATE d on a.R_ID = d.id and a.DICT_R_CUSTOMTER_TYPE='2'
+		where (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1') and COMP_TEL is not null
+		and a.loan_code=#{loanCode}
+	
+</insert>
+<!-- 插入单位名称信息 -->
+<insert id="insertWorkNameInfo" parameterType="java.lang.String">
+INSERT INTO  jk.T_JK_WORK_NAME_POOL (ID,LOAN_CODE,R_ID,R_NAME,RELATION,DICT_CUSTOMER_TYPE,WORK_NAME,RESOURCE,INCREMENT_ID,REPEAT_VIEW_TYPE) 
+	select getuuid32() as id,a.loan_code,a.r_id,case when a.DICT_R_CUSTOMTER_TYPE='0' then b.CUSTOMER_NAME when 
+	 a.DICT_R_CUSTOMTER_TYPE='1' then c.COBO_NAME end as R_NAME,case when a.DICT_R_CUSTOMTER_TYPE='0' then '本人' when a.DICT_R_CUSTOMTER_TYPE='1' then '共借人' 
+	 end as RELATION,a.DICT_R_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,a.COMP_NAME as WORK_NAME,
+	'jk.T_JK_LOAN_COMPANY' as RESOURCE,a.id as increment_id,
+	'单位名称'  end as repeat_view_type
+	from jk.T_JK_LOAN_COMPANY a
+	left join jk.T_JK_LOAN_CUSTOMER b on a.R_ID = b.id and a.DICT_R_CUSTOMTER_TYPE='0'
+	left join jk.T_JK_LOAN_COBORROWER c on a.R_ID = c.id and a.DICT_R_CUSTOMTER_TYPE='1'
+	where (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1') and char_length(COALESCE(a.COMP_NAME,''))&lt;&gt;0 
+	and (a.DICT_R_CUSTOMTER_TYPE='0' or a.DICT_R_CUSTOMTER_TYPE='1') and a.loan_code=#{loanCode} 
+
+</insert>
+<!-- 插入单位地址信息 -->
+<insert id="insertWorkAddressFirst" parameterType="java.lang.String">
+INSERT INTO  jk.T_JK_ADDRESS_POOL (ID,LOAN_CODE,R_ID,R_NAME,RELATION,DICT_CUSTOMER_TYPE,PROVINCE,CITY,AREA,ADDRESS,RESOURCE,INCREMENT_ID,REPEAT_VIEW_TYPE) 
+select getuuid32() as id,loan_code,id as r_id,CUSTOMER_NAME as R_NAME,'本人' as RELATION,'0' as DICT_CUSTOMER_TYPE,CUSTOMER_LIVE_PROVINCE as PROVINCE,
+CUSTOMER_LIVE_CITY as CITY,CUSTOMER_LIVE_AREA as AREA,CUSTOMER_ADDRESS as ADDRESS,
+'jk.T_JK_LOAN_CUSTOMER' as RESOURCE,id as increment_id,'家庭地址' as repeat_view_type
+from jk.T_JK_LOAN_CUSTOMER 
+where (CUSTOMER_LIVE_PROVINCE is not null and CUSTOMER_LIVE_CITY is not null  and CUSTOMER_LIVE_AREA is not null and char_length(COALESCE(CUSTOMER_ADDRESS,''))&lt;&gt;0)
+and loan_code=#{loanCode}
+union all
+select getuuid32() as id,loan_code,id as r_id,COBO_NAME as R_NAME,'共借人' as RELATION,'1' as DICT_CUSTOMER_TYPE,COBO_LIVEING_PROVINCE as PROVINCE,
+COBO_LIVEING_CITY as city,COBO_LIVEING_AREA as AREA,COBO_NOW_ADDRESS as ADDRESS,
+'jk.T_JK_LOAN_COBORROWER' as RESOURCE,id as increment_id,'家庭地址' as repeat_view_type
+from jk.T_JK_LOAN_COBORROWER 
+where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and loan_code=#{loanCode}
+  and (COBO_LIVEING_PROVINCE is not null and COBO_LIVEING_CITY is not null  and COBO_LIVEING_AREA is not null and char_length(COALESCE(COBO_NOW_ADDRESS,''))&lt;&gt;0)
+union all
+select getuuid32() as id,a.loan_code,a.r_id,case when a.DICT_R_CUSTOMTER_TYPE='0' then b.CUSTOMER_NAME when  a.DICT_R_CUSTOMTER_TYPE='1' then c.COBO_NAME
+ end as R_NAME,case when a.DICT_R_CUSTOMTER_TYPE='0' then '本人'
+  when a.DICT_R_CUSTOMTER_TYPE='1' then '共借人' end  as RELATION,
+ a.DICT_R_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,a.COMP_PROVINCE as PROVINCE,a.COMP_CITY as city,
+a.COMP_ARER as AREA,a.COMP_ADDRESS as ADDRESS,'jk.T_JK_LOAN_COMPANY' as RESOURCE,a.id as increment_id,
+'单位地址' end as repeat_view_type
+from jk.T_JK_LOAN_COMPANY a
+left join jk.T_JK_LOAN_CUSTOMER b on a.R_ID = b.id and a.DICT_R_CUSTOMTER_TYPE='0'
+left join jk.T_JK_LOAN_COBORROWER c on a.R_ID = c.id and a.DICT_R_CUSTOMTER_TYPE='1'
+where (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1')
+and (a.COMP_PROVINCE is not null and a.COMP_CITY is not null  and a.COMP_ARER is not null and char_length(COALESCE(a.COMP_ADDRESS,''))&lt;&gt;0)
+ and (a.DICT_R_CUSTOMTER_TYPE='0' or a.DICT_R_CUSTOMTER_TYPE='1') and a.loan_code=#{loanCode}  
+</insert>
+
+<insert id="insertWorkAddressOther" parameterType="java.lang.String">
+INSERT INTO  jk.T_JK_ADDRESS_POOL  (ID,LOAN_CODE,R_ID,R_NAME,RELATION,DICT_CUSTOMER_TYPE,PROVINCE,CITY,AREA,ADDRESS,RESOURCE,INCREMENT_ID,REPEAT_VIEW_TYPE) 
+select getuuid32() as id,loan_code,id as r_id,COBO_NAME as R_NAME,'共借人' as RELATION,'1' as DICT_CUSTOMER_TYPE,
+COBO_LIVEING_PROVINCE as PROVINCE,COBO_LIVEING_CITY as city,COBO_LIVEING_AREA as AREA,COBO_NOW_ADDRESS as ADDRESS,
+'jk.T_JK_LOAN_COBORROWER' as RESOURCE,id as increment_id,'家庭地址' as repeat_view_type
+from jk.T_JK_LOAN_COBORROWER 
+where  (include_pool_flag is null or include_pool_flag &lt;&gt; '1') and loan_code=#{loanCode}
+ and (COBO_LIVEING_PROVINCE is not null and COBO_LIVEING_CITY is not null  and COBO_LIVEING_AREA is not null and char_length(COBO_NOW_ADDRESS)&lt;&gt;0)
+union all
+select getuuid32() as id,a.loan_code,a.r_id,case when
+ a.DICT_R_CUSTOMTER_TYPE='0' then b.CUSTOMER_NAME when  a.DICT_R_CUSTOMTER_TYPE='1' then
+  c.COBO_NAME end as R_NAME,case when a.DICT_R_CUSTOMTER_TYPE='0' then '本人'
+  when a.DICT_R_CUSTOMTER_TYPE='1' then '共借人' end  as RELATION,a.DICT_R_CUSTOMTER_TYPE as DICT_CUSTOMER_TYPE,
+a.COMP_PROVINCE as PROVINCE,a.COMP_CITY as city,
+a.COMP_ARER as AREA,a.COMP_ADDRESS as ADDRESS,'jk.T_JK_LOAN_COMPANY' as RESOURCE,a.id as increment_id,
+'单位地址' end as repeat_view_type
+from jk.T_JK_LOAN_COMPANY a
+left join jk.T_JK_LOAN_CUSTOMER b on a.R_ID = b.id and a.DICT_R_CUSTOMTER_TYPE='0'
+left join jk.T_JK_LOAN_COBORROWER c on a.R_ID = c.id and a.DICT_R_CUSTOMTER_TYPE='1'
+where (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1')
+ and (a.COMP_PROVINCE is not null and a.COMP_CITY is not null  and a.COMP_ARER is not null and char_length(COALESCE(a.COMP_ADDRESS,''))&lt;&gt;0)
+ and a.loan_code=#{loanCode} 
+</insert>
+<update id="updateCobo" parameterType="java.lang.String">
+	UPDATE jk.T_JK_LOAN_COBORROWER
+    SET INCLUDE_POOL_FLAG= '1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+<update id="updateMate" parameterType="java.lang.String">
+	UPDATE jk.T_JK_LOAN_MATE
+    SET INCLUDE_POOL_FLAG= '1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+<update id="updateContact" parameterType="java.lang.String">
+	UPDATE jk.T_JK_CONTACT
+    SET INCLUDE_POOL_FLAG= '1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+<update id="updateCompany" parameterType="java.lang.String">
+	UPDATE jk.T_JK_LOAN_COMPANY
+    SET INCLUDE_POOL_FLAG= '1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+
+<update id="updateWork" parameterType="java.lang.String">
+	UPDATE jk.T_JK_TEL_AUDIT_WORK
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE loan_code=#{loanCode} and work_info_source='01'
+</update>
+<update id="updateTelnum" parameterType="java.lang.String">
+	UPDATE jk.T_JK_DHZH_WORK_TELNUM
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE WORK_ID in (select id from jk.T_JK_TEL_AUDIT_WORK where loan_code=#{loanCode}) and work_tel_source='01'
+</update>
+<update id="updateTelContact" parameterType="java.lang.String">
+	UPDATE jk.T_JK_DHZH_DHGXSH
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+<update id="updateMyTel" parameterType="java.lang.String">
+	UPDATE jk.T_JK_DHZH_BRHS_DHXX
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE R_BRHS_ID in (select id from jk.T_JK_DHZH_BRHS where loan_code=#{loanCode})
+</update>
+<update id="updateMyFamilyTel" parameterType="java.lang.String">
+	UPDATE jk.T_JK_DHZH_DHBRSHP
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE R_CUSTOMER_COBORROWER_ID in (select id from jk.T_JK_DHZH_BRHS where loan_code=#{loanCode})
+</update>
+<update id="updateMyFamilyAddress" parameterType="java.lang.String">
+	UPDATE JK.T_JK_DHZH_DHGXBRSHD
+    SET IS_REPEAT= '1',is_in_pool ='1'
+ 	WHERE R_CUSTOMER_COBORROWER_ID in (select id from jk.T_JK_DHZH_BRHS where loan_code=#{loanCode})
+</update>
+<update id="updateCompManage" parameterType="java.lang.String">
+	UPDATE JK.T_JK_COMP_MANAGE
+    SET INCLUDE_POOL_FLAG= '1'
+ 	WHERE loan_code=#{loanCode}
+</update>
+</mapper>

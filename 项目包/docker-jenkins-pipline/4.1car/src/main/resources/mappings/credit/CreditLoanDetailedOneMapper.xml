@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditLoanDetailedOneDao">
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditLoanDetailedOne">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="relation_id" jdbcType="VARCHAR" property="relationId" />
+    <result column="loan_type" jdbcType="VARCHAR" property="loanType" />
+    <result column="guarantee_type" jdbcType="VARCHAR" property="guaranteeType" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="account_status" jdbcType="VARCHAR" property="accountStatu" />
+    <result column="repay_frequency" jdbcType="VARCHAR" property="repayFrequency" />
+    <result column="level_class" jdbcType="VARCHAR" property="levelClass" />
+    <result column="repay_months" jdbcType="INTEGER" property="repayMonths" />
+    <result column="release_day" jdbcType="DATE" property="releaseDay" />
+    <result column="actual_day" jdbcType="DATE" property="actualDay" />
+    <result column="conteact_amount" jdbcType="NUMERIC" property="conteactAmount" />
+    <result column="loan_balance" jdbcType="NUMERIC" property="loanBalance" />
+    <result column="geting_time" jdbcType="TIMESTAMP" property="getingTime" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+  </resultMap>
+    <sql id="Base_Column_List">
+    id, relation_id, loan_type, guarantee_type, currency, account_status, repay_frequency, 
+    level_class, repay_months, release_day, actual_day, conteact_amount, loan_balance, 
+    geting_time, create_by,create_time,modify_by,modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_jk_credit_loan_detailed_one
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findByParams" parameterType="map"  resultMap="BaseResultMap" >
+		select
+			<include refid="Base_Column_List"/>
+		from 
+		  t_jk_credit_loan_detailed_one 
+ 		where 
+			1=1
+		<if test="relationId != null and relationId != ''">
+			and relation_Id  = #{relationId}
+		</if>
+		order by id
+	</select>
+	
+		<!-- 查询数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditLoanDetailedOne">
+		SELECT 
+			 b.id,
+			 b.relation_id, 
+			 b.loan_type, 
+			 b.guarantee_type,
+			 b.currency, 
+			 b.account_status as account_statu, 
+			 b.repay_frequency, 
+    b.level_class, b.repay_months, b.release_day, b.actual_day, b.conteact_amount, b.loan_balance, 
+    b.geting_time
+		FROM 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_loan_detailed_one b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+		order by b.create_time
+	</select>
+	
+	
+	
+	
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_jk_credit_loan_detailed_one
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedOne">
+    insert into t_jk_credit_loan_detailed_one (id, relation_id, loan_type, 
+      guarantee_type, currency, account_status, 
+      repay_frequency, level_class, repay_months, 
+      release_day, actual_day, conteact_amount, 
+      loan_balance, geting_time,
+       create_by, 
+      create_time, modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{loanType,jdbcType=VARCHAR}, 
+      #{guaranteeType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{accountStatu,jdbcType=VARCHAR}, 
+      #{repayFrequency,jdbcType=VARCHAR}, #{levelClass,jdbcType=VARCHAR}, #{repayMonths,jdbcType=INTEGER}, 
+      #{releaseDay,jdbcType=DATE}, #{actualDay,jdbcType=DATE}, #{conteactAmount,jdbcType=NUMERIC}, 
+      #{loanBalance,jdbcType=NUMERIC}, #{getingTime,jdbcType=TIMESTAMP},
+      #{createBy,jdbcType=VARCHAR},  #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedOne">
+    insert into t_jk_credit_loan_detailed_one
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="loanType != null">
+        loan_type,
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="accountStatu != null">
+        account_status,
+      </if>
+      <if test="repayFrequency != null">
+        repay_frequency,
+      </if>
+      <if test="levelClass != null">
+        level_class,
+      </if>
+      <if test="repayMonths != null">
+        repay_months,
+      </if>
+      <if test="releaseDay != null">
+        release_day,
+      </if>
+      <if test="actualDay != null">
+        actual_day,
+      </if>
+      <if test="conteactAmount != null">
+        conteact_amount,
+      </if>
+      <if test="loanBalance != null">
+        loan_balance,
+      </if>
+      <if test="getingTime != null">
+        geting_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanType != null">
+        #{loanType,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeType != null">
+        #{guaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStatu != null">
+        #{accountStatu,jdbcType=VARCHAR},
+      </if>
+      <if test="repayFrequency != null">
+        #{repayFrequency,jdbcType=VARCHAR},
+      </if>
+      <if test="levelClass != null">
+        #{levelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="repayMonths != null">
+        #{repayMonths,jdbcType=INTEGER},
+      </if>
+      <if test="releaseDay != null">
+        #{releaseDay,jdbcType=DATE},
+      </if>
+      <if test="actualDay != null">
+        #{actualDay,jdbcType=DATE},
+      </if>
+      <if test="conteactAmount != null">
+        #{conteactAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="loanBalance != null">
+        #{loanBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="getingTime != null">
+        #{getingTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateData" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedOne">
+    update t_jk_credit_loan_detailed_one
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanType != null">
+        loan_type = #{loanType,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type = #{guaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStatu != null">
+        account_status = #{accountStatu,jdbcType=VARCHAR},
+      </if>
+      <if test="repayFrequency != null">
+        repay_frequency = #{repayFrequency,jdbcType=VARCHAR},
+      </if>
+      <if test="levelClass != null">
+        level_class = #{levelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="repayMonths != null">
+        repay_months = #{repayMonths,jdbcType=INTEGER},
+      </if>
+      
+        release_day = #{releaseDay,jdbcType=DATE},
+   
+      
+        actual_day = #{actualDay,jdbcType=DATE},
+       
+      <if test="conteactAmount != null">
+        conteact_amount = #{conteactAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="loanBalance != null">
+        loan_balance = #{loanBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="getingTime != null">
+        geting_time = #{getingTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

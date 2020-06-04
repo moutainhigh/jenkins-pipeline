@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.management.dao.GlRefuseDao">
+	
+    <sql id="GlRefuseColumns">
+	id,
+	refuse_code,
+	refuse_name,
+	refuse_grade,
+	parent_id
+    </sql>
+	
+	<!-- 根据ID获取申请 -->
+	<select id="findGlRefuses" resultType="com.creditharmony.approve.management.entity.GlRefuse">		
+	select <include refid="GlRefuseColumns"/> 
+	from jk.t_gl_refuse a
+	where  a.parent_id in 
+	(select id from  jk.t_gl_refuse b
+ 	where b.refuse_code='N1' OR b.refuse_code='N2');
+	</select>
+	<!-- 获取所有的一级拒绝码 -->
+	<select id="findAllGlRefuses" resultType="com.creditharmony.approve.management.entity.GlRefuse">		
+	select <include refid="GlRefuseColumns"/> 
+	from jk.t_gl_refuse 
+	</select>
+	<!-- 通过一级拒绝ID 获取二级拒绝码 -->
+	<select id="getDataByParentId" resultType="com.creditharmony.approve.management.entity.GlRefuse" parameterType="com.creditharmony.approve.management.entity.GlRefuse" >
+	 select
+		id, 
+		refuse_code as refuseCode,
+		refuse_name as refuseName
+	 from 
+	   jk.t_gl_refuse
+ 	 where 
+		parent_id = #{parentIds,jdbcType=VARCHAR}
+ 		and delete_flag = '0'
+ 		and refuse_grade = #{refuseGrade,jdbcType=VARCHAR}
+ 		order by id
+	</select>
+	
+	<!-- 通过一级拒绝码 获取二级拒绝码 -->
+	<select id="getDataByParentCode" resultType="com.creditharmony.approve.management.entity.GlRefuse" parameterType="java.lang.String" >
+	 SELECT
+	   b.refuse_code as refuseCode,
+	   b.refuse_name as refuseName
+	 FROM 
+	   jk.t_gl_refuse a
+	 LEFT JOIN jk.t_gl_refuse b on a.id=b.parent_id
+ 	 WHERE 
+ 	   a.refuse_code = #{parentCode,jdbcType=VARCHAR}
+ 		order by a.id
+	</select>
+	
+	<!-- 通过一级拒绝码 获取二级拒绝码 -->
+	<select id="getNewDataByParentCode" resultType="com.creditharmony.approve.management.entity.GlRefuse" parameterType="java.lang.String" >
+	 SELECT
+	   b.id,
+	   b.refuse_code as refuseCode,
+	   b.refuse_name as refuseName
+	 FROM 
+	   jk.t_gl_refuse a
+	 LEFT JOIN jk.t_gl_refuse b on a.id=b.parent_id
+ 	 WHERE 
+ 	   a.refuse_code = #{parentCode,jdbcType=VARCHAR}
+ 	   and a.delete_flag = '0'
+ 		order by a.id
+	</select>
+	
+	<!-- 拒借码维护部分开始 -->
+	<sql id="RefuseColumns" >
+		a.id, 
+		a.refuse_code, 
+		a.refuse_name,
+		a.refuse_grade, 
+		a.parent_id AS "parent.id",
+		a.refuse_index,
+		a.create_by, 
+		a.delete_flag,
+		a.create_time, 
+		a.modify_by,
+		a.modify_time
+  </sql>
+  <sql id="refuseJoins">
+	LEFT JOIN jk.t_gl_refuse p ON p.id = a.parent_id
+   </sql>
+	<select id="getDataById" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+		<include refid="RefuseColumns"/>
+		FROM jk.t_gl_refuse a
+		<include refid="refuseJoins"/>
+		WHERE a.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+		<include refid="RefuseColumns"/>
+		FROM jk.t_gl_refuse a
+		<include refid="refuseJoins"/>
+		WHERE a.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findList" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+		<include refid="RefuseColumns"/>
+		FROM jk.t_gl_refuse a
+		<include refid="refuseJoins"/>
+		WHERE a.delete_flag = #{DEL_FLAG_NORMAL}
+		OR a.id = #{currentUser.department.refuse.id}
+		ORDER BY a.refuse_code
+	</select>
+
+	<select id="findAllList" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+		<include refid="RefuseColumns"/>
+		FROM jk.t_gl_refuse a
+		<include refid="refuseJoins"/>
+		WHERE a.delete_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.refuse_code
+	</select>
+	
+	
+	<select id="findByParentIdsLike" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+		<include refid="RefuseColumns"/>
+		FROM jk.t_gl_refuse a
+		<include refid="refuseJoins"/>
+		WHERE a.delete_flag = #{DEL_FLAG_NORMAL} <!--  AND a.parent_ids LIKE #{parentIds}-->
+		ORDER BY a.refuse_code
+	</select>
+	
+	<insert id="insertData">
+		INSERT INTO jk.t_gl_refuse(
+		    id, 
+		    refuse_code, 
+		    refuse_name, 
+		    refuse_grade, 
+		    parent_id,
+		    refuse_index,
+		    create_by, 
+		    delete_flag,
+		    create_time, 
+		    modify_by,
+		    modify_time
+		) VALUES (
+			#{id}, 
+			#{refuseCode}, 
+			#{refuseName}, 
+			#{refuseGrade}, 
+			#{parent.id}, 
+			#{sort}, 
+			#{createBy},
+			#{delFlag}, 
+			#{createTime}, 
+			#{modifyBy}, 
+			#{modifyTime}
+		)
+	</insert>
+	
+	<insert id="insert">
+		INSERT INTO jk.t_gl_refuse(
+		    id, 
+		    refuse_code, 
+		    refuse_name, 
+		    refuse_grade, 
+		    parent_id,
+		    refuse_index,
+		    create_by, 
+		    delete_flag,
+		    create_time, 
+		    modify_by,
+		    modify_time
+		) VALUES (
+			#{id}, 
+			#{refuseCode}, 
+			#{refuseName}, 
+			#{refuseGrade}, 
+			#{parent.id}, 
+			#{sort}, 
+			#{createBy},
+			#{delFlag}, 
+			#{createTime}, 
+			#{modifyBy}, 
+			#{modifyTime}
+		)
+	</insert>
+	
+	
+	
+	<update id="updateDataById">
+		UPDATE jk.t_gl_refuse SET 
+			parent_id = #{parent.id}, 
+			refuse_code = #{refuseCode}, 
+			refuse_name = #{refuseName}, 
+			refuse_index = #{sort}, 
+			refuse_grade = #{refuseGrade}, 
+			modify_by = #{modifyBy}, 
+			modify_time = #{modifyTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="update">
+		UPDATE jk.t_gl_refuse SET 
+			parent_id = #{parent.id}, 
+			refuse_code = #{refuseCode}, 
+			refuse_name = #{refuseName}, 
+			refuse_index = #{sort}, 
+			refuse_grade = #{refuseGrade}, 
+			modify_by = #{modifyBy}, 
+			modify_time = #{modifyTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE jk.t_gl_refuse SET 
+			delete_flag = #{DEL_FLAG_DELETE}
+		<!-- WHERE id = #{id} OR parent_ids LIKE CONCAT('%,', #{id}, ',%') -->
+		WHERE id = #{id}  
+	</update>
+	
+	<select id="findByParam" parameterType="com.creditharmony.approve.management.entity.GlRefuse" resultType="com.creditharmony.approve.management.entity.GlRefuse">
+	select 
+		id 
+	from 
+		jk.t_gl_refuse 
+	where
+		1=1
+		<if test="refuseName != null and refuseName != ''">
+			and refuse_name = #{refuseName}
+		</if>
+		<if test="refuseCode != null and refuseCode != ''">
+			and refuse_code = #{refuseCode}
+		</if>
+	</select>
+	<!-- 拒借码维护部分结束 -->
+	<select id="findName" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT REFUSE_NAME FROM T_GL_REFUSE WHERE REFUSE_CODE=#{refuseCode}
+	</select>
+</mapper>

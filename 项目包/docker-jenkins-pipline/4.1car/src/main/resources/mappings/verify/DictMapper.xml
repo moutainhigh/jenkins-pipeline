@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.ApproveDictDao" >
+
+  <resultMap type="com.creditharmony.approve.verify.entity.ex.DictEx" id="dictMap">
+  	 <id column="id" property="id" jdbcType="VARCHAR" />
+	 <result column="value" property="value" jdbcType="VARCHAR" />
+	 <result column="label" property="label" jdbcType="VARCHAR" />
+	 <result column="type" property="type" jdbcType="VARCHAR" />
+	 <collection property="dictExs" resultMap="secondDictMap" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  
+  <resultMap type="com.creditharmony.approve.verify.entity.ex.DictEx" id="secondDictMap">
+  	 <id column="secondId" property="id" jdbcType="VARCHAR" />
+	 <result column="secondValue" property="value" jdbcType="VARCHAR" />
+	 <result column="secondLabel" property="label" jdbcType="VARCHAR" />
+	 <result column="secondType" property="type" jdbcType="VARCHAR" />
+	 <collection property="dictExs" resultMap="thirdDictMap" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  
+  <resultMap type="com.creditharmony.approve.verify.entity.ex.DictEx" id="thirdDictMap">
+  	 <id column="thirdId" property="id" jdbcType="VARCHAR" />
+	 <result column="thirdValue" property="value" jdbcType="VARCHAR" />
+	 <result column="thirdLabel" property="label" jdbcType="VARCHAR" />
+	 <result column="thirdType" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getDictsByType" resultMap="dictMap" parameterType="java.lang.String">
+  	SELECT 
+  		a.id,
+  		a.value,
+  		a.label,
+  		a.type,
+  		b.id as secondId,
+  		b.value as secondValue,
+  		b.label as secondLabel,
+  		b.type as secondType,
+  		c.id as thirdId,
+  		c.value as thirdValue,
+  		c.label as thirdLabel,
+  		c.type as thirdType
+  	FROM jk.t_gl_dict a
+  	LEFT JOIN jk.t_gl_dict b on concat(a.type,'_',a.value) = b.type
+  	LEFT JOIN jk.t_gl_dict c on concat(b.type,'_',b.value) = c.type
+  	WHERE a.type = #{type}
+  	ORDER by a.sort,b.sort,c.sort
+  </select>
+ 
+  <select id="getByParentId" resultType="com.creditharmony.core.dict.entity.Dict" parameterType="java.util.Map">
+  	SELECT 
+  		b.value,
+  		b.label
+  	FROM jk.t_gl_dict a
+  	LEFT JOIN jk.t_gl_dict b ON b.parent_id=a.id
+  	WHERE a.type=#{type} AND a.value=#{parentValue}
+  </select>
+  
+</mapper>

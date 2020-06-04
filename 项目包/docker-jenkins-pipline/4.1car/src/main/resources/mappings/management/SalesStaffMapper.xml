@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.management.dao.SalesStaffDao" >
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.management.entity.SalesStaff" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="SALES_CODE" property="salesCode" jdbcType="VARCHAR" />
+		<result column="SALES_NAME" property="salesName" jdbcType="VARCHAR" />
+		<result column="SALES_TEL" property="salesTel" jdbcType="VARCHAR" />
+		<result column="WORK_FLAG" property="workFlag" jdbcType="VARCHAR" />
+		<result column="DICT_JOB_GRADE" property="dictJobGrade" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getSalesStaff"  resultType="com.creditharmony.approve.management.entity.SalesStaff" parameterType="java.lang.String">
+		select 
+			s.id,
+		    s.SALES_CODE, 
+			s.SALES_NAME,
+			s.SALES_TEL ,
+			s.WORK_FLAG ,
+			s.DICT_JOB_GRADE
+		 from T_JK_ANTIFRAUD_SALES_STAFF s  
+	</select> 
+	<select id="findByParams" parameterType="java.util.Map" resultType="com.creditharmony.approve.management.entity.SalesStaff">
+		select 
+			s.id,
+			s.SALES_CODE, 
+			s.SALES_NAME,
+			s.SALES_TEL ,
+			s.WORK_FLAG ,
+			s.DICT_JOB_GRADE
+		FROM 	
+			T_JK_ANTIFRAUD_SALES_STAFF s
+		
+		where 1=1
+			 	
+		<if test="salesCode != null and salesCode != ''">
+			and s.SALES_CODE  = #{salesCode}
+		</if>
+		<if test="salesName != null and salesName != ''">
+			and s.SALES_NAME  = #{salesName}
+		</if>
+		<if test="salesTel != null and salesTel != ''">
+			and s.SALES_TEL  = #{salesTel}
+		</if>
+		<if test="workFlag != null and workFlag != ''">
+			and s.WORK_FLAG  = #{workFlag}
+		</if>
+		<if test="dictJobGrade != null and dictJobGrade != ''">
+			and s.DICT_JOB_GRADE  = #{dictJobGrade}
+		</if>
+			
+	</select>
+	
+	<insert id="addSalesStaff" parameterType="com.creditharmony.approve.management.entity.SalesStaff">
+	INSERT INTO 
+		T_JK_ANTIFRAUD_SALES_STAFF(id, SALES_CODE, SALES_NAME, SALES_TEL, WORK_FLAG, 
+		DICT_JOB_GRADE)
+    VALUES 
+    	(#{id}, #{salesCode}, #{salesName}, #{salesTel}, #{workFlag}, #{dictJobGrade});
+    	  
+  </insert>
+  
+  <delete id="delSalesStaff" parameterType="java.lang.String">
+		DELETE FROM
+			T_JK_ANTIFRAUD_SALES_STAFF
+		WHERE 
+			id = #{id};
+  
+  </delete>
+  
+  <update id="updateSalesStaff" parameterType="com.creditharmony.approve.management.entity.SalesStaff">
+  		UPDATE T_JK_ANTIFRAUD_SALES_STAFF
+		<set>
+		<if test="id != null">
+			Id=#{id},
+		</if> 
+		<if test="salesCode != null">
+			SALES_CODE=#{salesCode},
+		</if>
+		<if test="salesName != null">
+			SALES_NAME=#{salesName},
+		</if>
+		<if test="salesTel != null">
+			SALES_TEL=#{salesTel},
+		</if>
+		<if test="workFlag != null">
+			WORK_FLAG=#{workFlag},
+		</if>
+		<if test="dictJobGrade != null">
+			DICT_JOB_GRADE=#{dictJobGrade},
+		</if>
+
+		</set>
+		WHERE Id = #{id};
+  </update>
+  
+  <select id="findList" resultType="com.creditharmony.approve.management.entity.SalesStaff">
+  	   select 
+  	   		id,
+		    SALES_CODE, 
+			SALES_NAME,
+			SALES_TEL ,
+			WORK_FLAG ,
+			DICT_JOB_GRADE
+		 from T_JK_ANTIFRAUD_SALES_STAFF  where id=#{id}
+  </select>
+  
+  <select id="findSalesStaff" resultType="com.creditharmony.approve.management.entity.SalesStaff">
+  		 select 
+  		 	id,
+		    SALES_CODE, 
+			SALES_NAME,
+			SALES_TEL ,
+			WORK_FLAG ,
+			DICT_JOB_GRADE
+		 from T_JK_ANTIFRAUD_SALES_STAFF  where id=#{id}
+  </select>
+</mapper>

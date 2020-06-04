@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.WorkTelNumDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.WorkTelNum" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="work_id" property="workId" jdbcType="VARCHAR" />
+    <result column="work_unit_tel" property="workUnitTel" jdbcType="NUMERIC" />
+    <result column="work_tel_source" property="workTelSource" jdbcType="VARCHAR" />
+    <result column="work_unittel_true" property="workUnittelTrue" jdbcType="VARCHAR" />
+    <result column="exception_record" property="exceptionRecord" jdbcType="VARCHAR" />
+    <result column="assessment_result" property="assessmentResult" jdbcType="VARCHAR" />
+    <result column="work_net_assess_result" property="workNetAssessResult" jdbcType="TIMESTAMP" />
+    <result column="work_check_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+    <result column="is_repeat" property="isRepeat" jdbcType="VARCHAR" />
+    <result column="is_in_pool" property="isInPool" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!--新增单位电话wanglidong  -->
+  <insert id="insertWorkTel" parameterType="com.creditharmony.approve.antifraud.entity.ex.PhoneWorkEx" >
+    insert into jk.t_jk_dhzh_work_telnum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="workId != null" >
+        work_id,
+      </if>
+      <if test="workUnitTel != null" >
+        work_unit_tel,
+      </if>
+      <if test="workTelSource != null" >
+        work_tel_source,
+      </if>
+      <if test="workUnittelTrue != null" >
+        work_unittel_true,
+      </if>
+      <if test="exceptionRecord != null" >
+        exception_record,
+      </if>
+      <if test="assessmentResult != null" >
+        assessment_result,
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result,
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark,
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat,
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="editRemark != null" >
+        edit_remark,
+      </if>
+      <if test="telRemark != null" >
+        tel_remark,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="workId != null" >
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitTel != null" >
+        #{workUnitTel,jdbcType=NUMERIC},
+      </if>
+      <if test="workTelSource != null" >
+        #{workTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnittelTrue != null" >
+        #{workUnittelTrue,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionRecord != null" >
+        #{exceptionRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentResult != null" >
+        #{assessmentResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        #{workNetAssessResult,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workCheckRemark != null" >
+        #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editRemark != null" >
+        #{editRemark,jdbcType=TIMESTAMP},
+      </if>
+      <if test="telRemark != null" >
+        #{telRemark,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loanId != null" >
+        #{loanId,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <insert id="insertWorkTelNum" parameterType="com.creditharmony.approve.phone.entity.WorkTelNum" >
+    insert into jk.t_jk_dhzh_work_telnum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="workId != null" >
+        work_id,
+      </if>
+      <if test="workUnitTel != null" >
+        work_unit_tel,
+      </if>
+      <if test="workTelSource != null" >
+        work_tel_source,
+      </if>
+      <if test="workUnittelTrue != null" >
+        work_unittel_true,
+      </if>
+      <if test="exceptionRecord != null" >
+        exception_record,
+      </if>
+      <if test="assessmentResult != null" >
+        assessment_result,
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result,
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark,
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat,
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="editRemark != null" >
+        edit_remark,
+      </if>
+      <if test="telRemark != null" >
+        tel_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="workId != null" >
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitTel != null" >
+        #{workUnitTel,jdbcType=NUMERIC},
+      </if>
+      <if test="workTelSource != null" >
+        #{workTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnittelTrue != null" >
+        #{workUnittelTrue,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionRecord != null" >
+        #{exceptionRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentResult != null" >
+        #{assessmentResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        #{workNetAssessResult,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workCheckRemark != null" >
+        #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="loanId != null" >
+        #{loanId,jdbcType=VARCHAR},
+      </if>      
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editRemark != null" >
+        #{editRemark,jdbcType=TIMESTAMP},
+      </if>
+      <if test="telRemark != null" >        
+        #{telRemark,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 更新信息 -->
+  <update id="update" parameterType="com.creditharmony.approve.phone.entity.WorkTelNum" >
+    update jk.t_jk_dhzh_work_telnum
+    <set >
+      <if test="workId != null" >
+        work_id = #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitTel != null" >
+        work_unit_tel = #{workUnitTel,jdbcType=NUMERIC},
+      </if>
+      <if test="workTelSource != null" >
+        work_tel_source = #{workTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnittelTrue != null" >
+        work_unittel_true = #{workUnittelTrue,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionRecord != null" >
+        exception_record = #{exceptionRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentResult != null" >
+        assessment_result = #{assessmentResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result = #{workNetAssessResult,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark = #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat = #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool = #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null">
+        EDIT_REMARK = #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.String">
+  delete from jk.t_jk_dhzh_work_telnum   where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByWorkId" parameterType="java.lang.String">
+  DELETE FROM T_JK_DHZH_WORK_TELNUM WHERE WORK_ID=#{workId}
+  </delete>
+
+  <!--修改单位电话  wanglidong-->
+	<update id="updataWorkTel"  parameterType="com.creditharmony.approve.antifraud.entity.ex.PhoneWorkEx">
+	      update jk.t_jk_dhzh_work_telnum
+	      <set>
+			<if test="workId != null" >
+			  work_id = #{workId},
+			</if>
+			<if test="workUnitTel != null" >
+			  work_unit_tel = #{workUnitTel},
+			</if>
+			<if test="workTelSource != null" >
+			  work_tel_source = #{workTelSource},
+			</if>
+			<if test="workUnittelTrue != null" >
+			  work_unittel_true = #{workUnittelTrue},
+			</if>
+			<if test="exceptionRecord != null" >
+			  exception_record = #{exceptionRecord},
+			</if>
+			<if test="assessmentResult != null" >
+			  assessment_result = #{assessmentResult},
+			</if>
+			<if test="workNetAssessResult != null" >
+			  work_net_assess_result = #{workNetAssessResult},
+			</if>
+			<if test="workCheckRemark != null" >
+			  work_check_remark = #{workCheckRemark},
+			</if>
+			<if test="isRepeat != null" >
+			  is_repeat = #{isRepeat},
+			</if>
+			<if test="isInPool != null" >
+			  is_in_pool = #{isInPool},
+			</if>
+			<if test="createBy != null" >
+			  create_by = #{createBy},
+			</if>
+			<if test="createTime != null" >
+			  create_time = #{createTime},
+			</if>
+			<if test="modifyBy != null" >
+			  modify_by = #{modifyBy},
+			</if>
+			<if test="modifyTime != null" >
+			  modify_time = #{modifyTime},
+			</if>
+			<if test="editRemark != null" >
+			  edit_remark = #{editRemark},
+			</if>
+			<if test="telRemark != null" >
+			  tel_remark = #{telRemark},
+			</if>
+	      </set>
+	      WHERE id = #{id}	
+	</update>
+	  <!--修改电话录音  wanglidong-->
+	<update id="updataTelRecordAll"  parameterType="java.util.List">
+	   <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	      update jk.t_jk_dhzh_dhlyxx
+	      <set>
+		    <if test="item.answerState != null" >
+				dhlyxx_answer_state = #{item.answerState},
+		    </if>
+		    <if test="item.answerInfo != null" >
+				dhlyxx_answer_inf = #{item.answerInfo},
+		    </if>
+		    <if test="item.modifyBy != null" >
+				modify_by = #{item.modifyBy},
+		    </if>
+		    <if test="item.modifyTime != null" >
+		  		modify_time = #{item.modifyTime}
+		    </if>
+	      </set>
+	      WHERE id = #{item.lyId}	
+	  </foreach> 
+	</update>
+	<update id="updateNums" parameterType="java.util.List">
+		<foreach collection="nums" item="item" index="index" separator=";">
+			UPDATE JK.T_JK_DHZH_WORK_TELNUM 
+			<set>
+			<if test="item.workUnittelTrue != null">
+				WORK_UNITTEL_TRUE = #{item.workUnittelTrue},
+			</if>
+			<if test="item.exceptionRecord != null">
+				EXCEPTION_RECORD = #{item.exceptionRecord},
+			</if>
+			<if test="item.modifyBy != null" >
+				modify_by = #{item.modifyBy},
+		    </if>
+		    <if test="item.modifyTime != null" >
+		  		modify_time = #{item.modifyTime}
+		    </if>
+			</set>
+			WHERE ID = #{item.id}
+		</foreach>
+	</update>
+<select id="getSrc" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT WORK_TEL_SOURCE FROM JK.T_JK_DHZH_WORK_TELNUM WHERE ID=#{id}
+</select>
+</mapper>
+
+

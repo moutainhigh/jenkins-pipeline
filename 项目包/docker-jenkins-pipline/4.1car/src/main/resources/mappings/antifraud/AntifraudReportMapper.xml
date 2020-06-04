@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudReportDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.antifraud.entity.AntifraudReport" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="r_status_his_id" property="rStatusHisId" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_report_type" property="dictReportType" jdbcType="VARCHAR" />
+    <result column="mention_group_id" property="mentionGroupId" jdbcType="VARCHAR" />
+    <result column="antifraud_msg" property="antifraudMsg" jdbcType="VARCHAR" />
+    <result column="mention_user_id" property="mentionUserId" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+   <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 提报反欺诈查看页面 -->
+<select id="findAntifraudReport" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" resultMap="BaseResultMap">
+	select  
+		b.refuse_name as dictReportType,
+		a.antifraud_msg,
+		d.name as mentionGroupId,
+		c.name as mentionUserId
+	from 
+		jk.t_jk_antifraud_report a
+	left join 
+		jk.t_gl_refuse b
+	on 
+		a.dict_report_type = b.refuse_code
+	left join 
+		jk.t_gl_user c
+	on 
+		a.mention_user_id = c.id
+	left join 
+		t_gl_org d
+	on 
+		a.mention_group_id=d.id
+	where 
+		a.R_STATUS_HIS_ID=#{id}
+</select>
+  <!-- 刘燕军  反欺诈反馈信息 -->
+ <select id="findListByLoanCode" resultType="com.creditharmony.approve.verify.entity.ex.AntiFraudResultEx" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  >
+ SELECT
+    A.DICT_REPORT_TYPE,
+    A.ANTIFRAUD_MSG,
+    A.LOAN_CODE,
+    C.LABEL AS DICT_CASE_RESULT,
+    B.JUDGE_RISK_MSG,
+    (CASE WHEN A.DICT_CHECK_TYPE = '3' THEN '系统提报反欺诈'
+    ELSE   '人工提报反欺诈'
+    END) AS reportFrom
+  FROM JK.T_JK_ANTIFRAUD_REPORT A
+  LEFT JOIN JK.T_JK_ANTIFRAUD_JUDGE B  ON	A.ID=B.R_REPORT_ID	
+  LEFT JOIN JK.T_GL_DICT C  ON	C.TYPE='jk_black_grey_list' AND C.VALUE= b.dict_case_result 
+  WHERE 
+  		(A.DICT_CHECK_TYPE='3'
+  			<if test="checkType != null and checkType != ''">
+				OR A.DICT_CHECK_TYPE = #{checkType}
+			</if>
+  		)
+		<if test="loanCode != null and loanCode != ''">
+			AND A.LOAN_CODE = #{loanCode}
+		</if>
+		AND B.DICT_CASE_RESULT IS NOT NULL
+  </select>
+   <!-- 刘燕军 插入 提报反欺诈信息 -->
+   <insert id="insertSelective" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudReport" >
+    insert into jk.t_jk_antifraud_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rStatusHisId != null" >
+        r_status_his_id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="dictBlackGrayType != null" >
+        dict_black_gray_type,
+      </if>
+      <if test="dictReportType != null" >
+        dict_report_type,
+      </if>
+      <if test="mentionGroupId != null" >
+        mention_group_id,
+      </if>
+      <if test="antifraudMsg != null" >
+        antifraud_msg,
+      </if>
+      <if test="mentionUserId != null" >
+        mention_user_id,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rStatusHisId != null" >
+        #{rStatusHisId,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictBlackGrayType != null" >
+        #{dictBlackGrayType,jdbcType=VARCHAR},
+      </if>      
+      <if test="dictReportType != null" >
+        #{dictReportType,jdbcType=VARCHAR},
+      </if>
+      <if test="mentionGroupId != null" >
+        #{mentionGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="antifraudMsg != null" >
+        #{antifraudMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="mentionUserId != null" >
+        #{mentionUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert> 
+	<!--wanglidong 获取一级拒借码 -->
+	<select id="getOneLevel" parameterType="java.lang.String"  resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+			id,refuse_grade, refuse_code, refuse_name,parent_id
+		FROM
+			t_gl_refuse 
+		where 
+			refuse_grade = '0'
+		and
+			delete_flag = '0'
+		and 
+			parent_id= '0'
+	</select>
+	<!--wanglidong 获取二级拒借码 -->
+	<select id="getTwoLevel" parameterType="java.lang.String"   resultType="com.creditharmony.approve.management.entity.GlRefuse">
+		SELECT
+			id,refuse_grade, refuse_code, refuse_name,parent_id
+		FROM
+			t_gl_refuse 
+		where 
+			refuse_grade = '0'
+		and
+			delete_flag = '0'
+		and 
+			parent_id=#{0}
+	</select>
+</mapper>

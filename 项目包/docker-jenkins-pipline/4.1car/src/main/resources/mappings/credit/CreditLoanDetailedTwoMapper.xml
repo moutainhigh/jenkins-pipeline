@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditLoanDetailedTwoDao">
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditLoanDetailedTwo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="relation_id" jdbcType="VARCHAR" property="relationId" />
+    <result column="repay_months" jdbcType="INTEGER" property="repayMonths" />
+    <result column="real_repay_day" jdbcType="DATE" property="realRepayDay" />
+    <result column="should_repay_amount" jdbcType="NUMERIC" property="shouldRepayAmount" />
+    <result column="real_repay_amount" jdbcType="NUMERIC" property="realRepayAmount" />
+    <result column="current_overdue" jdbcType="INTEGER" property="currentOverdue" />
+    <result column="current_overdue_total" jdbcType="NUMERIC" property="currentOverdueTotal" />
+    <result column="overdue_no_total" jdbcType="INTEGER" property="overdueNoTotal" />
+    <result column="overdue_no_highest" jdbcType="INTEGER" property="overdueNoHighest" />
+    <result column="overdue_principal_level1" jdbcType="NUMERIC" property="overduePrincipalLevel1" />
+    <result column="overdue_principal_level2" jdbcType="NUMERIC" property="overduePrincipalLevel2" />
+    <result column="overdue_principal_level3" jdbcType="NUMERIC" property="overduePrincipalLevel3" />
+    <result column="overdue_principal_level4" jdbcType="NUMERIC" property="overduePrincipalLevel4" />
+    <result column="clearing_day" jdbcType="DATE" property="clearingDay" />
+    	<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relation_id, repay_months, real_repay_day, should_repay_amount, real_repay_amount, 
+    current_overdue, current_overdue_total, overdue_no_total, overdue_no_highest, overdue_principal_level1, 
+    overdue_principal_level2, overdue_principal_level3, overdue_principal_level4, clearing_day,
+    create_by,create_time,modify_by,modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_jk_credit_loan_detailed_two
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <!-- 从贷款一中获取ID，作为贷款二的关联ID进行查询 -->
+  <select id="findByParams" parameterType="map"  resultMap="BaseResultMap" >
+		select
+			<include refid="Base_Column_List"/>
+		from 
+		  t_jk_credit_loan_detailed_two 
+ 		where 
+			1=1
+		<if test="relationId != null and relationId != ''">
+		    
+			and relation_Id in(select id from t_jk_credit_loan_detailed_one where relation_id=#{relationId,jdbcType=VARCHAR})    
+		</if>
+		order by create_time 
+	</select>
+	  <delete id="deleteByRelationId" parameterType="java.lang.String">
+    delete from t_jk_credit_loan_detailed_two
+where relation_Id=#{relationId,jdbcType=VARCHAR} 
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_jk_credit_loan_detailed_two
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedTwo">
+    insert into t_jk_credit_loan_detailed_two (id, relation_id, repay_months, 
+      real_repay_day, should_repay_amount, real_repay_amount, 
+      current_overdue, current_overdue_total, overdue_no_total, 
+      overdue_no_highest, overdue_principal_level1, 
+      overdue_principal_level2, overdue_principal_level3, 
+      overdue_principal_level4, clearing_day,
+      create_by, 
+      create_time, modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{repayMonths,jdbcType=INTEGER}, 
+      #{realRepayDay,jdbcType=DATE}, #{shouldRepayAmount,jdbcType=NUMERIC}, #{realRepayAmount,jdbcType=NUMERIC}, 
+      #{currentOverdue,jdbcType=INTEGER}, #{currentOverdueTotal,jdbcType=NUMERIC}, #{overdueNoTotal,jdbcType=INTEGER}, 
+      #{overdueNoHighest,jdbcType=INTEGER}, #{overduePrincipalLevel1,jdbcType=NUMERIC}, 
+      #{overduePrincipalLevel2,jdbcType=NUMERIC}, #{overduePrincipalLevel3,jdbcType=NUMERIC}, 
+      #{overduePrincipalLevel4,jdbcType=NUMERIC}, #{clearingDay,jdbcType=DATE},
+      #{createBy,jdbcType=VARCHAR},  #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+      
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedTwo">
+    insert into t_jk_credit_loan_detailed_two
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="repayMonths != null">
+        repay_months,
+      </if>
+      <if test="realRepayDay != null">
+        real_repay_day,
+      </if>
+      <if test="shouldRepayAmount != null">
+        should_repay_amount,
+      </if>
+      <if test="realRepayAmount != null">
+        real_repay_amount,
+      </if>
+      <if test="currentOverdue != null">
+        current_overdue,
+      </if>
+      <if test="currentOverdueTotal != null">
+        current_overdue_total,
+      </if>
+      <if test="overdueNoTotal != null">
+        overdue_no_total,
+      </if>
+      <if test="overdueNoHighest != null">
+        overdue_no_highest,
+      </if>
+      <if test="overduePrincipalLevel1 != null">
+        overdue_principal_level1,
+      </if>
+      <if test="overduePrincipalLevel2 != null">
+        overdue_principal_level2,
+      </if>
+      <if test="overduePrincipalLevel3 != null">
+        overdue_principal_level3,
+      </if>
+      <if test="overduePrincipalLevel4 != null">
+        overdue_principal_level4,
+      </if>
+      <if test="clearingDay != null">
+        clearing_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="repayMonths != null">
+        #{repayMonths,jdbcType=INTEGER},
+      </if>
+      <if test="realRepayDay != null">
+        #{realRepayDay,jdbcType=DATE},
+      </if>
+      <if test="shouldRepayAmount != null">
+        #{shouldRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayAmount != null">
+        #{realRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="currentOverdue != null">
+        #{currentOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="currentOverdueTotal != null">
+        #{currentOverdueTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="overdueNoTotal != null">
+        #{overdueNoTotal,jdbcType=INTEGER},
+      </if>
+      <if test="overdueNoHighest != null">
+        #{overdueNoHighest,jdbcType=INTEGER},
+      </if>
+      <if test="overduePrincipalLevel1 != null">
+        #{overduePrincipalLevel1,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel2 != null">
+        #{overduePrincipalLevel2,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel3 != null">
+        #{overduePrincipalLevel3,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel4 != null">
+        #{overduePrincipalLevel4,jdbcType=NUMERIC},
+      </if>
+      <if test="clearingDay != null">
+        #{clearingDay,jdbcType=DATE},
+      </if>
+     
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedTwo">
+    update t_jk_credit_loan_detailed_two
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="repayMonths != null">
+        repay_months = #{repayMonths,jdbcType=INTEGER},
+      </if>
+      <if test="realRepayDay != null">
+        real_repay_day = #{realRepayDay,jdbcType=DATE},
+      </if>
+      <if test="shouldRepayAmount != null">
+        should_repay_amount = #{shouldRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayAmount != null">
+        real_repay_amount = #{realRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="currentOverdue != null">
+        current_overdue = #{currentOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="currentOverdueTotal != null">
+        current_overdue_total = #{currentOverdueTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="overdueNoTotal != null">
+        overdue_no_total = #{overdueNoTotal,jdbcType=INTEGER},
+      </if>
+      <if test="overdueNoHighest != null">
+        overdue_no_highest = #{overdueNoHighest,jdbcType=INTEGER},
+      </if>
+      <if test="overduePrincipalLevel1 != null">
+        overdue_principal_level1 = #{overduePrincipalLevel1,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel2 != null">
+        overdue_principal_level2 = #{overduePrincipalLevel2,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel3 != null">
+        overdue_principal_level3 = #{overduePrincipalLevel3,jdbcType=NUMERIC},
+      </if>
+      <if test="overduePrincipalLevel4 != null">
+        overdue_principal_level4 = #{overduePrincipalLevel4,jdbcType=NUMERIC},
+      </if>
+      <if test="clearingDay != null">
+        clearing_day = #{clearingDay,jdbcType=DATE},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditLoanDetailedTwo">
+    update t_jk_credit_loan_detailed_two
+    set relation_id = #{relationId,jdbcType=VARCHAR},
+      repay_months = #{repayMonths,jdbcType=INTEGER},
+      real_repay_day = #{realRepayDay,jdbcType=DATE},
+      should_repay_amount = #{shouldRepayAmount,jdbcType=NUMERIC},
+      real_repay_amount = #{realRepayAmount,jdbcType=NUMERIC},
+      current_overdue = #{currentOverdue,jdbcType=INTEGER},
+      current_overdue_total = #{currentOverdueTotal,jdbcType=NUMERIC},
+      overdue_no_total = #{overdueNoTotal,jdbcType=INTEGER},
+      overdue_no_highest = #{overdueNoHighest,jdbcType=INTEGER},
+      overdue_principal_level1 = #{overduePrincipalLevel1,jdbcType=NUMERIC},
+      overdue_principal_level2 = #{overduePrincipalLevel2,jdbcType=NUMERIC},
+      overdue_principal_level3 = #{overduePrincipalLevel3,jdbcType=NUMERIC},
+      overdue_principal_level4 = #{overduePrincipalLevel4,jdbcType=NUMERIC},
+      clearing_day = #{clearingDay,jdbcType=DATE},
+       create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

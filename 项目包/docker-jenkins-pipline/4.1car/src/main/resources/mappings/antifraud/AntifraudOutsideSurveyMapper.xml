@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudOutsideSurveyDao" >
+
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.antifraud.entity.AntifraudOutsideSurvey" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="survey_time" property="surveyTime" jdbcType="TIMESTAMP" />
+    <result column="survey_project" property="surveyProject" jdbcType="VARCHAR" />
+    <result column="survey_msg" property="surveyMsg" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insert">
+		INSERT INTO jk.T_JK_ANTIFRAUD_OUTSIDE_SURVEY(
+			id,
+			loan_code,
+			survey_department,
+			survey_time,
+			survey_user_name,
+			survey_project,
+			survey_msg,
+			create_by,
+			create_time, 
+      		modify_by, 
+      		modify_time
+		) VALUES (
+			#{id},
+			#{loanCode},
+			#{surveyDepartment},
+			#{surveyTime},
+			#{surveyUserName}, 
+			#{surveyProject}, 
+			#{surveyMsg},
+			#{createBy}, 
+			#{createTime}, 
+      		#{modifyBy},
+      		#{modifyTime}
+		)
+	</insert>
+	<select id="findList" resultMap="BaseResultMap">
+		SELECT 
+				id,
+				survey_department,
+				survey_time,
+				survey_user_name,
+				survey_project,
+				survey_msg
+		FROM jk.T_JK_ANTIFRAUD_OUTSIDE_SURVEY	
+		WHERE loan_code = #{loanCode}
+		ORDER BY create_time
+	</select>
+	
+	<update id="update">
+		UPDATE jk.T_JK_ANTIFRAUD_OUTSIDE_SURVEY
+		SET survey_department = #{surveyDepartment},
+			survey_time = #{surveyTime},
+			survey_user_name = #{surveyUserName},
+			survey_project = #{surveyProject},
+			survey_msg = #{surveyMsg},
+			modify_by = #{modifyBy},
+      		modify_time = #{modifyTime}
+		WHERE id = #{id}	
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM jk.T_JK_ANTIFRAUD_OUTSIDE_SURVEY
+		WHERE id = #{id}
+	</delete>
+	
+	<select id="get" resultMap="BaseResultMap">
+		SELECT 
+			id,
+			loan_code,
+			survey_department,
+			survey_time,
+			survey_user_name,
+			survey_project,
+			survey_msg
+		FROM jk.T_JK_ANTIFRAUD_OUTSIDE_SURVEY
+		WHERE id = #{id} 
+	</select>
+	<!--获取进件时间  -->
+	<select id="getIntoTime"  parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			customer_into_time
+  		FROM 
+  			t_jk_loan_info 
+  		where 
+  			loan_code=#{loanCode};
+	</select>
+</mapper>

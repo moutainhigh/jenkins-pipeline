@@ -1,0 +1,333 @@
+version: '2'
+services:
+  microservice-process-bairong-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-process-bairong
+        source_port: 8001
+        target_port: 8001
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-admin:
+    scale: 1
+    start_on_create: true
+  microservice-config-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-config
+        source_port: 7001
+        target_port: 7001
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-website:
+    scale: 1
+    start_on_create: true
+  redis:
+    scale: 1
+    start_on_create: true
+  microservice-boss-tenant:
+    scale: 1
+    start_on_create: true
+  microservice-boss-oauth2-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-oauth2
+        source_port: 9001
+        target_port: 9001
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-outside03:
+    external_ips:
+    - 10.167.202.192
+    start_on_create: true
+  microservice-outside02:
+    external_ips:
+    - 10.150.33.112
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 9003
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  microservice-outside01:
+    external_ips:
+    - 10.167.202.192
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 10001
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  microservice-process-security-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-process-security
+        source_port: 8002
+        target_port: 8002
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-tenant-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-tenant
+        source_port: 9000
+        target_port: 9000
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-oauth2:
+    scale: 1
+    start_on_create: true
+  microservice-boss-website-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-website
+        source_port: 80
+        target_port: 80
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-logs:
+    scale: 1
+    start_on_create: true
+  microservice-sleuth:
+    scale: 1
+    start_on_create: true
+  microservice-boss-logs-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-logs
+        source_port: 7004
+        target_port: 7004
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-process-bairong:
+    scale: 1
+    start_on_create: true
+  microservice-process-security:
+    scale: 1
+    start_on_create: true
+  microservice-boss-apigateway:
+    scale: 1
+    start_on_create: true
+  microservice-hystrix-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-hystrix
+        source_port: 7003
+        target_port: 7003
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-sleuth-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-sleuth
+        source_port: 7002
+        target_port: 7002
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-boss-apigateway-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-apigateway
+        source_port: 9003
+        target_port: 9003
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-outside-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      config: "global \n    log 127.0.0.1:8514 local0 \n    log 127.0.0.1:8514 local1\
+        \ info \n\ndefaults \n    log global \n    option tcplog"
+      port_rules:
+      - hostname: ''
+        path: /insur/h5
+        priority: 1
+        protocol: http
+        service: microservice-outside03
+        source_port: 80
+        target_port: 10002
+      - path: /h5
+        priority: 2
+        protocol: http
+        service: microservice-outside01
+        source_port: 80
+        target_port: 10001
+      - path: /carrier
+        priority: 3
+        protocol: http
+        service: microservice-outside01
+        source_port: 80
+        target_port: 10001
+      - path: /
+        priority: 4
+        protocol: http
+        service: microservice-outside02
+        source_port: 80
+        target_port: 9003
+      stickiness_policy:
+        indirect: false
+        mode: insert
+        nocache: false
+        postonly: false
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      reinitializing_timeout: 60000
+  microservice-hystrix:
+    scale: 1
+    start_on_create: true
+  microservice-eureka-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-eureka
+        source_port: 8761
+        target_port: 8761
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-config:
+    scale: 1
+    start_on_create: true
+  microservice-boss-admin-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-admin
+        source_port: 9002
+        target_port: 9002
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-eureka:
+    scale: 1
+    start_on_create: true

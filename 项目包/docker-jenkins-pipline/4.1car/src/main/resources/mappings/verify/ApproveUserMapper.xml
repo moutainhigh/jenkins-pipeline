@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.ApproveUserDao" >
+  <select id="getFinalChecks" resultType="com.creditharmony.core.users.entity.User" parameterType="java.lang.String">
+  	SELECT 
+  		a.id,a.name 
+  	FROM t_gl_user a
+	LEFT JOIN t_gl_user_role_org b ON b.user_id=a.id
+	WHERE b.role_id = #{roleId}
+  </select>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.carloan.dao.CarCompletedListDao">
+	<resultMap id="entityMap" type="com.creditharmony.approve.carloan.entity.ex.CarVerifyListEx">
+		<result property="loanCode" column="LOAN_CODE" jdbcType="VARCHAR"/>
+		<result property="applyId" column="APPLY_ID" jdbcType="VARCHAR"/>
+		<result property="loanCustomerName" column="LOAN_CUSTOMER_NAME" jdbcType="VARCHAR"/>
+		<result property="province" column="PROVINCE_ID" jdbcType="VARCHAR"/>
+		<result property="city" column="CITY_ID" jdbcType="VARCHAR"/>
+		<result property="provinceName" column="PROVINCENAME" jdbcType="VARCHAR"/>
+		<result property="cityName" column="CITYNAME" jdbcType="VARCHAR"/>
+		<result property="loanTermOrgId" column="STORES_NAME" jdbcType="VARCHAR"/>
+		<result property="orgName" column="STORE_NAME" jdbcType="VARCHAR"/>
+		<result property="loanApplyAmount" column="LOAN_APPLY_AMOUNT" jdbcType="NUMERIC"/>
+		<result property="storeAssessAmount" column="STORE_AEESEE_AMOUNT" jdbcType="NUMERIC"/>
+		<result property="loanDivStore" column="loanDivStore" jdbcType="NUMERIC"/>
+		<result property="loanMonths" column="LOAN_MONTHS" jdbcType="INTEGER"/>
+		<result property="dictProductType" column="PRODUCT_TYPE" jdbcType="VARCHAR"/>
+		<result property="plateNumbers" column="PLATE_NUMBERS" jdbcType="VARCHAR"/>
+		<result property="customerIntoTime" column="CUSTOMER_INTO_TIME" jdbcType="TIMESTAMP"/>
+		<result property="dictLoanStatus" column="DICT_LOAN_STATUS" jdbcType="VARCHAR"/>
+		<result property="loanStatusName" column="LOAN_STATUS_NAME" jdbcType="VARCHAR"/>
+		<result property="dictSettleRelend" column="DICT_SETTLE_RELEND" jdbcType="VARCHAR"/>
+		<result property="loanAdditionalApplyid" column="LOAN_ADDITIONAL_APPLYID" jdbcType="VARCHAR"/>
+		<result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+    <sql id="verifyColumns">
+		li.LOAN_CUSTOMER_NAME,
+		li.APPLY_ID,
+		li.LOAN_APPLY_AMOUNT,
+		li.LOAN_MONTHS,
+		li.STORE_NAME,
+		li.CUSTOMER_INTO_TIME,
+		vi.PLATE_NUMBERS,
+		vi.STORE_ASSESS_AMOUNT,
+		ar.LOAN_CODE,
+		li.DICT_LOAN_STATUS,
+		li.STORES_NAME
+	</sql>
+	<sql id="extraColumns">
+		p.PRODUCT_NAME PRODUCT_TYPE,
+		case when li.LOAN_ADDITIONAL_APPLYID is not null then '是' else '否' end LOAN_ADDITIONAL_APPLYID,
+		d1.LABEL DICT_SETTLE_RELEND,
+		d2.LABEL LOAN_STATUS_NAME,
+	 	u.name CREATE_BY,
+	</sql>
+	<sql id="groupColumns">
+    	p.PRODUCT_NAME,
+		li.LOAN_ADDITIONAL_APPLYID,
+		d1.LABEL,
+		d2.LABEL,
+		u.name,
+	</sql>
+	
+	<!-- 查询已办列表 -->
+	<select id="getCompletedListDoneList" resultMap="entityMap">
+		SELECT
+			<include refid="extraColumns"/>
+			<include refid="verifyColumns"/>,
+			case when li.LOAN_APPLY_AMOUNT is null or vi.STORE_ASSESS_AMOUNT is null or vi.STORE_ASSESS_AMOUNT = 0 
+			then null 
+			when li.LOAN_APPLY_AMOUNT = 0 and vi.STORE_ASSESS_AMOUNT = 0 
+			then 100 
+			else li.LOAN_APPLY_AMOUNT / vi.STORE_ASSESS_AMOUNT * 100
+			end loanDivStore,
+			count(lco.*) coborroweCount
+		FROM (SELECT t.*
+			FROM (
+				SELECT tt.*,row_number() over(partition by tt.LOAN_CODE order by tt.CREATE_TIME desc) rn
+				FROM T_CJ_AUDIT_RESULT tt
+				<where>
+					<if test="transactorCode != null and transactorCode != ''">
+						and tt.create_by = #{transactorCode}
+					</if>
+				</where>
+			) t WHERE <![CDATA[t.rn <= 1]]>) ar
+		LEFT JOIN T_CJ_LOAN_INFO li ON ar.LOAN_CODE = li.LOAN_CODE
+		LEFT JOIN T_CJ_VEHICLE_INFO vi ON vi.LOAN_CODE = ar.LOAN_CODE
+		LEFT JOIN (SELECT d.*
+			FROM (
+				SELECT dd.loan_code, dd.create_by, row_number() over(partition by dd.LOAN_CODE order by dd.CREATE_TIME desc) rn
+				FROM T_CJ_AUDIT_RESULT dd
+				<where>
+					<if test="lastUser != null and lastUser != ''">
+						and dd.dict_check_type = #{lastUser}
+					</if>
+				</where>
+			) d WHERE <![CDATA[d.rn <= 1]]>) ddd ON ddd.LOAN_CODE = li.LOAN_CODE
+		LEFT JOIN T_GL_USER u ON u.id = ddd.create_by
+		LEFT JOIN T_GL_JK_PRODUCT p ON li.DICT_PRODUCT_TYPE = p.PRODUCT_CODE
+		LEFT JOIN T_GL_DICT d1 ON d1.VALUE = li.DICT_SETTLE_RELEND AND d1.TYPE = 'jk_circle_loan_flag'
+		LEFT JOIN T_GL_DICT d2 ON d2.VALUE = li.DICT_LOAN_STATUS AND d2.TYPE = 'jk_car_loan_status'
+		LEFT JOIN T_JK_LOAN_COBORROWER lco ON lco.LOAN_CODE = ar.LOAN_CODE
+		<where> 1=1 
+			<if test="loanCustomerName != null and loanCustomerName != ''">
+				and li.LOAN_CUSTOMER_NAME like '%' || #{loanCustomerName} || '%'
+			</if>
+			<if test="dictProductType != null and dictProductType != ''">
+				and p.PRODUCT_CODE = #{dictProductType}
+			</if>
+			<if test="dictLoanStatus != null and dictLoanStatus != ''">
+				and li.DICT_LOAN_STATUS = #{dictLoanStatus}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				and u.department_id = #{departmentId}
+			</if>
+			<if test="orgList != null and orgList != '' and orgList.size() > 0">
+				and li.store_code in 
+				<foreach collection="orgList" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+				and <![CDATA[ li.CUSTOMER_INTO_TIME >= #{minCustomerIntoTime} ]]>
+			</if>
+			<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+				and <![CDATA[ li.CUSTOMER_INTO_TIME - 1 < #{maxCustomerIntoTime} ]]>
+			</if>
+			<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+				and <![CDATA[ ar.TRANSACTOR_TIME >= #{minLoanAuditTime} ]]>
+			</if>
+			<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+				and <![CDATA[ ar.TRANSACTOR_TIME - 1 < #{maxLoanAuditTime} ]]>
+			</if>
+		</where>
+		group by 
+			<include refid="groupColumns"/>
+			<include refid="verifyColumns"/>
+		order by li.CUSTOMER_INTO_TIME desc
+	</select>
+</mapper>

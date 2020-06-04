@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.CreditRiskDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.CreditRisk" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="loan_customer_code" property="loanCustomerCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="risk_search_time" property="riskSearchTime" jdbcType="TIMESTAMP" />
+    <result column="effective_flag" property="effectiveFlag" jdbcType="VARCHAR" />
+    <result column="risk_effective_remark" property="riskEffectiveRemark" jdbcType="VARCHAR" />
+    <result column="risk_credit_version" property="riskCreditVersion" jdbcType="VARCHAR" />
+    <result column="credit_json" property="creditJson" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="risk_check_opinion" property="riskCheckOpinion" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+	
+	<sql id="Base_Column_List" >
+      id, loan_code, loan_customer_code, 
+      r_id, dict_customer_type, risk_search_time, 
+      effective_flag, risk_effective_remark, risk_credit_version, 
+      credit_json, dict_check_type, risk_check_opinion, 
+      create_by, create_time, modify_by, 
+      modify_time
+  </sql>
+
+
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.CreditRisk" >
+    insert into jk.t_jk_credit_risk (id, loan_code, loan_customer_code, 
+      r_id, dict_customer_type, risk_search_time, 
+      effective_flag, risk_effective_remark, risk_credit_version, 
+      credit_json, dict_check_type, risk_check_opinion, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{loanCustomerCode,jdbcType=VARCHAR}, 
+      #{rId,jdbcType=VARCHAR}, #{dictCustomerType,jdbcType=VARCHAR}, #{riskSearchTime,jdbcType=TIMESTAMP}, 
+      #{effectiveFlag,jdbcType=VARCHAR}, #{riskEffectiveRemark,jdbcType=VARCHAR}, #{riskCreditVersion,jdbcType=VARCHAR}, 
+      #{creditJson,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR}, #{riskCheckOpinion,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+    
+    <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.CreditRisk" >
+    insert into jk.t_jk_credit_risk
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="loanCustomerCode != null" >
+        loan_customer_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="riskSearchTime != null" >
+        risk_search_time,
+      </if>
+      <if test="effectiveFlag != null" >
+        effective_flag,
+      </if>
+      <if test="riskEffectiveRemark != null" >
+        risk_effective_remark,
+      </if>
+      <if test="riskCreditVersion != null" >
+        risk_credit_version,
+      </if>
+      <if test="creditJson != null" >
+        credit_json,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="riskCheckOpinion != null" >
+        risk_check_opinion,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCustomerCode != null" >
+        #{loanCustomerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="riskSearchTime != null" >
+        #{riskSearchTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveFlag != null" >
+        #{effectiveFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="riskEffectiveRemark != null" >
+        #{riskEffectiveRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="riskCreditVersion != null" >
+        #{riskCreditVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="creditJson != null" >
+        #{creditJson,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="riskCheckOpinion != null" >
+        #{riskCheckOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

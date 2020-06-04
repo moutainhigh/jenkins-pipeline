@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhBrhsJkjeDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.DhzhBrhsJkje" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_brhs_id" property="checkId" jdbcType="VARCHAR" />
+    <result column="loan_amount" property="loanAmount" jdbcType="NUMERIC" />
+    <result column="loan_months" property="loanMonths" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, r_brhs_id, loan_amount, loan_months, create_by, create_time, modify_by, modify_time
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_dhzh_brhs_jkje
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhBrhsJkje" >
+    insert into jk.t_jk_dhzh_brhs_jkje
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="checkId != null" >
+        r_brhs_id,
+      </if>
+      <if test="loanAmount != null" >
+        loan_amount,
+      </if>
+      <if test="loanMonths != null" >
+        loan_months,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="checkId != null" >
+        #{checkId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmount != null" >
+        #{loanAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="loanMonths != null" >
+        #{loanMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.phone.entity.DhzhBrhsJkje" >
+    update jk.t_jk_dhzh_brhs_jkje
+    <set >
+      <if test="checkId != null" >
+        r_brhs_id = #{checkId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmount != null" >
+        loan_amount = #{loanAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="loanMonths != null" >
+        loan_months = #{loanMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+	<!-- 根据关联ID删除数据 -->
+	<delete id="deleteByRid" parameterType="java.lang.String">
+		delete from jk.t_jk_dhzh_brhs_jkje
+		where r_brhs_id = #{rId,jdbcType=VARCHAR}
+	</delete>
+
+
+</mapper>

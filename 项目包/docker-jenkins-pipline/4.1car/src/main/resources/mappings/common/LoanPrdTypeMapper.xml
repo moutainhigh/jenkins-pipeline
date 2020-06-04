@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.LoanPrdTypeDao" >
+
+    <resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.LoanPrdTypeEntity" >
+        <id column="no" property="no" jdbcType="NUMERIC" />
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="product_type_code" property="productTypeCode" jdbcType="VARCHAR" />
+		<result column="class_type" property="classType" jdbcType="VARCHAR" />
+		<result column="prduct_type" property="prductType" jdbcType="VARCHAR" />
+		<result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+		<result column="product_type_status" property="productTypeStatus" jdbcType="VARCHAR" />
+		<result column="start_day" property="startDay" jdbcType="DATE" />
+		<result column="close_day" property="closeDay" jdbcType="DATE" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+  
+    <sql id="Base_Column_List" >
+		id, 
+		product_type_code, 
+		class_type, 
+		prduct_type, 
+		product_type_name, 
+		product_type_status, 
+		start_day, 
+		close_day, 
+		remark, 
+		create_by, 
+		create_time, 
+		modify_by, 
+		modify_time
+    </sql>
+
+    <!-- 检索产品类型的键值对 ************************************************************************************************ -->
+    <select id="selPrdTypeKV" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT 
+            product_type_code,
+            product_type_name 
+        FROM  
+            t_gl_jk_product_type where   close_day <![CDATA[ > ]]> NOW()
+        
+            <if test="productTypeStatus != null and productTypeStatus != ''">
+                AND product_type_status = #{productTypeStatus}
+            </if> 
+                
+            
+        
+    </select>
+    
+    <!-- 根据产品类型ID检索产品类型名称************************************************************************************************ -->
+    <select id="selPrdTypeNamebyId" resultType="java.lang.String">
+        SELECT 
+            product_type_name 
+        FROM  
+            t_gl_jk_product_type
+        <where>
+            <if test="productTypeCode != null and productTypeCode != ''">
+                product_type_code = #{productTypeCode}
+            </if>
+        </where>
+    </select>
+	
+</mapper>

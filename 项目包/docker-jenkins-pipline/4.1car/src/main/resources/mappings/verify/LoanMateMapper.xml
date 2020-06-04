@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.LoanMateDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.LoanMate" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="mate_name" property="mateName" jdbcType="VARCHAR" />
+    <result column="mate_age" property="mateAge" jdbcType="NUMERIC" />
+    <result column="loan_customter_type" property="loanCustomterType" jdbcType="VARCHAR" />
+    <result column="mate_birthday" property="mateBirthday" jdbcType="TIMESTAMP" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="mate_cert_num" property="mateCertNum" jdbcType="VARCHAR" />
+    <result column="mate_tel" property="mateTel" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, mate_name, mate_age, loan_customter_type, mate_birthday, dict_cert_type, 
+    mate_cert_num, mate_tel, create_by, create_time, modify_by, modify_time
+  </sql>
+  
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.LoanMate" >
+    insert into jk.t_jk_loan_mate (id, loan_code, mate_name, 
+      mate_age, loan_customter_type, mate_birthday, 
+      dict_cert_type, mate_cert_num, mate_tel, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{mateName,jdbcType=VARCHAR}, 
+      #{mateAge,jdbcType=NUMERIC}, #{loanCustomterType,jdbcType=VARCHAR}, #{mateBirthday,jdbcType=TIMESTAMP}, 
+      #{dictCertType,jdbcType=VARCHAR}, #{mateCertNum,jdbcType=VARCHAR}, #{mateTel,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+	<!-- 根据借款编号查询数据 -->
+	<select id="getByLoanCode" parameterType="com.creditharmony.approve.verify.entity.LoanMate" resultMap="BaseResultMap">
+		select 
+			<include refid="Base_Column_List" />
+		from
+			jk.t_jk_loan_mate
+		where
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+	<!-- 查看画面获取配偶信息 -->
+	<select id="viewGetByLoanCode"  parameterType="com.creditharmony.approve.verify.entity.LoanMate" resultType="com.creditharmony.approve.verify.entity.LoanMate">
+		select 
+			a.id,
+			a.MATE_NAME,
+			b.label as dictCertType,
+			a.MATE_CERT_NUM,
+			a.MATE_TEL
+		from
+			jk.t_jk_loan_mate a
+		left join 
+			jk.t_gl_dict b
+		on a.DICT_CERT_TYPE = b.value and b.type='jk_certificate_type'
+		where
+			1=1
+			<if test="loanCode != null and loanCode != ''">
+				and a.loan_code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="loanCustomterType != null and loanCustomterType != ''">
+				and a.loan_customter_type = #{loanCustomterType,jdbcType=VARCHAR}
+			</if>
+	</select>
+</mapper>

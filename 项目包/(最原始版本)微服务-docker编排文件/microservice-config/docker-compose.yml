@@ -1,0 +1,29 @@
+version: '2'
+services:
+  microservice-config:
+    image: 10.150.33.104/microservice-uat/microservice-config:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.hostname_override: container_name
+  microservice-fegin-ribbon-test:
+    image: rancher/dns-service
+    external_links:
+    - microservice-fegin-ribbon-test/fegin-ribbon-test-lb:fegin-ribbon-test-lb
+  config-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7001:7001/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-eureka:
+    image: rancher/dns-service
+    external_links:
+    - microservice-eureka/eureka-lb:eureka-lb
+  microservice-boss-logs:
+    image: rancher/dns-service
+    external_links:
+    - microservice/microservice-boss-logs:microservice-boss-logs

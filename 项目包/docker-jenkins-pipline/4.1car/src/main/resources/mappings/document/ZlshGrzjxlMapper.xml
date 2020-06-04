@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshGrzjxlDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshGrzjxl" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_grzj_id" property="rGrzjId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type " property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="educational_certifcate_type" property="educationalCertifcateType" jdbcType="VARCHAR" />
+    <result column="education_school" property="educationSchool" jdbcType="VARCHAR" />
+    <result column="educational_certifcate_num" property="educationalCertifcateNum" jdbcType="VARCHAR" />
+    <result column="educational_certifcate_time" property="educationalCertifcateTime" jdbcType="TIMESTAMP" />    
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 添加个人证件学历 -->
+  <insert id="insertGrzjxl" parameterType="com.creditharmony.approve.document.entity.ZlshGrzjxl" >
+    insert into jk.t_jk_zlsh_grzjxl  (id, loan_code, r_grzj_id, 
+      dict_customer_type, educational_certifcate_type, education_school, 
+      educational_certifcate_num, educational_certifcate_time,dict_check_type,dict_source_type, 
+      create_by, create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{rGrzjId,jdbcType=VARCHAR}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{educationalCertifcateType,jdbcType=VARCHAR}, 
+      #{educationSchool,jdbcType=VARCHAR}, #{educationalCertifcateNum,jdbcType=VARCHAR},#{educationalCertifcateTime,jdbcType=TIMESTAMP}, 
+      #{dictCheckType, jdbcType=VARCHAR},#{dictSourceType, jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <!-- 修改个人证件学历 -->
+  <update id="updateGrzjxl" parameterType="com.creditharmony.approve.document.entity.ZlshGrzjxl" >
+	update jk.t_jk_zlsh_grzjxl
+	set
+		<if test="educationalCertifcateType != null and educationalCertifcateType != ''">
+			educational_certifcate_type = #{educationalCertifcateType,jdbcType=VARCHAR},
+		</if>
+		<if test="educationSchool != null and educationSchool != ''">
+			education_school = #{educationSchool,jdbcType=VARCHAR},
+		</if>
+		<if test="educationalCertifcateNum != null and educationalCertifcateNum != ''">
+			educational_certifcate_num = #{educationalCertifcateNum,jdbcType=VARCHAR},
+		</if>
+		<if test="educationalCertifcateTime != null and educationalCertifcateTime != ''">
+			educational_certifcate_time = #{educationalCertifcateTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="modifyBy != null and modifyBy != ''">
+			modify_by = #{modifyBy,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyTime != null and modifyTime != ''">
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		</if>
+	where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 获取所有个人证件学历 -->
+  <select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshGrzjxl" resultMap="BaseResultMap">
+	  SELECT id, loan_code, r_grzj_id, dict_customer_type, educational_certifcate_type, education_school, educational_certifcate_num,
+	  educational_certifcate_time,dict_check_type, dict_source_type, create_by, create_time, modify_by, 
+      modify_time
+	  FROM jk.t_jk_zlsh_grzjxl
+	  WHERE  1=1
+	   <if test="loanCode != null" >
+        and loan_code = #{loanCode}
+      </if>
+	   <if test="dictCustomerType != null" >
+        and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+      </if>
+      <if test="rGrzjId != null" >
+        and r_grzj_id = #{rGrzjId,jdbcType=VARCHAR}
+      </if>
+       order by create_time
+  </select>
+     <!-- 删除个人证件学历-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_grzjxl
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+       <!-- 删除经营地址证明-->                        
+  <delete id="deleteByRId" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_grzjxl
+	  WHERE r_grzj_id = #{Rid,jdbcType=VARCHAR}
+  </delete>
+  
+</mapper>

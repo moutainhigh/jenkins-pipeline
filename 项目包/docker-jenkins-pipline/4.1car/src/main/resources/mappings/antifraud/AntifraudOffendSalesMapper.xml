@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudOffendSalesDao" >
+  <!--   wanglidong 获取销售人员匹配信息  -->
+  <select id="getAntifraudOffendSales" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudOffendSales" >
+    select 
+		sales.id, 
+		sales.rules_code, 
+		sales.loan_code_now, 
+		sales.loan_code, 
+		sales.offend_sales_name, 
+		sales.offend_tel, 
+		sales.offend_name, 
+		dict.label as work_flag, 
+		sales.dict_job_grade, 
+		sales.create_by, 
+		sales.create_time, 
+		sales.modify_by,
+		sales.modify_time
+    from 
+    	jk.t_jk_antifraud_offend_sales sales
+	left join
+		t_gl_dict dict
+	on 
+		sales.work_flag = dict.value and dict.type = 'com_user_status'
+    where 
+    	loan_code_now = #{1} 
+	and
+		rules_code = #{0}
+  </select> 
+</mapper>

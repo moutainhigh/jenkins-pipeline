@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshJydzzmDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshJydzzm" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_jyzm_id" property="rJyzmId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="jydzzm_expire_day" property="jydzzmExpireDay" jdbcType="TIMESTAMP" />
+    <result column="jydzzm_rent_month" property="jydzzmRentMonth" jdbcType="NUMERIC" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="place_situation" property="placeSituation" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    
+    <result column="month_pay_money" property="monthPayMonth" jdbcType="NUMERIC" />
+    <result column="business_area" property="businessArea" jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <!-- 添加经营地址证明 -->
+  <insert id="insertJydzzm" parameterType="com.creditharmony.approve.document.entity.ZlshJydzzm" >
+    insert into jk.t_jk_zlsh_jydzzm (id, loan_code, r_jyzm_id, 
+      dict_customer_type, jydzzm_expire_day, jydzzm_rent_month, 
+      dict_check_type, place_situation ,dict_source_type, 
+      create_by, create_time, modify_by, modify_time,month_pay_money,business_area
+      )
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rJyzmId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{jydzzmExpireDay,jdbcType=TIMESTAMP}, 
+      #{jydzzmRentMonth,jdbcType=NUMERIC}, #{dictCheckType,jdbcType=VARCHAR},#{placeSituation,jdbcType=VARCHAR} , 
+      #{dictSourceType, jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{monthPayMonth,jdbcType=NUMERIC}, #{businessArea,jdbcType=NUMERIC}
+      )
+  </insert>
+  
+  <!-- 修改经营地址证明 -->
+  <update id="updateJydzzm" parameterType="com.creditharmony.approve.document.entity.ZlshJydzzm" >
+	update jk.t_jk_zlsh_jydzzm
+	set
+		<if test="placeSituation != null and placeSituation != ''">
+			place_situation = #{placeSituation,jdbcType=VARCHAR},
+		</if>
+		<if test="jydzzmExpireDay != null and jydzzmExpireDay != ''">
+			jydzzm_expire_day = #{jydzzmExpireDay,jdbcType=TIMESTAMP},
+		</if>
+		<if test="jydzzmRentMonth != null and jydzzmRentMonth != ''">
+			jydzzm_rent_month = #{jydzzmRentMonth,jdbcType=NUMERIC},
+		</if>
+		<if test="monthPayMonth != null and monthPayMonth != ''">
+			month_pay_money = #{monthPayMonth,jdbcType=NUMERIC},
+		</if>
+		<if test="businessArea != null and businessArea != ''">
+			business_area = #{businessArea,jdbcType=NUMERIC},
+		</if>
+		<if test="modifyBy != null and modifyBy != ''">
+			modify_by = #{modifyBy,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyTime != null and modifyTime != ''">
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		</if>		
+	where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <!-- 获取所有经营地址证明 -->
+  <select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshJydzzm" resultMap="BaseResultMap">
+	  SELECT id, loan_code, r_jyzm_id, dict_customer_type, jydzzm_expire_day, jydzzm_rent_month, 
+	  	dict_check_type, place_situation , dict_source_type, create_by, create_time, modify_by, 
+       	modify_time,month_pay_money,business_area
+	  FROM jk.t_jk_zlsh_jydzzm
+	  WHERE  1=1
+	   <if test="loanCode != null" >
+        and loan_code = #{loanCode}
+      </if>
+	   <if test="dictCustomerType != null" >
+        and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+      </if>
+      <if test="rJyzmId != null" >
+        and r_jyzm_id = #{rJyzmId,jdbcType=VARCHAR}
+      </if>
+       order by create_time
+  </select>
+     <!-- 删除经营地址证明-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_jydzzm
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+       <!-- 删除经营地址证明-->                        
+  <delete id="deleteByRId" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_jydzzm
+	  WHERE r_jyzm_id = #{Rid,jdbcType=VARCHAR}
+  </delete>
+  
+</mapper>

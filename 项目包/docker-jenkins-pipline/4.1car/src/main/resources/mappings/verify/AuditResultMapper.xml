@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.AuditResultDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.AuditResult" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="apply_id" property="applyId" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="audit_result" property="auditResult" jdbcType="VARCHAR" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="audit_months" property="auditMonths" jdbcType="NUMERIC" />
+    <result column="audit_amount" property="auditAmount" jdbcType="NUMERIC" />
+    <result column="audit_contract_amount" property="auditContractAmount" jdbcType="NUMERIC" />
+    <result column="audit_rules_code" property="auditRulesCode" jdbcType="VARCHAR" />
+    <result column="audit_check_examine" property="auditCheckExamine" jdbcType="VARCHAR" />
+    <result column="audit_ensure_name" property="auditEnsureName" jdbcType="VARCHAR" />
+    <result column="audit_legal_man" property="auditLegalMan" jdbcType="VARCHAR" />
+    <result column="ensureman_business_place" property="ensuremanBusinessPlace" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="attachment_path" property="attachmentPath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="stepname" property="stepName" jdbcType="VARCHAR" />
+    <result column="business_prove_id" property="businessProveId" jdbcType="VARCHAR" />
+    <result column="ensureman_business_province" property="ensuremanBusinessProvince" jdbcType="VARCHAR" />
+    <result column="ensureman_business_city" property="ensuremanBusinessCity" jdbcType="VARCHAR" />
+    <result column="ensureman_business_area" property="ensuremanBusinessArea" jdbcType="VARCHAR" />
+    <result column="best_coborrower_id" property="bestCoborrowerId" jdbcType="VARCHAR" />
+  </resultMap>
+    <select id="findResult" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+  	SELECT audit_months,audit_amount
+  	FROM JK.t_jk_audit_result
+  	WHERE 
+  		1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+  	order by create_time DESC limit 0,1
+  </select>
+  <!-- distinct -->
+    <select id="findPeoples" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+  	SELECT DISTINCT B.NAME AS LOAN_CODE,C.LABEL AS APPLY_ID,A.STEPNAME
+  	FROM JK.T_JK_AUDIT_RESULT A
+  	LEFT JOIN JK.T_GL_USER B ON A.CREATE_BY=B.ID
+  	LEFT JOIN JK.T_GL_DICT C ON A.STEPNAME = C.VALUE AND C.TYPE='jk_check_type'
+  	WHERE A.STEPNAME &lt;&gt;'9' AND LOAN_CODE=#{loanCode} AND DICT_CHECK_TYPE =#{checkType}
+  	ORDER BY A.STEPNAME
+  </select>
+  <sql id="Base_Column_List" >
+    id, apply_id, loan_code, audit_result, product_type, audit_months, audit_amount, audit_contract_amount, 
+     audit_rules_code, audit_check_examine, audit_ensure_name, audit_legal_man, 
+    ensureman_business_place, dict_check_type, attachment_path, create_time, create_by, 
+    modify_time, modify_by
+  </sql>
+  <select id="getAuditResult" resultType="com.creditharmony.approve.verify.entity.ex.AuditResultEx" 
+  			parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  		SELECT 
+  			ID, APPLY_ID, LOAN_CODE, AUDIT_RESULT, RE.PRODUCT_TYPE, AUDIT_MONTHS, AUDIT_AMOUNT, 
+  			AUDIT_CONTRACT_AMOUNT, AUDIT_RULES_CODE, AUDIT_CHECK_EXAMINE, AUDIT_ENSURE_NAME, 
+  			AUDIT_LEGAL_MAN, ENSUREMAN_BUSINESS_PLACE, DICT_CHECK_TYPE, ATTACHMENT_PATH, 
+  			RE.CREATE_TIME, RE.CREATE_BY, RE.MODIFY_TIME, RE.MODIFY_BY,	PRO.PRODUCT_NAME AS BORROWPRODUCT, 
+  			PRO.LIMIT_UPPER AS LIMITUPPER, PRO.LIMIT_LOWER AS LIMITLOWER, GROSS_RATE AS RATE,
+  			PRO.CAUTIONER_LIMIT_AMOUNT AS CAUTIONERLIMITAMOUNT,RE.BUSINESS_PROVE_ID, 
+  			RE.ENSUREMAN_BUSINESS_PROVINCE AS ENSUREMANBUSINESSPROVINCE, RE.ENSUREMAN_BUSINESS_CITY AS ENSUREMANBUSINESSCITY,
+  			RE.ENSUREMAN_BUSINESS_AREA AS ENSUREMANBUSINESSAREA,RE.BEST_COBORROWER_ID AS bestCoborrowerId
+  		FROM JK.T_JK_AUDIT_RESULT RE
+  		LEFT JOIN JK.T_GL_JK_PRODUCT PRO ON PRO.PRODUCT_CODE = RE.PRODUCT_TYPE
+  		WHERE LOAN_CODE=#{loanCode} AND DICT_CHECK_TYPE=#{checkType}
+  		ORDER BY CREATE_TIME DESC
+  		LIMIT 1
+  </select>
+  <select id="findAuditResults" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  SELECT a.id,d.label as auditResult,a.create_time,e.label as dictCheckType,c.name as createBy,
+       (CASE a.audit_result 
+	    WHEN '0' THEN CONCAT(f.product_name,'/',ROUND(a.audit_amount),'/',a.audit_months,'/',a.audit_check_examine) 
+	    ELSE 'refuse'
+       END) as  audit_check_examine
+    FROM jk.T_JK_AUDIT_RESULT a
+    LEFT JOIN JK.T_GL_USER c
+    ON a.create_by=c.id 
+    left join jk.t_gl_dict d 
+	on d.type='jk_chk_result' and d.value= a.audit_result
+	left join jk.t_gl_dict e 
+	on e.type='jk_check_type' and e.value= a.stepname
+	left join jk.t_gl_jk_product f
+	on f.product_code=a.product_type
+    WHERE 
+    	1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and a.dict_check_type = #{checkType} 
+		</if>
+	union 
+	select  a.id,'退回协商' as auditResult,a.create_time,d.label as dictCheckType,b.name as createBy,
+	       CONCAT(e.negotiation_name,'/',a.BACK_REMARK) as  audit_check_examine 
+	from jk.T_JK_BACK_CONSULT a
+	LEFT JOIN JK.T_GL_USER b
+    ON a.create_by=b.id 
+	left join jk.t_gl_dict d
+	on d.type='jk_check_type' and d.value= a.stepname
+	left join jk.t_gl_negotiation e
+	on e.negotiation_code=a.back_code2
+    WHERE 
+    	1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and a.dict_check_type = #{checkType} 
+		</if>
+	union 
+	select  a.id,'客户放弃' as auditResult,a.create_time,d.label as dictCheckType,b.name as createBy,
+	       CONCAT(e.giveup_name,'/',a.ABANDON_REMARK) as  audit_check_examine 
+	from jk.T_JK_CUSTOMER_ABANDON a
+	LEFT JOIN JK.T_GL_USER b
+    ON a.create_by=b.id 
+	left join jk.t_gl_dict d
+	on d.type='jk_check_type' and d.value= a.dict_check_type
+	left join jk.t_gl_giveup e
+	on e.giveup_code = a.ABANDON_SECOND_CODE
+    WHERE 
+    	1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and a.dict_check_type = #{checkType} 
+		</if>
+ 	order by create_time		
+  </select>
+  
+  <!-- 通过审核结果获取拒借信息 -->
+  <select id="getRefuseInfo" resultMap="auditResultEx" parameterType="java.lang.String">
+  	SELECT
+  		a.audit_check_examine,
+  		r1.refuse_name as "refuse_first_code",
+  		r2.refuse_name as "refuse_second_code",
+  		r3.refuse_name as "refuse_third_code"
+  	FROM jk.t_jk_audit_result a
+  	LEFT JOIN jk.t_jk_audit_result_sublist b ON a.id=b.r_audit_id
+  	LEFT JOIN jk.t_gl_refuse r1 ON b.refuse_first_code = r1.refuse_code
+  	LEFT JOIN jk.t_gl_refuse r2 ON b.refuse_second_code = r2.refuse_code
+  	LEFT JOIN jk.t_gl_refuse r3 ON b.refuse_third_code = r3.refuse_code
+  	WHERE a.id=#{resultId,jdbcType=VARCHAR}
+  	ORDER BY b.create_time
+  </select>
+  <resultMap type="com.creditharmony.approve.verify.entity.ex.AuditResultEx" id="auditResultEx">
+  	<result column="audit_check_examine" property="auditCheckExamine" jdbcType="VARCHAR" />
+  	<collection property="subResult" javaType="java.util.List" resultMap="subResults"></collection>
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.verify.entity.AuditResultSublist" id="subResults">
+  	<result column="refuse_first_code" property="refuseFirstCode" jdbcType="VARCHAR" />
+    <result column="refuse_second_code" property="refuseSecondCode" jdbcType="VARCHAR" />
+    <result column="refuse_third_code" property="refuseThirdCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 插入审核结果 刘燕军 -->
+   <insert id="insertByEx" parameterType="com.creditharmony.approve.verify.entity.ex.AuditResultEx" >
+    INSERT INTO JK.T_JK_AUDIT_RESULT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     <if test="businessProveId != null" >
+       BUSINESS_PROVE_ID,
+     </if>
+    <if test="rate != null" >
+        GROSS_RATE,
+      </if>
+     <if test="singleTastId != null" >
+        single_tast_id,
+      </if>
+     <if test="stepName != null" >
+        STEPNAME,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="applyId != null" >
+        apply_id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rStatusHisId != null" >
+        r_status_his_id,
+      </if>
+      <if test="auditResult != null" >
+        audit_result,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="auditMonths != null" >
+        audit_months,
+      </if>
+      <if test="auditAmount != null" >
+        audit_amount,
+      </if>
+      <if test="auditContractAmount != null" >
+        audit_contract_amount,
+      </if>
+      <if test="auditMonthRepayAmount != null" >
+        audit_month_repay_amount,
+      </if>
+      <if test="auditRulesCode != null" >
+        audit_rules_code,
+      </if>
+      <if test="auditCheckExamine != null" >
+        audit_check_examine,
+      </if>
+      <if test="auditEnsureName != null" >
+        audit_ensure_name,
+      </if>
+      <if test="auditLegalMan != null" >
+        audit_legal_man,
+      </if>
+      <if test="ensuremanBusinessPlace != null" >
+        ensureman_business_place,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="attachmentPath != null" >
+        attachment_path,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="ensuremanBusinessProvince != null" >
+        ensureman_business_province,
+      </if>
+      <if test="ensuremanBusinessCity != null" >
+        ensureman_business_city,
+      </if>
+      <if test="ensuremanBusinessArea != null" >
+        ensureman_business_area,
+      </if>
+      <if test="bestCoborrowerId != null" >
+        best_coborrower_id,
+      </if>
+      <if test="businessCertNum != null" >
+        business_cert_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    <if test="businessProveId != null" >
+        #{businessProveId,jdbcType=NUMERIC},
+      </if>
+     <if test="rate != null" >
+        #{rate,jdbcType=NUMERIC},
+      </if>
+   	 <if test="singleTastId != null" >
+        #{singleTastId,jdbcType=VARCHAR},
+      </if>
+     <if test="stepName!= null" >
+        #{stepName,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="applyId != null" >
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+       <if test="rStatusHisId != null" >
+        #{rStatusHisId,jdbcType=NUMERIC},
+      </if>
+      <if test="auditResult != null" >
+        #{auditResult,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="auditMonths != null" >
+        #{auditMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="auditAmount != null" >
+        #{auditAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="auditContractAmount != null" >
+        #{auditContractAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="auditMonthRepayAmount != null" >
+        #{auditMonthRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="auditRulesCode != null" >
+        #{auditRulesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditCheckExamine != null" >
+        #{auditCheckExamine,jdbcType=VARCHAR},
+      </if>
+      <if test="auditEnsureName != null" >
+        #{auditEnsureName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditLegalMan != null" >
+        #{auditLegalMan,jdbcType=VARCHAR},
+      </if>
+      <if test="ensuremanBusinessPlace != null" >
+        #{ensuremanBusinessPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="attachmentPath != null" >
+        #{attachmentPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="ensuremanBusinessProvince != null" >
+        #{ensuremanBusinessProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="ensuremanBusinessCity != null" >
+        #{ensuremanBusinessCity,jdbcType=VARCHAR},
+      </if>
+      <if test="ensuremanBusinessArea != null" >
+        #{ensuremanBusinessArea,jdbcType=VARCHAR},
+      </if>
+      <if test="bestCoborrowerId != null" >
+        #{bestCoborrowerId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCertNum != null" >
+        #{businessCertNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+	<!-- 根据历史表关联ID回显决策信息 borrowProduct -->
+	<select id="getCheckInfo" parameterType="com.creditharmony.approve.verify.entity.AuditResult" resultType="com.creditharmony.approve.verify.entity.ex.AuditResultEx" >
+		SELECT
+			A.ID,
+			CASE WHEN A.DICT_CHECK_TYPE = '0' THEN C.VERIFY_RISK_LEVEL ELSE C.RECONSIDER_RISK_LEVEL
+			END AS BORROW_PRODUCT,
+			A.AUDIT_RESULT,
+			B.PRODUCT_NAME AS PRODUCT_TYPE,
+			A.AUDIT_MONTHS,
+			A.AUDIT_AMOUNT,
+			AUDIT_RULES_CODE,
+			A.AUDIT_CHECK_EXAMINE ,
+			A.AUDIT_ENSURE_NAME,AUDIT_LEGAL_MAN,A.ENSUREMAN_BUSINESS_PLACE,ENSUREMAN_BUSINESS_PROVINCE,ENSUREMAN_BUSINESS_CITY,ENSUREMAN_BUSINESS_AREA
+		FROM 
+			JK.T_JK_AUDIT_RESULT A
+		LEFT JOIN
+			JK.T_GL_JK_PRODUCT B
+		ON A.PRODUCT_TYPE = B.PRODUCT_CODE
+		LEFT JOIN JK.T_JK_AUDIT_RATING C ON A.LOAN_CODE=C.LOAN_CODE 
+		WHERE 
+			A.R_STATUS_HIS_ID = #{rStatusHisId,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据关联ID查询所有拒绝码  -->
+	<select id="getAllRefuseByRid" parameterType="java.lang.String" resultType="com.creditharmony.approve.verify.entity.AuditResultSublist" >
+		SELECT
+			r1.refuse_name as "refuse_first_code",
+			r2.refuse_name as "refuse_second_code",
+			r3.refuse_name as "refuse_third_code"
+		FROM 
+			jk.t_jk_audit_result_sublist a
+		LEFT JOIN 
+			jk.t_gl_refuse r1 
+		ON a.refuse_first_code = r1.refuse_code
+		LEFT JOIN 
+			jk.t_gl_refuse r2 
+		ON a.refuse_second_code = r2.refuse_code
+		LEFT 
+			JOIN jk.t_gl_refuse r3 
+		ON a.refuse_third_code = r3.refuse_code
+		where a.R_AUDIT_ID = #{id,jdbcType=VARCHAR}
+		ORDER BY a.create_time
+	</select>
+</mapper>

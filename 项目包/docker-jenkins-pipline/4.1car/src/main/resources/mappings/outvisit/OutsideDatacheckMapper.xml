@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.outvisit.dao.OutsideDatacheckDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.outvisit.entity.OutsideDatacheck" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_survey_type" property="dictSurveyType" jdbcType="VARCHAR" />
+    <result column="survey_famly" property="surveyFamly" jdbcType="VARCHAR" />
+    <result column="survey_work" property="surveyWork" jdbcType="VARCHAR" />
+    <result column="datacheck_description" property="datacheckDescription" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--wangleedong+保存外访核查  -->
+  <insert id="insertVisitCheck" parameterType="com.creditharmony.approve.outvisit.entity.OutsideDatacheck">
+	INSERT INTO 
+		t_jk_outside_datacheck(id, loan_code, dict_survey_type, survey_famly, survey_work, 
+		datacheck_description,dict_check_type,create_time, create_by, modify_time, modify_by,loan_customter_type,r_customer_coborrower_id)
+    VALUES 
+    	(#{id}, #{loanCode}, #{dictSurveyType}, #{surveyFamly}, #{surveyWork}, #{datacheckDescription},
+    	#{dictCheckType},#{createTime},#{createBy},#{modifyTime},#{modifyBy},#{loanCustomterType},#{rCustomerCoborrowerId});  
+  </insert>
+  <!--wangleedong+修改外访核查  -->
+  <update id="updateVisitCheck" parameterType="com.creditharmony.approve.outvisit.entity.OutsideDatacheck">
+	UPDATE 
+		t_jk_outside_datacheck
+	SET  
+	   dict_survey_type=#{dictSurveyType}, 
+	   survey_famly=#{surveyFamly}, 
+	   survey_work=#{surveyWork},
+	   datacheck_description=#{datacheckDescription}, 
+	   modify_time=#{modifyTime}, 
+	   modify_by=#{modifyBy}
+	WHERE 
+	 	id = #{id}
+  </update>
+  <!--wangleedong+信审出具外访说明 、时间、距离-->
+  <select id="getVisitCheckInfo" parameterType="java.lang.String" resultType="com.creditharmony.approve.outvisit.entity.ex.OutsideDatacheckEx">
+	select 
+		b.item_distance, 
+		b.create_time, 
+		c.remark 
+	FROM 
+		(select * from t_jk_outside_task_list  where loan_code = #{loanCode} and dict_check_type = #{checkType}) b
+	left join 
+		t_jk_outside_task_info c 
+	on 
+		b.id = c.task_id 
+	and 
+		c.dict_customer_type = #{type} 
+	
+	order by b.create_time desc 
+  </select>  
+  <!--wangleedong+获取外访核查 -->
+  <select id="getOutsideDatacheck" parameterType="java.lang.String" resultType="com.creditharmony.approve.outvisit.entity.ex.OutsideDatacheckEx">
+	SELECT A.ID,A.DICT_SURVEY_TYPE, A.SURVEY_FAMLY, A.SURVEY_WORK, A.DATACHECK_DESCRIPTION
+ 	FROM T_JK_OUTSIDE_DATACHECK A 
+	WHERE A.LOAN_CODE = #{loanCode} 
+		AND A.DICT_CHECK_TYPE =  #{checkType}
+		AND A.LOAN_CUSTOMTER_TYPE =  #{type}
+		AND A.R_CUSTOMER_COBORROWER_ID =  #{coboId}
+  </select>  
+  <!--wangleedong+判定外访核查是否保存 -->
+  <select id="checkOutsideDatacheck" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" resultType="java.lang.Integer">
+	  SELECT COUNT(LOAN_CODE)
+	  FROM JK.T_JK_OUTSIDE_DATACHECK WHERE LOAN_CODE=#{loanCode} AND DICT_CHECK_TYPE=#{checkType} AND LOAN_CUSTOMTER_TYPE = '0'
+  </select>  
+  <select id="getOutVist" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" resultType="java.lang.String">
+       SELECT OUTSIDE_FLAG FROM JK.T_JK_LOAN_INFO WHERE LOAN_CODE=#{loanCode} limit 1
+  </select>
+</mapper>

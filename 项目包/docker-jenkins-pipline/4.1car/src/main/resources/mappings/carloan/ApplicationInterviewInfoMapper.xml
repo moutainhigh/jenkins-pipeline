@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.ApplicationInterviewInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.ApplicationInterviewInfo" >
+    <id column="loan_code" property="loanCode" jdbcType="CHAR" />
+    <result column="customer_register_address" property="customerRegisterAddress" jdbcType="VARCHAR" />
+    <result column="dict_id_istrue" property="dictIdIstrue" jdbcType="VARCHAR" />
+    <result column="cobo_now_address" property="coboNowAddress" jdbcType="VARCHAR" />
+    <result column="query_result" property="queryResult" jdbcType="VARCHAR" />
+    <result column="query_result_phone" property="queryResultPhone" jdbcType="VARCHAR" />
+    <result column="customer_job_review" property="customerJobReview" jdbcType="VARCHAR" />
+    <result column="credit_report" property="creditReport" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, customer_register_address, dict_id_istrue, cobo_now_address, query_result, 
+    query_result_phone, customer_job_review, credit_report, create_by, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_application_interview_info
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_application_interview_info
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.ApplicationInterviewInfo" >
+    insert into jk.t_cj_application_interview_info (loan_code, customer_register_address, dict_id_istrue, 
+      cobo_now_address, query_result, query_result_phone, 
+      customer_job_review, credit_report, create_by, 
+      create_time)
+    values (#{loanCode,jdbcType=CHAR}, #{customerRegisterAddress,jdbcType=VARCHAR}, #{dictIdIstrue,jdbcType=VARCHAR}, 
+      #{coboNowAddress,jdbcType=VARCHAR}, #{queryResult,jdbcType=VARCHAR}, #{queryResultPhone,jdbcType=VARCHAR}, 
+      #{customerJobReview,jdbcType=VARCHAR}, #{creditReport,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.ApplicationInterviewInfo" >
+    insert into jk.t_cj_application_interview_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="customerRegisterAddress != null" >
+        customer_register_address,
+      </if>
+      <if test="dictIdIstrue != null" >
+        dict_id_istrue,
+      </if>
+      <if test="coboNowAddress != null" >
+        cobo_now_address,
+      </if>
+      <if test="queryResult != null" >
+        query_result,
+      </if>
+      <if test="queryResultPhone != null" >
+        query_result_phone,
+      </if>
+      <if test="customerJobReview != null" >
+        customer_job_review,
+      </if>
+      <if test="creditReport != null" >
+        credit_report,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=CHAR},
+      </if>
+      <if test="customerRegisterAddress != null" >
+        #{customerRegisterAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictIdIstrue != null" >
+        #{dictIdIstrue,jdbcType=VARCHAR},
+      </if>
+      <if test="coboNowAddress != null" >
+        #{coboNowAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="queryResult != null" >
+        #{queryResult,jdbcType=VARCHAR},
+      </if>
+      <if test="queryResultPhone != null" >
+        #{queryResultPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerJobReview != null" >
+        #{customerJobReview,jdbcType=VARCHAR},
+      </if>
+      <if test="creditReport != null" >
+        #{creditReport,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.ApplicationInterviewInfo" >
+    update jk.t_cj_application_interview_info
+    <set >
+      <if test="customerRegisterAddress != null" >
+        customer_register_address = #{customerRegisterAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictIdIstrue != null" >
+        dict_id_istrue = #{dictIdIstrue,jdbcType=VARCHAR},
+      </if>
+      <if test="coboNowAddress != null" >
+        cobo_now_address = #{coboNowAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="queryResult != null" >
+        query_result = #{queryResult,jdbcType=VARCHAR},
+      </if>
+      <if test="queryResultPhone != null" >
+        query_result_phone = #{queryResultPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerJobReview != null" >
+        customer_job_review = #{customerJobReview,jdbcType=VARCHAR},
+      </if>
+      <if test="creditReport != null" >
+        credit_report = #{creditReport,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.ApplicationInterviewInfo" >
+    update jk.t_cj_application_interview_info
+    set customer_register_address = #{customerRegisterAddress,jdbcType=VARCHAR},
+      dict_id_istrue = #{dictIdIstrue,jdbcType=VARCHAR},
+      cobo_now_address = #{coboNowAddress,jdbcType=VARCHAR},
+      query_result = #{queryResult,jdbcType=VARCHAR},
+      query_result_phone = #{queryResultPhone,jdbcType=VARCHAR},
+      customer_job_review = #{customerJobReview,jdbcType=VARCHAR},
+      credit_report = #{creditReport,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </update>
+</mapper>

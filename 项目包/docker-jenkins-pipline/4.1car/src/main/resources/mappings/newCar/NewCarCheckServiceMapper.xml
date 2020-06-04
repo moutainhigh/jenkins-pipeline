@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewCarCheckDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewCarExamineEntity" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="loan_customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="storeName" property="storeName" jdbcType="VARCHAR" />
+    <result column="customer_into_time" property="customerIntoTime" jdbcType="TIMESTAMP" />
+    <result column="loan_apply_amount" property="loanApplyAmount" jdbcType="DOUBLE" />
+    <result column="store_assess_amount" property="storeAssessAmount" jdbcType="DOUBLE" /> 
+    <result column="loan_months" property="loanMonths" jdbcType="INTEGER" />
+    <result column="dict_product_type" property="borrowProductCode" jdbcType="VARCHAR" />
+    <result column="plate_numbers" property="plateNumbers" jdbcType="VARCHAR" />
+    <result column="dict_loan_status" property="dictStatus" jdbcType="VARCHAR" /> 
+    <result column="dict_settle_relend" property="cycleBorrowingFlag" jdbcType="CHAR" /> 
+    <result column="isextension" property="extensionFlag" jdbcType="CHAR" /> 
+    <result column="firstCheckName" property="firstCheckName" jdbcType="VARCHAR" /> 
+    <result column="recheckName" property="recheckName" jdbcType="VARCHAR" /> 
+  </resultMap>
+  <select id="getFinalCheckList" parameterType="com.creditharmony.approve.newCar.entity.NewCarExamineEntity" resultMap="BaseResultMap">
+    	SELECT 
+  		lo.id,
+		lo.apply_id,
+		lo.loan_code,
+		lo.customer_into_time ,
+		og.name	storeName,
+		lo.loan_customer_name,
+		lo.loan_apply_amount,
+		vlo.store_assess_amount,
+		lo.loan_months,
+		lo.dict_product_type,
+		vlo.plate_numbers,
+		lo.dict_loan_status,
+		lo.dict_settle_relend ,
+		lo.isextension,
+    	(select name FROM jk.t_gl_user WHERE id = lo.modify_by ) recheckName, 
+    	(select name FROM jk.t_gl_user WHERE id = ilo.create_by ) firstCheckName
+	FROM 
+		jk.t_cj_loan_info lo LEFT JOIN jk.t_cj_contract act 
+			on lo.loan_code = act.loan_code
+		LEFT JOIN  jk.t_cj_vehicle_info vlo on lo.loan_code  = vlo.loan_code 
+    	LEFT JOIN jk.t_cj_application_interview_info ilo ON lo.loan_code = ilo.loan_code
+		LEFT JOIN jk.t_gl_org org on lo.store_code = org.id
+		LEFT JOIN jk.t_gl_org og on org.parent_id = og.id
+	WHERE lo.queue_name like '%FINAL_CHECK%'
+	and lo.dict_loan_flag = '1'
+    AND 
+	CASE WHEN time_out_point is not null
+		 THEN time_out_point > now()
+	 	 ELSE time_out_point is null 
+	END
+  </select>
+  <select id="getReCheckList" parameterType="java.util.List" resultMap="BaseResultMap">
+  	SELECT 
+  		lo.id,
+		lo.apply_id,
+		lo.loan_code,
+		lo.customer_into_time ,
+		og.name	storeName,
+		lo.loan_customer_name,
+		lo.loan_apply_amount,
+		vlo.store_assess_amount,
+		lo.loan_months,
+		lo.dict_product_type,
+		vlo.plate_numbers,
+		lo.dict_loan_status,
+		lo.dict_settle_relend ,
+		lo.isextension,
+    	(select name FROM jk.t_gl_user WHERE id = lo.modify_by ) recheckName, 
+    	(select name FROM jk.t_gl_user WHERE id = ilo.create_by ) firstCheckName
+	FROM 
+		jk.t_cj_loan_info lo LEFT JOIN jk.t_cj_contract act 
+			on lo.loan_code = act.loan_code
+		LEFT JOIN  jk.t_cj_vehicle_info vlo on lo.loan_code  = vlo.loan_code 
+    	LEFT JOIN jk.t_cj_application_interview_info ilo ON lo.loan_code = ilo.loan_code
+		LEFT JOIN jk.t_gl_org org on lo.store_code = org.id
+		LEFT JOIN jk.t_gl_org og on org.parent_id = og.id
+	WHERE lo.dict_loan_status in
+	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+          #{item}  
+	</foreach>
+	and lo.dict_loan_flag = '1'
+    AND 
+	CASE WHEN time_out_point is not null
+		 THEN time_out_point > now()
+	 	 ELSE time_out_point is null 
+	END
+  </select>
+  
+  <select id="getOrderReCheckList" parameterType="com.creditharmony.approve.newCar.entity.NewCarExamineEntity" resultMap="BaseResultMap">
+  SELECT 
+  		lo.id,
+		lo.apply_id,
+		lo.loan_code,
+		lo.customer_into_time ,
+		og.name	storeName,
+		lo.loan_customer_name,
+		lo.loan_apply_amount,
+		vlo.store_assess_amount,
+		lo.loan_months,
+		lo.dict_product_type,
+		vlo.plate_numbers,
+		lo.dict_loan_status,
+		lo.isextension,
+    	(select name FROM jk.t_gl_user WHERE id = lo.modify_by ) recheckName, 
+    	(select name FROM jk.t_gl_user WHERE id = ilo.create_by ) firstCheckName
+	FROM 
+		jk.t_cj_loan_info lo LEFT JOIN jk.t_cj_contract act 
+			on lo.loan_code = act.loan_code
+		LEFT JOIN  jk.t_cj_vehicle_info vlo on lo.loan_code  = vlo.loan_code 
+    	LEFT JOIN jk.t_cj_application_interview_info ilo ON lo.loan_code = ilo.loan_code
+		LEFT JOIN jk.t_gl_org org on lo.store_code = org.id
+		LEFT JOIN jk.t_gl_org og on org.parent_id = og.id
+	WHERE lo.dict_loan_status = #{dictStatus}
+	and lo.dict_loan_flag is null
+    AND 
+	CASE WHEN time_out_point is not null
+		 THEN time_out_point > now()
+	 	 ELSE time_out_point is null 
+	END
+  </select>
+
+</mapper>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshLoanAccountDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshLoanAccount" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="bank_card_no" property="bankCardNo" jdbcType="VARCHAR" />
+    <result column="dict_account_type" property="dictAccountType" jdbcType="VARCHAR" />
+    <result column="account_flow_mark" property="accountFlowMark" jdbcType="VARCHAR" />
+    <result column="account_flow_detail" property="accountFlowDetail" typeHandler="JSONTypeHandler" />
+    <result column="account_stream_scope" property="accountStreamScope" jdbcType="VARCHAR" />
+    <result column="account_free_amount" property="accountFreeAmount" jdbcType="NUMERIC" />
+    <result column="account_interest_3" property="accountInterest3" jdbcType="NUMERIC" />
+    <result column="account_interest_6" property="accountInterest6" jdbcType="NUMERIC" />
+    <result column="account_interest_9" property="accountInterest9" jdbcType="NUMERIC" />
+    <result column="account_interest_12" property="accountInterest12" jdbcType="NUMERIC" />
+    <result column="account_month_wage" property="accountMonthWage" jdbcType="NUMERIC" />
+    <result column="account_consume_habit" property="accountConsumeHabit" jdbcType="VARCHAR" />
+    <result column="account_flow_length" property="accountFlowLength" jdbcType="VARCHAR" />
+    <result column="account_abstract_info" property="accountAbstractInfo" jdbcType="VARCHAR" />
+    <result column="account_myself_abstract" property="accountMyselfAbstract" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="other_loan_mark" property="otherLoanMark" jdbcType="VARCHAR" />
+    <result column="month_use_money" property="monthUseMoney" jdbcType="VARCHAR" />
+    <result column="month_use_num" property="monthUseNum" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+        id,
+        r_customer_coborrower_id,
+        loan_code,
+        dict_customer_type,
+        bank_card_no,
+        dict_account_type,
+        account_flow_mark,
+        account_flow_detail,
+        account_stream_scope,
+        account_free_amount,
+        account_interest_3,
+        account_interest_6,
+        account_interest_9,
+        account_interest_12,
+        account_month_wage,
+        account_consume_habit,
+        account_flow_length,
+        account_abstract_info,
+        account_myself_abstract,
+        dict_check_type,
+        other_loan_mark,
+        month_use_money,
+        month_use_num,
+        dict_source_type,
+        create_by,
+        create_time,
+        modify_by,
+        modify_time
+  </sql>
+  <!-- 保存银行卡流水 -->
+	<insert id="insertLoanAccount" parameterType="com.creditharmony.approve.document.entity.ZlshLoanAccount" >
+		insert into jk.t_jk_zlsh_loan_account (id, loan_code, r_customer_coborrower_id, 
+			dict_customer_type, bank_card_no, dict_account_type, 
+			account_flow_mark, account_stream_scope, account_free_amount, 
+			account_interest_3, account_interest_6, account_interest_9, 
+			account_interest_12, account_month_wage, account_consume_habit, 
+			account_flow_length, account_abstract_info, 
+			account_myself_abstract, dict_check_type,account_flow_detail,
+			other_loan_mark,month_use_money,month_use_num, dict_source_type, 
+			create_by, create_time, modify_by, modify_time
+			)
+		values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=VARCHAR}, 
+			#{dictCustomerType,jdbcType=VARCHAR}, #{bankCardNo,jdbcType=VARCHAR}, #{dictAccountType,jdbcType=VARCHAR}, 
+			#{accountFlowMark,jdbcType=VARCHAR}, #{accountStreamScope,jdbcType=NUMERIC}, #{accountFreeAmount,jdbcType=NUMERIC}, 
+			#{accountInterest3,jdbcType=NUMERIC}, #{accountInterest6,jdbcType=NUMERIC}, #{accountInterest9,jdbcType=NUMERIC}, 
+			#{accountInterest12,jdbcType=NUMERIC}, #{accountMonthWage,jdbcType=NUMERIC}, #{accountConsumeHabit,jdbcType=VARCHAR}, 
+			#{accountFlowLength,jdbcType=VARCHAR}, #{accountAbstractInfo,jdbcType=VARCHAR}, #{accountMyselfAbstract,jdbcType=VARCHAR}, 
+			#{dictCheckType,jdbcType=VARCHAR}, #{accountFlowDetail,typeHandler=JSONTypeHandler}, #{otherLoanMark,jdbcType=VARCHAR},
+			#{monthUseMoney,jdbcType=NUMERIC},#{monthUseNum,jdbcType=VARCHAR},#{dictSourceType,jdbcType=VARCHAR},#{createBy,jdbcType=VARCHAR}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+			)
+	</insert>
+  
+	<!-- 修改银行卡流水 -->
+	<update id="updateLoanAccount" parameterType="com.creditharmony.approve.document.entity.ZlshLoanAccount">  
+		update jk.t_jk_zlsh_loan_account set 
+			r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}, 
+			dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}, 
+			bank_card_no = #{bankCardNo,jdbcType=VARCHAR}, 
+			dict_account_type = #{dictAccountType,jdbcType=VARCHAR}, 
+			account_flow_mark = #{accountFlowMark,jdbcType=VARCHAR}, 
+			account_stream_scope = #{accountStreamScope,jdbcType=NUMERIC}, 
+			account_free_amount = #{accountFreeAmount,jdbcType=NUMERIC}, 
+			account_interest_3 = #{accountInterest3,jdbcType=NUMERIC}, 
+			account_interest_6 = #{accountInterest6,jdbcType=NUMERIC}, 
+			account_interest_9 = #{accountInterest9,jdbcType=NUMERIC}, 
+			account_interest_12 = #{accountInterest12,jdbcType=NUMERIC}, 
+			account_month_wage = #{accountMonthWage,jdbcType=NUMERIC}, 
+			account_consume_habit = #{accountConsumeHabit,jdbcType=VARCHAR}, 
+			account_flow_length = #{accountFlowLength,jdbcType=VARCHAR}, 
+			account_abstract_info = #{accountAbstractInfo,jdbcType=VARCHAR}, 
+			account_myself_abstract = #{accountMyselfAbstract,jdbcType=VARCHAR}, 
+			dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+			account_flow_detail = #{accountFlowDetail,typeHandler=JSONTypeHandler},
+			other_loan_mark = #{otherLoanMark,jdbcType=VARCHAR},
+			month_use_money = #{monthUseMoney,jdbcType=NUMERIC},
+			month_use_num = #{monthUseNum,jdbcType=VARCHAR},
+			modify_by = #{modifyBy,jdbcType=VARCHAR}, 
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP}  
+		where id = #{id}  
+	</update>
+  <!-- 下载意见书 流水信息 -->
+  <select id="findZlshLoanAccounts" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="BaseResultMap">
+  SELECT a.id, a.loan_code, a.dict_account_type,a.account_flow_mark,a.account_month_wage,a.account_free_amount,
+		a.account_interest_3,a.account_interest_6,a.account_interest_9,a.account_interest_12,b.label dictCustomerType
+  FROM jk.t_jk_zlsh_loan_account a
+  LEFT JOIN jk.t_gl_dict b
+  ON type='jk_loan_man_flag' and value=a.DICT_CUSTOMER_TYPE
+  WHERE loan_code=#{loanCode} and dict_check_type=#{checkType} 
+  </select> 
+  
+  <!-- 刘燕军 初审决策页面中的月认定收入 -->
+  <select id="findSalaryMonth" resultType="com.creditharmony.approve.verify.entity.ex.MonthIncomeEx" parameterType="java.lang.String">
+   <!-- dict_account_type 账户类型 1：对公卡 0：个人卡-->
+   <!-- account_flow_mark 工资流水标记 0：否 1:是 -->
+   <!-- social_security_type 社保类型 01：社保 02：公积金 -->
+	   SELECT A.r_customer_coborrower_id as id,
+	   		   MAX(A.A1) as publicMonth,
+			   MAX(A.A2) as oftenMonth,
+			   MAX(A.A3) as salaryMonth,
+			   MAX(B.A1) as accumulationMonth,
+			   MAX(B.A2) as securityMoney,
+			   Max(A.dict_customer_type) as type
+		FROM
+		(SELECT r_customer_coborrower_id,f.label as dict_customer_type,
+		       CASE WHEN dict_account_type='1' THEN SUM(account_month_wage) END AS A1,
+		       CASE WHEN dict_account_type='0' AND account_flow_mark='0' THEN SUM(account_month_wage) END AS A2,
+		       CASE WHEN dict_account_type='0' AND account_flow_mark='1' THEN SUM(account_month_wage) END AS A3
+		FROM jk.t_jk_zlsh_loan_account
+		left join jk.t_gl_dict f
+		on f.type='jk_loan_man_flag' and f.value=dict_customer_type
+		WHERE  1=1
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			and dict_customer_type = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			and R_CUSTOMER_COBORROWER_ID = #{relId} 
+		</if>
+		GROUP BY dict_account_type,account_flow_mark,r_customer_coborrower_id,f.label) A
+		LEFT JOIN
+		(
+		SELECT R_ID,MAX(CASE WHEN social_security_type='02' THEN SBGJJ_PAY_BASE END) A1,
+			    MAX(CASE WHEN social_security_type='01' THEN SBGJJ_PAY_BASE END) A2,dict_customer_type
+		FROM jk.T_JK_ZLSH_SBGJJ 
+		WHERE 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			and dict_customer_type = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			and r_id = #{relId} 
+		</if>
+	GROUP BY R_ID,dict_customer_type) B ON r_customer_coborrower_id = B.R_ID
+	GROUP BY A.r_customer_coborrower_id,A.dict_customer_type
+  </select>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.document.entity.ZlshLoanAccount" >
+    insert into jk.t_jk_zlsh_loan_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="bankCardNo != null" >
+        bank_card_no,
+      </if>
+      <if test="dictAccountType != null" >
+        dict_account_type,
+      </if>
+      <if test="accountStreamScope != null" >
+        account_stream_scope,
+      </if>
+      <if test="accountFreeAmount != null" >
+        account_free_amount,
+      </if>
+      <if test="accountInterest3 != null" >
+        account_interest_3,
+      </if>
+      <if test="accountInterest6 != null" >
+        account_interest_6,
+      </if>
+      <if test="accountInterest9 != null" >
+        account_interest_9,
+      </if>
+      <if test="accountInterest12 != null" >
+        account_interest_12,
+      </if>
+      <if test="accountMonthWage != null" >
+        account_month_wage,
+      </if>
+      <if test="accountConsumeHabit != null" >
+        account_consume_habit,
+      </if>
+      <if test="accountStreamLength != null" >
+        account_stream_length,
+      </if>
+      <if test="accountAbstractInfo != null" >
+        account_abstract_info,
+      </if>
+      <if test="accountMyselfAbstract != null" >
+        account_myself_abstract,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCardNo != null" >
+        #{bankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dictAccountType != null" >
+        #{dictAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountFlowMark != null" >
+        #{accountFlowMark,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStreamScope != null" >
+        #{accountStreamScope,jdbcType=VARCHAR},
+      </if>
+      <if test="accountFreeAmount != null" >
+        #{accountFreeAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="accountInterest3 != null" >
+        #{accountInterest3,jdbcType=NUMERIC},
+      </if>
+      <if test="accountInterest6 != null" >
+        #{accountInterest6,jdbcType=NUMERIC},
+      </if>
+      <if test="accountInterest9 != null" >
+        #{accountInterest9,jdbcType=NUMERIC},
+      </if>
+      <if test="accountInterest12 != null" >
+        #{accountInterest12,jdbcType=NUMERIC},
+      </if>
+      <if test="accountMonthWage != null" >
+        #{accountMonthWage,jdbcType=NUMERIC},
+      </if>
+      <if test="accountConsumeHabit != null" >
+        #{accountConsumeHabit,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStreamLength != null" >
+        #{accountStreamLength,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAbstractInfo != null" >
+        #{accountAbstractInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountMyselfAbstract != null" >
+        #{accountMyselfAbstract,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  
+	<!-- 获取所有卡流水 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshLoanAccount" resultMap="BaseResultMap">
+	SELECT 
+	<include refid="Base_Column_List" />
+	from jk.t_jk_zlsh_loan_account
+	WHERE 
+	loan_code = #{loanCode,jdbcType=VARCHAR}
+		<if test="dictAccountType != null" >
+			and  dict_account_type =  #{dictAccountType,jdbcType=VARCHAR}
+		</if>
+		<if test="dictCustomerType != null" >
+			and  dict_customer_type =  #{dictCustomerType,jdbcType=VARCHAR}
+		</if>
+		<if test="rCustomerCoborrowerId != null">
+			and  r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+		</if>
+		<if test="dictCheckType != null">
+			and dict_check_type = #{dictCheckType,jdbcType=VARCHAR}
+		</if>
+		order by create_time
+  </select>
+  
+     <!-- 删除卡流水-->                        
+  <delete id="deleteBankCard" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_loan_account
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+   
+  
+</mapper>

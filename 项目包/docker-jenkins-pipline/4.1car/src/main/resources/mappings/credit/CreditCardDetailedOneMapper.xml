@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCardDetailedOneDao">
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="relation_id" jdbcType="VARCHAR" property="relationId" />
+    <result column="card_type" jdbcType="VARCHAR" property="cardType" />
+    <result column="guarantee_type" jdbcType="VARCHAR" property="guaranteeType" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="account_day" jdbcType="DATE" property="accountDay" />
+    <result column="cerdit_line" jdbcType="NUMERIC" property="cerditLine" />
+    <result column="share_credit_line" jdbcType="NUMERIC" property="shareCreditLine" />
+    <result column="liabilities_line" jdbcType="NUMERIC" property="liabilitiesLine" />
+    <result column="used_amount" jdbcType="NUMERIC" property="usedAmount" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relation_id, card_type, guarantee_type, currency, account_day, cerdit_line, share_credit_line, 
+    liabilities_line, used_amount, create_by,create_time,modify_by,modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_jk_credit_card_detailed_one
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  	<!-- 查询数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+		SELECT 
+			b.id, b.relation_id, b.card_type, b.guarantee_type, b.currency, 
+			b.account_day, b.cerdit_line, b.share_credit_line, 
+            b.liabilities_line, b.used_amount
+		FROM 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_card_detailed_one b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			order by b.create_time
+	</select>
+  
+  <select id="findByParams" parameterType="map"  resultMap="BaseResultMap" >
+		select
+			<include refid="Base_Column_List"/>
+		from 
+		  t_jk_credit_card_detailed_one 
+ 		where 
+			1=1
+		<if test="relationId != null and relationId != ''">
+			and relation_Id  = #{relationId}
+		</if>
+		order by id
+	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_jk_credit_card_detailed_one
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+    insert into t_jk_credit_card_detailed_one (id, relation_id, card_type, 
+      guarantee_type, currency, account_day, 
+      cerdit_line, share_credit_line, liabilities_line, 
+      used_amount,
+      create_by, create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
+      #{guaranteeType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{accountDay,jdbcType=DATE}, 
+      #{cerditLine,jdbcType=NUMERIC}, #{shareCreditLine,jdbcType=NUMERIC}, #{liabilitiesLine,jdbcType=NUMERIC}, 
+      #{usedAmount,jdbcType=NUMERIC},
+      #{createBy,jdbcType=VARCHAR},  #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+       )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+    insert into t_jk_credit_card_detailed_one
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="cardType != null">
+        card_type,
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="accountDay != null">
+        account_day,
+      </if>
+      <if test="cerditLine != null">
+        cerdit_line,
+      </if>
+      <if test="shareCreditLine != null">
+        share_credit_line,
+      </if>
+      <if test="liabilitiesLine != null">
+        liabilities_line,
+      </if>
+      <if test="usedAmount != null">
+        used_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null">
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeType != null">
+        #{guaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="accountDay != null">
+        #{accountDay,jdbcType=DATE},
+      </if>
+      <if test="cerditLine != null">
+        #{cerditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="shareCreditLine != null">
+        #{shareCreditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="liabilitiesLine != null">
+        #{liabilitiesLine,jdbcType=NUMERIC},
+      </if>
+      <if test="usedAmount != null">
+        #{usedAmount,jdbcType=NUMERIC},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+    update t_jk_credit_card_detailed_one
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null">
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type = #{guaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="accountDay != null">
+        account_day = #{accountDay,jdbcType=DATE},
+      </if>
+      <if test="cerditLine != null">
+        cerdit_line = #{cerditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="shareCreditLine != null">
+        share_credit_line = #{shareCreditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="liabilitiesLine != null">
+        liabilities_line = #{liabilitiesLine,jdbcType=NUMERIC},
+      </if>
+      <if test="usedAmount != null">
+        used_amount = #{usedAmount,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedOne">
+    update t_jk_credit_card_detailed_one
+    set relation_id = #{relationId,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      guarantee_type = #{guaranteeType,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      account_day = #{accountDay,jdbcType=DATE},
+      cerdit_line = #{cerditLine,jdbcType=NUMERIC},
+      share_credit_line = #{shareCreditLine,jdbcType=NUMERIC},
+      liabilities_line = #{liabilitiesLine,jdbcType=NUMERIC},
+      used_amount = #{usedAmount,jdbcType=NUMERIC}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

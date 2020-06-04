@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudOffendInfoDao" >
+	<!--wanglidong+  -->
+	<sql id="Base_Column_List" >
+	  id, loan_code, rules_code, dict_offend_type, offend_msg, offend_status, offend_relieve_status, 
+	  offend_remark, create_by, create_time, modify_by, modify_time
+	</sql> 
+	<resultMap id="ResultMap" type="com.creditharmony.approve.verify.entity.ex.GreyListEx" >
+	  <result column="now_loan_code" property="nowLoanCode" jdbcType="VARCHAR" />
+	  <result column="his_loan_code" property="hisLoanCode" jdbcType="VARCHAR" />
+	  <result column="blacklist_msg" property="blacklistMsg" jdbcType="VARCHAR" />
+	  <result column="blacklist_risk_msg" property="blacklistRiskMsg" jdbcType="VARCHAR" />
+	  <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	  <result column="loan_customer_name" property="loanCustomerName" jdbcType="VARCHAR" />
+	  <result column="type" property="type" jdbcType="VARCHAR" />
+	  <result column="product_type" property="productType" jdbcType="VARCHAR" />
+	</resultMap>
+	<!--wanglidong+  -->
+	<update id="updateRemark"  parameterType="java.lang.String" >
+		UPDATE jk.t_jk_antifraud_offend_info SET offend_remark=#{0} WHERE 	id = #{1}	
+	</update>
+	<!--wanglidong+  -->
+	<update id="updateRemarkAll"  parameterType="java.util.List" >
+	   <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	      update jk.t_jk_antifraud_offend_info 
+	      <set>
+	          offend_remark = #{item.remark},
+	          offend_relieve_status = #{item.offendRelieveStatus}
+	      </set>
+	      WHERE id = #{item.id}	
+	  </foreach> 	
+	</update>
+	<!--刘燕军 内网查黑查灰 -->
+	<select id="selectByLoanCode"  parameterType="java.lang.String" resultMap="ResultMap" >
+		SELECT  a.loan_code as now_loan_code,
+		b.loan_code as his_loan_code,
+		i.REFUSE_NAME as dict_mark_type,
+		d.label as dict_blacklist_type,
+		b.blacklist_msg,
+		b.blacklist_risk_msg,
+		b.add_black_time as create_time,
+		c.loan_customer_name,
+		f.product_name as product_type,
+		CONCAT(e.label,g.label) as type
+		FROM  jk.t_jk_antifraud_offend_info a
+		inner JOIN  jk.t_jk_antifraud_blacklist b ON a.loan_code=b.loan_code_now and a.rules_code = b.rules_code
+		inner JOIN  jk.t_jk_loan_info c ON  b.loan_code=c.loan_code
+		left join jk.t_gl_dict d on d.type='jk_afraud_list_type' and d.value=b.dict_blacklist_type -- 加黑字段
+		left join jk.t_gl_dict e on e.type='jk_afraud_list_source' and e.value=b.add_black_type -- 内部/外部
+		left join jk.t_gl_jk_product f on f.product_code = c.product_type
+		left join jk.t_gl_dict g on g.type='jk_black_grey_list' and g.value=b.dict_mark_type --  加黑/加灰
+		left join jk.T_JK_ANTIFRAUD_JUDGE h on b.loan_code=h.LOAN_CODE and h.DICT_CASE_RESULT = b.dict_mark_type
+		left join jk.T_GL_REFUSE i on h.DICT_JUDGE_SECOND_CODE = i.REFUSE_CODE 
+		WHERE  a.loan_code=#{0}   and b.DICT_MARK_TYPE=#{1}  and a.DICT_OFFEND_TYPE='2'  -- 加黑灰类型
+	</select>
+	<!--wanglidong+  查重匹配规则 -->
+	<select id="getAntifraudOffendInfoCheckRepeat" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudOffendInfo" >
+		select 
+			info.id, 
+			info.loan_code, 
+			info.rules_code, 
+			info.dict_offend_type, 
+			rule.rules_remark  as offend_msg, 
+			info.offend_status, 
+			info.offend_relieve_status, 
+			info.offend_remark
+		from 
+			jk.t_jk_antifraud_offend_info info
+		left join
+			jk.t_jk_antifraud_rules rule
+		on
+			info.rules_code = rule.rules_code
+		where 
+			loan_code = #{0}
+		and 
+			dict_offend_type='3'
+	</select>  
+	<!--wanglidong+  销售匹配 -->
+	<select id="getAntifraudOffendInfoSaleInfo" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudOffendInfo" >
+		select 
+			info.id, 
+			info.loan_code, 
+			info.rules_code, 
+			info.dict_offend_type, 
+			rule.rules_remark as offend_msg, 
+			info.offend_status, 
+			info.offend_relieve_status, 
+			info.offend_remark
+		from 
+			jk.t_jk_antifraud_offend_info info
+		left join
+			jk.t_jk_antifraud_rules rule
+		on
+			info.rules_code = rule.rules_code
+		where 
+			loan_code = #{0} 
+		and 
+			dict_offend_type='1'
+	</select>  
+	<!--wanglidong+  黑名单匹配 -->
+	<select id="getAntifraudOffendInfoBlackList" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudOffendInfo" >
+		select 
+			info.id, 
+			info.loan_code, 
+			info.rules_code, 
+			info.dict_offend_type,  
+			rule.rules_remark  as offend_msg, 
+			info.offend_status, 
+			info.offend_relieve_status, 
+			info.offend_remark
+		from 
+			jk.t_jk_antifraud_offend_info info
+		left join
+			jk.t_jk_antifraud_rules rule
+		on
+			info.rules_code = rule.rules_code
+		where 
+			loan_code = #{0} 
+		and 
+			dict_offend_type='2'
+	</select>  
+	<!--wanglidong+  欺诈案件匹配 -->
+	<select id="getAntifraudOffendInfoJudgeCase" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudOffendInfo" >
+		select 
+			info.id, 
+			info.loan_code, 
+			info.rules_code, 
+			info.dict_offend_type,  
+			rule.rules_remark  as offend_msg, 
+			info.offend_status, 
+			info.offend_relieve_status, 
+			info.offend_remark
+		from 
+			jk.t_jk_antifraud_offend_info info
+		left join
+			jk.t_jk_antifraud_rules rule
+		on
+			info.rules_code = rule.rules_code
+		where 
+			loan_code = #{0} 
+		and 
+			dict_offend_type='4'
+	</select>  
+	<!-- wanglidong+ -->
+	<update id="updateRrelieveStatus" parameterType="java.lang.String"  >
+		UPDATE jk.t_jk_antifraud_offend_info SET offend_relieve_status=#{1},offend_remark=#{2} WHERE id = #{0};	
+	</update>
+	<!-- wanglidong获取applyid-->
+	<select id="getApplyid" parameterType="java.lang.String" resultType="java.lang.String" >
+		SELECT 
+			apply_id
+		FROM 
+			t_jk_loan_info 
+		where 
+			loan_code = #{0};	
+  	</select>
+	<!-- 获取查重匹配的内容-->
+	<select id="getRepeatMsg" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.ex.RepeatMsgEx" >
+		select T_JK_LOAN_CUSTOMER.customer_cert_num ,T_JK_LOAN_CUSTOMER.CUSTOMER_PHONE_FIRST,T_JK_LOAN_CUSTOMER.CUSTOMER_NAME
+		from  T_JK_LOAN_CUSTOMER 
+		inner join T_JK_LOAN_INFO on T_JK_LOAN_CUSTOMER.LOAN_CODE= T_JK_LOAN_INFO.LOAN_CODE  and T_JK_LOAN_INFO.LOAN_CODE!=#{0} 
+		left join 
+		(
+		select 
+			T_JK_LOAN_CUSTOMER.CUSTOMER_NAME,T_JK_LOAN_CUSTOMER.DICT_CERT_TYPE,T_JK_LOAN_CUSTOMER.CUSTOMER_CERT_NUM,T_JK_LOAN_CUSTOMER.CUSTOMER_PHONE_FIRST,
+			T_JK_LOAN_CUSTOMER.CUSTOMER_PHONE_SECOND,T_JK_LOAN_CUSTOMER.CUSTOMER_ADDRESS,T_JK_LOAN_CUSTOMER.CUSTOMER_REGISTER_ADDRESS 
+		from  T_JK_LOAN_CUSTOMER 
+		inner join T_JK_LOAN_INFO 
+		on T_JK_LOAN_CUSTOMER.LOAN_CODE= T_JK_LOAN_INFO.LOAN_CODE  
+		where T_JK_LOAN_INFO.LOAN_CODE=#{0}
+		) as CUREET on 1=1 
+		WHERE  T_JK_LOAN_CUSTOMER.CUSTOMER_NAME = CUREET.CUSTOMER_NAME 
+		and T_JK_LOAN_CUSTOMER.CUSTOMER_CERT_NUM != CUREET.CUSTOMER_CERT_NUM 
+		and  T_JK_LOAN_CUSTOMER.CUSTOMER_PHONE_FIRST = CUREET.CUSTOMER_PHONE_FIRST 
+  	</select>
+</mapper>

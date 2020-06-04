@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.GrossSpreadDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.GrossSpread" >
+    <id column="rate_id" property="rateId" jdbcType="SMALLINT" />
+    <result column="dict_product_type" property="dictProductType" jdbcType="VARCHAR" />
+    <result column="dict_deadline" property="dictDeadline" jdbcType="VARCHAR" />
+    <result column="gross_rate" property="grossRate" jdbcType="NUMERIC" />
+    <result column="dict_initiate" property="dictInitiate" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="rate_type" property="rateType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    t.rate_id, t.dict_product_type, t.dict_deadline, t.gross_rate, t.dict_initiate, t.create_by, 
+    t.create_time, t.modify_by, t.modify_time,rate_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_gross_spread
+    where rate_id = #{rateId,jdbcType=SMALLINT}
+  </select>
+  
+<!-- 根据产品类型和产品期限获取总费率 -->
+  <select id="findByProductTypeAndDeadline" resultMap="BaseResultMap" parameterType="java.util.Map">
+  select
+  <include refid="Base_Column_List" />
+  from t_cj_gross_spread t
+  inner join t_cj_spread_province_city_relation r on r.rate_id = t.rate_id
+  inner join t_gl_org o on o.city_id = r.province_city_id
+  inner join (select * from t_cj_loan_info where loan_code = #{loanCode, jdbcType=VARCHAR}) i on i.store_code = o.id
+  where t.dict_product_type = #{productTypeName, jdbcType=VARCHAR}
+  	AND t.dict_deadline = #{productTypeMonths, jdbcType=VARCHAR}
+  	AND t.dict_initiate = #{useFlag, jdbcType=VARCHAR}
+  	AND r.province_city_id is not null
+  limit 1
+  </select>
+  
+  <!-- 根据产品类型和产品期限获取总费率 -->
+  <select id="selectCarGross" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select
+  		<include refid="Base_Column_List" />
+  	from t_cj_gross_spread t
+  	<where>
+  	  t.dict_initiate = '1'
+  	  <if test="dictProductType != null and dictProductType !='' " >
+         and t.dict_product_type = #{dictProductType,jdbcType=VARCHAR} 
+      </if>
+      <if test="dictDeadline != null  and dictDeadline !=''  ">
+        and t.dict_deadline = #{dictDeadline,jdbcType=VARCHAR}
+      </if>
+      <if test="rateType != null  and rateType !=''  ">
+        and t.rate_type = #{rateType,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from jk.t_cj_gross_spread
+    where rate_id = #{rateId,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.GrossSpread" >
+    insert into jk.t_cj_gross_spread (rate_id, dict_product_type, dict_deadline, 
+      gross_rate, dict_initiate, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{rateId,jdbcType=SMALLINT}, #{dictProductType,jdbcType=VARCHAR}, #{dictDeadline,jdbcType=VARCHAR}, 
+      #{grossRate,jdbcType=NUMERIC}, #{dictInitiate,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.GrossSpread" >
+    insert into jk.t_cj_gross_spread
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rateId != null" >
+        rate_id,
+      </if>
+      <if test="dictProductType != null" >
+        dict_product_type,
+      </if>
+      <if test="dictDeadline != null" >
+        dict_deadline,
+      </if>
+      <if test="grossRate != null" >
+        gross_rate,
+      </if>
+      <if test="dictInitiate != null" >
+        dict_initiate,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rateId != null" >
+        #{rateId,jdbcType=SMALLINT},
+      </if>
+      <if test="dictProductType != null" >
+        #{dictProductType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDeadline != null" >
+        #{dictDeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="grossRate != null" >
+        #{grossRate,jdbcType=NUMERIC},
+      </if>
+      <if test="dictInitiate != null" >
+        #{dictInitiate,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.GrossSpread" >
+    update jk.t_cj_gross_spread
+    <set >
+      <if test="dictProductType != null" >
+        dict_product_type = #{dictProductType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDeadline != null" >
+        dict_deadline = #{dictDeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="grossRate != null" >
+        gross_rate = #{grossRate,jdbcType=NUMERIC},
+      </if>
+      <if test="dictInitiate != null" >
+        dict_initiate = #{dictInitiate,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rate_id = #{rateId,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.GrossSpread" >
+    update jk.t_cj_gross_spread
+    set dict_product_type = #{dictProductType,jdbcType=VARCHAR},
+      dict_deadline = #{dictDeadline,jdbcType=VARCHAR},
+      gross_rate = #{grossRate,jdbcType=NUMERIC},
+      dict_initiate = #{dictInitiate,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where rate_id = #{rateId,jdbcType=SMALLINT}
+  </update>
+  <!-- 复审-终审 总费率 -->
+  <resultMap id="BaseResultMapA" type="com.creditharmony.approve.carloan.entity.CarCustomerConsultation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="manager_code" property="managerCode" jdbcType="VARCHAR" />
+    <result column="cons_team_manager_code" property="consTeamManagerCode" jdbcType="VARCHAR" />
+    <result column="cons_loan_amount" property="consLoanAmount" jdbcType="NUMERIC" />
+    <result column="dict_loan_use" property="dictLoanUse" jdbcType="VARCHAR" />
+    <result column="dict_loan_type" property="dictLoanType" jdbcType="VARCHAR" />
+    <result column="cons_loan_remarks" property="consLoanRemarks" jdbcType="VARCHAR" />
+    <result column="cons_communicate_date" property="consCommunicateDate" jdbcType="TIMESTAMP" />
+    <result column="plan_arrival_time" property="planArrivalTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_flag" property="consTelesalesFlag" jdbcType="VARCHAR" />
+    <result column="cons_service_user_code" property="consServiceUserCode" jdbcType="VARCHAR" />
+    <result column="cons_telesales_source" property="consTelesalesSource" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_orgcode" property="consTelesalesOrgcode" jdbcType="VARCHAR" />
+    <result column="dict_oper_status" property="dictOperStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByLoanCode" resultMap="BaseResultMapA" parameterType="java.lang.String" >
+    select 
+    id, customer_code, manager_code, cons_team_manager_code, cons_loan_amount, dict_loan_use, 
+    dict_loan_type, cons_loan_remarks, cons_communicate_date, plan_arrival_time, cons_telesales_flag, 
+    cons_service_user_code, cons_telesales_source, create_by, modify_by, create_time, 
+    modify_time, cons_telesales_orgcode, dict_oper_status
+    from t_cj_customer_consultation
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByLoanCodeList" parameterType="java.lang.String" resultType="java.lang.String">
+  	select loan_code from jk.t_cj_loan_info
+		where loan_additional_applyid  
+			= (select loan_additional_applyid from jk.t_cj_loan_info
+				where loan_code = #{loanCode,jdbcType=VARCHAR})
+		and dict_loan_status = '43'
+		order by create_time asc
+  </select>
+</mapper>

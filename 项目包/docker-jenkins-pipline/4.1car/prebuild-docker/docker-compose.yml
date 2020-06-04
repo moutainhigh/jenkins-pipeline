@@ -1,0 +1,17 @@
+version: '2'
+services:
+  tomcat:
+    image: registry.cn-hangzhou.aliyuncs.com/sourcegarden/$JOB_NAME:$BUILD_NUMBER
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    labels:
+      io.rancher.container.hostname_override: container_name
+  tomcat-lb:
+    image: rancher/lb-service-haproxy:v0.7.6
+    stdin_open: true
+    tty: true
+    ports:
+    - 8080:8080/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewLoanStatusHisDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewLoanStatusHis" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="dict_loan_status" property="dictLoanStatus" jdbcType="VARCHAR" />
+    <result column="operate_step" property="operateStep" jdbcType="VARCHAR" />
+    <result column="dict_sys_flag" property="dictSysFlag" jdbcType="VARCHAR" />
+    <result column="operate_result" property="operateResult" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="operator_role_id" property="operatorRoleId" jdbcType="VARCHAR" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, id, dict_loan_status, operate_step, dict_sys_flag, operate_result, operator, 
+    operator_role_id, org_code, operate_time, remark, create_by, create_time, modify_by, 
+    modify_time
+  </sql>
+  <select id="findByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.newCar.entity.NewLoanStatusHis" >
+	select d2.label operate_result, a.id, a.operator, a.operate_time, d.label operate_step,
+		a.dict_loan_status, case when a.remark = '1' then '' else a.remark end remark
+	from jk.t_cj_loan_status_his a
+	left join t_gl_dict d on d.value = a.operate_step and d.type = 'jk_car_loan_steps'
+	  left join t_gl_dict d2 on d2.type = 'jk_car_operate_result' and d2.value = a.operate_result
+	where a.loan_code = #{loanCode,jdbcType=VARCHAR}
+	order by a.create_time desc
+  </select>
+  <insert id="insertLoanStatusHis" parameterType="com.creditharmony.approve.newCar.entity.NewLoanStatusHis" >
+    insert into jk.t_cj_loan_status_his
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status,
+      </if>
+      <if test="operateStep != null" >
+        operate_step,
+      </if>
+      <if test="dictSysFlag != null" >
+        dict_sys_flag,
+      </if>
+      <if test="operateResult != null" >
+        operate_result,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="operatorRoleId != null" >
+        operator_role_id,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+      <if test="operateTime != null" >
+        operate_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="operateStep != null" >
+        #{operateStep,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSysFlag != null" >
+        #{dictSysFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operateResult != null" >
+        #{operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorRoleId != null" >
+        #{operatorRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

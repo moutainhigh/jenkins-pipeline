@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.LoanPrdDao" >
+
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.LoanPrdEntity" >
+		<id column="no" property="no" jdbcType="NUMERIC" />
+		<result column="product_type" property="productType" jdbcType="VARCHAR" />
+		<result column="product_code" property="productCode" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_status" property="productStatus" jdbcType="VARCHAR" />
+		<result column="limit_lower" property="limitLower" jdbcType="NUMERIC" />
+		<result column="limit_upper" property="limitUpper" jdbcType="NUMERIC" />
+		<result column="product_limit_upperraio" property="productLimitUpperraio" jdbcType="NUMERIC" />
+		<result column="product_limit_lowerraio" property="productLimitLowerraio" jdbcType="NUMERIC" />
+		<result column="product_months" property="productMonths" jdbcType="VARCHAR" />
+		<result column="discount_rate" property="discountRate" jdbcType="VARCHAR" />
+		<result column="start_day" property="startDay" jdbcType="DATE" />
+		<result column="close_day" property="closeDay" jdbcType="DATE" />
+		<result column="treaty" property="treaty" jdbcType="VARCHAR" />
+		<result column="formula" property="formula" jdbcType="VARCHAR" />
+		<result column="class_type" property="classType" jdbcType="VARCHAR" />
+		<result column="interest_rate" property="interestRate" jdbcType="VARCHAR" />
+		<result column="material" property="material" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+		product_type, 
+		product_code, 
+		product_name, 
+		product_status, 
+		limit_lower, 
+		limit_upper, 
+		product_limit_upperraio, 
+		product_limit_lowerraio, 
+		product_months, 
+		discount_rate, 
+		start_day, 
+		close_day, 
+		treaty, 
+		formula, 
+		class_type, 
+		interest_rate, 
+		material, 
+		remark, 
+		create_by, 
+		create_time, 
+		modify_by, 
+		modify_time
+	</sql>
+
+    <!-- 检索产品的键值对 *************************************************************************************************** -->
+    <select id="selPrdKV" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT DISTINCT 
+            product_code,
+            product_name 
+        FROM  
+            t_gl_jk_product
+       	<where>
+         <if test="productType != null and productType != ''">
+                AND product_type = #{productType}
+         </if> 
+      </where>
+    </select>
+    
+    <!-- 根据产品ID检索产品名称************************************************************************************************ -->
+    <select id="selPrdNamebyId" resultType="java.lang.String">
+        SELECT 
+            product_name 
+        FROM  
+            t_gl_jk_product
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+    
+    
+    <!-- 根据productType 、productCode检索产品信息 *************************************************************************************************** -->
+    <select id="getPrdByTypeAndCode" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM  
+            t_gl_jk_product
+       	<where>
+       	 <if test="productType != null and productType != ''">
+                AND product_type = #{productType}
+         </if> 
+         <if test="productCode != null and productCode != ''">
+                AND product_code = #{productCode}
+         </if> 
+      </where>
+    </select>
+    
+</mapper>

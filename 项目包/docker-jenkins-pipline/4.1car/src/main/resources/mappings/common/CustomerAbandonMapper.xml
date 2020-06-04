@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.CustomerAbandonDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.CustomerAbandon" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="r_status_his_id" property="rStatusHisId" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="abandon_first_code" property="abandonFirstCode" jdbcType="VARCHAR" />
+    <result column="abandon_second_code" property="abandonSecondCode" jdbcType="VARCHAR" />
+    <result column="abandon_remark" property="abandonRemark" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />    
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+     <result column="abandon_third_code" property="abandonThirdCode" jdbcType="VARCHAR" />
+  </resultMap>
+ <select id="findCustomerAbandon" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+ 	select b.GIVEUP_NAME as abandonFirstCode,c.GIVEUP_NAME as abandonSecondCode,a.abandon_remark
+ 	from jk.t_jk_customer_abandon a
+ 	left join jk.T_GL_GIVEUP b
+ 	on b.GIVEUP_CODE =a.abandon_first_code
+ 	left join jk.T_GL_GIVEUP c
+ 	on c.GIVEUP_CODE =a.abandon_second_code
+ 	where a.R_STATUS_HIS_ID=#{id}
+ </select>
+    <!-- 刘燕军  把客户放弃信息插入到数据库中 -->
+ <insert id="insertSelective" parameterType="com.creditharmony.approve.common.entity.CustomerAbandon" >
+    insert into jk.t_jk_customer_abandon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rStatusHisId != null" >
+        r_status_his_id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="abandonFirstCode != null" >
+        abandon_first_code,
+      </if>
+      <if test="abandonSecondCode != null" >
+        abandon_second_code,
+      </if>
+      <if test="abandonRemark != null" >
+        abandon_remark,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+        abandon_third_code,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rStatusHisId != null" >
+        #{rStatusHisId,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="abandonFirstCode != null" >
+        #{abandonFirstCode,jdbcType=VARCHAR},
+      </if>
+      <if test="abandonSecondCode != null" >
+        #{abandonSecondCode,jdbcType=VARCHAR},
+      </if>
+      <if test="abandonRemark != null" >
+        #{abandonRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+        #{abandonThirdCode,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <select id="findAbandonList" resultType="java.lang.String" parameterType="com.creditharmony.approve.workflow.view.VerifyBusinessView">
+  	SELECT B.GIVEUP_NAME
+ 	FROM JK.T_JK_CUSTOMER_ABANDON A
+ 	LEFT JOIN JK.T_GL_GIVEUP B
+ 	ON B.GIVEUP_CODE =A.ABANDON_FIRST_CODE
+ 	WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode}
+  </select>
+</mapper>

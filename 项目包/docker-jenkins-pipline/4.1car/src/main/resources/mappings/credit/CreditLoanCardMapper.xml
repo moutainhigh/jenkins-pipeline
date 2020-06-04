@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditLoanCardDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="through_year" property="throughYear" jdbcType="VARCHAR" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="add_day" property="addDay" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, through_year, org_name, operation, add_day, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_loan_card
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByLoanCardInfo" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_loan_card
+    where loan_code = #{loanCode}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_loan_card
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByLoanCode" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_loan_card
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertCreditLoanCard" parameterType="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    insert into jk.t_jk_credit_loan_card (id, loan_code, through_year, 
+      org_name, operation, add_day, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{throughYear,jdbcType=VARCHAR}, 
+      #{orgName,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, #{addDay,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    insert into jk.t_jk_credit_loan_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="throughYear != null" >
+        through_year,
+      </if>
+      <if test="orgName != null" >
+        org_name,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="addDay != null" >
+        add_day,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="throughYear != null" >
+        #{throughYear,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="addDay != null" >
+        #{addDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    update jk.t_jk_credit_loan_card
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="throughYear != null" >
+        through_year = #{throughYear,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="addDay != null" >
+        add_day = #{addDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditLoanCard" >
+    update jk.t_jk_credit_loan_card
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      through_year = #{throughYear,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=VARCHAR},
+      add_day = #{addDay,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

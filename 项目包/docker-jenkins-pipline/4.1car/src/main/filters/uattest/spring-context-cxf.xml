@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<bean id="approveWebServiceBean" class="com.creditharmony.approve.common.ws.ApproveWebServiceImpl" />
+
+	<!-- 发布服务 -->
+	<jaxws:endpoint id="approveWebServiceExecute" implementor="#approveWebServiceBean"
+		address="/ApproveWebService">
+	</jaxws:endpoint>
+	
+	
+	<!-- 汇诚进件引擎规则-ODM client -->	
+	<jaxws:client id="applyengineRulesService" 
+			address="http://10.167.210.228:8228/DecisionService/ws/applyengine_ruleapp/applyengine_rules?WSDL"
+			serviceClass="com.creditharmony.approve.rule.applyengine.client.ApplyengineRulesDecisionService" >
+	</jaxws:client>
+	
+	<!-- 汇诚决策评分规则-ODM client -->	
+	<jaxws:client id="ratingService" 
+			address="http://10.167.210.228:8228/DecisionService/ws/auditRating_ruleapp/auditRating_rules?WSDL"
+			serviceClass="com.creditharmony.approve.rule.auditrating.client.AuditRatingRulesDecisionService" >
+	</jaxws:client>
+	
+	<!-- 根据门店判断渠道 -->	
+	<jaxws:client id="channelconfigRuleService" 
+			address="http://10.167.210.228:8228/DecisionService/ws/channelconfig_ruleapp/channelconfig_rule?WSDL"
+			serviceClass="com.creditharmony.approve.rule.channelconfig.client.ChannelconfigRuleDecisionService" >
+	</jaxws:client>
+	
+</beans>

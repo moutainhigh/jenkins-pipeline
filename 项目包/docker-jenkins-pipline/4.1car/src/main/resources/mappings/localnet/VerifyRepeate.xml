@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.localnet.dao.VerifyRepeateDao" >
+  <select id="getPhoneUse" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	SELECT COUNT(PHONE_NUM) FROM JK.T_JK_PHONENUM_FILTER WHERE PHONE_NUM = #{phone};
+  </select>
+  <!-- 0 本人核实，1联系人，2单位名称 ， 3 单位电话, 4联系人电话信息（家庭、固话） -->
+  <select id="getParam" parameterType="java.util.Map" resultType="com.creditharmony.approve.common.entity.RepeateParam"> 
+  		<if test="tableType == 0"> 
+  			SELECT A.LOAN_CODE AS loanCode,B.BRHS_PHONE as repeateContent,A.DICT_CUSTOMER_TYPE AS type,A.DICT_CHECK_TYPE AS checkType,
+  				   B.SOURCE AS src,A.R_CUSTOMER_COBORROWER_ID AS relId,CASE WHEN B.TYPE='1' THEN '手机号码' ELSE '家庭固话' END AS repeateType
+  			FROM JK.T_JK_DHZH_BRHS_DHXX  B
+  			LEFT JOIN JK.T_JK_DHZH_BRHS A ON A.ID=B.R_BRHS_ID
+  			WHERE B.ID=#{id}
+  		</if>
+  		<if test="tableType == 1"> 
+  			SELECT A.LOAN_CODE AS loanCode,A.DHGXSH_TEL as repeateContent,A.DICT_CUSTOMER_TYPE AS type,A.DICT_CHECK_TYPE AS checkType,
+  				   A.DICT_TEL_SOURCE AS src,A.R_CUSTOMER_COBORROWER_ID AS relId,CONCAT(B.LABEL,'-',C.LABEL,'(',A.NAME,')手机号码') AS repeateType
+  			FROM JK.T_JK_DHZH_DHGXSH  A
+			LEFT JOIN JK.T_GL_DICT B ON B.TYPE='jk_relation_type' AND A.DICT_RELATION_TYPE = B.VALUE
+			LEFT JOIN JK.T_GL_DICT C ON C.PARENT_ID=B.ID AND A.LOAN_MAN_RELATION = C.VALUE  
+  			WHERE A.ID=#{id}
+  		</if>
+  		<if test="tableType == 2"> 
+  			SELECT A.LOAN_CODE AS loanCode,A.WORK_UNITNAME as repeateContent,A.DICT_CUSTOMER_TYPE AS type,A.WORK_INFO_SOURCE as src,
+  				   A.R_CUSTOMER_COBORROWER_ID AS relId,'单位名称' AS repeateType,A.DICT_CHECK_TYPE AS checkType
+  			FROM JK.T_JK_TEL_AUDIT_WORK A
+  			WHERE A.ID=#{id}
+  		</if>
+  		<if test="tableType == 3"> 
+  			SELECT A.LOAN_CODE AS loanCode,B.WORK_UNIT_TEL as repeateContent,A.DICT_CUSTOMER_TYPE AS type,B.WORK_TEL_SOURCE AS src,
+  				   A.R_CUSTOMER_COBORROWER_ID AS relId,'单位固话' AS repeateType,A.DICT_CHECK_TYPE AS checkType
+  			FROM JK.T_JK_DHZH_WORK_TELNUM  B
+  			LEFT JOIN JK.T_JK_TEL_AUDIT_WORK A ON A.ID=B.WORK_ID
+  			WHERE B.ID=#{id}
+  		</if>
+ 		<if test="tableType == 4"> 
+  			SELECT A.LOAN_CODE AS loanCode,B.BRHS_PHONE as repeateContent,A.DICT_CUSTOMER_TYPE AS type,A.DICT_CHECK_TYPE AS checkType,
+  				   B.SOURCE AS src,A.R_CUSTOMER_COBORROWER_ID AS relId,CASE WHEN B.TYPE='1' THEN '手机号码' ELSE '家庭固话' END AS repeateType
+  			FROM JK.T_JK_DHZH_DHGXSH_DHXX  B
+  			LEFT JOIN JK.T_JK_DHZH_DHGXSH A ON A.ID=B.r_dhgxsh_id
+  			WHERE B.ID=#{id}
+  		</if>
+  </select>
+  <select id="getParamList" parameterType="java.util.Map" resultMap="baseMap">
+  	  		SELECT A.LOAN_CODE,B.WORK_UNIT_TEL,A.DICT_CUSTOMER_TYPE,A.WORK_INFO_SOURCE as src,
+  				   A.R_CUSTOMER_COBORROWER_ID,'单位固话' AS repeateType,A.DICT_CHECK_TYPE
+  			FROM JK.T_JK_TEL_AUDIT_WORK A
+  			LEFT JOIN JK.T_JK_DHZH_WORK_TELNUM  B ON A.ID=B.WORK_ID
+  			WHERE A.ID=#{id}
+  </select>
+  <resultMap type="com.creditharmony.approve.common.entity.RepeateParam" id="baseMap">
+  	<result column="LOAN_CODE" property="loanCode" jdbcType="VARCHAR"/>
+  	<result column="WORK_UNIT_TEL" property="repeateContent" jdbcType="VARCHAR"/>
+  	<result column="DICT_CUSTOMER_TYPE" property="type" jdbcType="VARCHAR"/>
+  	<result column="R_CUSTOMER_COBORROWER_ID" property="relId" jdbcType="VARCHAR"/>
+  	<result column="repeateType" property="repeateType" jdbcType="VARCHAR"/>
+  	<result column="DICT_CHECK_TYPE" property="checkType" jdbcType="VARCHAR"/>
+  	<result column="src" property="src" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <!-- 各类号码查重 -->
+  <insert id="repeateCheck" parameterType="com.creditharmony.approve.common.entity.RepeateParam">
+  	INSERT INTO JK.T_JK_INNER_REPEAT(ID,LOAN_CODE,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,
+			DICT_CUSTOMER_TYPE,REPEAT_RELATION,EXCEPTION_FLAG,REPEAT_VIEW_TYPE,REPEAT_VIEW_CONTENT,
+            CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE,EXCEPTION_RECONSIDER_FLAG)
+	SELECT JK.GETUUID32(),#{loanCode},B.LOAN_CODE,B.R_NAME,#{relId},#{type},B.RELATION,'2',#{repeateType},
+				#{repeateContent},#{user},SYSDATE,#{user},SYSDATE,'2','2'
+	FROM JK.T_JK_PHONE_POOL B
+		 LEFT JOIN JK.T_JK_INNER_CUSTOMER_HIS B1 ON B1.LOAN_CODE=#{loanCode} AND B.LOAN_CODE=B1.HIS_LOAN_CODE AND B1.CUSTOMER_CODE=#{relId}
+	WHERE B1.LOAN_CODE IS NULL AND B.PHONE=#{repeateContent} AND B.LOAN_CODE != #{loanCode}
+	LIMIT 10
+  </insert>
+  
+  <!-- 单位名称查重 -->
+  <insert id="repeateCheckName" parameterType="com.creditharmony.approve.common.entity.RepeateParam">
+  	INSERT INTO JK.T_JK_INNER_REPEAT(ID,LOAN_CODE,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,
+			DICT_CUSTOMER_TYPE,REPEAT_RELATION,EXCEPTION_FLAG,REPEAT_VIEW_TYPE,REPEAT_VIEW_CONTENT,
+            CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE,EXCEPTION_RECONSIDER_FLAG)
+	SELECT JK.GETUUID32(),#{loanCode},B.LOAN_CODE,B.R_NAME,#{relId},#{type},B.RELATION,'2',#{repeateType},
+			#{repeateContent},#{user},SYSDATE,#{user},SYSDATE,'2','2'
+	FROM JK.T_JK_WORK_NAME_POOL B
+		 LEFT JOIN JK.T_JK_INNER_CUSTOMER_HIS B1 ON B1.LOAN_CODE=#{loanCode} AND B.LOAN_CODE=B1.HIS_LOAN_CODE AND B1.CUSTOMER_CODE=#{relId}
+	WHERE B1.LOAN_CODE IS NULL AND B.WORK_NAME=#{repeateContent} AND B.LOAN_CODE != #{loanCode}
+	LIMIT 10
+  </insert>  
+  <delete id="deleteRepeate" parameterType="com.creditharmony.approve.common.entity.RepeateParam">
+  	DELETE FROM JK.T_JK_INNER_REPEAT  WHERE LOAN_CODE=#{loanCode} AND LOAN_CUSTOMER_CODE=#{relId}
+  	AND DICT_CUSTOMER_TYPE=#{type} AND REPEAT_VIEW_CONTENT=#{repeateContent}
+  </delete>
+</mapper>

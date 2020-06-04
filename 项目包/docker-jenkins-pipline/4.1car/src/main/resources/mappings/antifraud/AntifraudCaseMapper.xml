@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudCaseDao" >
+  <!--wanglidong  -->
+  <select id="getAntifraudCase" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudCase" >
+	select 
+		cse.id, 
+		cse.loan_code_now, 
+		cse.rules_code, 
+		cse.case_code, 
+		cse.loan_code, 
+		cse.case_handle_day,  
+		cse.case_handle_by,
+		cse.loan_customer_name, 
+		refuse.refuse_name as dict_antifraud_type, 
+		cse.case_risk_msg
+	from 
+		t_jk_antifraud_case cse
+	left join
+		t_gl_refuse refuse 
+	on 
+		cse.dict_antifraud_type = refuse.refuse_code 
+	where 
+		rules_code = #{0}
+	and 
+		loan_code_now = #{1}
+  </select>     
+</mapper>

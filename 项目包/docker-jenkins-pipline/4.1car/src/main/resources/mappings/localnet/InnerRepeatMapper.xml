@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.localnet.dao.InnerRepeatDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.localnet.entity.InnerRepeat" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="repeat_name" property="repeatName" jdbcType="VARCHAR" />
+    <result column="loan_customer_code" property="loanCustomterCode" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="repeat_relation" property="repeatRelation" jdbcType="VARCHAR" />
+    <result column="repeat_into_time" property="repeatIntoTime" jdbcType="TIMESTAMP" />
+    <result column="repeat_main_loaner" property="repeatMainLoaner" jdbcType="VARCHAR" />
+    <result column="repeat_unitname" property="repeatUnitname" jdbcType="VARCHAR" />
+    <result column="repeat_unit_address" property="repeatUnitAddress" jdbcType="VARCHAR" />
+    <result column="exception_flag" property="exceptionFlag" jdbcType="VARCHAR" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="repeat_view_type" property="repeatViewType" jdbcType="VARCHAR" />
+    <result column="repeat_view_content" property="repeatViewContent" jdbcType="VARCHAR" />
+    <result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+    <result column="repeat_refuse_reson" property="repeatRefuseReson" jdbcType="VARCHAR" />
+    <result column="repeat_after_situation" property="repeatAfterSituation" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_id, repeat_name, loan_customer_code, dict_customer_type, repeat_relation, 
+    repeat_into_time, repeat_main_loaner, repeat_unitname, repeat_unit_address, exception_flag, 
+    product_type, repeat_view_type, repeat_view_content, dict_check_status, repeat_refuse_reson, 
+    repeat_after_situation, remark, create_by, create_time, modify_by, modify_time
+  </sql>
+  
+    <sql id="Base_List" >
+   id, loan_code, r_id, repeat_name, loan_customer_code, dict_customer_type, repeat_relation, 
+    repeat_into_time, repeat_main_loaner, repeat_unitname, repeat_unit_address, exception_flag, 
+    product_type, repeat_view_type, repeat_view_content, dict_check_status, repeat_refuse_reson, 
+    repeat_after_situation,  create_by, create_time, modify_by, modify_time
+  </sql>
+  <!-- 决策时查重信息校验 是否判定过 -->
+  <select id="checkException" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+			SELECT COUNT(1)  
+		  	FROM JK.T_JK_INNER_REPEAT
+			WHERE  LOAN_CODE = #{loanCode} AND (RESOURCE= '2' OR RESOURCE = #{checkType})
+			<if test="checkType == 0">
+			   AND ( 
+			   			COALESCE(EXCEPTION_FLAG,'') = '' OR EXCEPTION_FLAG='2'
+			   	  )
+			</if>
+			<if test="checkType == 1">
+			   AND ( 
+			   		COALESCE(EXCEPTION_RECONSIDER_FLAG,'') = '' OR EXCEPTION_FLAG='2'
+			   	  )
+			</if>
+  </select>
+ <!-- 决策时，单位名称查重 -->
+   <insert id="insertInnerRepeats"  parameterType="java.lang.String">
+	insert into jk.t_jk_inner_repeat
+	(id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+	select getuuid32() as id,b.loan_code,a.LOAN_CODE as R_ID,a.R_NAME as REPEAT_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,
+	a.RELATION AS REPEAT_RELATION,c.customer_into_time as REPEAT_INTO_TIME,d.customer_name as REPEAT_MAIN_LOANER,
+	e.WORK_UNITNAME as REPEAT_UNITNAME,CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,
+	'2' as EXCEPTION_FLAG,c.product_type,'单位名称' as REPEAT_VIEW_TYPE,
+	a.work_name as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,
+	''  as REPEAT_AFTER_SITUATION,'' as REMARK,
+	'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+	from jk.T_JK_WORK_NAME_POOL a
+	inner join (
+	SELECT filtercompanyname(WORK_UNITNAME) as work_name,loan_code,R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,
+	DICT_CUSTOMER_TYPE
+	FROM JK.T_JK_TEL_AUDIT_WORK WHERE loan_code=#{0} and (IS_REPEAT&lt;&gt;'1' or IS_REPEAT is null) and WORK_INFO_SOURCE='01'
+	) b
+	on filtercompanyname(a.work_name) = b.work_name and a.loan_code &lt;&gt; b.loan_code
+	left join  jk.t_jk_inner_customer_his m on a.loan_code=m.HIS_LOAN_CODE and m.HIS_LOAN_CODE is null and m.loan_code=#{0}
+	left join jk.t_jk_loan_info c on a.loan_code=c.loan_code
+	left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+	left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+	and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+	left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+	left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+	left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+	left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+	LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+	LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+	group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,a.RELATION,
+	c.customer_into_time,d.customer_name,e.WORK_UNITNAME,
+	 f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,a.work_name,
+	 X.LABEL,Y.LABEL,I.REFUSE_REASON
+  	</insert>	
+  <!-- 决策时，电话称查重 -->
+   <insert id="insertInnerRepeatsByTel" parameterType="java.lang.String">
+  		insert into jk.t_jk_inner_repeat
+  		(id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+	select getuuid32() as id,b.loan_code,a.LOAN_CODE as R_ID,a.R_NAME as REPEAT_NAME,b.LOAN_CUSTOMER_CODE,
+	b.DICT_CUSTOMER_TYPE,a.RELATION AS REPEAT_RELATION,c.customer_into_time as REPEAT_INTO_TIME,
+	d.customer_name as REPEAT_MAIN_LOANER,e.WORK_UNITNAME as REPEAT_UNITNAME,
+	CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,
+	'2' as EXCEPTION_FLAG,c.product_type,b.type as REPEAT_VIEW_TYPE,
+	a.PHONE as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,''  as REPEAT_AFTER_SITUATION,'' as REMARK,'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+	from jk.T_JK_PHONE_POOL a
+	inner join(
+	select b.WORK_UNIT_TEL as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	'单位电话'   as type 
+	from jk.T_JK_TEL_AUDIT_WORK a
+	inner join jk.T_JK_DHZH_WORK_TELNUM b on a.id=b.WORK_ID and char_length(COALESCE(b.WORK_UNIT_TEL,''))&lt;&gt; 0 and b.WORK_TEL_SOURCE='01' and (b.IS_REPEAT&lt;&gt;'1' or b.IS_REPEAT is null)
+	where a.WORK_INFO_SOURCE='01' and a.loan_code=#{0}
+	union all
+	select b.BRHS_PHONE as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	'手机号码' as type   
+	from jk.T_JK_DHZH_BRHS a
+	inner join jk.T_JK_DHZH_BRHS_DHXX b on a.id=b.R_BRHS_ID and char_length(COALESCE(b.BRHS_PHONE,''))&lt;&gt; 0  and (b.IS_REPEAT&lt;&gt;'1' or b.IS_REPEAT is null)
+	where a.loan_code=#{0}
+	union all
+	select b.HOME_TEL as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	'家庭固话' as type   
+	from jk.T_JK_DHZH_BRHS a
+	inner join jk.T_JK_DHZH_DHBRSHP b on a.id=b.R_CUSTOMER_COBORROWER_ID and COALESCE(b.HOME_TEL,'')&lt;&gt;''  and (b.IS_REPEAT='1' or COALESCE(b.IS_REPEAT,'')='')
+	where a.loan_code=#{0}
+	union all
+	select a.DHGXSH_TEL as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	CONCAT(B.LABEL,'-',C.LABEL,'(',a.NAME,')手机号码') as type 
+	from jk.T_JK_DHZH_DHGXSH a
+	LEFT JOIN JK.T_GL_DICT B ON B.TYPE='JK_RELATION_TYPE' AND A.DICT_RELATION_TYPE = B.VALUE
+	LEFT JOIN JK.T_GL_DICT C ON C.PARENT_ID=B.ID AND A.LOAN_MAN_RELATION = C.VALUE
+	where  char_length(COALESCE(DHGXSH_TEL,''))&lt;&gt; 0  and loan_code=#{0} and (a.IS_REPEAT&lt;&gt;'1' or a.IS_REPEAT is null)) b
+    on a.phone=b.tel and a.loan_code &lt;&gt; b.loan_code
+    left join  jk.t_jk_inner_customer_his m on a.loan_code=m.HIS_LOAN_CODE and m.HIS_LOAN_CODE is null and m.loan_code=#{0}
+	left join jk.t_jk_loan_info c on a.loan_code=c.loan_code
+	left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+	left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+	and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+	left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+	left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+	left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+	left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+	LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+	LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+	group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,a.RELATION,c.customer_into_time,d.customer_name,e.WORK_UNITNAME,
+	 f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,a.phone,
+	 B.TYPE,X.LABEL,Y.LABEL,I.REFUSE_REASON 
+  </insert>
+  <!-- 决策时，单位地址查重 -->
+   <insert id="insertInnerRepeatsByAddress"  parameterType="java.lang.String">
+  	insert into jk.t_jk_inner_repeat (id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+select getuuid32() as id,b.loan_code,a.LOAN_CODE as R_ID,a.R_NAME as REPEAT_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,
+a.RELATION AS REPEAT_RELATION,c.customer_into_time as REPEAT_INTO_TIME,d.customer_name as REPEAT_MAIN_LOANER,
+e.WORK_UNITNAME as REPEAT_UNITNAME,CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,'2' as EXCEPTION_FLAG,c.product_type,
+B.TYPE  as REPEAT_VIEW_TYPE,
+CONCAT(m.AREA_NAME,n.AREA_NAME,o.AREA_NAME,b.WORK_ADDRESS)as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,
+''  as REPEAT_AFTER_SITUATION,'' as REMARK,'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+	 from jk.T_JK_ADDRESS_POOL a
+	inner join (
+	select WORK_PROVINCE,WORK_CITY,WORK_DISTRICT,WORK_ADDRESS,loan_code,R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,
+	DICT_CUSTOMER_TYPE,'单位地址'  as TYPE
+	from jk.T_JK_TEL_AUDIT_WORK 
+	where WORK_INFO_SOURCE='01' and char_length(COALESCE(WORK_PROVINCE,''))&lt;&gt; 0 and char_length(COALESCE(WORK_CITY,''))&lt;&gt; 0 and char_length(COALESCE(WORK_DISTRICT,''))&lt;&gt; 0 and char_length(COALESCE(WORK_ADDRESS,''))&lt;&gt; 0 and loan_code=#{0}
+	and (IS_REPEAT&lt;&gt;'1' or IS_REPEAT is null)
+	UNION ALL
+	select B.LIVE_PROVINCE AS WORK_PROVINCE,B.LIVE_CITY AS WORK_CITY,B.LIVE_AREA AS WORK_DISTRICT,
+	B.LIVE_ADDRESS AS WORK_ADDRESS,A.loan_code,A.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,A.DICT_CUSTOMER_TYPE,'家庭地址' AS TYPE
+	from jk.T_JK_DHZH_BRHS A
+	INNER JOIN JK.T_JK_DHZH_DHGXBRSHD B ON A.ID = B.R_CUSTOMER_COBORROWER_ID 
+	WHERE COALESCE(B.LIVE_ADDRESS,'')&lt;&gt;''
+	and char_length(COALESCE(B.LIVE_PROVINCE,''))&lt;&gt; 0 and char_length(COALESCE(B.LIVE_CITY,''))&lt;&gt; 0 
+	and char_length(COALESCE(B.LIVE_AREA,''))&lt;&gt; 0 
+	and (B.IS_REPEAT='0' or COALESCE(B.IS_REPEAT,'')='') AND  A.LOAN_CODE=#{0}
+	 ) b
+	on a.PROVINCE = b.WORK_PROVINCE and b.WORK_CITY=a.city and WORK_DISTRICT=a.AREA and b.WORK_ADDRESS=a.ADDRESS and a.loan_code &lt;&gt; b.loan_code
+	left join  jk.t_jk_inner_customer_his p on a.loan_code=p.HIS_LOAN_CODE and p.HIS_LOAN_CODE is null and p.loan_code=#{0}
+	left join jk.t_jk_loan_info c on a.loan_code=c.loan_code
+	left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+	left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+	and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+	left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+	left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+	left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+	left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+	LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+	LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+	left join JK.T_GL_PROVINCE_CITY m on m.AREA_CODE = b.WORK_PROVINCE
+	left join JK.T_GL_PROVINCE_CITY n on n.AREA_CODE = b.WORK_CITY
+	left join JK.T_GL_PROVINCE_CITY o on o.AREA_CODE = b.WORK_DISTRICT
+	group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,
+	a.RELATION,c.customer_into_time,d.customer_name,e.WORK_UNITNAME,f.AREA_NAME,
+	g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,M.AREA_NAME,N.AREA_NAME,
+	O.AREA_NAME,B.WORK_ADDRESS,X.LABEL,Y.LABEL,I.REFUSE_REASON
+ 
+  </insert>
+  <!-- 查询查重信息 -->
+   <!-- source 0信审查重，1复议查重 ,2系统查重' --> 
+  <select id="findListByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  >
+	  SELECT
+	    A.ID,A.LOAN_CODE,A.R_ID,A.REPEAT_NAME,A.LOAN_CUSTOMER_CODE,A.REPEAT_RELATION, 
+	    B.OUTTO_LOAN_TIME AS REPEAT_INTO_TIME, B.LOAN_CUSTOMER_NAME AS REPEAT_MAIN_LOANER, A.REPEAT_UNITNAME, A.REPEAT_UNIT_ADDRESS,
+	    D.PRODUCT_NAME AS PRODUCT_TYPE, A.REPEAT_VIEW_TYPE, A.REPEAT_VIEW_CONTENT,
+	    M1.LABEL AS DICT_CHECK_STATUS,C.REFUSE_REASON AS REPEAT_REFUSE_RESON, 
+	    CASE WHEN COALESCE(PAY.EFFECTIVE_FLAG,'0')='0' THEN '' 
+	         WHEN COALESCE(PAY.EFFECTIVE_FLAG,'0')='1' AND COALESCE(PAY.PAYBACK_MAX_OVERDUEDAYS,0)>0 THEN '逾期' 
+	         ELSE '正常' END REPEAT_AFTER_SITUATION,
+	    CONCAT (E.CNT,',',E.REPEAT_VIEW_TYPE,',',E.REPEAT_VIEW_CONTENT) AS MESSAGE,
+	    (CASE WHEN #{checkType} = '1' THEN A.EXCEPTION_RECONSIDER_FLAG ELSE A.EXCEPTION_FLAG END) AS EXCEPTION_FLAG,
+	    (CASE WHEN #{checkType} = '1' THEN A.RECONSIDER_REMARK ELSE A.REMARK END) AS REMARK 
+	 FROM JK.T_JK_INNER_REPEAT A LEFT JOIN JK.T_JK_LOAN_INFO B ON A.R_ID=B.LOAN_CODE
+	      LEFT JOIN JK.T_JK_AUDIT_RECORD C ON B.AUDIT_ID= C.ID 
+	      LEFT JOIN JK.T_GL_JK_PRODUCT D ON D.PRODUCT_CODE = B.PRODUCT_TYPE
+	      LEFT JOIN JK.T_GL_DICT M1 ON M1.VALUE=B.DICT_LOAN_STATUS AND M1.TYPE='jk_loan_apply_status'
+	      LEFT JOIN (SELECT COUNT(1) CNT, D.REPEAT_VIEW_TYPE, D.REPEAT_VIEW_CONTENT 
+	 FROM JK.T_JK_INNER_REPEAT D
+	 WHERE D.LOAN_CODE = #{loanCode} AND D.DICT_CUSTOMER_TYPE = #{type}
+	   AND D.LOAN_CUSTOMER_CODE=#{relId} AND (D.RESOURCE= '2' OR D.RESOURCE = #{checkType})
+	 GROUP BY D.REPEAT_VIEW_TYPE, D.REPEAT_VIEW_CONTENT) E ON A.REPEAT_VIEW_TYPE=E.REPEAT_VIEW_TYPE AND A.REPEAT_VIEW_CONTENT=E.REPEAT_VIEW_CONTENT
+	      LEFT JOIN JK.T_JK_CONTRACT CON ON A.R_ID=CON.LOAN_CODE
+	      LEFT JOIN JK.T_JK_PAYBACK PAY ON CON.CONTRACT_CODE=PAY.CONTRACT_CODE
+	WHERE A.LOAN_CODE = #{loanCode} AND A.DICT_CUSTOMER_TYPE = #{type} AND A.LOAN_CUSTOMER_CODE=#{relId}
+	      AND (A.RESOURCE= '2' OR A.RESOURCE = #{checkType})
+	ORDER BY A.REPEAT_VIEW_TYPE,A.REPEAT_VIEW_CONTENT
+  </select>
+  <!-- 查询异常的查重信息 -->
+    <select id="findExceptions" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  >
+	 SELECT
+	    A.ID,A.LOAN_CODE,A.R_ID,A.REPEAT_NAME,A.LOAN_CUSTOMER_CODE,A.REPEAT_RELATION, A.DICT_CUSTOMER_TYPE,
+	    B.OUTTO_LOAN_TIME AS REPEAT_INTO_TIME, B.LOAN_CUSTOMER_NAME AS REPEAT_MAIN_LOANER, A.REPEAT_UNITNAME, A.REPEAT_UNIT_ADDRESS,
+	    D.PRODUCT_NAME AS PRODUCT_TYPE, A.REPEAT_VIEW_TYPE, A.REPEAT_VIEW_CONTENT,
+	    M1.LABEL AS DICT_CHECK_STATUS,C.REFUSE_REASON AS REPEAT_REFUSE_RESON, 
+	    CASE WHEN COALESCE(PAY.EFFECTIVE_FLAG,'0')='0' THEN '' 
+	         WHEN COALESCE(PAY.EFFECTIVE_FLAG,'0')='1' AND COALESCE(PAY.PAYBACK_MAX_OVERDUEDAYS,0)>0 THEN '逾期' 
+	         ELSE '正常' END REPEAT_AFTER_SITUATION,
+	    CONCAT (E.CNT,',',E.REPEAT_VIEW_TYPE,',',E.REPEAT_VIEW_CONTENT) AS MESSAGE,
+	    (CASE WHEN #{checkType} = '1' THEN A.EXCEPTION_RECONSIDER_FLAG ELSE A.EXCEPTION_FLAG END) AS EXCEPTION_FLAG,
+	    (CASE WHEN #{checkType} = '1' THEN A.RECONSIDER_REMARK ELSE A.REMARK END) AS REMARK 
+	 FROM JK.T_JK_INNER_REPEAT A LEFT JOIN JK.T_JK_LOAN_INFO B ON A.R_ID=B.LOAN_CODE
+	      LEFT JOIN JK.T_JK_AUDIT_RECORD C ON B.AUDIT_ID= C.ID 
+	      LEFT JOIN JK.T_GL_JK_PRODUCT D ON D.PRODUCT_CODE = B.PRODUCT_TYPE
+	      LEFT JOIN JK.T_GL_DICT M1 ON M1.VALUE=B.DICT_LOAN_STATUS AND M1.TYPE='jk_loan_apply_status'
+	      LEFT JOIN (
+	      			SELECT COUNT(1) CNT, D.REPEAT_VIEW_TYPE, D.REPEAT_VIEW_CONTENT 
+					 FROM JK.T_JK_INNER_REPEAT D
+					 WHERE D.LOAN_CODE = #{loanCode} AND (D.RESOURCE= '2' OR D.RESOURCE = #{checkType}) 
+	   				 <if test="checkType == 0">
+	   				  	AND D.EXCEPTION_FLAG = '1' 
+	   				 </if>
+	   				<if test="checkType == 1">
+	   				  	AND D.EXCEPTION_RECONSIDER_FLAG = '1' 
+	   				 </if>
+	 				GROUP BY D.REPEAT_VIEW_TYPE, D.REPEAT_VIEW_CONTENT
+	 				) E ON A.REPEAT_VIEW_TYPE=E.REPEAT_VIEW_TYPE AND A.REPEAT_VIEW_CONTENT=E.REPEAT_VIEW_CONTENT
+	      LEFT JOIN JK.T_JK_CONTRACT CON ON A.R_ID=CON.LOAN_CODE
+	      LEFT JOIN JK.T_JK_PAYBACK PAY ON CON.CONTRACT_CODE=PAY.CONTRACT_CODE
+	WHERE A.LOAN_CODE = #{loanCode} AND (A.RESOURCE= '2' OR A.RESOURCE = #{checkType})
+					 <if test="checkType == 0">
+	   				  	AND A.EXCEPTION_FLAG = '1' 
+	   				 </if>
+	   				<if test="checkType == 1">
+	   				  	AND A.EXCEPTION_RECONSIDER_FLAG = '1' 
+	   				 </if>
+	ORDER BY A.DICT_CUSTOMER_TYPE,A.REPEAT_VIEW_TYPE,A.REPEAT_VIEW_CONTENT 
+  </select>
+<!--     select 
+    <include refid="Base_List" />
+    from jk.t_jk_inner_repeat
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select> -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_inner_repeat
+    where id = #{id,jdbcType=NUMERIC}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from jk.t_jk_inner_repeat
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.localnet.entity.InnerRepeat" >
+    insert into jk.t_jk_inner_repeat (id, loan_code, r_id, 
+      repeat_name, loan_customer_code, dict_customer_type, 
+      repeat_relation, repeat_into_time, repeat_main_loaner, 
+      repeat_unitname, repeat_unit_address, exception_flag, 
+      product_type, repeat_view_type, repeat_view_content, 
+      dict_check_status, repeat_refuse_reson, repeat_after_situation, 
+      remark, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rId,jdbcType=NUMERIC}, 
+      #{repeatName,jdbcType=VARCHAR}, #{loanCustomterCode,jdbcType=VARCHAR}, #{dictCustomerType,jdbcType=VARCHAR}, 
+      #{repeatRelation,jdbcType=VARCHAR}, #{repeatIntoTime,jdbcType=TIMESTAMP}, #{repeatMainLoaner,jdbcType=VARCHAR}, 
+      #{repeatUnitname,jdbcType=VARCHAR}, #{repeatUnitAddress,jdbcType=VARCHAR}, #{exceptionFlag,jdbcType=VARCHAR}, 
+      #{productType,jdbcType=VARCHAR}, #{repeatViewType,jdbcType=VARCHAR}, #{repeatViewContent,jdbcType=VARCHAR}, 
+      #{dictCheckStatus,jdbcType=VARCHAR}, #{repeatRefuseReson,jdbcType=VARCHAR}, #{repeatAfterSituation,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.localnet.entity.InnerRepeat" >
+    insert into jk.t_jk_inner_repeat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="repeatName != null" >
+        repeat_name,
+      </if>
+      <if test="loanCustomterCode != null" >
+        loan_customer_code,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="repeatRelation != null" >
+        repeat_relation,
+      </if>
+      <if test="repeatIntoTime != null" >
+        repeat_into_time,
+      </if>
+      <if test="repeatMainLoaner != null" >
+        repeat_main_loaner,
+      </if>
+      <if test="repeatUnitname != null" >
+        repeat_unitname,
+      </if>
+      <if test="repeatUnitAddress != null" >
+        repeat_unit_address,
+      </if>
+      <if test="exceptionFlag != null" >
+        exception_flag,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="repeatViewType != null" >
+        repeat_view_type,
+      </if>
+      <if test="repeatViewContent != null" >
+        repeat_view_content,
+      </if>
+      <if test="dictCheckStatus != null" >
+        dict_check_status,
+      </if>
+      <if test="repeatRefuseReson != null" >
+        repeat_refuse_reson,
+      </if>
+      <if test="repeatAfterSituation != null" >
+        repeat_after_situation,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+       <if test="resource != null" >
+        resource,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="repeatName != null" >
+        #{repeatName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCustomterCode != null" >
+        #{loanCustomterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatRelation != null" >
+        #{repeatRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatIntoTime != null" >
+        #{repeatIntoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repeatMainLoaner != null" >
+        #{repeatMainLoaner,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatUnitname != null" >
+        #{repeatUnitname,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatUnitAddress != null" >
+        #{repeatUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionFlag != null" >
+        #{exceptionFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatViewType != null" >
+        #{repeatViewType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatViewContent != null" >
+        #{repeatViewContent,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckStatus != null" >
+        #{dictCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatRefuseReson != null" >
+        #{repeatRefuseReson,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatAfterSituation != null" >
+        #{repeatAfterSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resource != null" >
+        #{resource,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 更新查重信息 刘燕军-->
+  <update id="update" parameterType="com.creditharmony.approve.localnet.entity.InnerRepeat" >
+    update jk.t_jk_inner_repeat
+    <set>
+      <if test="resource != null" >
+        resource = #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionReconsiderFlag != null" >
+        exception_reconsider_flag = #{exceptionReconsiderFlag,jdbcType=VARCHAR},
+      </if>
+       <if test="reconsiderRemark != null" >
+        reconsider_remark = #{reconsiderRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        r_id = #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="repeatName != null" >
+        repeat_name = #{repeatName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCustomterCode != null" >
+        loan_customer_code = #{loanCustomterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatRelation != null" >
+        repeat_relation = #{repeatRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatIntoTime != null" >
+        repeat_into_time = #{repeatIntoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repeatMainLoaner != null" >
+        repeat_main_loaner = #{repeatMainLoaner,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatUnitname != null" >
+        repeat_unitname = #{repeatUnitname,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatUnitAddress != null" >
+        repeat_unit_address = #{repeatUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionFlag != null" >
+        exception_flag = #{exceptionFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatViewType != null" >
+        repeat_view_type = #{repeatViewType,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatViewContent != null" >
+        repeat_view_content = #{repeatViewContent,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckStatus != null" >
+        dict_check_status = #{dictCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatRefuseReson != null" >
+        repeat_refuse_reson = #{repeatRefuseReson,jdbcType=VARCHAR},
+      </if>
+      <if test="repeatAfterSituation != null" >
+        repeat_after_situation = #{repeatAfterSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.localnet.entity.InnerRepeat" >
+    update jk.t_jk_inner_repeat
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      r_id = #{rId,jdbcType=NUMERIC},
+      repeat_name = #{repeatName,jdbcType=VARCHAR},
+      loan_customer_code = #{loanCustomterCode,jdbcType=VARCHAR},
+      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      repeat_relation = #{repeatRelation,jdbcType=VARCHAR},
+      repeat_into_time = #{repeatIntoTime,jdbcType=TIMESTAMP},
+      repeat_main_loaner = #{repeatMainLoaner,jdbcType=VARCHAR},
+      repeat_unitname = #{repeatUnitname,jdbcType=VARCHAR},
+      repeat_unit_address = #{repeatUnitAddress,jdbcType=VARCHAR},
+      exception_flag = #{exceptionFlag,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=VARCHAR},
+      repeat_view_type = #{repeatViewType,jdbcType=VARCHAR},
+      repeat_view_content = #{repeatViewContent,jdbcType=VARCHAR},
+      dict_check_status = #{dictCheckStatus,jdbcType=VARCHAR},
+      repeat_refuse_reson = #{repeatRefuseReson,jdbcType=VARCHAR},
+      repeat_after_situation = #{repeatAfterSituation,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  
+  <!-- wanglidong+内网审核逾期次数 -->
+  <sql id="getLateTimeList" >
+	   a.contract_code, 
+	   a.month_pay_day, 
+	   a.is_overdue, 
+	   a.month_overdue_days, 
+	   a.dict_month_status
+  </sql>
+  <!-- wanglidong+内网审核逾期次数 -->
+  <select id="getLateTime" parameterType="String" resultType="com.creditharmony.approve.verify.entity.ex.PayBackMonthEx" >
+		select 
+			a.months, 
+			(case a.is_overdue when '1' then '是' else '否' end) as is_overdue, 
+			dict.label as dict_month_status 
+		from 
+			jk.t_jk_payback_month a 
+		left join 
+			jk.t_jk_contract c 
+		on 
+			a.contract_code = c.contract_code 
+		left join
+			t_gl_dict dict
+		on
+			a.dict_month_status = dict.value and dict.type = 'jk_period_status'
+		where 
+			loan_code = #{0}
+		ORDER BY month_pay_day desc   limit 12
+  </select>    
+  <select id="getLateTimeRecord" parameterType="String" resultType="com.creditharmony.approve.verify.entity.ex.PayBackMonthEx" >
+    SELECT 
+		L.LOAN_CODE, 
+		L.LOAN_NUM, 
+		P.MONTH_PAY_DAY, 
+		P.MONTH_PAY_ACTUALDAY, 
+		P.MONTH_OVERDUE_DAYS, 
+		P.MONTH_OVERDUE_MES
+	FROM   JK.T_JK_CONTRACT C 
+	INNER JOIN  JK.T_JK_LOAN_INFO L  ON  C.LOAN_CODE = L.LOAN_CODE
+	INNER JOIN JK.T_JK_PAYBACK_MONTH P ON  C.CONTRACT_CODE = P.CONTRACT_CODE  AND P.IS_OVERDUE='1'
+	WHERE  C.LOAN_CODE = #{0}
+	ORDER BY P.MONTH_PAY_DAY;
+  </select>    
+  <!-- 把查重信息放入历史的借款信息中 -->
+<insert id="insertRepeatHisName" parameterType="java.lang.String">
+insert into jk.t_jk_inner_repeat(id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+select getuuid32() as id,a.loan_code,b.LOAN_CODE as R_ID,case when b.DICT_CUSTOMER_TYPE='0' then m.customer_name 
+when b.DICT_CUSTOMER_TYPE='1' then n.cobo_name when a.DICT_CUSTOMER_TYPE='2' then o.MATE_NAME end  as REPEAT_NAME,
+a.R_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,case when b.DICT_CUSTOMER_TYPE='0' then '本人' when b.DICT_CUSTOMER_TYPE='1' then '共借人' 
+when b.DICT_CUSTOMER_TYPE='2' then '家庭联系人-配偶' end AS REPEAT_RELATION,
+c.customer_into_time as REPEAT_INTO_TIME,d.customer_name as REPEAT_MAIN_LOANER,e.WORK_UNITNAME as REPEAT_UNITNAME,
+CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,'2' as EXCEPTION_FLAG,c.product_type,
+a.repeat_view_type as REPEAT_VIEW_TYPE,a.work_name as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,
+''  as REPEAT_AFTER_SITUATION,'' as REMARK,'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+ from jk.T_JK_WORK_NAME_POOL a
+inner join (SELECT filtercompanyname(WORK_UNITNAME) as work_name,loan_code,R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE
+ FROM JK.T_JK_TEL_AUDIT_WORK WHERE loan_code=#{0} and (IS_REPEAT&lt;&gt;'1' or IS_REPEAT is null) and WORK_INFO_SOURCE='01') b
+on filtercompanyname(a.work_name) = b.work_name and a.loan_code &lt;&gt; b.loan_code
+left join  jk.t_jk_inner_customer_his m on a.loan_code=m.HIS_LOAN_CODE and m.HIS_LOAN_CODE is null and m.loan_code=#{0}
+left join jk.t_jk_loan_info c on b.loan_code=c.loan_code
+left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+left join jk.t_jk_loan_customer m on b.LOAN_CUSTOMER_CODE=m.id and b.DICT_CUSTOMER_TYPE='0'
+left join jk.t_jk_loan_coborrower n on b.LOAN_CUSTOMER_CODE=n.id and b.DICT_CUSTOMER_TYPE='1'
+left join jk.T_JK_LOAN_MATE o on b.LOAN_CUSTOMER_CODE=o.id and b.DICT_CUSTOMER_TYPE='2'
+group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,a.RELATION,c.customer_into_time,d.customer_name,e.WORK_UNITNAME,
+f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,a.work_name,a.repeat_view_type,
+o.MATE_NAME,n.cobo_name,m.customer_name,a.R_ID,a.DICT_CUSTOMER_TYPE,p.label,X.LABEL,Y.LABEL,I.REFUSE_REASON
+</insert>
+ <!-- 把查重信息放入历史的借款信息中 -->
+<insert id="insertInnerRepeatHisTel" parameterType="java.lang.String">
+insert into jk.t_jk_inner_repeat(id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+select getuuid32() as id,a.loan_code,b.LOAN_CODE as R_ID,case when b.DICT_CUSTOMER_TYPE='0' then m.customer_name when b.DICT_CUSTOMER_TYPE='1' then n.cobo_name when a.DICT_CUSTOMER_TYPE='2' then o.MATE_NAME end  as REPEAT_NAME,a.R_ID as LOAN_CUSTOMER_CODE,
+a.DICT_CUSTOMER_TYPE,b.type AS REPEAT_RELATION,c.customer_into_time as REPEAT_INTO_TIME,d.customer_name as REPEAT_MAIN_LOANER,e.WORK_UNITNAME as REPEAT_UNITNAME,CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,'2' as EXCEPTION_FLAG,c.product_type,a.repeat_view_type as REPEAT_VIEW_TYPE,
+a.phone as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,''  as REPEAT_AFTER_SITUATION,'' as REMARK,'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+ from jk.T_JK_PHONE_POOL a
+inner join (select b.WORK_UNIT_TEL as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+   case when a.DICT_CUSTOMER_TYPE='0' then '本人' when a.DICT_CUSTOMER_TYPE='1' then '共借人' 
+   end as type 
+	from jk.T_JK_TEL_AUDIT_WORK a
+	inner join jk.T_JK_DHZH_WORK_TELNUM b on a.id=b.WORK_ID and char_length(COALESCE(b.WORK_UNIT_TEL,''))&lt;&gt; 0 and b.WORK_TEL_SOURCE='01' and (b.IS_REPEAT&lt;&gt;'1' or b.IS_REPEAT is null)
+	where a.WORK_INFO_SOURCE='01' and a.loan_code=#{0}
+	union all
+	select b.BRHS_PHONE as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	case when a.DICT_CUSTOMER_TYPE='0' then '本人' when a.DICT_CUSTOMER_TYPE='1' then '共借人' 
+    end as type
+	from jk.T_JK_DHZH_BRHS a
+	inner join jk.T_JK_DHZH_BRHS_DHXX b on a.id=b.R_BRHS_ID and char_length(COALESCE(b.BRHS_PHONE,''))&lt;&gt; 0 and (b.IS_REPEAT&lt;&gt;'1' or b.IS_REPEAT is null)
+	where a.loan_code=#{0}
+	union all
+	select a.DHGXSH_TEL as tel,a.loan_code,a.R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+	CONCAT(b.label,'-',c.label) as type   
+	from jk.T_JK_DHZH_DHGXSH a
+	left join jk.t_gl_dict b on a.DICT_RELATION_TYPE= b.value and b.type='jk_relation_type'
+	left join jk.t_gl_dict c on a.LOAN_MAN_RELATION= c.value and c.parent_id=b.id
+	where  char_length(COALESCE(DHGXSH_TEL,''))&lt;&gt; 0  and loan_code=#{0} and (a.IS_REPEAT&lt;&gt;'1' or a.IS_REPEAT is null)) b
+	 on a.phone=b.tel and a.loan_code &lt;&gt; b.loan_code
+left join  jk.t_jk_inner_customer_his t on a.loan_code=t.HIS_LOAN_CODE and t.HIS_LOAN_CODE is null and t.loan_code=#{0}
+left join jk.t_jk_loan_info c on b.loan_code=c.loan_code
+left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+left join jk.t_jk_loan_customer m on b.LOAN_CUSTOMER_CODE=m.id and b.DICT_CUSTOMER_TYPE='0'
+left join jk.t_jk_loan_coborrower n on b.LOAN_CUSTOMER_CODE=n.id and b.DICT_CUSTOMER_TYPE='1'
+left join jk.T_JK_LOAN_MATE o on b.LOAN_CUSTOMER_CODE=o.id and b.DICT_CUSTOMER_TYPE='2'
+left join jk.t_gl_dict p on a.DICT_CUSTOMER_TYPE= p.value and p.type='jk_loan_man_flag'
+group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,a.RELATION,c.customer_into_time,d.customer_name,e.WORK_UNITNAME,
+f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,a.phone,a.repeat_view_type,
+o.MATE_NAME,n.cobo_name,m.customer_name,a.R_ID,a.DICT_CUSTOMER_TYPE,p.label,b.type,X.LABEL,Y.LABEL,I.REFUSE_REASON
+</insert>
+<!-- 把查重信息放入历史的借款信息中 -->
+<insert id="insertInnerRepeatHisAddress" parameterType="java.lang.String">
+insert into jk.t_jk_inner_repeat(id,loan_code,R_ID,REPEAT_NAME,LOAN_CUSTOMER_CODE,DICT_CUSTOMER_TYPE,REPEAT_RELATION,
+  	REPEAT_INTO_TIME,REPEAT_MAIN_LOANER,REPEAT_UNITNAME,REPEAT_UNIT_ADDRESS,EXCEPTION_FLAG,product_type,REPEAT_VIEW_TYPE,
+  	REPEAT_VIEW_CONTENT,DICT_CHECK_STATUS,REPEAT_REFUSE_RESON,REPEAT_AFTER_SITUATION,REMARK,CREATE_BY,CREATE_TIME,MODIFY_BY,MODIFY_TIME,RESOURCE)
+select getuuid32() as id,a.loan_code,b.LOAN_CODE as R_ID,case when b.DICT_CUSTOMER_TYPE='0' then m.customer_name when b.DICT_CUSTOMER_TYPE='1' then n.cobo_name when a.DICT_CUSTOMER_TYPE='2' then o.MATE_NAME end  as REPEAT_NAME,a.R_ID as LOAN_CUSTOMER_CODE,a.DICT_CUSTOMER_TYPE,
+case when b.DICT_CUSTOMER_TYPE='0' then '本人' when b.DICT_CUSTOMER_TYPE='1' then '共借人' 
+ when b.DICT_CUSTOMER_TYPE='2' then '家庭联系人-配偶'   end  AS REPEAT_RELATION,c.customer_into_time as REPEAT_INTO_TIME,d.customer_name as REPEAT_MAIN_LOANER,e.WORK_UNITNAME as REPEAT_UNITNAME,CONCAT(f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS) as REPEAT_UNIT_ADDRESS,'2' as EXCEPTION_FLAG,c.product_type,a.repeat_view_type as REPEAT_VIEW_TYPE,
+CONCAT(q.AREA_NAME,r.AREA_NAME,s.AREA_NAME,b.WORK_ADDRESS) as REPEAT_VIEW_CONTENT,CONCAT(X.LABEL,Y.LABEL) AS DICT_CHECK_STATUS,I.REFUSE_REASON as REPEAT_REFUSE_RESON,''  as REPEAT_AFTER_SITUATION,'' as REMARK,'' as CREATE_BY,'1-1-1' as CREATE_TIME,'' as MODIFY_BY,'1-1-1' as MODIFY_TIME,#{1} as RESOURCE
+ from jk.T_JK_ADDRESS_POOL a
+inner join (
+	select WORK_PROVINCE,WORK_CITY,WORK_DISTRICT,WORK_ADDRESS,loan_code,R_CUSTOMER_COBORROWER_ID as LOAN_CUSTOMER_CODE,
+	DICT_CUSTOMER_TYPE
+	from jk.T_JK_TEL_AUDIT_WORK 
+	where WORK_INFO_SOURCE='01' and char_length(COALESCE(WORK_PROVINCE,'')) &lt;&gt; 0 and char_length(COALESCE(WORK_CITY,'')) &lt;&gt; 0 and char_length(COALESCE(WORK_DISTRICT,'')) &lt;&gt; 0 and char_length(COALESCE(WORK_ADDRESS,'')) &lt;&gt; 0 and loan_code=#{0}
+	) b
+	on a.PROVINCE = b.WORK_PROVINCE and b.WORK_CITY=a.city and WORK_DISTRICT=a.AREA and b.WORK_ADDRESS=a.ADDRESS and a.loan_code &lt;&gt; b.loan_code
+left join  jk.t_jk_inner_customer_his t on a.loan_code=t.HIS_LOAN_CODE and t.HIS_LOAN_CODE is null and t.loan_code=#{0}
+left join jk.t_jk_loan_info c on b.loan_code=c.loan_code
+left join JK.t_jk_loan_customer d on d.loan_code = c.loan_code
+left join JK.T_JK_TEL_AUDIT_WORK e on e.loan_code=d.loan_code and e.DICT_CUSTOMER_TYPE='0' and e.WORK_INFO_SOURCE='01'
+and e.id=(select MAX(ID) from JK.T_JK_TEL_AUDIT_WORK where loan_code=d.loan_code and DICT_CUSTOMER_TYPE='0' and WORK_INFO_SOURCE='01')
+left join JK.T_GL_PROVINCE_CITY f on f.AREA_CODE = e.WORK_PROVINCE
+left join JK.T_GL_PROVINCE_CITY g on g.AREA_CODE = e.WORK_CITY
+left join JK.T_GL_PROVINCE_CITY h on h.AREA_CODE = e.WORK_DISTRICT
+left join JK.T_JK_AUDIT_RECORD i on c.audit_id=i.id
+LEFT JOIN JK.T_GL_DICT X ON X.VALUE=I.OPERATE_STEP AND X.TYPE='jk_check_type'
+LEFT JOIN JK.T_GL_DICT Y ON Y.VALUE=I.OPERATE_RESULT AND Y.TYPE='jk_check_result'
+left join jk.t_jk_loan_customer m on b.LOAN_CUSTOMER_CODE=m.id and b.DICT_CUSTOMER_TYPE='0'
+left join jk.t_jk_loan_coborrower n on b.LOAN_CUSTOMER_CODE=n.id and b.DICT_CUSTOMER_TYPE='1'
+left join jk.T_JK_LOAN_MATE o on b.LOAN_CUSTOMER_CODE=o.id and b.DICT_CUSTOMER_TYPE='2'
+left join JK.T_GL_PROVINCE_CITY q on q.AREA_CODE = b.WORK_PROVINCE
+left join JK.T_GL_PROVINCE_CITY r on r.AREA_CODE = b.WORK_CITY
+left join JK.T_GL_PROVINCE_CITY s on s.AREA_CODE = b.WORK_DISTRICT
+group by b.loan_code,a.LOAN_CODE,a.R_NAME,b.LOAN_CUSTOMER_CODE,b.DICT_CUSTOMER_TYPE,a.RELATION,c.customer_into_time,d.customer_name,e.WORK_UNITNAME,
+f.AREA_NAME,g.AREA_NAME,h.AREA_NAME,e.WORK_ADDRESS,c.product_type,o.MATE_NAME,
+n.cobo_name,m.customer_name,a.R_ID,a.DICT_CUSTOMER_TYPE,p.label,q.AREA_NAME,r.AREA_NAME,a.repeat_view_type,
+s.AREA_NAME,b.WORK_ADDRESS,X.LABEL,Y.LABEL,I.REFUSE_REASON
+</insert>
+<select id="selectRepeatNum" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.workflow.view.VerifyBusinessView">
+	SELECT COUNT(1) 
+	FROM JK.t_jk_inner_repeat 
+	WHERE LOAN_CODE=#{loanCode}
+	<if test="checkType == 0">
+	 	AND (COALESCE(EXCEPTION_FLAG,'')='' OR EXCEPTION_FLAG='2')
+	</if>
+	<if test="checkType == 1">
+	 	AND (COALESCE(EXCEPTION_RECONSIDER_FLAG,'')='' OR EXCEPTION_RECONSIDER_FLAG='2')
+	</if>	
+</select>
+<select id="selectTelNum" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.workflow.view.VerifyBusinessView">
+	SELECT COUNT(1) 
+	FROM JK.T_JK_DHZH_DHLYXX 
+	WHERE LOAN_CODE=#{loanCode} AND R_GX_ID=#{customerId} AND DICT_CHECK_TYPE = #{checkType}
+</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

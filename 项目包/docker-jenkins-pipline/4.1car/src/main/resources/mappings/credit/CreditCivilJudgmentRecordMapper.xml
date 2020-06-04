@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCivilJudgmentRecordDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="filing_court" property="filingCourt" jdbcType="VARCHAR" />
+    <result column="matter_case" property="matterCase" jdbcType="VARCHAR" />
+    <result column="case_reference" property="caseReference" jdbcType="VARCHAR" />
+    <result column="object_litigation" property="objectLitigation" jdbcType="VARCHAR" />
+    <result column="dict_closed_manner" property="dictClosedManner" jdbcType="VARCHAR" />
+    <result column="filing_day" property="filingDay" jdbcType="DATE" />
+    <result column="dict_lawsuit_position" property="dictLawsuitPosition" jdbcType="VARCHAR" />
+    <result column="trial_procedure" property="trialProcedure" jdbcType="VARCHAR" />
+    <result column="object_litigation_amount" property="objectLitigationAmount" jdbcType="NUMERIC" />
+    <result column="effective_day" property="effectiveDay" jdbcType="DATE" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, filing_court, matter_case, case_reference, object_litigation, dict_closed_manner, 
+    filing_day, dict_lawsuit_position, trial_procedure, object_litigation_amount, effective_day, 
+    operation, create_by, create_time, modify_by, modify_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_civil_judgment_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="selectByJudgmentInfo" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_civil_judgment_record
+    where loan_code = #{loanCode}
+  </select>
+  
+  <delete id="deleteByLoanCode" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_civil_judgment_record
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_civil_judgment_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertCivilJudgment" parameterType="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    insert into jk.t_jk_credit_civil_judgment_record (id, loan_code, filing_court, 
+      matter_case, case_reference, object_litigation, 
+      dict_closed_manner, filing_day, dict_lawsuit_position, 
+      trial_procedure, object_litigation_amount, 
+      effective_day, operation, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{filingCourt,jdbcType=VARCHAR}, 
+      #{matterCase,jdbcType=VARCHAR}, #{caseReference,jdbcType=VARCHAR}, #{objectLitigation,jdbcType=VARCHAR}, 
+      #{dictClosedManner,jdbcType=VARCHAR}, #{filingDay,jdbcType=DATE}, #{dictLawsuitPosition,jdbcType=VARCHAR}, 
+      #{trialProcedure,jdbcType=VARCHAR}, #{objectLitigationAmount,jdbcType=NUMERIC}, 
+      #{effectiveDay,jdbcType=DATE}, #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    insert into jk.t_jk_credit_civil_judgment_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="filingCourt != null" >
+        filing_court,
+      </if>
+      <if test="matterCase != null" >
+        matter_case,
+      </if>
+      <if test="caseReference != null" >
+        case_reference,
+      </if>
+      <if test="objectLitigation != null" >
+        object_litigation,
+      </if>
+      <if test="dictClosedManner != null" >
+        dict_closed_manner,
+      </if>
+      <if test="filingDay != null" >
+        filing_day,
+      </if>
+      <if test="dictLawsuitPosition != null" >
+        dict_lawsuit_position,
+      </if>
+      <if test="trialProcedure != null" >
+        trial_procedure,
+      </if>
+      <if test="objectLitigationAmount != null" >
+        object_litigation_amount,
+      </if>
+      <if test="effectiveDay != null" >
+        effective_day,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="filingCourt != null" >
+        #{filingCourt,jdbcType=VARCHAR},
+      </if>
+      <if test="matterCase != null" >
+        #{matterCase,jdbcType=VARCHAR},
+      </if>
+      <if test="caseReference != null" >
+        #{caseReference,jdbcType=VARCHAR},
+      </if>
+      <if test="objectLitigation != null" >
+        #{objectLitigation,jdbcType=VARCHAR},
+      </if>
+      <if test="dictClosedManner != null" >
+        #{dictClosedManner,jdbcType=VARCHAR},
+      </if>
+      <if test="filingDay != null" >
+        #{filingDay,jdbcType=DATE},
+      </if>
+      <if test="dictLawsuitPosition != null" >
+        #{dictLawsuitPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="trialProcedure != null" >
+        #{trialProcedure,jdbcType=VARCHAR},
+      </if>
+      <if test="objectLitigationAmount != null" >
+        #{objectLitigationAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="effectiveDay != null" >
+        #{effectiveDay,jdbcType=DATE},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    update jk.t_jk_credit_civil_judgment_record
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="filingCourt != null" >
+        filing_court = #{filingCourt,jdbcType=VARCHAR},
+      </if>
+      <if test="matterCase != null" >
+        matter_case = #{matterCase,jdbcType=VARCHAR},
+      </if>
+      <if test="caseReference != null" >
+        case_reference = #{caseReference,jdbcType=VARCHAR},
+      </if>
+      <if test="objectLitigation != null" >
+        object_litigation = #{objectLitigation,jdbcType=VARCHAR},
+      </if>
+      <if test="dictClosedManner != null" >
+        dict_closed_manner = #{dictClosedManner,jdbcType=VARCHAR},
+      </if>
+      <if test="filingDay != null" >
+        filing_day = #{filingDay,jdbcType=DATE},
+      </if>
+      <if test="dictLawsuitPosition != null" >
+        dict_lawsuit_position = #{dictLawsuitPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="trialProcedure != null" >
+        trial_procedure = #{trialProcedure,jdbcType=VARCHAR},
+      </if>
+      <if test="objectLitigationAmount != null" >
+        object_litigation_amount = #{objectLitigationAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="effectiveDay != null" >
+        effective_day = #{effectiveDay,jdbcType=DATE},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditCivilJudgmentRecord" >
+    update jk.t_jk_credit_civil_judgment_record
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      filing_court = #{filingCourt,jdbcType=VARCHAR},
+      matter_case = #{matterCase,jdbcType=VARCHAR},
+      case_reference = #{caseReference,jdbcType=VARCHAR},
+      object_litigation = #{objectLitigation,jdbcType=VARCHAR},
+      dict_closed_manner = #{dictClosedManner,jdbcType=VARCHAR},
+      filing_day = #{filingDay,jdbcType=DATE},
+      dict_lawsuit_position = #{dictLawsuitPosition,jdbcType=VARCHAR},
+      trial_procedure = #{trialProcedure,jdbcType=VARCHAR},
+      object_litigation_amount = #{objectLitigationAmount,jdbcType=NUMERIC},
+      effective_day = #{effectiveDay,jdbcType=DATE},
+      operation = #{operation,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

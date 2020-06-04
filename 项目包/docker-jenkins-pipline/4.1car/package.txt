@@ -1,0 +1,24 @@
+
+设置环境变量：
+classpath配置:MAVEN_HOME
+path配置:%MAVEN_HOME%\bin
+
+打test包：
+windows系统进入cmd, cd到项目目录下，执行
+mvn clean
+mvn package –P test 
+
+打开发包：
+windows系统进入cmd, cd到项目目录下，执行
+mvn clean
+mvn package –P dev
+
+打uat包：
+windows系统进入cmd, cd到项目目录下，执行
+mvn clean
+mvn package –P uat 
+
+打生产包：
+windows系统进入cmd, cd到项目目录下，执行
+mvn clean
+mvn package –P prod 

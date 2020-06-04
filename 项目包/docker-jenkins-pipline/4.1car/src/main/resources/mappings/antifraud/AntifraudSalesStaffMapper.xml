@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudSalesStaffDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.antifraud.entity.AntifraudSalesStaff" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="sales_code" property="salesCode" jdbcType="VARCHAR" />
+    <result column="sales_name" property="salesName" jdbcType="VARCHAR" />
+    <result column="sales_tel" property="salesTel" jdbcType="VARCHAR" />
+    <result column="is_work" property="isWork" jdbcType="VARCHAR" />
+    <result column="sales_rank" property="salesRank" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sales_code, sales_name, sales_tel, is_work, sales_rank, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_antifraud_sales_staff
+    where id = #{id,jdbcType=NUMERIC}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from jk.t_jk_antifraud_sales_staff
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudSalesStaff" >
+    insert into jk.t_jk_antifraud_sales_staff (id, sales_code, sales_name, 
+      sales_tel, is_work, sales_rank, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{salesCode,jdbcType=VARCHAR}, #{salesName,jdbcType=VARCHAR}, 
+      #{salesTel,jdbcType=VARCHAR}, #{isWork,jdbcType=VARCHAR}, #{salesRank,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudSalesStaff" >
+    insert into jk.t_jk_antifraud_sales_staff
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="salesCode != null" >
+        sales_code,
+      </if>
+      <if test="salesName != null" >
+        sales_name,
+      </if>
+      <if test="salesTel != null" >
+        sales_tel,
+      </if>
+      <if test="isWork != null" >
+        is_work,
+      </if>
+      <if test="salesRank != null" >
+        sales_rank,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="salesCode != null" >
+        #{salesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salesName != null" >
+        #{salesName,jdbcType=VARCHAR},
+      </if>
+      <if test="salesTel != null" >
+        #{salesTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isWork != null" >
+        #{isWork,jdbcType=VARCHAR},
+      </if>
+      <if test="salesRank != null" >
+        #{salesRank,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudSalesStaff" >
+    update jk.t_jk_antifraud_sales_staff
+    <set >
+      <if test="salesCode != null" >
+        sales_code = #{salesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="salesName != null" >
+        sales_name = #{salesName,jdbcType=VARCHAR},
+      </if>
+      <if test="salesTel != null" >
+        sales_tel = #{salesTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isWork != null" >
+        is_work = #{isWork,jdbcType=VARCHAR},
+      </if>
+      <if test="salesRank != null" >
+        sales_rank = #{salesRank,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudSalesStaff" >
+    update jk.t_jk_antifraud_sales_staff
+    set sales_code = #{salesCode,jdbcType=VARCHAR},
+      sales_name = #{salesName,jdbcType=VARCHAR},
+      sales_tel = #{salesTel,jdbcType=VARCHAR},
+      is_work = #{isWork,jdbcType=VARCHAR},
+      sales_rank = #{salesRank,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+</mapper>

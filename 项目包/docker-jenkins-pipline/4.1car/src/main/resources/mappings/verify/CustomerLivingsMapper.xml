@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.CustomerLivingsDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.CustomerLivings" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="loan_customter_type" property="loanCustomterType" jdbcType="VARCHAR" />
+    <result column="customertmp_residential_permit" property="customertmpResidentialPermit" jdbcType="VARCHAR" />
+    <result column="customer_firt_arrive_year" property="customerFirtArriveYear" jdbcType="VARCHAR" />
+    <result column="customer_residential" property="customerResidential" jdbcType="VARCHAR" />
+    <result column="customer_firt_living_time" property="customerFirtLivingTime" jdbcType="TIMESTAMP" />
+    <result column="customer_family_support" property="customerFamilySupport" jdbcType="VARCHAR" />
+    <result column="customer_housing_situation" property="customerHousingSituation" jdbcType="VARCHAR" />
+    <result column="customer_house_hold_hold" property="customerHouseHoldHold" jdbcType="VARCHAR" />
+    <result column="customer_household_province" property="customerHouseholdProvince" jdbcType="VARCHAR" />
+    <result column="customer_household_city" property="customerHouseholdCity" jdbcType="VARCHAR" />
+    <result column="customer_household_area" property="customerHouseholdArea" jdbcType="VARCHAR" />
+    <result column="customer_household_address" property="customerHouseholdAddress" jdbcType="VARCHAR" />
+    <result column="customer_monthpay" property="customerMonthpay" jdbcType="NUMERIC" />
+    <result column="customer_monrental" property="customerMonrental" jdbcType="NUMERIC" />
+    <result column="customer_house_hold_property" property="customerHouseHoldProperty" jdbcType="VARCHAR" />
+    <result column="customer_have_live" property="customerHaveLive" jdbcType="VARCHAR" />
+    <result column="customer_living_num" property="customerLivingNum" jdbcType="VARCHAR" />
+    <result column="dict_house_type" property="dictHouseType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.CustomerLivings" >
+    insert into jk.t_jk_customer_livings
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="loanCustomterType != null" >
+        loan_customter_type,
+      </if>
+      <if test="customertmpResidentialPermit != null" >
+        customertmp_residential_permit,
+      </if>
+      <if test="customerFirtArriveYear != null" >
+        customer_firt_arrive_year,
+      </if>
+      <if test="customerResidential != null" >
+        customer_residential,
+      </if>
+      <if test="customerFirtLivingTime != null" >
+        customer_firt_living_time,
+      </if>
+      <if test="customerFamilySupport != null" >
+        customer_family_support,
+      </if>
+      <if test="customerHousingSituation != null" >
+        customer_housing_situation,
+      </if>
+      <if test="customerHouseHoldHold != null" >
+        customer_house_hold_hold,
+      </if>
+      <if test="customerHouseholdProvince != null" >
+        customer_household_province,
+      </if>
+      <if test="customerHouseholdCity != null" >
+        customer_household_city,
+      </if>
+      <if test="customerHouseholdArea != null" >
+        customer_household_area,
+      </if>
+      <if test="customerHouseholdAddress != null" >
+        customer_household_address,
+      </if>
+      <if test="customerMonthpay != null" >
+        customer_monthpay,
+      </if>
+      <if test="customerMonrental != null" >
+        customer_monrental,
+      </if>
+      <if test="customerHouseHoldProperty != null" >
+        customer_house_hold_property,
+      </if>
+      <if test="customerHaveLive != null" >
+        customer_have_live,
+      </if>
+      <if test="customerLivingNum != null" >
+        customer_living_num,
+      </if>
+      <if test="dictHouseType != null" >
+        dict_house_type,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCustomterType != null" >
+        #{loanCustomterType,jdbcType=VARCHAR},
+      </if>
+      <if test="customertmpResidentialPermit != null" >
+        #{customertmpResidentialPermit,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirtArriveYear != null" >
+        #{customerFirtArriveYear,jdbcType=VARCHAR},
+      </if>
+      <if test="customerResidential != null" >
+        #{customerResidential,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirtLivingTime != null" >
+        #{customerFirtLivingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerFamilySupport != null" >
+        #{customerFamilySupport,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHousingSituation != null" >
+        #{customerHousingSituation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseHoldHold != null" >
+        #{customerHouseHoldHold,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseholdProvince != null" >
+        #{customerHouseholdProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseholdCity != null" >
+        #{customerHouseholdCity,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseholdArea != null" >
+        #{customerHouseholdArea,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseholdAddress != null" >
+        #{customerHouseholdAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerMonthpay != null" >
+        #{customerMonthpay,jdbcType=NUMERIC},
+      </if>
+      <if test="customerMonrental != null" >
+        #{customerMonrental,jdbcType=NUMERIC},
+      </if>
+      <if test="customerHouseHoldProperty != null" >
+        #{customerHouseHoldProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHaveLive != null" >
+        #{customerHaveLive,jdbcType=VARCHAR},
+      </if>
+      <if test="customerLivingNum != null" >
+        #{customerLivingNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dictHouseType != null" >
+        #{dictHouseType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <select  id="viewByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.CustomerLivings">
+	select 
+		a.CUSTOMER_HOUSING_SITUATION,
+		b.label as CUSTOMER_HOUSE_HOLD_PROPERTY, 
+		a.CUSTOMER_RESIDENTIAL,
+		a.customer_firt_arrive_year
+	from 
+		jk.t_jk_customer_livings a
+	left join 
+		jk.t_gl_dict b
+	on a.CUSTOMER_HOUSE_HOLD_PROPERTY = b.value and b.type= 'jk_house_nature'
+	where 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_code = #{loanCode,jdbcType=VARCHAR} 	  
+		</if>
+		<if test="loanCustomterType != null and loanCustomterType != ''">
+			and a.LOAN_CUSTOMER_TYPE = #{loanCustomterType,jdbcType=VARCHAR} 	  
+		</if>
+		 <if test="rId != null and rId != ''">
+			and a.R_CUSTOMER_COBORROWER_ID = #{rId,jdbcType=VARCHAR} 	  
+		</if>
+	</select>
+</mapper>

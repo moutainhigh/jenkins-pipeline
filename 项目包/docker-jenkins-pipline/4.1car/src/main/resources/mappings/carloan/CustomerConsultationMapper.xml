@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CustomerConsultationDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.CustomerConsultation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="manager_code" property="managerCode" jdbcType="VARCHAR" />
+    <result column="cons_team_manager_code" property="consTeamManagerCode" jdbcType="VARCHAR" />
+    <result column="cons_loan_amount" property="consLoanAmount" jdbcType="NUMERIC" />
+    <result column="dict_loan_use" property="dictLoanUse" jdbcType="VARCHAR" />
+    <result column="dict_loan_type" property="dictLoanType" jdbcType="VARCHAR" />
+    <result column="cons_loan_remarks" property="consLoanRemarks" jdbcType="VARCHAR" />
+    <result column="cons_communicate_date" property="consCommunicateDate" jdbcType="TIMESTAMP" />
+    <result column="plan_arrival_time" property="planArrivalTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_flag" property="consTelesalesFlag" jdbcType="VARCHAR" />
+    <result column="cons_service_user_code" property="consServiceUserCode" jdbcType="VARCHAR" />
+    <result column="cons_telesales_source" property="consTelesalesSource" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_orgcode" property="consTelesalesOrgcode" jdbcType="VARCHAR" />
+    <result column="dict_oper_status" property="dictOperStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_code, manager_code, cons_team_manager_code, cons_loan_amount, dict_loan_use, 
+    dict_loan_type, cons_loan_remarks, cons_communicate_date, plan_arrival_time, cons_telesales_flag, 
+    cons_service_user_code, cons_telesales_source, create_by, modify_by, create_time, 
+    modify_time, cons_telesales_orgcode, dict_oper_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_customer_consultation
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_customer_consultation
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cj_customer_consultation
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.CustomerConsultation" >
+    insert into jk.t_cj_customer_consultation (id, customer_code, manager_code, 
+      cons_team_manager_code, cons_loan_amount, dict_loan_use, 
+      dict_loan_type, cons_loan_remarks, cons_communicate_date, 
+      plan_arrival_time, cons_telesales_flag, cons_service_user_code, 
+      cons_telesales_source, create_by, modify_by, 
+      create_time, modify_time, cons_telesales_orgcode, 
+      dict_oper_status)
+    values (#{id,jdbcType=VARCHAR}, #{customerCode,jdbcType=VARCHAR}, #{managerCode,jdbcType=VARCHAR}, 
+      #{consTeamManagerCode,jdbcType=VARCHAR}, #{consLoanAmount,jdbcType=NUMERIC}, #{dictLoanUse,jdbcType=VARCHAR}, 
+      #{dictLoanType,jdbcType=VARCHAR}, #{consLoanRemarks,jdbcType=VARCHAR}, #{consCommunicateDate,jdbcType=TIMESTAMP}, 
+      #{planArrivalTime,jdbcType=TIMESTAMP}, #{consTelesalesFlag,jdbcType=VARCHAR}, #{consServiceUserCode,jdbcType=VARCHAR}, 
+      #{consTelesalesSource,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{consTelesalesOrgcode,jdbcType=VARCHAR}, 
+      #{dictOperStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerConsultation" >
+    insert into jk.t_cj_customer_consultation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerCode != null" >
+        customer_code,
+      </if>
+      <if test="managerCode != null" >
+        manager_code,
+      </if>
+      <if test="consTeamManagerCode != null" >
+        cons_team_manager_code,
+      </if>
+      <if test="consLoanAmount != null" >
+        cons_loan_amount,
+      </if>
+      <if test="dictLoanUse != null" >
+        dict_loan_use,
+      </if>
+      <if test="dictLoanType != null" >
+        dict_loan_type,
+      </if>
+      <if test="consLoanRemarks != null" >
+        cons_loan_remarks,
+      </if>
+      <if test="consCommunicateDate != null" >
+        cons_communicate_date,
+      </if>
+      <if test="planArrivalTime != null" >
+        plan_arrival_time,
+      </if>
+      <if test="consTelesalesFlag != null" >
+        cons_telesales_flag,
+      </if>
+      <if test="consServiceUserCode != null" >
+        cons_service_user_code,
+      </if>
+      <if test="consTelesalesSource != null" >
+        cons_telesales_source,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="consTelesalesOrgcode != null" >
+        cons_telesales_orgcode,
+      </if>
+      <if test="dictOperStatus != null" >
+        dict_oper_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="managerCode != null" >
+        #{managerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consTeamManagerCode != null" >
+        #{consTeamManagerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consLoanAmount != null" >
+        #{consLoanAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictLoanUse != null" >
+        #{dictLoanUse,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanType != null" >
+        #{dictLoanType,jdbcType=VARCHAR},
+      </if>
+      <if test="consLoanRemarks != null" >
+        #{consLoanRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="consCommunicateDate != null" >
+        #{consCommunicateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planArrivalTime != null" >
+        #{planArrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consTelesalesFlag != null" >
+        #{consTelesalesFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="consServiceUserCode != null" >
+        #{consServiceUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consTelesalesSource != null" >
+        #{consTelesalesSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consTelesalesOrgcode != null" >
+        #{consTelesalesOrgcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictOperStatus != null" >
+        #{dictOperStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerConsultation" >
+    update jk.t_cj_customer_consultation
+    <set >
+      <if test="customerCode != null" >
+        customer_code = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="managerCode != null" >
+        manager_code = #{managerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consTeamManagerCode != null" >
+        cons_team_manager_code = #{consTeamManagerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consLoanAmount != null" >
+        cons_loan_amount = #{consLoanAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictLoanUse != null" >
+        dict_loan_use = #{dictLoanUse,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanType != null" >
+        dict_loan_type = #{dictLoanType,jdbcType=VARCHAR},
+      </if>
+      <if test="consLoanRemarks != null" >
+        cons_loan_remarks = #{consLoanRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="consCommunicateDate != null" >
+        cons_communicate_date = #{consCommunicateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planArrivalTime != null" >
+        plan_arrival_time = #{planArrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consTelesalesFlag != null" >
+        cons_telesales_flag = #{consTelesalesFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="consServiceUserCode != null" >
+        cons_service_user_code = #{consServiceUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consTelesalesSource != null" >
+        cons_telesales_source = #{consTelesalesSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consTelesalesOrgcode != null" >
+        cons_telesales_orgcode = #{consTelesalesOrgcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictOperStatus != null" >
+        dict_oper_status = #{dictOperStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.CustomerConsultation" >
+    update jk.t_cj_customer_consultation
+    set customer_code = #{customerCode,jdbcType=VARCHAR},
+      manager_code = #{managerCode,jdbcType=VARCHAR},
+      cons_team_manager_code = #{consTeamManagerCode,jdbcType=VARCHAR},
+      cons_loan_amount = #{consLoanAmount,jdbcType=NUMERIC},
+      dict_loan_use = #{dictLoanUse,jdbcType=VARCHAR},
+      dict_loan_type = #{dictLoanType,jdbcType=VARCHAR},
+      cons_loan_remarks = #{consLoanRemarks,jdbcType=VARCHAR},
+      cons_communicate_date = #{consCommunicateDate,jdbcType=TIMESTAMP},
+      plan_arrival_time = #{planArrivalTime,jdbcType=TIMESTAMP},
+      cons_telesales_flag = #{consTelesalesFlag,jdbcType=VARCHAR},
+      cons_service_user_code = #{consServiceUserCode,jdbcType=VARCHAR},
+      cons_telesales_source = #{consTelesalesSource,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      cons_telesales_orgcode = #{consTelesalesOrgcode,jdbcType=VARCHAR},
+      dict_oper_status = #{dictOperStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

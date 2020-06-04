@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CheckRateDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.CheckRate" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="interest_rate" property="interestRate" jdbcType="NUMERIC" />
+    <result column="monthly_interest" property="monthlyInterest" jdbcType="NUMERIC" />
+    <result column="first_service_tariffing_rate" property="firstServiceTariffingRate" jdbcType="NUMERIC" />
+    <result column="first_service_tariffing" property="firstServiceTariffing" jdbcType="NUMERIC" />
+    <result column="contract_amount" property="contractAmount" jdbcType="NUMERIC" />
+    <result column="fee_payment_amount" property="feePaymentAmount" jdbcType="NUMERIC" />
+    <result column="month_repay_amount" property="monthRepayAmount" jdbcType="NUMERIC" />
+    <result column="comprehensive_service_fee" property="comprehensiveServiceFee" jdbcType="NUMERIC" />
+    <result column="audit_fee" property="auditFee" jdbcType="NUMERIC" />
+    <result column="consulting_fee" property="consultingFee" jdbcType="NUMERIC" />
+    <result column="intermediary_service_fee" property="intermediaryServiceFee" jdbcType="NUMERIC" />
+    <result column="information_service_charge" property="informationServiceCharge" jdbcType="NUMERIC" />
+    <result column="default_penalty_interest" property="defaultPenaltyInterest" jdbcType="NUMERIC" />
+    <result column="default_penalty_interest_rate" property="defaultPenaltyInterestRate" jdbcType="NUMERIC" />
+    <result column="default_penalty_rate" property="defaultPenaltyRate" jdbcType="NUMERIC" />
+    <result column="default_penalty" property="defaultPenalty" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, interest_rate, monthly_interest, first_service_tariffing_rate, first_service_tariffing, 
+    contract_amount, fee_payment_amount, month_repay_amount, comprehensive_service_fee, 
+    audit_fee, consulting_fee, intermediary_service_fee, information_service_charge, 
+    default_penalty_interest, default_penalty_interest_rate, default_penalty_rate, default_penalty, 
+    create_by, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_check_rate
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_check_rate
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.CheckRate" >
+    insert into jk.t_cj_check_rate (loan_code, interest_rate, monthly_interest, 
+      first_service_tariffing_rate, first_service_tariffing, 
+      contract_amount, fee_payment_amount, month_repay_amount, 
+      comprehensive_service_fee, audit_fee, consulting_fee, 
+      intermediary_service_fee, information_service_charge, 
+      default_penalty_interest, default_penalty_interest_rate, 
+      default_penalty_rate, default_penalty, create_by, 
+      create_time)
+    values (#{loanCode,jdbcType=VARCHAR}, #{interestRate,jdbcType=NUMERIC}, #{monthlyInterest,jdbcType=NUMERIC}, 
+      #{firstServiceTariffingRate,jdbcType=NUMERIC}, #{firstServiceTariffing,jdbcType=NUMERIC}, 
+      #{contractAmount,jdbcType=NUMERIC}, #{feePaymentAmount,jdbcType=NUMERIC}, #{monthRepayAmount,jdbcType=NUMERIC}, 
+      #{comprehensiveServiceFee,jdbcType=NUMERIC}, #{auditFee,jdbcType=NUMERIC}, #{consultingFee,jdbcType=NUMERIC}, 
+      #{intermediaryServiceFee,jdbcType=NUMERIC}, #{informationServiceCharge,jdbcType=NUMERIC}, 
+      #{defaultPenaltyInterest,jdbcType=NUMERIC}, #{defaultPenaltyInterestRate,jdbcType=NUMERIC}, 
+      #{defaultPenaltyRate,jdbcType=NUMERIC}, #{defaultPenalty,jdbcType=NUMERIC}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.CheckRate" >
+    insert into jk.t_cj_check_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="interestRate != null" >
+        interest_rate,
+      </if>
+      <if test="monthlyInterest != null" >
+        monthly_interest,
+      </if>
+      <if test="firstServiceTariffingRate != null" >
+        first_service_tariffing_rate,
+      </if>
+      <if test="firstServiceTariffing != null" >
+        first_service_tariffing,
+      </if>
+      <if test="contractAmount != null" >
+        contract_amount,
+      </if>
+      <if test="feePaymentAmount != null" >
+        fee_payment_amount,
+      </if>
+      <if test="monthRepayAmount != null" >
+        month_repay_amount,
+      </if>
+      <if test="comprehensiveServiceFee != null" >
+        comprehensive_service_fee,
+      </if>
+      <if test="auditFee != null" >
+        audit_fee,
+      </if>
+      <if test="consultingFee != null" >
+        consulting_fee,
+      </if>
+      <if test="intermediaryServiceFee != null" >
+        intermediary_service_fee,
+      </if>
+      <if test="informationServiceCharge != null" >
+        information_service_charge,
+      </if>
+      <if test="defaultPenaltyInterest != null" >
+        default_penalty_interest,
+      </if>
+      <if test="defaultPenaltyInterestRate != null" >
+        default_penalty_interest_rate,
+      </if>
+      <if test="defaultPenaltyRate != null" >
+        default_penalty_rate,
+      </if>
+      <if test="defaultPenalty != null" >
+        default_penalty,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="interestRate != null" >
+        #{interestRate,jdbcType=NUMERIC},
+      </if>
+      <if test="monthlyInterest != null" >
+        #{monthlyInterest,jdbcType=NUMERIC},
+      </if>
+      <if test="firstServiceTariffingRate != null" >
+        #{firstServiceTariffingRate,jdbcType=NUMERIC},
+      </if>
+      <if test="firstServiceTariffing != null" >
+        #{firstServiceTariffing,jdbcType=NUMERIC},
+      </if>
+      <if test="contractAmount != null" >
+        #{contractAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="feePaymentAmount != null" >
+        #{feePaymentAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="monthRepayAmount != null" >
+        #{monthRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="comprehensiveServiceFee != null" >
+        #{comprehensiveServiceFee,jdbcType=NUMERIC},
+      </if>
+      <if test="auditFee != null" >
+        #{auditFee,jdbcType=NUMERIC},
+      </if>
+      <if test="consultingFee != null" >
+        #{consultingFee,jdbcType=NUMERIC},
+      </if>
+      <if test="intermediaryServiceFee != null" >
+        #{intermediaryServiceFee,jdbcType=NUMERIC},
+      </if>
+      <if test="informationServiceCharge != null" >
+        #{informationServiceCharge,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyInterest != null" >
+        #{defaultPenaltyInterest,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyInterestRate != null" >
+        #{defaultPenaltyInterestRate,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyRate != null" >
+        #{defaultPenaltyRate,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenalty != null" >
+        #{defaultPenalty,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.CheckRate" >
+    update jk.t_cj_check_rate
+    <set >
+      <if test="interestRate != null" >
+        interest_rate = #{interestRate,jdbcType=NUMERIC},
+      </if>
+      <if test="monthlyInterest != null" >
+        monthly_interest = #{monthlyInterest,jdbcType=NUMERIC},
+      </if>
+      <if test="firstServiceTariffingRate != null" >
+        first_service_tariffing_rate = #{firstServiceTariffingRate,jdbcType=NUMERIC},
+      </if>
+      <if test="firstServiceTariffing != null" >
+        first_service_tariffing = #{firstServiceTariffing,jdbcType=NUMERIC},
+      </if>
+      <if test="contractAmount != null" >
+        contract_amount = #{contractAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="feePaymentAmount != null" >
+        fee_payment_amount = #{feePaymentAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="monthRepayAmount != null" >
+        month_repay_amount = #{monthRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="comprehensiveServiceFee != null" >
+        comprehensive_service_fee = #{comprehensiveServiceFee,jdbcType=NUMERIC},
+      </if>
+      <if test="auditFee != null" >
+        audit_fee = #{auditFee,jdbcType=NUMERIC},
+      </if>
+      <if test="consultingFee != null" >
+        consulting_fee = #{consultingFee,jdbcType=NUMERIC},
+      </if>
+      <if test="intermediaryServiceFee != null" >
+        intermediary_service_fee = #{intermediaryServiceFee,jdbcType=NUMERIC},
+      </if>
+      <if test="informationServiceCharge != null" >
+        information_service_charge = #{informationServiceCharge,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyInterest != null" >
+        default_penalty_interest = #{defaultPenaltyInterest,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyInterestRate != null" >
+        default_penalty_interest_rate = #{defaultPenaltyInterestRate,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenaltyRate != null" >
+        default_penalty_rate = #{defaultPenaltyRate,jdbcType=NUMERIC},
+      </if>
+      <if test="defaultPenalty != null" >
+        default_penalty = #{defaultPenalty,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.CheckRate" >
+    update jk.t_cj_check_rate
+    set interest_rate = #{interestRate,jdbcType=NUMERIC},
+      monthly_interest = #{monthlyInterest,jdbcType=NUMERIC},
+      first_service_tariffing_rate = #{firstServiceTariffingRate,jdbcType=NUMERIC},
+      first_service_tariffing = #{firstServiceTariffing,jdbcType=NUMERIC},
+      contract_amount = #{contractAmount,jdbcType=NUMERIC},
+      fee_payment_amount = #{feePaymentAmount,jdbcType=NUMERIC},
+      month_repay_amount = #{monthRepayAmount,jdbcType=NUMERIC},
+      comprehensive_service_fee = #{comprehensiveServiceFee,jdbcType=NUMERIC},
+      audit_fee = #{auditFee,jdbcType=NUMERIC},
+      consulting_fee = #{consultingFee,jdbcType=NUMERIC},
+      intermediary_service_fee = #{intermediaryServiceFee,jdbcType=NUMERIC},
+      information_service_charge = #{informationServiceCharge,jdbcType=NUMERIC},
+      default_penalty_interest = #{defaultPenaltyInterest,jdbcType=NUMERIC},
+      default_penalty_interest_rate = #{defaultPenaltyInterestRate,jdbcType=NUMERIC},
+      default_penalty_rate = #{defaultPenaltyRate,jdbcType=NUMERIC},
+      default_penalty = #{defaultPenalty,jdbcType=NUMERIC},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

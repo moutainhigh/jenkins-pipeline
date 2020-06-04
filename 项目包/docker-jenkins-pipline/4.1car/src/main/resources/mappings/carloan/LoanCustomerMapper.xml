@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CarLoanCustomerDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.LoanCustomer" >
+    <id column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="id_start_day" property="idStartDay" jdbcType="DATE" />
+    <result column="id_end_day" property="idEndDay" jdbcType="DATE" />
+    <result column="is_long_term" property="isLongTerm" jdbcType="VARCHAR" />
+    <result column="dict_sex" property="dictSex" jdbcType="VARCHAR" />
+    <result column="dict_customer_register_province" property="dictCustomerRegisterProvince" jdbcType="VARCHAR" />
+    <result column="dict_customer_register_city" property="dictCustomerRegisterCity" jdbcType="VARCHAR" />
+    <result column="dict_customer_register_area" property="dictCustomerRegisterArea" jdbcType="VARCHAR" />
+    <result column="customer_register_address" property="customerRegisterAddress" jdbcType="VARCHAR" />
+    <result column="customer_birthday" property="customerBirthday" jdbcType="DATE" />
+    <result column="dict_marry_status" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="dict_education" property="dictEducation" jdbcType="VARCHAR" />
+    <result column="customer_phone_first" property="customerPhoneFirst" jdbcType="VARCHAR" />
+    <result column="customer_tel" property="customerTel" jdbcType="VARCHAR" />
+    <result column="customer_email" property="customerEmail" jdbcType="VARCHAR" />
+    <result column="dict_customer_source" property="dictCustomerSource" jdbcType="VARCHAR" />
+    <result column="dict_customer_have_children" property="dictCustomerHaveChildren" jdbcType="VARCHAR" />
+    <result column="dict_customer_live_province" property="dictCustomerLiveProvince" jdbcType="VARCHAR" />
+    <result column="dict_customer_live_city" property="dictCustomerLiveCity" jdbcType="VARCHAR" />
+    <result column="dict_customer_live_area" property="dictCustomerLiveArea" jdbcType="VARCHAR" />
+    <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
+    <result column="customer_cert_org" property="customerCertOrg" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="customer_temp_permit" property="customerTempPermit" jdbcType="VARCHAR" />
+    <result column="customer_house_hold_property" property="customerHouseHoldProperty" jdbcType="VARCHAR" />
+    <result column="customer_first_living_day" property="customerFirstLivingDay" jdbcType="DATE" />
+    <result column="city_phone" property="cityPhone" jdbcType="VARCHAR" />
+    <result column="customer_firt_arrive_year" property="customerFirtArriveYear" jdbcType="VARCHAR" />
+    <result column="credit_line" property="creditLine" jdbcType="NUMERIC" />
+    <result column="customer_family_support" property="customerFamilySupport" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    customer_code, id, customer_name, dict_cert_type, customer_cert_num, id_start_day, 
+    id_end_day, is_long_term, dict_sex, dict_customer_register_province, dict_customer_register_city, 
+    dict_customer_register_area, customer_register_address, customer_birthday, dict_marry_status, 
+    dict_education, customer_phone_first, customer_tel, customer_email, dict_customer_source, 
+    dict_customer_have_children, dict_customer_live_province, dict_customer_live_city, 
+    dict_customer_live_area, customer_address, customer_cert_org, create_by, create_time, 
+    modify_by, modify_time, customer_temp_permit, customer_house_hold_property, customer_first_living_day, 
+    city_phone, customer_firt_arrive_year, credit_line, customer_family_support
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_loan_customer
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_loan_customer
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.LoanCustomer" >
+    insert into jk.t_cj_loan_customer (customer_code, id, customer_name, 
+      dict_cert_type, customer_cert_num, id_start_day, 
+      id_end_day, is_long_term, dict_sex, 
+      dict_customer_register_province, dict_customer_register_city, 
+      dict_customer_register_area, customer_register_address, 
+      customer_birthday, dict_marry_status, dict_education, 
+      customer_phone_first, customer_tel, customer_email, 
+      dict_customer_source, dict_customer_have_children, 
+      dict_customer_live_province, dict_customer_live_city, 
+      dict_customer_live_area, customer_address, 
+      customer_cert_org, create_by, create_time, 
+      modify_by, modify_time, customer_temp_permit, 
+      customer_house_hold_property, customer_first_living_day, 
+      city_phone, customer_firt_arrive_year, credit_line, 
+      customer_family_support)
+    values (#{customerCode,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{dictCertType,jdbcType=VARCHAR}, #{customerCertNum,jdbcType=VARCHAR}, #{idStartDay,jdbcType=DATE}, 
+      #{idEndDay,jdbcType=DATE}, #{isLongTerm,jdbcType=VARCHAR}, #{dictSex,jdbcType=VARCHAR}, 
+      #{dictCustomerRegisterProvince,jdbcType=VARCHAR}, #{dictCustomerRegisterCity,jdbcType=VARCHAR}, 
+      #{dictCustomerRegisterArea,jdbcType=VARCHAR}, #{customerRegisterAddress,jdbcType=VARCHAR}, 
+      #{customerBirthday,jdbcType=DATE}, #{dictMarryStatus,jdbcType=VARCHAR}, #{dictEducation,jdbcType=VARCHAR}, 
+      #{customerPhoneFirst,jdbcType=VARCHAR}, #{customerTel,jdbcType=VARCHAR}, #{customerEmail,jdbcType=VARCHAR}, 
+      #{dictCustomerSource,jdbcType=VARCHAR}, #{dictCustomerHaveChildren,jdbcType=VARCHAR}, 
+      #{dictCustomerLiveProvince,jdbcType=VARCHAR}, #{dictCustomerLiveCity,jdbcType=VARCHAR}, 
+      #{dictCustomerLiveArea,jdbcType=VARCHAR}, #{customerAddress,jdbcType=VARCHAR}, 
+      #{customerCertOrg,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{customerTempPermit,jdbcType=VARCHAR}, 
+      #{customerHouseHoldProperty,jdbcType=VARCHAR}, #{customerFirstLivingDay,jdbcType=DATE}, 
+      #{cityPhone,jdbcType=VARCHAR}, #{customerFirtArriveYear,jdbcType=VARCHAR}, #{creditLine,jdbcType=NUMERIC}, 
+      #{customerFamilySupport,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.LoanCustomer" >
+    insert into jk.t_cj_loan_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerCode != null" >
+        customer_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type,
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num,
+      </if>
+      <if test="idStartDay != null" >
+        id_start_day,
+      </if>
+      <if test="idEndDay != null" >
+        id_end_day,
+      </if>
+      <if test="isLongTerm != null" >
+        is_long_term,
+      </if>
+      <if test="dictSex != null" >
+        dict_sex,
+      </if>
+      <if test="dictCustomerRegisterProvince != null" >
+        dict_customer_register_province,
+      </if>
+      <if test="dictCustomerRegisterCity != null" >
+        dict_customer_register_city,
+      </if>
+      <if test="dictCustomerRegisterArea != null" >
+        dict_customer_register_area,
+      </if>
+      <if test="customerRegisterAddress != null" >
+        customer_register_address,
+      </if>
+      <if test="customerBirthday != null" >
+        customer_birthday,
+      </if>
+      <if test="dictMarryStatus != null" >
+        dict_marry_status,
+      </if>
+      <if test="dictEducation != null" >
+        dict_education,
+      </if>
+      <if test="customerPhoneFirst != null" >
+        customer_phone_first,
+      </if>
+      <if test="customerTel != null" >
+        customer_tel,
+      </if>
+      <if test="customerEmail != null" >
+        customer_email,
+      </if>
+      <if test="dictCustomerSource != null" >
+        dict_customer_source,
+      </if>
+      <if test="dictCustomerHaveChildren != null" >
+        dict_customer_have_children,
+      </if>
+      <if test="dictCustomerLiveProvince != null" >
+        dict_customer_live_province,
+      </if>
+      <if test="dictCustomerLiveCity != null" >
+        dict_customer_live_city,
+      </if>
+      <if test="dictCustomerLiveArea != null" >
+        dict_customer_live_area,
+      </if>
+      <if test="customerAddress != null" >
+        customer_address,
+      </if>
+      <if test="customerCertOrg != null" >
+        customer_cert_org,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="customerTempPermit != null" >
+        customer_temp_permit,
+      </if>
+      <if test="customerHouseHoldProperty != null" >
+        customer_house_hold_property,
+      </if>
+      <if test="customerFirstLivingDay != null" >
+        customer_first_living_day,
+      </if>
+      <if test="cityPhone != null" >
+        city_phone,
+      </if>
+      <if test="customerFirtArriveYear != null" >
+        customer_firt_arrive_year,
+      </if>
+      <if test="creditLine != null" >
+        credit_line,
+      </if>
+      <if test="customerFamilySupport != null" >
+        customer_family_support,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="idStartDay != null" >
+        #{idStartDay,jdbcType=DATE},
+      </if>
+      <if test="idEndDay != null" >
+        #{idEndDay,jdbcType=DATE},
+      </if>
+      <if test="isLongTerm != null" >
+        #{isLongTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSex != null" >
+        #{dictSex,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterProvince != null" >
+        #{dictCustomerRegisterProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterCity != null" >
+        #{dictCustomerRegisterCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterArea != null" >
+        #{dictCustomerRegisterArea,jdbcType=VARCHAR},
+      </if>
+      <if test="customerRegisterAddress != null" >
+        #{customerRegisterAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerBirthday != null" >
+        #{customerBirthday,jdbcType=DATE},
+      </if>
+      <if test="dictMarryStatus != null" >
+        #{dictMarryStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dictEducation != null" >
+        #{dictEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoneFirst != null" >
+        #{customerPhoneFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="customerTel != null" >
+        #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="customerEmail != null" >
+        #{customerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerSource != null" >
+        #{dictCustomerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerHaveChildren != null" >
+        #{dictCustomerHaveChildren,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveProvince != null" >
+        #{dictCustomerLiveProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveCity != null" >
+        #{dictCustomerLiveCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveArea != null" >
+        #{dictCustomerLiveArea,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertOrg != null" >
+        #{customerCertOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerTempPermit != null" >
+        #{customerTempPermit,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseHoldProperty != null" >
+        #{customerHouseHoldProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirstLivingDay != null" >
+        #{customerFirstLivingDay,jdbcType=DATE},
+      </if>
+      <if test="cityPhone != null" >
+        #{cityPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirtArriveYear != null" >
+        #{customerFirtArriveYear,jdbcType=VARCHAR},
+      </if>
+      <if test="creditLine != null" >
+        #{creditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="customerFamilySupport != null" >
+        #{customerFamilySupport,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.LoanCustomer" >
+    update jk.t_cj_loan_customer
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="idStartDay != null" >
+        id_start_day = #{idStartDay,jdbcType=DATE},
+      </if>
+      <if test="idEndDay != null" >
+        id_end_day = #{idEndDay,jdbcType=DATE},
+      </if>
+      <if test="isLongTerm != null" >
+        is_long_term = #{isLongTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSex != null" >
+        dict_sex = #{dictSex,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterProvince != null" >
+        dict_customer_register_province = #{dictCustomerRegisterProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterCity != null" >
+        dict_customer_register_city = #{dictCustomerRegisterCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerRegisterArea != null" >
+        dict_customer_register_area = #{dictCustomerRegisterArea,jdbcType=VARCHAR},
+      </if>
+      <if test="customerRegisterAddress != null" >
+        customer_register_address = #{customerRegisterAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerBirthday != null" >
+        customer_birthday = #{customerBirthday,jdbcType=DATE},
+      </if>
+      <if test="dictMarryStatus != null" >
+        dict_marry_status = #{dictMarryStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dictEducation != null" >
+        dict_education = #{dictEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoneFirst != null" >
+        customer_phone_first = #{customerPhoneFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="customerTel != null" >
+        customer_tel = #{customerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="customerEmail != null" >
+        customer_email = #{customerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerSource != null" >
+        dict_customer_source = #{dictCustomerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerHaveChildren != null" >
+        dict_customer_have_children = #{dictCustomerHaveChildren,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveProvince != null" >
+        dict_customer_live_province = #{dictCustomerLiveProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveCity != null" >
+        dict_customer_live_city = #{dictCustomerLiveCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerLiveArea != null" >
+        dict_customer_live_area = #{dictCustomerLiveArea,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        customer_address = #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertOrg != null" >
+        customer_cert_org = #{customerCertOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerTempPermit != null" >
+        customer_temp_permit = #{customerTempPermit,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseHoldProperty != null" >
+        customer_house_hold_property = #{customerHouseHoldProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirstLivingDay != null" >
+        customer_first_living_day = #{customerFirstLivingDay,jdbcType=DATE},
+      </if>
+      <if test="cityPhone != null" >
+        city_phone = #{cityPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFirtArriveYear != null" >
+        customer_firt_arrive_year = #{customerFirtArriveYear,jdbcType=VARCHAR},
+      </if>
+      <if test="creditLine != null" >
+        credit_line = #{creditLine,jdbcType=NUMERIC},
+      </if>
+      <if test="customerFamilySupport != null" >
+        customer_family_support = #{customerFamilySupport,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.LoanCustomer" >
+    update jk.t_cj_loan_customer
+    set id = #{id,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      id_start_day = #{idStartDay,jdbcType=DATE},
+      id_end_day = #{idEndDay,jdbcType=DATE},
+      is_long_term = #{isLongTerm,jdbcType=VARCHAR},
+      dict_sex = #{dictSex,jdbcType=VARCHAR},
+      dict_customer_register_province = #{dictCustomerRegisterProvince,jdbcType=VARCHAR},
+      dict_customer_register_city = #{dictCustomerRegisterCity,jdbcType=VARCHAR},
+      dict_customer_register_area = #{dictCustomerRegisterArea,jdbcType=VARCHAR},
+      customer_register_address = #{customerRegisterAddress,jdbcType=VARCHAR},
+      customer_birthday = #{customerBirthday,jdbcType=DATE},
+      dict_marry_status = #{dictMarryStatus,jdbcType=VARCHAR},
+      dict_education = #{dictEducation,jdbcType=VARCHAR},
+      customer_phone_first = #{customerPhoneFirst,jdbcType=VARCHAR},
+      customer_tel = #{customerTel,jdbcType=VARCHAR},
+      customer_email = #{customerEmail,jdbcType=VARCHAR},
+      dict_customer_source = #{dictCustomerSource,jdbcType=VARCHAR},
+      dict_customer_have_children = #{dictCustomerHaveChildren,jdbcType=VARCHAR},
+      dict_customer_live_province = #{dictCustomerLiveProvince,jdbcType=VARCHAR},
+      dict_customer_live_city = #{dictCustomerLiveCity,jdbcType=VARCHAR},
+      dict_customer_live_area = #{dictCustomerLiveArea,jdbcType=VARCHAR},
+      customer_address = #{customerAddress,jdbcType=VARCHAR},
+      customer_cert_org = #{customerCertOrg,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      customer_temp_permit = #{customerTempPermit,jdbcType=VARCHAR},
+      customer_house_hold_property = #{customerHouseHoldProperty,jdbcType=VARCHAR},
+      customer_first_living_day = #{customerFirstLivingDay,jdbcType=DATE},
+      city_phone = #{cityPhone,jdbcType=VARCHAR},
+      customer_firt_arrive_year = #{customerFirtArriveYear,jdbcType=VARCHAR},
+      credit_line = #{creditLine,jdbcType=NUMERIC},
+      customer_family_support = #{customerFamilySupport,jdbcType=SMALLINT}
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

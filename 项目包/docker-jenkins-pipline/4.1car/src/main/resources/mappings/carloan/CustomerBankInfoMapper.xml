@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CustomerBankInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.CustomerBankInfo" >
+    <id column="loan_code" property="loanCode" jdbcType="CHAR" />
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="bank_account_name" property="bankAccountName" jdbcType="VARCHAR" />
+    <result column="bank_province_city" property="bankProvinceCity" jdbcType="VARCHAR" />
+    <result column="card_bank" property="cardBank" jdbcType="VARCHAR" />
+    <result column="apply_bank_name" property="applyBankName" jdbcType="VARCHAR" />
+    <result column="bank_card_no" property="bankCardNo" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="top" property="top" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, id, bank_account_name, bank_province_city, card_bank, apply_bank_name, 
+    bank_card_no, create_by, create_time, top
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_customer_bank_info
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_customer_bank_info
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.CustomerBankInfo" >
+    insert into jk.t_cj_customer_bank_info (loan_code, id, bank_account_name, 
+      bank_province_city, card_bank, apply_bank_name, 
+      bank_card_no, create_by, create_time, 
+      top)
+    values (#{loanCode,jdbcType=CHAR}, #{id,jdbcType=CHAR}, #{bankAccountName,jdbcType=VARCHAR}, 
+      #{bankProvinceCity,jdbcType=VARCHAR}, #{cardBank,jdbcType=VARCHAR}, #{applyBankName,jdbcType=VARCHAR}, 
+      #{bankCardNo,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{top,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerBankInfo" >
+    insert into jk.t_cj_customer_bank_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name,
+      </if>
+      <if test="bankProvinceCity != null" >
+        bank_province_city,
+      </if>
+      <if test="cardBank != null" >
+        card_bank,
+      </if>
+      <if test="applyBankName != null" >
+        apply_bank_name,
+      </if>
+      <if test="bankCardNo != null" >
+        bank_card_no,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="top != null" >
+        top,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=CHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankProvinceCity != null" >
+        #{bankProvinceCity,jdbcType=VARCHAR},
+      </if>
+      <if test="cardBank != null" >
+        #{cardBank,jdbcType=VARCHAR},
+      </if>
+      <if test="applyBankName != null" >
+        #{applyBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCardNo != null" >
+        #{bankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="top != null" >
+        #{top,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerBankInfo" >
+    update jk.t_cj_customer_bank_info
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=CHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankProvinceCity != null" >
+        bank_province_city = #{bankProvinceCity,jdbcType=VARCHAR},
+      </if>
+      <if test="cardBank != null" >
+        card_bank = #{cardBank,jdbcType=VARCHAR},
+      </if>
+      <if test="applyBankName != null" >
+        apply_bank_name = #{applyBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCardNo != null" >
+        bank_card_no = #{bankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="top != null" >
+        top = #{top,jdbcType=CHAR},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.CustomerBankInfo" >
+    update jk.t_cj_customer_bank_info
+    set id = #{id,jdbcType=CHAR},
+      bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      bank_province_city = #{bankProvinceCity,jdbcType=VARCHAR},
+      card_bank = #{cardBank,jdbcType=VARCHAR},
+      apply_bank_name = #{applyBankName,jdbcType=VARCHAR},
+      bank_card_no = #{bankCardNo,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      top = #{top,jdbcType=CHAR}
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </update>
+</mapper>

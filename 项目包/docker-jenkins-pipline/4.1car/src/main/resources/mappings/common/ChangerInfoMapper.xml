@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.common.dao.ChangerInfoDao">
+	  <resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.ChangerInfo" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="apply_id" property="applyId" jdbcType="VARCHAR" />
+    <result column="change_code" property="changeCode" jdbcType="VARCHAR" />
+    <result column="change_type" property="changeType" jdbcType="VARCHAR" />
+    <result column="change_result" property="changeResult" jdbcType="VARCHAR" />
+    <result column="change_begin" property="changeBegin" jdbcType="VARCHAR" />
+    <result column="change_after" property="changeAfter" jdbcType="VARCHAR" />
+    <result column="cob_id" property="cobId" jdbcType="VARCHAR" />
+    <result column="del_flag" property="dealFlag" jdbcType="VARCHAR" />
+    <result column="select_flag" property="selectFlag" jdbcType="VARCHAR" />    
+    <result column="update_id" property="updateId" jdbcType="VARCHAR" />    
+    <result column="remark" property="remark" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>    
+  
+	<sql id="Base_Column_List">
+		id,apply_id,change_code,change_type,change_result,change_begin,change_after,
+		cob_id,del_flag,select_flag,update_id,remark,modify_by,modify_time,create_by,create_time
+	</sql>
+    <insert id="insertChangerInfo" parameterType="com.creditharmony.approve.common.entity.ChangerInfo">
+  	insert into t_jk_changer_info (id,apply_id,change_code,change_type,
+		change_result,change_begin,change_after,cob_id,del_flag,update_id,modify_by,modify_time,create_by)
+	values(#{id,jdbcType=VARCHAR},#{applyId,jdbcType=VARCHAR},#{changeCode,jdbcType=VARCHAR},
+		#{changeType,jdbcType=VARCHAR},#{changeResult,jdbcType=VARCHAR},#{changeBegin,jdbcType=VARCHAR},
+		#{changeAfter,jdbcType=VARCHAR},#{cobId,jdbcType=VARCHAR},#{dealFlag,jdbcType=VARCHAR},
+		#{updateId,jdbcType=VARCHAR},#{modifyBy,jdbcType=VARCHAR},#{modifyTime,jdbcType=DATE},#{createBy,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="getChangerInfoByParam" parameterType="com.creditharmony.approve.common.entity.ChangerInfo" 
+  			resultMap="BaseResultMap">  		
+  	select ci.id,change_code,change_type,change_result,change_begin,change_after,
+		cob_id,ci.del_flag,select_flag,update_id,remark,ci.modify_by,ci.modify_time,ci.create_time,
+		u.name as create_by
+			 from jk.t_jk_changer_info ci
+			 left join jk.t_gl_user u on u.id=ci.create_by
+		where 1=1 
+  		<if test="changeCode != null">
+  			and change_code = #{changeCode}
+  		</if>
+  		order by create_time 
+  </select>  
+
+</mapper>

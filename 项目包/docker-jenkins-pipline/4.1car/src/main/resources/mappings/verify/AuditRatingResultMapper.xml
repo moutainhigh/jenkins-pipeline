@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.AuditRatingResultDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.AuditRatingResult" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="rating_advise_amount" property="ratingAdviseAmount" jdbcType="NUMERIC" />
+    <result column="rating_advise_months" property="ratingAdviseMonths" jdbcType="NUMERIC" />
+    <result column="rating_score_decision" property="ratingScoreDecision" jdbcType="VARCHAR" />
+    <result column="rating_score" property="ratingScore" jdbcType="INTEGER" />
+    <result column="verify_rate_score" property="verifyRateScore" jdbcType="INTEGER" />
+    <result column="reconsider_rate_score" property="reconsiderRateScore" jdbcType="INTEGER" />
+    <result column="verify_risk_level" property="verifyRiskLevel" jdbcType="VARCHAR" />
+    <result column="reconsider_risk_level" property="reconsiderRiskLevel" jdbcType="VARCHAR" />
+    <result column="apply_risk_level" property="applyRiskLevel" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, rating_advise_amount, rating_advise_months, rating_score_decision, rating_score, 
+    verify_risk_level, reconsider_risk_level
+  </sql>
+    <resultMap id="myResultMap" type="com.creditharmony.approve.verify.entity.ex.AuditRatingEx" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="rating_advise_amount" property="ratingAdviseAmount" jdbcType="NUMERIC" />
+    <result column="rating_advise_months" property="ratingAdviseMonths" jdbcType="NUMERIC" />
+    <result column="rating_score_decision" property="ratingScoreDecision" jdbcType="VARCHAR" />
+    <result column="verify_rate_score" property="verifyRateScore" jdbcType="INTEGER" />
+    <result column="reconsider_rate_score" property="reconsiderRateScore" jdbcType="INTEGER" />
+    <result column="verify_risk_level" property="verifyRiskLevel" jdbcType="VARCHAR" />
+    <result column="reconsider_risk_level" property="reconsiderRiskLevel" jdbcType="VARCHAR" />
+    <result column="apply_risk_level" property="applyRiskLevel" jdbcType="VARCHAR" /> 
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <collection property="auditResult" resultMap="myMap"></collection>
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.verify.entity.AuditResult" id="myMap">
+  	 <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+    <select id="findByParam" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT 
+   RATING_ADVISE_AMOUNT,RATING_ADVISE_MONTHS,APPLY_RISK_LEVEL,
+   CASE WHEN #{1}='0' THEN VERIFY_RATE_SCORE ELSE RECONSIDER_RATE_SCORE END AS VERIFY_RATE_SCORE,
+   CASE WHEN #{1}='0' THEN VERIFY_RISK_LEVEL ELSE RECONSIDER_RISK_LEVEL END AS VERIFY_RISK_LEVEL
+   FROM JK.T_JK_AUDIT_RATING
+   WHERE 
+		LOAN_CODE = #{0}
+  </select>
+  <select id="findByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_audit_rating
+    where 
+		loan_Code = #{loanCode}
+  </select>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.AuditRatingResult" >
+    insert into jk.t_jk_audit_rating
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="ratingAdviseAmount != null" >
+        rating_advise_amount,
+      </if>
+      <if test="ratingAdviseMonths != null" >
+        rating_advise_months,
+      </if>
+      <if test="ratingScoreDecision != null" >
+        rating_score_decision,
+      </if>
+      <if test="ratingScore != null" >
+        rating_score,
+      </if>
+      <if test="verifyRateScore != null" >
+        verify_rate_score,
+      </if>
+      <if test="reconsiderRateScore != null" >
+        reconsider_rate_score,
+      </if>
+      <if test="verifyRiskLevel != null" >
+        verify_risk_level,
+      </if>
+      <if test="reconsiderRiskLevel != null" >
+        reconsider_risk_level,
+      </if>
+      <if test="applyRiskLevel != null" >
+        apply_risk_level,
+      </if>          
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ratingAdviseAmount != null" >
+        #{ratingAdviseAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="ratingAdviseMonths != null" >
+        #{ratingAdviseMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="ratingScoreDecision != null" >
+        #{ratingScoreDecision,jdbcType=VARCHAR},
+      </if>
+      <if test="ratingScore != null" >
+        #{ratingScore,jdbcType=INTEGER},
+      </if>
+      <if test="verifyRateScore != null" >
+        #{verifyRateScore,jdbcType=INTEGER},
+      </if>
+      <if test="reconsiderRateScore != null" >
+        #{reconsiderRateScore,jdbcType=INTEGER},
+      </if>
+      <if test="verifyRiskLevel != null" >
+        #{verifyRiskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="reconsiderRiskLevel != null" >
+        #{reconsiderRiskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRiskLevel != null" >
+        #{applyRiskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 信审或者复议决策，所需评分参数 -->
+  <select id="findAuditRatingParam" resultType="com.creditharmony.approve.rule.auditrating.client.AuditRatingParam" parameterType="java.util.Map" >
+	select 	
+		d.dict_education as education,
+		d.dict_marry_status as marriage,
+		a.customer_sex as sex,	
+		(case when a.dict_cert_type='0' and length(a.customer_cert_num)=18 then extract(year from age(to_timestamp(substring(a.customer_cert_num from 7 for 8),'YYYYMMDD'))) else -1 end)::int as age,
+		(case when d.hire_month is not null then d.hire_month/12 else -1 end)::int as companyWorkYear,
+		d.customer_house_hold_property as housingSituation
+ 	from jk.t_jk_loan_customer a 
+	left join jk.t_jk_dhzh_brhs d on d.r_customer_coborrower_id=a.id and d.loan_code = a.loan_code and d.dict_check_type=#{dictCheckType}
+	where a.loan_code = #{loanCode}
+  </select> 
+  
+    <update id="updateSelective" parameterType="com.creditharmony.approve.verify.entity.AuditRatingResult" >
+    update jk.t_jk_audit_rating
+    <set >
+      <if test="ratingAdviseAmount != null" >
+       rating_advise_amount = #{ratingAdviseAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="ratingAdviseMonths != null" >
+        rating_advise_months = #{ratingAdviseMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="ratingScoreDecision != null" >
+        rating_score_decision = #{ratingScoreDecision,jdbcType=VARCHAR},
+      </if>
+      <if test="ratingScore != null" >
+        rating_score = #{ratingScore,jdbcType=INTEGER},
+      </if>
+      <if test="verifyRateScore != null" >
+        verify_rate_score = #{verifyRateScore,jdbcType=INTEGER},
+      </if>
+      <if test="reconsiderRateScore != null" >
+        reconsider_rate_score = #{reconsiderRateScore,jdbcType=INTEGER},
+      </if>
+      <if test="verifyRiskLevel != null" >
+        verify_risk_level = #{verifyRiskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="reconsiderRiskLevel != null" >
+        reconsider_risk_level = #{reconsiderRiskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRiskLevel != null" >
+        apply_risk_level = #{applyRiskLevel,jdbcType=VARCHAR},
+      </if>    	
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR} and loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>	
+  
+  <!-- 分别查询征信报告中贷款审批查询次数、本人查询次数、近六个月查询次数 -->
+  <select id="queryRecordCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+  select count(id) as count from (
+		select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_simple b on a.relation_id=b.id and a.query_type in ('4')
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag} 
+		union all 
+		select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_detailed b on a.relation_id=b.id and a.query_type in ('4')
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag})  
+  	union all
+	select count(id) as b from (
+		select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_simple b on a.relation_id=b.id and a.query_type in ('7','15','16')
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag} 
+		union all 
+		select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_detailed b on a.relation_id=b.id and a.query_type in ('7','15','16')
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag})  
+	union all
+	select count(id) as c from (
+		select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_simple b on a.relation_id=b.id and a.query_day>(b.query_time-180)
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag} 
+		union all 
+			select a.id 
+			from t_jk_credit_query_record a 
+			join t_jk_credit_report_detailed b on a.relation_id=b.id and a.query_day>(b.query_time-180)
+			where b.loan_code=#{loanCode} and b.r_customer_coborrower_id=#{customerId} and b.del_flag=#{delFlag})  
+  </select> 
+  
+  <!-- 逾期的贷款的个数 -->
+  <select id="countLoanOverdue" resultType="int" parameterType="java.util.Map" >      
+  select (detailCount + simpleCount )::int as overDueCount 
+  	from (  
+		select
+			(select count(two.id) as detailCount 
+				from T_JK_CREDIT_REPORT_DETAILED de
+				join t_JK_CREDIT_LOAN_DETAILED_ONE one on de.id=one.relation_id 
+				join T_JK_CREDIT_LOAN_DETAILED_TWO two on one.id=two.relation_id 
+				where two.OVERDUE_NO_TOTAL > 0 and de.loan_code=#{loanCode} 
+					and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag} ),
+			(select count(info.id) as simpleCount 
+				from T_JK_CREDIT_REPORT_SIMPLE si 
+				join T_JK_CREDIT_LOAN_INFO info on si.id=info.relation_id
+				where info.OVERDUE_NO > 0 and si.loan_code=#{loanCode}
+					and si.r_customer_coborrower_id=#{customerId} and si.del_flag=#{delFlag} ) 
+		)			
+	</select> 
+	
+	<!-- 6个月内是否有新的信用卡或贷款 -->
+	<select id="newCreditLoanExists" resultType="boolean" parameterType="java.util.Map" >   
+	<![CDATA[
+	select (case when (simpleCreditCount + simpleLoanCount + detailCreditCount + detailLoanCount)::int>0 
+			then 1 else 0 end)::varchar as newCreditFlag from 
+			(select 
+				(select count(credit.id) as simpleCreditCount 
+					from T_JK_CREDIT_REPORT_SIMPLE si
+					join T_JK_CREDIT_CARD_INFO credit on si.id=credit.relation_id 
+					where credit.ISSUE_DAY>(si.QUERY_TIME-180) and si.loan_code=#{loanCode}
+						and si.r_customer_coborrower_id=#{customerId} and si.del_flag=#{delFlag}),
+				(select count(loan.id) as simpleLoanCount 
+					from T_JK_CREDIT_REPORT_SIMPLE si 
+					join T_JK_CREDIT_LOAN_INFO loan on si.id=loan.relation_id
+					where loan.ISSUE_DAY>(si.QUERY_TIME-180) and si.loan_code=#{loanCode}
+						and si.r_customer_coborrower_id=#{customerId} and si.del_flag=#{delFlag}),
+				(select count(credit.id) as detailCreditCount 
+					from T_JK_CREDIT_REPORT_DETAILED de
+					join T_JK_CREDIT_CARD_DETAILED_ONE credit on de.id=credit.relation_id 
+					where credit.ACCOUNT_DAY>(de.QUERY_TIME-180) and de.loan_code=#{loanCode}
+						and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag}),
+				(select count(loan.id) as detailLoanCount 
+					from T_JK_CREDIT_REPORT_DETAILED de 
+					join T_JK_CREDIT_LOAN_DETAILED_ONE loan on de.id=loan.relation_id
+					where loan.RELEASE_DAY>(de.QUERY_TIME-180) and de.loan_code=#{loanCode}
+						and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag}) )
+	]]>
+	</select>
+	
+	<!-- 正常信用卡额度使用率 -->
+	<select id="selectMaxCreditUseCentage" resultType="java.lang.Float" parameterType="java.util.Map" >   
+	select (case when max(a) is not null then max(a) else -1 end) as useCentage from (
+		select (case when sum(credit."LIMIT")>0 then sum(credit.USED_LIMIT)/sum(credit."LIMIT") else -1 end) as a 
+			from T_JK_CREDIT_REPORT_SIMPLE si
+			join T_JK_CREDIT_CARD_INFO credit on si.id=credit.relation_id 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}
+				 and si.del_flag=#{delFlag} and credit.account_status='1'
+		union all
+		select (case when sum(credit.CERDIT_LINE)>0 then sum(credit.USED_AMOUNT)/sum(credit.CERDIT_LINE) else -1 end)  as a 
+			from T_JK_CREDIT_REPORT_DETAILED de
+			join T_JK_CREDIT_CARD_DETAILED_ONE credit on de.id=credit.relation_id 
+			join T_JK_CREDIT_CARD_DETAILED_TWO two on credit.id=two.relation_id
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				 and de.del_flag=#{delFlag} and two.account_status='1')
+	</select>	
+	
+	<!-- 最早贷款的账龄 -->
+	<select id="selectLoanEarliestMonth" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	select (case when max(monthTillQuery) is not null then max(monthTillQuery) else -1 end) as earliestLoanMonth 
+	from (
+		select loan.id as newId, (extract(day from si.QUERY_TIME-loan.ISSUE_DAY)/30)::int as monthTillQuery 
+			from T_JK_CREDIT_REPORT_SIMPLE si 
+			join T_JK_CREDIT_LOAN_INFO loan on si.id=loan.relation_id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}
+				 and si.del_flag=#{delFlag} 
+		union all
+		select loan.id as newId, (extract(day from de.QUERY_TIME-loan.RELEASE_DAY)/30)::int as monthTillQuery 
+			from T_JK_CREDIT_REPORT_DETAILED de 
+			join T_JK_CREDIT_LOAN_DETAILED_ONE loan on de.id=loan.relation_id
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				 and de.del_flag=#{delFlag} )
+	</select>
+	
+	<!-- 最早信用卡的账龄 -->
+	<select id="selectCreditEarliestMonth" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	select (case when max(monthTillQuery) is not null then max(monthTillQuery) else -1 end) as earliestCreditMonth 
+	from (
+		select credit.id as newId, (extract(day from si.QUERY_TIME-credit.ISSUE_DAY)/30)::int as monthTillQuery
+			from T_JK_CREDIT_REPORT_SIMPLE si
+			join T_JK_CREDIT_CARD_INFO credit on si.id=credit.relation_id 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}
+				 and si.del_flag=#{delFlag} 
+		union all  
+		select credit.id as newId, (extract(day from de.QUERY_TIME-credit.ACCOUNT_DAY)/30)::int as monthTillQuery
+			from T_JK_CREDIT_REPORT_DETAILED de
+			join T_JK_CREDIT_CARD_DETAILED_ONE credit on de.id=credit.relation_id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				 and de.del_flag=#{delFlag} )	
+	</select>	
+	
+	<!-- 最晚信用卡的账龄 -->
+	<select id="selectCreditLatestMonth" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	select (case when min(monthTillQuery) is not null then min(monthTillQuery) else -1 end) as latestCreditMonth from 
+		(select credit.id as newId, (extract(day from si.QUERY_TIME-credit.ISSUE_DAY)/30)::int as monthTillQuery
+			from T_JK_CREDIT_REPORT_SIMPLE si
+			join T_JK_CREDIT_CARD_INFO credit on si.id=credit.relation_id 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}
+				 and si.del_flag=#{delFlag} 
+		union all  
+		select credit.id as newId, (extract(day from de.QUERY_TIME-credit.ACCOUNT_DAY)/30)::int as monthTillQuery
+			from T_JK_CREDIT_REPORT_DETAILED de
+			join T_JK_CREDIT_CARD_DETAILED_ONE credit on de.id=credit.relation_id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				 and de.del_flag=#{delFlag} )	
+	</select>
+	
+   <select id="findApplyRatingParam" resultType="com.creditharmony.approve.rule.applyengine.client.RatingParam" parameterType="java.util.Map" >
+	select 	
+		a.dict_education as education,
+		a.dict_marry_status as marriage,
+		a.customer_sex as sex,	
+		(case when a.dict_cert_type='0' and length(a.customer_cert_num)=18 then extract(year from age(to_timestamp(substring(a.customer_cert_num from 7 for 8),'YYYYMMDD'))) else -1 end)::int as age,
+		(case when b.comp_entry_day is not null then (case when b.comp_entry_day &lt; now() then extract(year from age(b.comp_entry_day)) else 0 end) else -1 end)::int as companyWorkYear,
+		c.customer_house_hold_property as housingSituation
+ 	from jk.t_jk_loan_customer a 
+	left join jk.t_jk_loan_company b on b.loan_code = a.loan_code and b.r_id = a.id
+	left join jk.t_jk_customer_livings c on c.loan_code = a.loan_code and c.r_customer_coborrower_id=a.id
+	where a.loan_code = #{loanCode}
+  </select> 
+	
+</mapper>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.CustomerBaseDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.CustomerBase" >
+    <id column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="customer_sex" property="customerSex" jdbcType="VARCHAR" />
+    <result column="customer_birthday" property="customerBirthday" jdbcType="TIMESTAMP" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="customer_cert_org" property="customerCertOrg" jdbcType="VARCHAR" />
+    <result column="id_start_timestamp" property="idStartTimestamp" jdbcType="TIMESTAMP" />
+    <result column="id_end_timestamp" property="idEndTimestamp" jdbcType="TIMESTAMP" />
+    <result column="customer_mobile_phone" property="customerMobilePhone" jdbcType="VARCHAR" />
+    <result column="dict_comp_industry" property="dictCompIndustry" jdbcType="VARCHAR" />
+    <result column="customer_name_ocr" property="customerNameOcr" jdbcType="VARCHAR" />
+    <result column="customer_cret_ocr" property="customerCretOcr" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    customer_code, id, customer_name, customer_sex, customer_birthday, dict_cert_type, 
+    customer_cert_num, customer_cert_org, id_start_timestamp, id_end_timestamp, customer_mobile_phone, 
+    dict_comp_industry, customer_name_ocr, customer_cret_ocr, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_customer_base
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </select>
+   <select id="selectByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  customer_code,customer_name    
+    from jk.t_jk_customer_base
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_customer_base
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.CustomerBase" >
+    insert into jk.t_jk_customer_base (customer_code, id, customer_name, 
+      customer_sex, customer_birthday, dict_cert_type, 
+      customer_cert_num, customer_cert_org, id_start_timestamp, 
+      id_end_timestamp, customer_mobile_phone, 
+      dict_comp_industry, customer_name_ocr, customer_cret_ocr, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{customerCode,jdbcType=VARCHAR}, #{id,jdbcType=NUMERIC}, #{customerName,jdbcType=VARCHAR}, 
+      #{customerSex,jdbcType=VARCHAR}, #{customerBirthday,jdbcType=TIMESTAMP}, #{dictCertType,jdbcType=VARCHAR}, 
+      #{customerCertNum,jdbcType=VARCHAR}, #{customerCertOrg,jdbcType=VARCHAR}, #{idStartTimestamp,jdbcType=TIMESTAMP}, 
+      #{idEndTimestamp,jdbcType=TIMESTAMP}, #{customerMobilePhone,jdbcType=VARCHAR}, 
+      #{dictCompIndustry,jdbcType=VARCHAR}, #{customerNameOcr,jdbcType=VARCHAR}, #{customerCretOcr,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.CustomerBase" >
+    insert into jk.t_jk_customer_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerCode != null" >
+        customer_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="customerSex != null" >
+        customer_sex,
+      </if>
+      <if test="customerBirthday != null" >
+        customer_birthday,
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type,
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num,
+      </if>
+      <if test="customerCertOrg != null" >
+        customer_cert_org,
+      </if>
+      <if test="idStartTimestamp != null" >
+        id_start_timestamp,
+      </if>
+      <if test="idEndTimestamp != null" >
+        id_end_timestamp,
+      </if>
+      <if test="customerMobilePhone != null" >
+        customer_mobile_phone,
+      </if>
+      <if test="dictCompIndustry != null" >
+        dict_comp_industry,
+      </if>
+      <if test="customerNameOcr != null" >
+        customer_name_ocr,
+      </if>
+      <if test="customerCretOcr != null" >
+        customer_cret_ocr,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerSex != null" >
+        #{customerSex,jdbcType=VARCHAR},
+      </if>
+      <if test="customerBirthday != null" >
+        #{customerBirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictCertType != null" >
+        #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertOrg != null" >
+        #{customerCertOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="idStartTimestamp != null" >
+        #{idStartTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idEndTimestamp != null" >
+        #{idEndTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerMobilePhone != null" >
+        #{customerMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompIndustry != null" >
+        #{dictCompIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNameOcr != null" >
+        #{customerNameOcr,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCretOcr != null" >
+        #{customerCretOcr,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.verify.entity.CustomerBase" >
+    update jk.t_jk_customer_base
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerSex != null" >
+        customer_sex = #{customerSex,jdbcType=VARCHAR},
+      </if>
+      <if test="customerBirthday != null" >
+        customer_birthday = #{customerBirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertOrg != null" >
+        customer_cert_org = #{customerCertOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="idStartTimestamp != null" >
+        id_start_timestamp = #{idStartTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idEndTimestamp != null" >
+        id_end_timestamp = #{idEndTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerMobilePhone != null" >
+        customer_mobile_phone = #{customerMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompIndustry != null" >
+        dict_comp_industry = #{dictCompIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNameOcr != null" >
+        customer_name_ocr = #{customerNameOcr,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCretOcr != null" >
+        customer_cret_ocr = #{customerCretOcr,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.verify.entity.CustomerBase" >
+    update jk.t_jk_customer_base
+    set id = #{id,jdbcType=NUMERIC},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      customer_sex = #{customerSex,jdbcType=VARCHAR},
+      customer_birthday = #{customerBirthday,jdbcType=TIMESTAMP},
+      dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      customer_cert_org = #{customerCertOrg,jdbcType=VARCHAR},
+      id_start_timestamp = #{idStartTimestamp,jdbcType=TIMESTAMP},
+      id_end_timestamp = #{idEndTimestamp,jdbcType=TIMESTAMP},
+      customer_mobile_phone = #{customerMobilePhone,jdbcType=VARCHAR},
+      dict_comp_industry = #{dictCompIndustry,jdbcType=VARCHAR},
+      customer_name_ocr = #{customerNameOcr,jdbcType=VARCHAR},
+      customer_cret_ocr = #{customerCretOcr,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

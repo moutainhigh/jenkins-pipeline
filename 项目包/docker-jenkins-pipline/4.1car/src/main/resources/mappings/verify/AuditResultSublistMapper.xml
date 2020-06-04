@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.AuditResultSublistDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.AuditResultSublist" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="r_audit_id" property="rAuditId" jdbcType="NUMERIC" />
+    <result column="refuse_first_code" property="refuseFirstCode" jdbcType="VARCHAR" />
+    <result column="refuse_second_code" property="refuseSecondCode" jdbcType="VARCHAR" />
+    <result column="refuse_third_code" property="refuseThirdCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, r_audit_id, refuse_first_code, refuse_second_code, refuse_third_code, create_time, create_by, modify_time, 
+    modify_by
+  </sql>
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.AuditResultSublist" >
+    insert into jk.t_jk_audit_result_sublist (id, r_audit_id, refuse_first_code, 
+      refuse_second_code, refuse_third_code, create_time, 
+      create_by, modify_time, modify_by
+      )
+    values (#{id,jdbcType=VARCHAR}, #{rAuditId,jdbcType=VARCHAR}, #{refuseFirstCode,jdbcType=VARCHAR}, 
+      #{refuseSecondCode,jdbcType=VARCHAR}, #{refuseThirdCode,jdbcType=VARCHAR}, 
+			#{createTime}, 
+			#{createBy}, 
+			#{modifyTime},
+      		#{modifyBy}
+      		
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.AuditResultSublist" >
+    insert into jk.t_jk_audit_result_sublist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rAuditId != null" >
+        r_audit_id,
+      </if>
+      <if test="refuseFirstCode != null" >
+        refuse_first_code,
+      </if>
+      <if test="refuseSecondCode != null" >
+        refuse_second_code,
+      </if>
+      <if test="refuseThirdCode != null" >
+        refuse_third_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="rAuditId != null" >
+        #{rAuditId,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseFirstCode != null" >
+        #{refuseFirstCode,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseSecondCode != null" >
+        #{refuseSecondCode,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseThirdCode != null" >
+        #{refuseThirdCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!-- 根据关联ID获取拒借码列表（审核结果表） -->
+  <select id="getByRid" resultType="com.creditharmony.approve.verify.entity.ex.AuditResultSublistEx" parameterType="java.lang.String">
+  	SELECT 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_audit_result_sublist
+    where r_audit_id = #{rId,jdbcType=NUMERIC}
+  </select>
+</mapper>

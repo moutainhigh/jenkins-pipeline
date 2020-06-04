@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditOccupationInfoDao">
+	
+	<insert id="saveData" parameterType="com.creditharmony.approve.credit.entity.CreditOccupationInfo">
+		INSERT INTO jk.t_jk_credit_occupation_info
+ 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			relation_id,
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			UNIT_NAME,
+			</if>
+			<if test="zipCode != null and zipCode != ''" >
+			ZIP_CODE,
+			</if>
+			<if test="unitIndustry != null and unitIndustry != ''" >
+			UNIT_INDUSTRY,
+			</if>
+			<if test="occupation != null and occupation != ''" >
+			OCCUPATION,
+			</if>
+			<if test="duties != null and duties != ''" >
+			DUTIES,
+			</if>
+			<if test="title != null and title != ''" >
+			TITLE,
+			</if>
+			<if test="annualIncome != null and annualIncome != ''" >
+			ANNUAL_INCOME,
+			</if>
+			<if test="startingYear != null and startingYear != ''" >
+			STARTING_YEAR,
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			GETINFO_TIME,
+			</if>
+			<if test="unitProvince != null and unitProvince != ''" >
+			UNIT_PROVINCE,
+			</if>
+			<if test="unitCity != null and unitCity != ''" >
+			UNIT_CITY,
+			</if>
+			<if test="unitArea != null and unitArea != ''" >
+			UNIT_AREA,
+			</if>
+			<if test="unitAddress != null and unitAddress != ''" >
+			UNIT_ADDRESS,
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			create_by,
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			create_time,
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by,
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time
+			</if> 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			#{relationId},
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			#{unitName},
+			</if>
+			<if test="zipCode != null and zipCode != ''" >
+			#{zipCode},
+			</if>
+			<if test="unitIndustry != null and unitIndustry != ''" >
+			#{unitIndustry},
+			</if>
+			<if test="occupation != null and occupation != ''" >
+			#{occupation},
+			</if>
+			<if test="duties != null and duties != ''" >
+			#{duties},
+			</if>
+			<if test="title != null and title != ''" >
+			#{title},
+			</if>
+			<if test="annualIncome != null and annualIncome != ''" >
+			#{annualIncome},
+			</if>
+			<if test="startingYear != null and startingYear != ''" >
+			#{startingYear},
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			#{getinfoTime},
+			</if>
+			<if test="unitProvince != null and unitProvince != ''" >
+			#{unitProvince},
+			</if>
+			<if test="unitCity != null and unitCity != ''" >
+			#{unitCity},
+			</if>
+			<if test="unitArea != null and unitArea != ''" >
+			#{unitArea},
+			</if>
+			<if test="unitAddress != null and unitAddress != ''" >
+			#{unitAddress},
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			#{createBy},
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			#{createTime},
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			#{modifyBy},
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			#{modifyTime}
+			</if> 
+		</trim>
+	</insert>
+	<!-- 根据条件获取数据 -->
+	<select id="getByParam" parameterType="java.lang.String" resultType="com.creditharmony.approve.credit.entity.CreditOccupationInfo">
+		select
+			id,
+			relation_id,
+			UNIT_NAME,
+			ZIP_CODE,
+			UNIT_INDUSTRY,
+			OCCUPATION,
+			DUTIES,
+			TITLE,
+			ANNUAL_INCOME,
+			STARTING_YEAR,
+			GETINFO_TIME,
+			UNIT_PROVINCE,
+			UNIT_CITY,
+			UNIT_AREA,
+			UNIT_ADDRESS
+		from
+			jk.t_jk_credit_occupation_info
+		where 
+			relation_id = #{relationId}
+		order by create_time
+	</select>
+	
+	<update id="updataById" parameterType="com.creditharmony.approve.credit.entity.CreditOccupationInfo">
+		update jk.t_jk_credit_occupation_info
+			<set >
+				<if test="id != null and id != ''" >
+				id=#{id},
+				</if> 
+				<if test="relationId != null and relationId != ''" >
+				relation_id = #{relationId},
+				</if>
+				<if test="unitName != null and unitName != ''" >
+				UNIT_NAME = #{unitName},
+				</if>
+				<if test="zipCode != null and zipCode != ''" >
+				ZIP_CODE = #{zipCode},
+				</if>
+				<if test="unitIndustry != null and unitIndustry != ''" >
+				UNIT_INDUSTRY = #{unitIndustry},
+				</if>
+				<if test="occupation != null and occupation != ''" >
+				OCCUPATION = #{occupation},
+				</if>
+				<if test="duties != null and duties != ''" >
+				DUTIES = #{duties},
+				</if>
+				<if test="title != null and title != ''" >
+				TITLE = #{title},
+				</if>
+				<if test="annualIncome != null and annualIncome != ''" >
+				ANNUAL_INCOME = #{annualIncome},
+				</if>
+				<if test="startingYear != null and startingYear != ''" >
+				STARTING_YEAR = #{startingYear},
+				</if>
+				<if test="getinfoTime != null and getinfoTime != ''" >
+				GETINFO_TIME = #{getinfoTime},
+				</if>
+				<if test="unitProvince != null and unitProvince != ''" >
+				UNIT_PROVINCE = #{unitProvince},
+				</if>
+				<if test="unitCity != null and unitCity != ''" >
+				UNIT_CITY = #{unitCity},
+				</if>
+				<if test="unitArea != null and unitArea != ''" >
+				UNIT_AREA = #{unitArea},
+				</if>
+				<if test="unitAddress != null and unitAddress != ''" >
+				UNIT_ADDRESS = #{unitAddress},
+				</if>
+				<if test="createBy != null and createBy != ''" >
+				create_by = #{createBy},
+				</if> 
+				<if test="createTime != null and createTime != ''" >
+				create_time = #{createTime},
+				</if> 
+				<if test="modifyBy != null and modifyBy != ''" >
+				modify_by = #{modifyBy},
+				</if> 
+				<if test="modifyTime != null and modifyTime != ''" >
+				modify_time = #{modifyTime}
+				</if> 
+			</set>
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 删除数据 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditOccupationInfo" >
+		delete from jk.t_jk_credit_occupation_info
+		where id = #{id,jdbcType=NUMERIC}
+	</delete>
+	
+</mapper>

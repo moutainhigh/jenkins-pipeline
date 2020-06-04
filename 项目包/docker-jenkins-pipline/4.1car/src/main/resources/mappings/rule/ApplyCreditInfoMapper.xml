@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.rule.dao.ApplyCreditInfoDao" >  
+
+  <select id="getCreditInfo" resultType="com.creditharmony.approve.rule.applyengine.client.CreditInfo"
+  	 parameterType="java.util.Map" >
+  select 
+  		<!-- 祥版征信报告：贷记卡当前逾期期数   贷记卡或贷款当前逾期出现“2”及“2”以上-->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as currentOverdueGTTwoCardDetail
+		from 
+			(select count(de.id) as count 
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on de.id= one.relation_id
+			join jk.T_JK_CREDIT_CARD_DETAILED_TWO two on one.id=two.relation_id
+			where two.CURRENT_OVERDUE &gt;= 2 and de.loan_code=#{loanCode} 
+				and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag})
+			) ,
+		<!-- 祥版征信报告：贷款当前逾期期数    贷记卡或贷款当前逾期出现“2”及“2”以上-->					
+		(		
+		select (case when count &gt; 0 then 1 else 0 end) as currentOverdueGTTwoLoanDetail
+		from 
+			(select count(de.id) as count 
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on de.id= one.relation_id
+			join jk.T_JK_CREDIT_LOAN_DETAILED_TWO two on one.id=two.relation_id
+			where two.CURRENT_OVERDUE &gt;= 2 and de.loan_code=#{loanCode} 
+				and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag}) 
+		),
+		<!-- 祥版征信报告：贷款24个月内出现'3'及以上 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as overdueGTThreeLoanToYearDetail
+		from 
+			(select max(co)  as count
+			from (select count(cyc.id) as co,one.id 
+					from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('3','4','5','6','7')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) )		
+		),
+		<!-- 祥版征信报告：贷记卡24个月内出现'3'及以上 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as overdueGTThreeCardToYearDetail
+		from 
+			(select max(co) as count
+			from (select count(cyc.id) as co,one.id from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('3','4','5','6','7')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) )		
+		),		
+		<!-- 祥版征信报告：贷款24个月内单笔最大累计逾期次数 -->
+		(select max(co) as maxOverdueLoanToYearDetail
+			from (select count(cyc.id) as co,one.id 
+					from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) ),
+		<!-- 祥版征信报告：贷记卡24个月内单张最大累计逾期次数 -->
+		(select max(co) as maxOverdueCardToYearDetail
+			from (select count(cyc.id) as co,one.id from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) ),
+		<!--祥版征信报告：贷款24个月内总逾期次数 -->
+		(select count(cyc.id) as totalOverdueLoanToYearDetail
+			from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+			join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+			where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+				and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} ),
+		<!-- 祥版征信报告：贷记卡24个月内总逾期次数 -->
+		(select count(cyc.id) as totalOverdueCardToYearDetail
+			from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+			join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+			where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+				and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} ),		
+		<!-- 简版征信报告:状态为正常、逾期的贷记卡 5年内出现90天以上的逾期 jk_credit_cardinfo_accountstatus-->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as normalCardHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS in ('1','7') 
+				and credit.OVERDUE_FOR_NO &gt; 0 ) 	
+		),			
+		<!-- 简版征信报告：状态为正常、逾期的贷款 5年内出现90天以上的逾期 jk_credit_loaninfo_accountstatus-->	
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as normalLoanHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS in ('2','5') 
+				and loan.OVERDUE_FOR_NO &gt; 0)	
+		),
+		<!-- 简版征信报告：状态为销户的贷记卡，5年内出现90天以上的逾期 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as closedCardHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS='2' 
+				and credit.OVERDUE_FOR_NO &gt; 0 )
+		),
+		<!-- 简版征信报告：5年内有90天以上逾期的状态为销户的贷记卡，销户的时间距进件时间的最小月数
+			(如果销户信用卡5年内有90天以上逾期且月数小于12，进件引擎规则要求拒借，所以取最小数字) -->
+		(select 
+			min(	
+				extract(year from (age(info.CUSTOMER_INTO_TIME,credit.CANCELLATION_DAY)))*12 + 
+				extract(month from (age(info.CUSTOMER_INTO_TIME,credit.CANCELLATION_DAY)))
+			) as monthsFromCardCloseDateBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS='2'
+				and credit.OVERDUE_FOR_NO &gt; 0 ),	
+		<!-- 简版征信报告：状态为结清的贷款，5年内出现90天以上的逾期 -->	
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settledLoanHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='1' 
+				and loan.OVERDUE_FOR_NO &gt; 0 ) 
+		),
+		<!-- 简版征信报告：5年内出现90天以上的逾期的状态为结清的贷款，结清的时间距进件时间的最小月数
+			(如果结清贷款5年内有90天以上逾期且月数小于12，进件引擎规则要求拒借，所以取最小数字) -->	
+		(select 
+			min(
+				extract(year from (age(info.CUSTOMER_INTO_TIME, loan.SETTLE_DAY)))*12 + 
+				extract(month from (age(info.CUSTOMER_INTO_TIME, loan.SETTLE_DAY)))
+			) as monthsFromLoanPayDateBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='1' 
+				and loan.OVERDUE_FOR_NO &gt; 0 ) ,				
+		<!-- 简版征信报告：状态为销户的贷记卡，5年内出现90天以上的逾期，且无新增授信记录 -->
+		(
+		select (case when count=0 and maxDate is not null then 1 else 0 end) as closedCardHasNoNewCreditBrief
+		from 
+			(select count(ci.id) as count, maxDate
+			from jk.T_JK_CREDIT_REPORT_SIMPLE rSi
+			join jk.T_JK_CREDIT_CARD_INFO ci on ci.relation_id=rSi.id
+			join (select max(CANCELLATION_DAY) as maxDate,relation_id from jk.T_JK_CREDIT_CARD_INFO 
+							where ACCOUNT_STATUS='2' and OVERDUE_FOR_NO &gt; 0 group by relation_id ) cc 
+						on cc.relation_id=rSi.id
+			where rSi.loan_code=#{loanCode} and rSi.r_customer_coborrower_id=#{customerId}
+				and rSi.del_flag=#{delFlag} and ci.ACCOUNT_STATUS !='2' 
+				and ci.ISSUE_DAY &gt;= cc.maxDate group by cc.maxDate )
+		), 
+		<!-- 简版征信报告：状态为结清的贷款，5年内出现90天以上的逾期，且无新增授信记录 -->		
+		(		
+		select (case when count=0 and maxDate is not null then 1 else 0 end) as settledLoanHasNoNewCreditBrief
+		from 
+			(select count(li.id) as count, maxDate
+				from jk.T_JK_CREDIT_REPORT_SIMPLE rSi
+				join jk.T_JK_CREDIT_LOAN_INFO li on li.relation_id=rSi.id
+				left join (select max(SETTLE_DAY) as maxDate,relation_id from jk.T_JK_CREDIT_LOAN_INFO 
+							where ACCOUNT_STATUS='1' and OVERDUE_FOR_NO &gt; 0 group by relation_id) 
+					ol on ol.relation_id=rSi.id
+			where rSi.loan_code=#{loanCode} and rSi.r_customer_coborrower_id=#{customerId}
+				and rSi.del_flag=#{delFlag} and  li.ACCOUNT_STATUS!='1' 
+				and li.ISSUE_DAY &gt;= ol.maxDate group by ol.maxDate)
+		),  
+		<!-- 简版征信报告：贷记卡5年内单张累计逾期次数 -->
+		(select max(credit.OVERDUE_NO) as maxOverdueCardBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag}  ),
+		<!-- 简版征信报告：贷款5年内单笔累计逾期次数 -->
+		(select max(loan.OVERDUE_NO) as maxOverdueLoanBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 简版征信报告：贷记卡5年内总逾期次数 -->
+		(select sum(credit.OVERDUE_NO) as totalOverdueCardBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 简版征信报告：贷款5年内总逾期次数 -->
+		(select sum(loan.OVERDUE_NO) as totalOverdueLoanBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 祥版征信报告:贷记卡或贷款五级分类出现“次级”、“可疑”、“损失” -->
+		<!-- 祥版征信报告:信用卡没有五级分类的字段 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanLevelHasCKSDetail
+		from 
+			(select count(de.id) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and one.LEVEL_CLASS in ('2','3','4'))
+		),
+		<!-- 祥版征信报告:贷记卡还款记录出现冻结、呆账、止付、“G”   -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as creditCycleHasDDZGDetail
+		from 
+			(select count(distinct(two.id)) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.relation_id=de.id 
+			join jk.T_JK_CREDIT_CARD_DETAILED_TWO two on two.relation_id=one.id
+			left join jk.T_JK_CREDIT_CYCLE_RECORD rec on rec.relation_id=one.id 
+				and relation_type='2'
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag}  
+				and (two.ACCOUNT_STATUS in ('4','5','6') or rec.cycle_value in ('D','G','Z')) )
+		),
+		<!-- 祥版征信报告:贷款还款记录出现“D”、“G”、“Z” -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanCycleHasDGZDetail
+		from 
+			(select count(distinct(one.id)) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			left join jk.T_JK_CREDIT_CYCLE_RECORD rec on rec.relation_id=one.id and relation_type='1'
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and rec.cycle_value in ('D','G','Z') )
+		),
+		<!-- 祥版征信报告:贷款出现呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanHasBadDebtsDetail
+		from 
+			(select count(de.id) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and one.ACCOUNT_STATUS='4' ) 
+		),
+		<!-- 简版征信报告：贷记卡还款记录出现止付、冻结、呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as cardHasBadDebtBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS in ('4','5','6') )
+		) ,	
+		<!-- 简版征信报告：贷款出现呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanHasBadDebtBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='4' ) 
+		) 	
+		<!-- 企业征信：未结清授信五级分类出现次级、可疑、损失 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as unSettleCompanyLoanLevelHasCKS
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_UNCLEARED_IMPROPER_LOAN 
+			where loan_code=#{loanCode} and DICT_LEVEL_CLASS in ('2','3','4'))
+		),	
+		 -->
+		<!-- 企业征信：已结清授信五级分类出现关注、次级、可疑、损失，且无新增授信 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settleCompanyLoanLevelHasGCKS
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_PAID_LOAN 
+			where loan_code=#{loanCode} and DICT_LEVEL_CLASS in ('1','2','3','4'))
+		),	
+		 -->
+		<!-- 企业征信：未结清授信出现垫款 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as unSettleCompanyLoanHasDDZ
+		from 
+			(select sum(transaction_count) as count
+			from jk.T_JK_CREDIT_CURRENT_LIABILITY_INFO 
+			where loan_code=#{loanCode} and sort in (3) )
+		)
+		 -->
+		<!-- 企业征信：已结清授信出现垫款、担保代偿、由资产管理公司处置等，且无新增授信 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settleCompanyLoanHasDDZ
+		from 
+			(select sum(transaction_count) as count
+			from jk.T_JK_CREDIT_CREDIT_CLEARED_INFO 
+			where loan_code=#{loanCode} and sort in (1,3) )
+		),
+		 -->	
+		<!-- 企业征信：对外担保授信出现不良 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as externalVouchHasBadRating
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_EXTERNAL_SECURITY_INFO
+			where loan_code=#{loanCode} and BADNESS_BALANCE &gt; 0 )
+		)
+		 -->
+		<!--
+		,	
+		-->
+		<!-- 个人征信：查询记录中有“司法调查”且距进件时间在3个月之内	 -->
+		<!--
+		(
+		select (case when lawQueryCountSi + lawQueryCountDe  &gt;  0 then 1 else 0 end) as lawQueryWithinThreeMonths			
+			from (select count(rec.id) as lawQueryCountSi 
+					from jk.T_JK_CREDIT_QUERY_RECORD rec 
+					join jk.T_JK_CREDIT_REPORT_SIMPLE si on rec.relation_id=si.id
+					join jk.t_jk_loan_info info on info.loan_code=si.loan_code
+					where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+						and si.del_flag=#{delFlag} and rec.query_type='司法调查' 
+						and rec.QUERY_DAY &gt; (info.customer_into_time-90) ),	
+				 (select count(1) as lawQueryCountDe
+					from jk.T_JK_CREDIT_QUERY_RECORD rec 
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on rec.relation_id=de.id
+					join jk.t_jk_loan_info info on info.loan_code=de.loan_code
+					where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag} and rec.query_type='司法调查' 
+						and rec.QUERY_DAY &gt; (info.customer_into_time-90) )
+		)	
+		-->
+		<!-- 个人征信：出现”强制执行信息”显示未结案，且无新增授信 -->
+		<!--
+		(select count(1) 
+			from jk.T_JK_ENFORCEMENT_RECO rec
+			join jk.T_JK_CREDIT_REPORT_SIMPLE si on rec.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+					and si.del_flag=#{delFlag} and rec.DICT_LAW_CASE_STATE='未结案' )
+		-->
+  </select>
+  <select id="getCreditInfoNew" resultType="com.creditharmony.approve.rule.applyengine.client.CreditInfo"
+  	 parameterType="java.util.Map" >
+  select 
+  		<!-- 祥版征信报告：贷记卡当前逾期期数   贷记卡或贷款当前逾期出现“2”及“2”以上-->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as currentOverdueGTTwoCardDetail
+		from 
+			(select count(de.id) as count 
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on de.id= one.relation_id
+			join jk.T_JK_CREDIT_CARD_DETAILED_TWO two on one.id=two.relation_id
+			where two.CURRENT_OVERDUE &gt;= 2 and de.loan_code=#{loanCode} 
+				and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag})
+			) ,
+		<!-- 祥版征信报告：贷款当前逾期期数    贷记卡或贷款当前逾期出现“2”及“2”以上-->					
+		(		
+		select (case when count &gt; 0 then 1 else 0 end) as currentOverdueGTTwoLoanDetail
+		from 
+			(select count(de.id) as count 
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on de.id= one.relation_id
+			join jk.T_JK_CREDIT_LOAN_DETAILED_TWO two on one.id=two.relation_id
+			where two.CURRENT_OVERDUE &gt;= 2 and de.loan_code=#{loanCode} 
+				and de.r_customer_coborrower_id=#{customerId} and de.del_flag=#{delFlag}) 
+		),
+		<!-- 祥版征信报告：贷款24个月内出现'3'及以上 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as overdueGTThreeLoanToYearDetail
+		from 
+			(select max(co)  as count
+			from (select count(cyc.id) as co,one.id 
+					from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('3','4','5','6','7')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) )		
+		),
+		<!-- 祥版征信报告：贷记卡24个月内出现'4'及以上 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as overdueGTThreeCardToYearDetail
+		from 
+			(select max(co) as count
+			from (select count(cyc.id) as co,one.id from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('4','5','6','7')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) )		
+		),		
+		<!-- 祥版征信报告：贷款24个月内单笔最大累计逾期次数 -->
+		(select max(co) as maxOverdueLoanToYearDetail
+			from (select count(cyc.id) as co,one.id 
+					from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) ),
+		<!-- 祥版征信报告：贷记卡24个月内单张最大累计逾期次数 -->
+		(select max(co) as maxOverdueCardToYearDetail
+			from (select count(cyc.id) as co,one.id from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+					join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+					where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+						and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}
+						group by one.id) ),
+		<!--祥版征信报告：贷款24个月内总逾期次数 -->
+		(select count(cyc.id) as totalOverdueLoanToYearDetail
+			from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.id=cyc.relation_id
+			join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+			where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+				and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} ),
+		<!-- 祥版征信报告：贷记卡24个月内总逾期次数 -->
+		(select count(cyc.id) as totalOverdueCardToYearDetail
+			from jk.T_JK_CREDIT_CYCLE_RECORD cyc
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.id=cyc.relation_id
+			join jk.T_JK_CREDIT_REPORT_DETAILED de on de.id=one.relation_id
+			where cyc.cycle_value in ('1','2','3','4','5','6','7','Z','D','G')
+				and de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} ),		
+		<!-- 简版征信报告:状态为正常、逾期的贷记卡 5年内出现90天以上的逾期 jk_credit_cardinfo_accountstatus-->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as normalCardHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS in ('1','7') 
+				and credit.OVERDUE_FOR_NO &gt; 1 ) 	
+		),			
+		<!-- 简版征信报告：状态为正常、逾期的贷款 5年内出现90天以上的逾期 jk_credit_loaninfo_accountstatus-->	
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as normalLoanHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS in ('2','5') 
+				and loan.OVERDUE_FOR_NO &gt; 0)	
+		),
+		<!-- 简版征信报告：状态为销户的贷记卡，5年内出现90天以上的逾期 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as closedCardHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS='2' 
+				and credit.OVERDUE_FOR_NO &gt; 0 )
+		),
+		<!-- 简版征信报告：5年内有90天以上逾期的状态为销户的贷记卡，销户的时间距进件时间的最小月数
+			(如果销户信用卡5年内有90天以上逾期且月数小于12，进件引擎规则要求拒借，所以取最小数字) -->
+		(select 
+			min(	
+				extract(year from (age(si.QUERY_TIME,credit.CANCELLATION_DAY)))*12 + 
+				extract(month from (age(si.QUERY_TIME,credit.CANCELLATION_DAY)))
+			) as monthsFromCardCloseDateBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS='2'
+				and credit.OVERDUE_FOR_NO &gt; 0 ),	
+		<!-- 简版征信报告：状态为结清的贷款，5年内出现90天以上的逾期 -->	
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settledLoanHasMaxOverdueBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			join jk.t_jk_loan_info info on info.loan_code=si.loan_code 
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='1' 
+				and loan.OVERDUE_FOR_NO &gt; 0 ) 
+		),
+		<!-- 简版征信报告：5年内出现90天以上的逾期的状态为结清的贷款，结清的时间距进件时间的最小月数
+			(如果结清贷款5年内有90天以上逾期且月数小于12，进件引擎规则要求拒借，所以取最小数字) -->	
+		(select 
+			min(
+				extract(year from (age(si.QUERY_TIME, loan.SETTLE_DAY)))*12 + 
+				extract(month from (age(si.QUERY_TIME, loan.SETTLE_DAY)))
+			) as monthsFromLoanPayDateBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='1' 
+				and loan.OVERDUE_FOR_NO &gt; 0 ) ,				
+		<!-- 简版征信报告：状态为销户的贷记卡，5年内出现90天以上的逾期，且无新增授信记录 -->
+		(
+		select (case when count=0 and maxDate is not null then 1 else 0 end) as closedCardHasNoNewCreditBrief
+		from 
+			(select count(ci.id) as count, maxDate
+			from jk.T_JK_CREDIT_REPORT_SIMPLE rSi
+			join jk.T_JK_CREDIT_CARD_INFO ci on ci.relation_id=rSi.id
+			join (select max(CANCELLATION_DAY) as maxDate,relation_id from jk.T_JK_CREDIT_CARD_INFO 
+							where ACCOUNT_STATUS='2' and OVERDUE_FOR_NO &gt; 0 group by relation_id ) cc 
+						on cc.relation_id=rSi.id
+			where rSi.loan_code=#{loanCode} and rSi.r_customer_coborrower_id=#{customerId}
+				and rSi.del_flag=#{delFlag} and ci.ACCOUNT_STATUS !='2' 
+				and ci.ISSUE_DAY &gt;= cc.maxDate group by cc.maxDate )
+		), 
+		<!-- 简版征信报告：状态为结清的贷款，5年内出现90天以上的逾期，且无新增授信记录 -->		
+		(		
+		select (case when count=0 and maxDate is not null then 1 else 0 end) as settledLoanHasNoNewCreditBrief
+		from 
+			(select count(li.id) as count, maxDate
+				from jk.T_JK_CREDIT_REPORT_SIMPLE rSi
+				join jk.T_JK_CREDIT_LOAN_INFO li on li.relation_id=rSi.id
+				left join (select max(SETTLE_DAY) as maxDate,relation_id from jk.T_JK_CREDIT_LOAN_INFO 
+							where ACCOUNT_STATUS='1' and OVERDUE_FOR_NO &gt; 0 group by relation_id) 
+					ol on ol.relation_id=rSi.id
+			where rSi.loan_code=#{loanCode} and rSi.r_customer_coborrower_id=#{customerId}
+				and rSi.del_flag=#{delFlag} and  li.ACCOUNT_STATUS!='1' 
+				and li.ISSUE_DAY &gt;= ol.maxDate group by ol.maxDate)
+		),  
+		<!-- 简版征信报告：贷记卡5年内单张累计逾期次数 -->
+		(select max(credit.OVERDUE_NO) as maxOverdueCardBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag}  ),
+		<!-- 简版征信报告：贷款5年内单笔累计逾期次数 -->
+		(select max(loan.OVERDUE_NO) as maxOverdueLoanBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 简版征信报告：贷记卡5年内总逾期次数 -->
+		(select sum(credit.OVERDUE_NO) as totalOverdueCardBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 简版征信报告：贷款5年内总逾期次数 -->
+		(select sum(loan.OVERDUE_NO) as totalOverdueLoanBrief
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} ),
+		<!-- 祥版征信报告:贷记卡或贷款五级分类出现“次级”、“可疑”、“损失” -->
+		<!-- 祥版征信报告:信用卡没有五级分类的字段 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanLevelHasCKSDetail
+		from 
+			(select count(de.id) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and one.LEVEL_CLASS in ('2','3','4'))
+		),
+		<!-- 祥版征信报告:贷记卡还款记录出现冻结、呆账、止付、“G”   -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as creditCycleHasDDZGDetail
+		from 
+			(select count(distinct(two.id)) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_CARD_DETAILED_ONE one on one.relation_id=de.id 
+			join jk.T_JK_CREDIT_CARD_DETAILED_TWO two on two.relation_id=one.id
+			left join jk.T_JK_CREDIT_CYCLE_RECORD rec on rec.relation_id=one.id 
+				and relation_type='2'
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag}  
+				and (two.ACCOUNT_STATUS in ('4','5','6') or rec.cycle_value in ('D','G','Z')) )
+		),
+		<!-- 祥版征信报告:贷款还款记录出现“D”、“G”、“Z” -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanCycleHasDGZDetail
+		from 
+			(select count(distinct(one.id)) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			left join jk.T_JK_CREDIT_CYCLE_RECORD rec on rec.relation_id=one.id and relation_type='1'
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and rec.cycle_value in ('D','G','Z') )
+		),
+		<!-- 祥版征信报告:贷款出现呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanHasBadDebtsDetail
+		from 
+			(select count(de.id) as count
+			from jk.T_JK_CREDIT_REPORT_DETAILED de 
+			join jk.T_JK_CREDIT_LOAN_DETAILED_ONE one on one.relation_id=de.id 
+			where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+				and de.del_flag=#{delFlag} and one.ACCOUNT_STATUS='4' ) 
+		),
+		<!-- 简版征信报告：贷记卡还款记录出现止付、冻结、呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as cardHasBadDebtBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_CARD_INFO credit on credit.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and credit.ACCOUNT_STATUS in ('4','5','6') )
+		) ,	
+		<!-- 简版征信报告：贷款出现呆账 -->
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as loanHasBadDebtBrief
+		from 
+			(select count(si.id) as count
+			from jk.T_JK_CREDIT_REPORT_SIMPLE si 
+			join jk.T_JK_CREDIT_LOAN_INFO loan on loan.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+				and si.del_flag=#{delFlag} and loan.ACCOUNT_STATUS='4' ) 
+		) 	
+		<!-- 企业征信：未结清授信五级分类出现次级、可疑、损失 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as unSettleCompanyLoanLevelHasCKS
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_UNCLEARED_IMPROPER_LOAN 
+			where loan_code=#{loanCode} and DICT_LEVEL_CLASS in ('2','3','4'))
+		),	
+		 -->
+		<!-- 企业征信：已结清授信五级分类出现关注、次级、可疑、损失，且无新增授信 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settleCompanyLoanLevelHasGCKS
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_PAID_LOAN 
+			where loan_code=#{loanCode} and DICT_LEVEL_CLASS in ('1','2','3','4'))
+		),	
+		 -->
+		<!-- 企业征信：未结清授信出现垫款 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as unSettleCompanyLoanHasDDZ
+		from 
+			(select sum(transaction_count) as count
+			from jk.T_JK_CREDIT_CURRENT_LIABILITY_INFO 
+			where loan_code=#{loanCode} and sort in (3) )
+		)
+		 -->
+		<!-- 企业征信：已结清授信出现垫款、担保代偿、由资产管理公司处置等，且无新增授信 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as settleCompanyLoanHasDDZ
+		from 
+			(select sum(transaction_count) as count
+			from jk.T_JK_CREDIT_CREDIT_CLEARED_INFO 
+			where loan_code=#{loanCode} and sort in (1,3) )
+		),
+		 -->	
+		<!-- 企业征信：对外担保授信出现不良 -->
+		<!-- 
+		(
+		select (case when count &gt; 0 then 1 else 0 end) as externalVouchHasBadRating
+		from 
+			(select count(id) as count
+			from jk.T_JK_CREDIT_EXTERNAL_SECURITY_INFO
+			where loan_code=#{loanCode} and BADNESS_BALANCE &gt; 0 )
+		)
+		 -->
+		<!--
+		,	
+		-->
+		<!-- 个人征信：查询记录中有“司法调查”且距进件时间在3个月之内	 -->
+		<!--
+		(
+		select (case when lawQueryCountSi + lawQueryCountDe  &gt;  0 then 1 else 0 end) as lawQueryWithinThreeMonths			
+			from (select count(rec.id) as lawQueryCountSi 
+					from jk.T_JK_CREDIT_QUERY_RECORD rec 
+					join jk.T_JK_CREDIT_REPORT_SIMPLE si on rec.relation_id=si.id
+					join jk.t_jk_loan_info info on info.loan_code=si.loan_code
+					where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+						and si.del_flag=#{delFlag} and rec.query_type='司法调查' 
+						and rec.QUERY_DAY &gt; (info.customer_into_time-90) ),	
+				 (select count(1) as lawQueryCountDe
+					from jk.T_JK_CREDIT_QUERY_RECORD rec 
+					join jk.T_JK_CREDIT_REPORT_DETAILED de on rec.relation_id=de.id
+					join jk.t_jk_loan_info info on info.loan_code=de.loan_code
+					where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag} and rec.query_type='司法调查' 
+						and rec.QUERY_DAY &gt; (info.customer_into_time-90) )
+		)	
+		-->
+		<!-- 个人征信：出现”强制执行信息”显示未结案，且无新增授信 -->
+		<!--
+		(select count(1) 
+			from jk.T_JK_ENFORCEMENT_RECO rec
+			join jk.T_JK_CREDIT_REPORT_SIMPLE si on rec.relation_id=si.id
+			where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId} 
+					and si.del_flag=#{delFlag} and rec.DICT_LAW_CASE_STATE='未结案' )
+		-->
+  </select>  
+</mapper>

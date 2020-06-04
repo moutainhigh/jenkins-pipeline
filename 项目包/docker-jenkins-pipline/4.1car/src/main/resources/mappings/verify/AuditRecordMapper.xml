@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.AuditRecordDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.AuditRecord" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="dict_loan_status" property="dictLoanStatus" jdbcType="VARCHAR" />
+    <result column="transactor_code" property="transactorCode" jdbcType="VARCHAR" />
+    <result column="transactor_time" property="transactorTime" jdbcType="TIMESTAMP" /> 
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="operate_step" property="operateStep" jdbcType="TIMESTAMP" />
+    <result column="operate_result" property="operateResult" jdbcType="VARCHAR" />
+    <result column="refuse_reason" property="refuseReason" jdbcType="TIMESTAMP" />
+  </resultMap>
+  	<!-- 获取关联的审核记录表的id -->
+<select id="findId" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT ID FROM JK.T_JK_AUDIT_RECORD 
+	WHERE TRANSACTOR_CODE = #{0} AND LOAN_CODE=#{1}
+	ORDER BY CREATE_TIME DESC LIMIT 1
+</select>
+  <update id="update" parameterType="com.creditharmony.approve.verify.entity.AuditRecord">
+  	UPDATE JK.T_JK_AUDIT_RECORD
+  	<set>
+  	  	<if test="orgCode != null">
+  			org_code =#{orgCode},
+  		</if>
+  	  	<if test="transactorCode != null">
+  			TRANSACTOR_CODE =#{transactorCode},
+  		</if>
+  	  	<if test="refuseReason != null">
+  			REFUSE_REASON =#{refuseReason},
+  		</if>
+  		<if test="operateResult != null">
+  			OPERATE_RESULT =#{operateResult},
+  		</if>
+  		<if test="operateStep != null">
+  			OPERATE_STEP =#{operateStep},
+  		</if>
+  	   <if test="dictLoanStatus != null">
+  			DICT_LOAN_STATUS =#{dictLoanStatus},
+  		</if>
+  		<if test="transactorTime != null">
+  			TRANSACTOR_TIME =#{transactorTime},
+  		</if>
+  		<if test="modifyBy != null">
+  			MODIFY_BY =#{modifyBy},
+  		</if>
+  		<if test="modifyTime != null">
+  			MODIFY_TIME =#{modifyTime},
+  		</if>
+  	</set>
+  	WHERE id=#{id}
+  </update>
+  <insert id="insertAuditRecord" parameterType="com.creditharmony.approve.verify.entity.AuditRecord" >
+    INSERT INTO JK.T_JK_AUDIT_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     <if test="refuseReason != null" >
+       refuse_reason,
+      </if>
+      <if test="operateResult != null" >
+        operate_result,
+      </if>
+       <if test="operateStep != null" >
+        operate_step,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status,
+      </if>
+      <if test="transactorCode != null" >
+        transactor_code,
+      </if>
+      <if test="transactorTime != null" >
+        transactor_time,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+       <if test="refuseReason != null" >
+        #{refuseReason,jdbcType=NUMERIC},
+      </if>
+       <if test="operateResult != null" >
+        #{operateResult,jdbcType=NUMERIC},
+      </if>
+       <if test="operateStep != null" >
+        #{operateStep,jdbcType=NUMERIC},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="transactorCode != null" >
+        #{transactorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transactorTime != null" >
+        #{transactorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

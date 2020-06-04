@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.AdviseAmountDao" >
+  
+  <!-- 电话照会本人核实 -->
+  <resultMap id="DhzhBrhsMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="id" property="rBrhsId" jdbcType="VARCHAR" />  
+    <result column="loan_apply_amount" property="loanApplyAmount" jdbcType="NUMERIC" />
+    <result column="brhs_loan_quota" property="brhsLoanQuota" jdbcType="NUMERIC" />
+    <result column="brhs_month_repay_amount" property="brhsMonthRepayAmount" jdbcType="NUMERIC" />
+    <result column="other_month_input" property="otherMonthInput" jdbcType="NUMERIC" />
+    <result column="family_month_output" property="familyMonthOutput" jdbcType="NUMERIC" />
+    <result column="dict_comp_industry" property="dictCompIndustry" jdbcType="VARCHAR" />
+    <result column="dict_comp_industry_second" property="dictCompIndustrySecond" jdbcType="VARCHAR" />
+    <result column="dict_unit_province" property="dictUnitProvince" jdbcType="VARCHAR" />
+    <result column="dict_unit_city" property="dictUnitCity" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询电话照会本人核实 -->
+  <select id="selectDhzhBrhs" resultMap="DhzhBrhsMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+	select 
+		d.id,
+		l.loan_apply_amount,
+		d.brhs_loan_quota,
+		d.brhs_month_repay_amount,
+		d.other_month_input,
+		d.family_month_output,
+		d.dict_comp_industry,
+		d.dict_comp_industry_second,
+		d.dict_unit_province,
+		d.dict_unit_city
+ 	from jk.t_jk_dhzh_brhs d
+ 	left join jk.t_jk_loan_info l
+		on l.loan_code = d.loan_code
+	where d.loan_code = #{loanCode}
+		and d.r_customer_coborrower_id = #{rCustomerCoborrowerId}
+		and d.dict_customer_type = #{dictCustomerType}
+		and d.dict_check_type = #{dictCheckType}
+  </select> 
+  
+  <!-- 最终批借期数、大纲上线 -->
+  <resultMap id="AuditResultMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="audit_months" property="auditMonths" jdbcType="NUMERIC" />
+    <result column="limit_upper" property="limitUpper" jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <!-- 查询最终审核结果 -->
+  <select id="selectAuditResult" resultMap="AuditResultMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select a.audit_months, p.limit_upper
+  	from jk.t_jk_audit_result a
+  	left join t_gl_jk_product p
+  	on a.product_type = p.product_code
+  	where 
+  		1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+  		order by a.create_time 
+  		desc limit 0,1
+  </select>
+  
+    <!-- 大纲上线 -->
+  <resultMap id="LimitUpperMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="limit_upper" property="limitUpper" jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <!-- 查询大纲上线 -->
+  <select id="selectLimitUpper" resultMap="LimitUpperMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select p.limit_upper
+  	from t_gl_jk_product p
+  	where
+  		p.product_code = #{productCode}
+  </select>
+  
+  <!-- 资料审核 -->
+  <resultMap id="SumAccountMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="sumAccount" property="sumAccount" jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <!-- 查询资料审核-流水(工资流水、常储流水、对公流水) -->
+  <select id="selectAccountMonthWage" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(account_month_wage) as sumAccount
+  	from jk.t_jk_zlsh_loan_account
+  	where loan_Code = #{loanCode}
+  		and r_customer_coborrower_id = #{rCustomerCoborrowerId}
+  		and dict_check_type = #{dictCheckType}
+  		and dict_account_type = #{dictAccountType}
+ 		<if test="accountFlowMark != null and accountFlowMark != ''">
+		and account_flow_mark = #{accountFlowMark}
+		</if>
+  </select>
+
+  <!-- 查询资料审核-个人或对公流水-同业月供 -->
+  <select id="selectMonthUseMoney" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(month_use_money) as sumAccount
+  	from jk.t_jk_zlsh_loan_account
+  	where loan_Code = #{loanCode}
+  		and r_customer_coborrower_id = #{rCustomerCoborrowerId}
+  		and dict_check_type = #{dictCheckType}
+  		and dict_account_type = #{dictAccountType}
+  		and other_loan_mark = #{otherLoanMark}
+  </select>
+  
+  <!-- 个人征信 -->
+  <resultMap id="CreditReportMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="id" property="relationId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询个人征信-版本-简版、详版 -->
+  <select id="selectCreditReportVersion" resultType="java.lang.String" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select risk_credit_version
+  	from jk.t_jk_credit_risk
+  	where loan_Code = #{loanCode}
+  		and dict_customer_type = #{dictCustomerType}
+  		and dict_check_type = #{dictCheckType}
+  </select>  
+  
+  <!-- 查询个人征信-简版-id -->
+  <select id="selectCreditReportSimpleId" resultMap="CreditReportMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select id
+  	from jk.t_jk_credit_report_simple
+  	where loan_Code = #{loanCode}
+  		and r_customer_coborrower_id = #{rCustomerCoborrowerId}
+  		and dict_customer_type = #{dictCustomerType}
+  </select>
+  
+  <!-- 查询个人征信-详版-id -->
+  <select id="selectCreditReportDetailedId" resultMap="CreditReportMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select id
+  	from jk.t_jk_credit_report_detailed
+  	where loan_Code = #{loanCode}
+  		and r_customer_coborrower_id = #{rCustomerCoborrowerId}
+  		and dict_customer_type = #{dictCustomerType}
+  </select>
+  
+  <!-- 查询-简版征信-信用卡-已使用额度之和 （未激活、销户、冻结、呆账、止付）-->
+  <select id="selectUsedLimit" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(used_limit) as sumAccount
+  	from jk.t_jk_credit_card_info
+  	where relation_id = #{relationId}
+  		and account_status not in ('2','3','4','5','6')
+  		and currency = #{currency}
+  </select>
+  
+  <!-- 查询-简版征信-贷款-所有贷款合同金额/(到期日期-发放日期）之和  （结清、呆账）-->
+  <select id="selectConteactAmount" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(conteact_amount/(((abort_day-issue_day))/30)) as sumAccount
+  	from jk.t_jk_credit_loan_info
+  	where relation_id = #{relationId}
+  		and account_status not in ('1','4')
+  </select>
+  
+  <!-- 查询-详版征信-信用卡-所有“本月应还款金额”之和 （未激活、销户、冻结、呆账、止付）近24个月中还款状态有G  -->
+  <select id="selectCardShouldRepay" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(two.should_repay_amount) as sumAccount 
+	from jk.t_jk_credit_card_detailed_one one
+	left join  jk.t_jk_credit_card_detailed_two two
+		on one.id = two.relation_id 
+	where one.relation_id = #{relationId}
+		and one.id in (
+			select distinct r.relation_id 
+			from jk.t_jk_credit_cycle_record r
+			where r.relation_id in(
+				select a.id
+				from jk.t_jk_credit_card_detailed_one a
+				where a.relation_id = #{relationId}
+				)
+			and r.cycle_value not in ('G') 
+		)
+		
+		and two.account_status not in ('2','3','4','5','6') 
+		and one.currency = #{currency} 	
+  </select>
+  
+  
+  <!-- 查询-详版征信-贷款-贷款的所有“本月应还款金额  账户状态：结清、呆账 贷款五级分类：出现次级、可疑、损失 贷款近24个月中月还款状态有D、G、Z中的一种-->
+  <select id="selectLoanShouldRepay" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >	
+  	select sum(two.should_repay_amount) as sumAccount 
+	from jk.t_jk_credit_loan_detailed_one one
+	left join  jk.t_jk_credit_loan_detailed_two two
+		on one.id = two.relation_id
+	where one.relation_id = #{relationId} 
+		and one.account_status not in ('1','4') 
+		and one.level_class not in ('2','3','4') 
+		and one.currency = #{currency} 
+		and one.id in (
+				select distinct r.relation_id 
+				from jk.t_jk_credit_cycle_record r
+				where r.relation_id in(
+				select a.id
+				from jk.t_jk_credit_loan_detailed_one a
+				where a.relation_id = #{relationId}
+			)
+			and r.cycle_value not in ('D','G','Z')
+		)	
+  </select>
+  
+  <!-- 查询-电话照会中本人的所有“借款金额”/“借款期限”之和-->
+  <select id="selectJkjeLoanAmount" resultMap="SumAccountMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select sum(loan_amount/loan_months) as sumAccount
+  	from jk.t_jk_dhzh_brhs_jkje 
+  	where r_brhs_id = #{rBrhsId}
+  </select>
+  
+  <!-- 信审评分结果表 -->
+  <resultMap id="AuditRatingMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="verify_risk_level" property="verifyRiskLevel" jdbcType="VARCHAR" />
+    <result column="reconsider_risk_level" property="reconsiderRiskLevel" jdbcType="VARCHAR" />
+    <result column="apply_risk_level" property="applyRiskLevel" jdbcType="VARCHAR" />
+  </resultMap>
+	
+  <!-- 查询-信审评分结果表-风险等级-->
+  <select id="selectJkAuditRating" resultMap="AuditRatingMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select verify_risk_level,
+  		reconsider_risk_level,
+  		apply_risk_level
+  	from jk.t_jk_audit_rating 
+  	where loan_code = #{loanCode}
+  </select>	
+  
+  <!-- 产品总费率（%） -->
+  <resultMap id="ProductUsableRateMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="product_usable_rate" property="productUsableRate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询-产品总费率（%）-->
+  <select id="selectProductUsableRate" resultMap="ProductUsableRateMap" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select product_usable_rate
+  	from t_jk_coeff_refer
+	where months = #{auditMonths}
+		and risk_level = #{riskLevel}
+  </select>	
+  
+  <!-- 城市月均收入系数 -->
+  <resultMap id="CityIncomeCoefficientMap" type="com.creditharmony.approve.verify.entity.AdviseAmount" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="coefficient" property="cityIncomeCoefficient" jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <!-- 查询-城市月均收入系数 -->
+  <select id="selectCityIncomeCoefficient" resultType="com.creditharmony.approve.verify.entity.AdviseAmount" parameterType="com.creditharmony.approve.verify.entity.AdviseAmount" >
+  	select a.id, a.coefficient as cityIncomeCoefficient
+	from jk.t_jk_tel_audit_work b 
+	left join t_gl_city_income_coefficient a
+		on b.work_province = a.province_id
+		and b.work_city = a.city_id
+	where 1=1 
+		and loan_Code = #{loanCode}
+		and dict_customer_type = #{dictCustomerType}
+		and dict_check_type = #{dictCheckType} 
+		and r_customer_coborrower_id = #{rCustomerCoborrowerId} 
+		order by b.create_time 
+  </select>	
+	
+</mapper>

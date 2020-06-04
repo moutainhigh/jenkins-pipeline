@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.LoanCreditInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.LoanCreditInfo" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="credit_authorizer" property="creditAuthorizer" jdbcType="VARCHAR" />
+    <result column="dict_mortgage_type" property="dictMortgageType" jdbcType="VARCHAR" />
+    <result column="credit_mortgage_goods" property="creditMortgageGoods" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="VARCHAR" />
+    <result column="credit_work_quota" property="creditWorkQuota" jdbcType="NUMERIC" />
+    <result column="credit_months" property="creditMonths" jdbcType="NUMERIC" />
+    <result column="credit_surplus" property="creditSurplus" jdbcType="NUMERIC" />
+    <result column="credit_num" property="creditNum" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, credit_authorizer, dict_mortgage_type, credit_mortgage_goods, org_id, 
+    credit_work_quota, credit_months, credit_surplus, credit_num, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_loan_credit_info
+    where id = #{id,jdbcType=NUMERIC}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from jk.t_jk_loan_credit_info
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.LoanCreditInfo" >
+    insert into jk.t_jk_loan_credit_info (id, loan_code, credit_authorizer, 
+      dict_mortgage_type, credit_mortgage_goods, 
+      org_id, credit_work_quota, credit_months, 
+      credit_surplus, credit_num, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{creditAuthorizer,jdbcType=VARCHAR}, 
+      #{dictMortgageType,jdbcType=VARCHAR}, #{creditMortgageGoods,jdbcType=VARCHAR}, 
+      #{orgId,jdbcType=VARCHAR}, #{creditWorkQuota,jdbcType=NUMERIC}, #{creditMonths,jdbcType=NUMERIC}, 
+      #{creditSurplus,jdbcType=NUMERIC}, #{creditNum,jdbcType=NUMERIC}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.LoanCreditInfo" >
+    insert into jk.t_jk_loan_credit_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="creditAuthorizer != null" >
+        credit_authorizer,
+      </if>
+      <if test="dictMortgageType != null" >
+        dict_mortgage_type,
+      </if>
+      <if test="creditMortgageGoods != null" >
+        credit_mortgage_goods,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="creditWorkQuota != null" >
+        credit_work_quota,
+      </if>
+      <if test="creditMonths != null" >
+        credit_months,
+      </if>
+      <if test="creditSurplus != null" >
+        credit_surplus,
+      </if>
+      <if test="creditNum != null" >
+        credit_num,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditAuthorizer != null" >
+        #{creditAuthorizer,jdbcType=VARCHAR},
+      </if>
+      <if test="dictMortgageType != null" >
+        #{dictMortgageType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditMortgageGoods != null" >
+        #{creditMortgageGoods,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="creditWorkQuota != null" >
+        #{creditWorkQuota,jdbcType=NUMERIC},
+      </if>
+      <if test="creditMonths != null" >
+        #{creditMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="creditSurplus != null" >
+        #{creditSurplus,jdbcType=NUMERIC},
+      </if>
+      <if test="creditNum != null" >
+        #{creditNum,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.verify.entity.LoanCreditInfo" >
+    update jk.t_jk_loan_credit_info
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditAuthorizer != null" >
+        credit_authorizer = #{creditAuthorizer,jdbcType=VARCHAR},
+      </if>
+      <if test="dictMortgageType != null" >
+        dict_mortgage_type = #{dictMortgageType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditMortgageGoods != null" >
+        credit_mortgage_goods = #{creditMortgageGoods,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="creditWorkQuota != null" >
+        credit_work_quota = #{creditWorkQuota,jdbcType=NUMERIC},
+      </if>
+      <if test="creditMonths != null" >
+        credit_months = #{creditMonths,jdbcType=NUMERIC},
+      </if>
+      <if test="creditSurplus != null" >
+        credit_surplus = #{creditSurplus,jdbcType=NUMERIC},
+      </if>
+      <if test="creditNum != null" >
+        credit_num = #{creditNum,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.verify.entity.LoanCreditInfo" >
+    update jk.t_jk_loan_credit_info
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      credit_authorizer = #{creditAuthorizer,jdbcType=VARCHAR},
+      dict_mortgage_type = #{dictMortgageType,jdbcType=VARCHAR},
+      credit_mortgage_goods = #{creditMortgageGoods,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      credit_work_quota = #{creditWorkQuota,jdbcType=NUMERIC},
+      credit_months = #{creditMonths,jdbcType=NUMERIC},
+      credit_surplus = #{creditSurplus,jdbcType=NUMERIC},
+      credit_num = #{creditNum,jdbcType=NUMERIC},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+</mapper>

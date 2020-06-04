@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewCarCustomerDao" >
+  <!-- 获取客户信息 -->
+  <select id="findCustomerInfo" parameterType="java.lang.String" resultType="com.creditharmony.approve.newCar.entity.NewLoanCustomerEx" >
+	select 
+		a.customer_cert_num customerCertNum,
+		a.customer_code customerCode,
+		gd.label customerSex
+	from t_jk_loan_customer a
+	left join T_gl_dict gd on gd.value = a.customer_sex and gd.type = 'jk_sex'
+	where a.loan_code = #{loanCode, jdbcType=VARCHAR}
+  </select>
+</mapper>

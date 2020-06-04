@@ -1,0 +1,239 @@
+version: '2'
+services:
+  microservice-process-bairong-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 8001:8001/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-admin:
+    image: 10.150.33.104/microservice-uat/microservice-boss-admin:24
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-config-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7001:7001/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-website:
+    image: 10.150.33.104/microservice-uat/microservice-boss-website:0.0.1-SNAPSHOT
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.hostname_override: container_name
+  redis:
+    image: redis:alpine
+    stdin_open: true
+    volumes:
+    - /redis/data:/data
+    tty: true
+    ports:
+    - 6379:6379/tcp
+    command:
+    - redis-server
+    - --appendonly
+    - 'yes'
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=redis
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-boss-tenant:
+    image: 10.150.33.104/microservice-uat/microservice-boss-tenant:8
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-boss-oauth2-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 9001:9001/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-outside03:
+    image: rancher/external-service
+  microservice-outside02:
+    image: rancher/external-service
+  microservice-outside01:
+    image: rancher/external-service
+  microservice-process-security-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 8002:8002/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-tenant-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 9000:9000/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-oauth2:
+    image: 10.150.33.104/microservice-uat/microservice-boss-oauth2:2
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-boss-website-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 80:80/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-logs:
+    image: 10.150.33.104/microservice-uat/microservice-boss-logs:49
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-sleuth:
+    image: 10.150.33.104/microservice-uat/microservice-sleuth:6
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-boss-logs-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7004:7004/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-process-bairong:
+    image: 10.150.33.104/microservice-uat/microservice-process-bairong:1
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-process-security:
+    image: 10.150.33.104/microservice-uat/microservice-process-security:14
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-boss-apigateway:
+    image: 10.150.33.104/microservice-uat/microservice-boss-apigateway:15
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-hystrix-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7003:7003/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-sleuth-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7002:7002/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-boss-apigateway-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 9003:9003/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-outside-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    ports:
+    - 80:80/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: outside=true
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-hystrix:
+    image: 10.150.33.104/microservice-uat/microservice-hystrix:1
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-eureka-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 8761:8761/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: eureka-lb=eureka
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-config:
+    image: 10.150.33.104/microservice-uat/microservice-config:2
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.container.hostname_override: container_name
+  microservice-boss-admin-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 9002:9002/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-eureka:
+    image: 10.150.33.104/microservice-uat/microservice-eureka:2
+    volumes:
+    - /usr/local/tomcat/logs:/usr/local/tomcat/logs
+    - /docker/uat-microservice-log/:/home/
+    - /jprofiler9/:/jprofiler9/
+    labels:
+      io.rancher.scheduler.affinity:host_label: eureka-lb=eureka
+      io.rancher.container.hostname_override: container_name

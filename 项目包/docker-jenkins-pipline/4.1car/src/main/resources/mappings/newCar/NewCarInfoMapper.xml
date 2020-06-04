@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewCarLoanInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewCarLoanInfo" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="apply_id" property="applyId" jdbcType="VARCHAR" />
+    <result column="loan_customer_name" property="loanCustomerName" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="loan_apply_amount" property="loanApplyAmount" jdbcType="NUMERIC" />
+    <result column="dict_product_type" property="dictProductType" jdbcType="VARCHAR" />
+    <result column="loan_months" property="loanMonths" jdbcType="SMALLINT" />
+    <result column="loan_apply_time" property="loanApplyTime" jdbcType="TIMESTAMP" />
+    <result column="mortgagee" property="mortgagee" jdbcType="VARCHAR" />
+    <result column="loan_authorizer" property="loanAuthorizer" jdbcType="VARCHAR" />
+    <result column="parking_fee" property="parkingFee" jdbcType="DOUBLE" />
+    <result column="facility_charge" property="facilityCharge" jdbcType="DOUBLE" />
+    <result column="dict_settle_relend" property="dictSettleRelend" jdbcType="VARCHAR" />
+    <result column="dict_gps_remaining" property="dictGpsRemaining" jdbcType="VARCHAR" />
+    <result column="dict_is_gather_flow_fee" property="dictIsGatherFlowFee" jdbcType="VARCHAR" />
+    <result column="flow_fee" property="flowFee" jdbcType="DOUBLE" />
+    <result column="dict_loan_common_repayment_flag" property="dictLoanCommonRepaymentFlag" jdbcType="VARCHAR" />
+    <result column="dict_loan_use" property="dictLoanUse" jdbcType="VARCHAR" />
+    <result column="loan_back_top_status" property="loanBackTopStatus" jdbcType="VARCHAR" />
+    <result column="dict_loan_status" property="dictLoanStatus" jdbcType="VARCHAR" />
+    <result column="dict_repay_method" property="dictRepayMethod" jdbcType="VARCHAR" />
+    <result column="loan_additional_applyid" property="loanAdditionalApplyid" jdbcType="VARCHAR" />
+    <result column="dict_loan_flag" property="dictLoanFlag" jdbcType="VARCHAR" />
+    <result column="outside_flag" property="outsideFlag" jdbcType="VARCHAR" />
+    <result column="visit_flag" property="visitFlag" jdbcType="VARCHAR" />
+    <result column="loan_customer_service" property="loanCustomerService" jdbcType="VARCHAR" />
+    <result column="manager_code" property="managerCode" jdbcType="VARCHAR" />
+    <result column="cons_team_managercode" property="consTeamManagercode" jdbcType="VARCHAR" />
+    <result column="review_meet" property="reviewMeet" jdbcType="VARCHAR" />
+    <result column="stores_name" property="storesName" jdbcType="VARCHAR" />
+    <result column="dict_back_mestype" property="dictBackMestype" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="customer_into_time" property="customerIntoTime" jdbcType="TIMESTAMP" />
+    <result column="loan_audit_time" property="loanAuditTime" jdbcType="TIMESTAMP" />
+    <result column="conditional_through_flag" property="conditionalThroughFlag" jdbcType="TIMESTAMP" />
+    <result column="isextension" property="isextension" jdbcType="VARCHAR" />
+    <result column="extension_reason" property="extensionReason" jdbcType="VARCHAR" />
+    <result column="loan_rawcode" property="loanRawcode" jdbcType="VARCHAR" />
+    <result column="loan_flag" property="loanFlag" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictsourcetype" jdbcType="VARCHAR" />
+    <result column="queue_name" property="queueName" jdbcType="VARCHAR" />
+    <result column="first_service_charge_id" property="firstServiceChargeId" jdbcType="VARCHAR" />
+    <result column="first_service_tariffing_rate" property="firstServiceTariffingRate" jdbcType="NUMERIC" />
+    <association property="newInterviewInfo" column="li_loan_code" javaType="com.creditharmony.approve.newCar.entity.NewInterviewInfo" resultMap="aiiResult"/>
+  </resultMap>
+  
+  <resultMap id="aiiResult" type="com.creditharmony.approve.newCar.entity.NewInterviewInfo">
+	<id property="loanCode" column="aii_loan_code"/>
+	<result property="queryResultPhone" column="query_result_phone"/>
+	<result property="queryResult" column="query_result"/>
+	<result property="creditReport" column="credit_report"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    li.loan_code, li.id, apply_id, loan_customer_name, customer_code, loan_apply_amount, dict_product_type, 
+    loan_months, loan_apply_time, mortgagee, loan_authorizer, parking_fee, facility_charge, 
+    dict_settle_relend, dict_gps_remaining, dict_is_gather_flow_fee, flow_fee, dict_loan_common_repayment_flag, 
+    dict_loan_use, loan_back_top_status, dict_loan_status, dict_repay_method, loan_additional_applyid, 
+    dict_loan_flag, outside_flag, visit_flag, loan_customer_service, manager_code, cons_team_managercode, 
+    review_meet, stores_name, dict_back_mestype, li.remark, store_code, store_name, li.create_by, 
+    li.create_time, li.modify_by, li.modify_time, customer_into_time, loan_audit_time, conditional_through_flag,
+    isextension, extension_reason, loan_rawcode,loan_flag,li.dict_source_type,li.first_service_tariffing_rate,
+    li.first_service_charge_id,li.queue_name
+  </sql>
+  
+    <!-- 根据借款编码获得此借款编码的下的总借款期限等 -->
+  <select id="getSumData" parameterType="java.lang.String" resultType="com.creditharmony.approve.newCar.entity.NewCarLoanExtendExtraEx">
+  	WITH tab1 AS (
+		SELECT t1.* 
+		FROM t_cj_loan_info t1
+		WHERE t1.loan_code = #{loanCode,jdbcType=VARCHAR}
+		UNION ALL 
+		SELECT t2.*
+		FROM t_cj_loan_info t2
+		WHERE t2.loan_rawcode = #{loanCode,jdbcType=VARCHAR}
+	)
+	SELECT tab1.loan_months maxMonths, SUM(tab1.loan_months) OVER() totalLoanMonths, SUM(CASE WHEN tab1.isextension = '1' THEN 1 ELSE 0 END) OVER() totalExt
+	FROM tab1
+	ORDER BY tab1.loan_months DESC
+	LIMIT 1
+  </select>
+  
+  <!-- 根据借款状态获取汇诚取单数据 -->
+  <select id="getOrderByLoanStatus" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from jk.t_cj_loan_info li
+  	where li.dict_loan_status in
+  	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+          #{item}  
+	</foreach> 
+  	and (li.dict_loan_flag = '' or li.dict_loan_flag is null or li.dict_loan_flag ='0')
+  </select>
+  <!-- 根据借款applyid获取借款信息 -->
+  <select id="findByApplyId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select li.loan_code li_loan_code, ii.loan_code aii_loan_code, ii.query_result_phone, ii.query_result, ii.credit_report,
+    <include refid="Base_Column_List" />
+    from jk.t_cj_loan_info li
+    left join jk.t_cj_application_interview_info ii on ii.loan_code = li.loan_code
+    where li.apply_id = #{applyId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据借款编码获取借款信息 -->
+  <select id="findByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select li.loan_code li_loan_code, ii.loan_code aii_loan_code, ii.query_result_phone, ii.query_result, ii.credit_report,
+    p.product_name dict_product_type, u1.name manager_code, u2.name cons_team_managercode, 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_loan_info li
+    left join jk.t_cj_application_interview_info ii on ii.loan_code = li.loan_code
+    LEFT JOIN t_gl_jk_product p ON p.product_code = li.dict_product_type AND p.product_type = 'products_type_car_credit'
+    LEFT JOIN t_gl_user u1 ON u1.id = li.manager_code
+    LEFT JOIN t_gl_user u2 ON u2.id = li.cons_team_managercode
+    where li.loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="findByLoanCodeNew" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select li.loan_code li_loan_code, ii.loan_code aii_loan_code, ii.query_result_phone, ii.query_result, ii.credit_report,
+    li.dict_product_type, u1.name manager_code, u2.name cons_team_managercode, 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_loan_info li
+    left join jk.t_cj_application_interview_info ii on ii.loan_code = li.loan_code
+    LEFT JOIN t_gl_user u1 ON u1.id = li.manager_code
+    LEFT JOIN t_gl_user u2 ON u2.id = li.cons_team_managercode
+    where li.loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateLoanFlag" parameterType="com.creditharmony.approve.newCar.entity.NewCarLoanInfo">
+  	update jk.t_cj_loan_info
+  	<set>
+  	<if test="dictLoanFlag != null" >
+    	dict_loan_flag = #{dictLoanFlag,jdbcType=VARCHAR},
+    </if>
+ 	</set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}  
+  </update>
+  
+  <update id="updateQueueName" parameterType="com.creditharmony.approve.newCar.entity.NewCarLoanInfo">
+  	update jk.t_cj_loan_info
+  	<set> modify_by = #{createBy}
+  	<if test="queueName != null">
+  		,queue_name = #{queueName,jdbcType=VARCHAR},
+  	</if>
+  	</set>
+  	where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  
+    <!-- 根据借款编码更新借款信息 -->
+  <update id="update" parameterType="com.creditharmony.approve.newCar.entity.NewCarLoanInfo" >
+    update jk.t_cj_loan_info
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCustomerName != null" >
+        loan_customer_name = #{loanCustomerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        customer_code = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanApplyAmount != null" >
+        loan_apply_amount = #{loanApplyAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictProductType != null" >
+        dict_product_type = #{dictProductType,jdbcType=VARCHAR},
+      </if>
+      <if test="loanMonths != null" >
+        loan_months = #{loanMonths,jdbcType=SMALLINT},
+      </if>
+      <if test="loanApplyTime != null" >
+        loan_apply_time = #{loanApplyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mortgagee != null" >
+        mortgagee = #{mortgagee,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAuthorizer != null" >
+        loan_authorizer = #{loanAuthorizer,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingFee != null" >
+        parking_fee = #{parkingFee,jdbcType=DOUBLE},
+      </if>
+      <if test="facilityCharge != null" >
+        facility_charge = #{facilityCharge,jdbcType=DOUBLE},
+      </if>
+      <if test="dictSettleRelend != null" >
+        dict_settle_relend = #{dictSettleRelend,jdbcType=VARCHAR},
+      </if>
+      <if test="queueName != null" >
+        queue_name = #{queueName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictGpsRemaining != null" >
+        dict_gps_remaining = #{dictGpsRemaining,jdbcType=VARCHAR},
+      </if>
+      <if test="dictIsGatherFlowFee != null" >
+        dict_is_gather_flow_fee = #{dictIsGatherFlowFee,jdbcType=VARCHAR},
+      </if>
+      <if test="flowFee != null" >
+        flow_fee = #{flowFee,jdbcType=DOUBLE},
+      </if>
+      <if test="dictLoanCommonRepaymentFlag != null" >
+        dict_loan_common_repayment_flag = #{dictLoanCommonRepaymentFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanUse != null" >
+        dict_loan_use = #{dictLoanUse,jdbcType=VARCHAR},
+      </if>
+      <if test="loanBackTopStatus != null" >
+        loan_back_top_status = #{loanBackTopStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status = #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRepayMethod != null" >
+        dict_repay_method = #{dictRepayMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAdditionalApplyid != null" >
+        loan_additional_applyid = #{loanAdditionalApplyid,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanFlag != null" >
+        dict_loan_flag = #{dictLoanFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="outsideFlag != null" >
+        outside_flag = #{outsideFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="visitFlag != null" >
+        visit_flag = #{visitFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCustomerService != null" >
+        loan_customer_service = #{loanCustomerService,jdbcType=VARCHAR},
+      </if>
+      <if test="managerCode != null" >
+        manager_code = #{managerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consTeamManagercode != null" >
+        cons_team_managercode = #{consTeamManagercode,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewMeet != null" >
+        review_meet = #{reviewMeet,jdbcType=VARCHAR},
+      </if>
+      <if test="storesName != null" >
+        stores_name = #{storesName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictBackMestype != null" >
+        dict_back_mestype = #{dictBackMestype,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerIntoTime != null" >
+        customer_into_time = #{customerIntoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loanAuditTime != null" >
+        loan_audit_time = #{loanAuditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="conditionalThroughFlag != null" >
+        conditional_through_flag = #{conditionalThroughFlag,jdbcType=VARCHAR},
+      </if>
+       <if test="isextension != null" >
+        isextension = #{isextension,jdbcType=VARCHAR},
+      </if>
+      <if test="extensionReason != null" >
+        extension_reason = #{extensionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="loanRawcode != null" >
+        loan_rawcode = #{loanRawcode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanFlag != null" >
+        loan_flag = #{loanFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="firstServiceTariffingRate != null" >
+        first_service_tariffing_rate = #{firstServiceTariffingRate,jdbcType=NUMERIC},
+      </if>
+      <if test="deviceUsedFee != null" >
+        device_used_fee = #{deviceUsedFee,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

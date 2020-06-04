@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.EnterpriseCreditDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.EnterpriseCredit" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="credit_version" property="creditVersion" jdbcType="VARCHAR" />
+    <result column="loan_card_code" property="loanCardCode" jdbcType="VARCHAR" />
+    <result column="report_date" property="reportDate" jdbcType="DATE" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, credit_version, loan_card_code, report_date, create_by, create_time, modify_by, 
+    modify_time
+  </sql>
+  
+    <select id="selectEnterpriseCredit" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.EnterpriseCredit" >
+    SELECT  A.LOAN_CODE,A.CREDIT_VERSION, A.LOAN_CARD_CODE, A.REPORT_DATE,B.CUSTOMER_NAME AS customerName
+    FROM JK.T_JK_ENTERPRISE_CREDIT A
+    LEFT JOIN JK.T_JK_LOAN_CUSTOMER B ON A.LOAN_CODE = B.LOAN_CODE
+    WHERE A.LOAN_CODE = #{loanCode}
+  </select>
+  
+  <select id="selectByEnterpriseCredit" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.EnterpriseCredit" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_enterprise_credit
+    where loan_code = #{loanCode}
+  </select>
+
+  <insert id="insertEnterpriseCredit" parameterType="com.creditharmony.approve.credit.entity.EnterpriseCredit" >
+    insert into jk.t_jk_enterprise_credit (loan_code, credit_version, loan_card_code, 
+      report_date, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{loanCode,jdbcType=VARCHAR}, #{creditVersion,jdbcType=VARCHAR}, #{loanCardCode,jdbcType=VARCHAR}, 
+      #{reportDate,jdbcType=DATE}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.EnterpriseCredit" >
+    update jk.t_jk_enterprise_credit
+    <set >
+      <if test="creditVersion != null" >
+        credit_version = #{creditVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCardCode != null" >
+        loan_card_code = #{loanCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null" >
+        report_date = #{reportDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getByLoanCode" parameterType="com.creditharmony.approve.credit.entity.EnterpriseCredit">
+		select 
+			<include refid="Base_Column_List" />
+		from
+			jk.t_jk_enterprise_credit
+		where 
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+  
+  
+	<select id="getVersion" parameterType="java.lang.String" resultType="com.creditharmony.approve.credit.entity.EnterpriseCredit">
+		select 
+			b.label as credit_version, 
+			a.loan_card_code, 
+			a.report_date
+		from
+			jk.t_jk_enterprise_credit a
+		left join
+			jk.t_gl_dict b
+		on a.credit_version = b.value and b.type='jk_enterprise_risk_type'
+		where 
+			a.loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+  
+  
+  
+</mapper>

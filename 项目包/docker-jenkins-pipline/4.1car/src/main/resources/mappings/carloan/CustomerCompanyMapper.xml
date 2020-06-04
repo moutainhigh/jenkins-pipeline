@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CustomerCompanyDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.CustomerCompany" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_code" property="rCustomerCoborrowerCode" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="dict_company_province" property="dictCompanyProvince" jdbcType="VARCHAR" />
+    <result column="dict_company_city" property="dictCompanyCity" jdbcType="VARCHAR" />
+    <result column="dict_company_area" property="dictCompanyArea" jdbcType="VARCHAR" />
+    <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
+    <result column="dict_department" property="dictDepartment" jdbcType="VARCHAR" />
+    <result column="established_time" property="establishedTime" jdbcType="DATE" />
+    <result column="work_telephone" property="workTelephone" jdbcType="VARCHAR" />
+    <result column="dict_position_level" property="dictPositionLevel" jdbcType="VARCHAR" />
+    <result column="monthly_pay" property="monthlyPay" jdbcType="DOUBLE" />
+    <result column="is_other_revenue" property="isOtherRevenue" jdbcType="VARCHAR" />
+    <result column="dict_unit_nature" property="dictUnitNature" jdbcType="VARCHAR" />
+    <result column="dict_enterprise_nature" property="dictEnterpriseNature" jdbcType="VARCHAR" />
+    <result column="first_service_date" property="firstServiceDate" jdbcType="DATE" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, id, r_customer_coborrower_code, dict_customer_type, company_name, dict_company_province, 
+    dict_company_city, dict_company_area, company_address, dict_department, established_time, 
+    work_telephone, dict_position_level, monthly_pay, is_other_revenue, dict_unit_nature, 
+    dict_enterprise_nature, first_service_date, create_by, create_time, modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_customer_company
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_customer_company
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.CustomerCompany" >
+    insert into jk.t_cj_customer_company (loan_code, id, r_customer_coborrower_code, 
+      dict_customer_type, company_name, dict_company_province, 
+      dict_company_city, dict_company_area, company_address, 
+      dict_department, established_time, work_telephone, 
+      dict_position_level, monthly_pay, is_other_revenue, 
+      dict_unit_nature, dict_enterprise_nature, first_service_date, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{loanCode,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{rCustomerCoborrowerCode,jdbcType=VARCHAR}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{dictCompanyProvince,jdbcType=VARCHAR}, 
+      #{dictCompanyCity,jdbcType=VARCHAR}, #{dictCompanyArea,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
+      #{dictDepartment,jdbcType=VARCHAR}, #{establishedTime,jdbcType=DATE}, #{workTelephone,jdbcType=VARCHAR}, 
+      #{dictPositionLevel,jdbcType=VARCHAR}, #{monthlyPay,jdbcType=DOUBLE}, #{isOtherRevenue,jdbcType=VARCHAR}, 
+      #{dictUnitNature,jdbcType=VARCHAR}, #{dictEnterpriseNature,jdbcType=VARCHAR}, #{firstServiceDate,jdbcType=DATE}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerCompany" >
+    insert into jk.t_cj_customer_company
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rCustomerCoborrowerCode != null" >
+        r_customer_coborrower_code,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="dictCompanyProvince != null" >
+        dict_company_province,
+      </if>
+      <if test="dictCompanyCity != null" >
+        dict_company_city,
+      </if>
+      <if test="dictCompanyArea != null" >
+        dict_company_area,
+      </if>
+      <if test="companyAddress != null" >
+        company_address,
+      </if>
+      <if test="dictDepartment != null" >
+        dict_department,
+      </if>
+      <if test="establishedTime != null" >
+        established_time,
+      </if>
+      <if test="workTelephone != null" >
+        work_telephone,
+      </if>
+      <if test="dictPositionLevel != null" >
+        dict_position_level,
+      </if>
+      <if test="monthlyPay != null" >
+        monthly_pay,
+      </if>
+      <if test="isOtherRevenue != null" >
+        is_other_revenue,
+      </if>
+      <if test="dictUnitNature != null" >
+        dict_unit_nature,
+      </if>
+      <if test="dictEnterpriseNature != null" >
+        dict_enterprise_nature,
+      </if>
+      <if test="firstServiceDate != null" >
+        first_service_date,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerCode != null" >
+        #{rCustomerCoborrowerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyProvince != null" >
+        #{dictCompanyProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyCity != null" >
+        #{dictCompanyCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyArea != null" >
+        #{dictCompanyArea,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null" >
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDepartment != null" >
+        #{dictDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="establishedTime != null" >
+        #{establishedTime,jdbcType=DATE},
+      </if>
+      <if test="workTelephone != null" >
+        #{workTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="dictPositionLevel != null" >
+        #{dictPositionLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyPay != null" >
+        #{monthlyPay,jdbcType=DOUBLE},
+      </if>
+      <if test="isOtherRevenue != null" >
+        #{isOtherRevenue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictUnitNature != null" >
+        #{dictUnitNature,jdbcType=VARCHAR},
+      </if>
+      <if test="dictEnterpriseNature != null" >
+        #{dictEnterpriseNature,jdbcType=VARCHAR},
+      </if>
+      <if test="firstServiceDate != null" >
+        #{firstServiceDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.CustomerCompany" >
+    update jk.t_cj_customer_company
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerCode != null" >
+        r_customer_coborrower_code = #{rCustomerCoborrowerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyProvince != null" >
+        dict_company_province = #{dictCompanyProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyCity != null" >
+        dict_company_city = #{dictCompanyCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompanyArea != null" >
+        dict_company_area = #{dictCompanyArea,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null" >
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDepartment != null" >
+        dict_department = #{dictDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="establishedTime != null" >
+        established_time = #{establishedTime,jdbcType=DATE},
+      </if>
+      <if test="workTelephone != null" >
+        work_telephone = #{workTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="dictPositionLevel != null" >
+        dict_position_level = #{dictPositionLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyPay != null" >
+        monthly_pay = #{monthlyPay,jdbcType=DOUBLE},
+      </if>
+      <if test="isOtherRevenue != null" >
+        is_other_revenue = #{isOtherRevenue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictUnitNature != null" >
+        dict_unit_nature = #{dictUnitNature,jdbcType=VARCHAR},
+      </if>
+      <if test="dictEnterpriseNature != null" >
+        dict_enterprise_nature = #{dictEnterpriseNature,jdbcType=VARCHAR},
+      </if>
+      <if test="firstServiceDate != null" >
+        first_service_date = #{firstServiceDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.CustomerCompany" >
+    update jk.t_cj_customer_company
+    set id = #{id,jdbcType=VARCHAR},
+      r_customer_coborrower_code = #{rCustomerCoborrowerCode,jdbcType=VARCHAR},
+      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      dict_company_province = #{dictCompanyProvince,jdbcType=VARCHAR},
+      dict_company_city = #{dictCompanyCity,jdbcType=VARCHAR},
+      dict_company_area = #{dictCompanyArea,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      dict_department = #{dictDepartment,jdbcType=VARCHAR},
+      established_time = #{establishedTime,jdbcType=DATE},
+      work_telephone = #{workTelephone,jdbcType=VARCHAR},
+      dict_position_level = #{dictPositionLevel,jdbcType=VARCHAR},
+      monthly_pay = #{monthlyPay,jdbcType=DOUBLE},
+      is_other_revenue = #{isOtherRevenue,jdbcType=VARCHAR},
+      dict_unit_nature = #{dictUnitNature,jdbcType=VARCHAR},
+      dict_enterprise_nature = #{dictEnterpriseNature,jdbcType=VARCHAR},
+      first_service_date = #{firstServiceDate,jdbcType=DATE},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

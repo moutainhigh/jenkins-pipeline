@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditUnclearedImproperLoanDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditUnclearedImproperLoan" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="loan_org" property="loanOrg" jdbcType="VARCHAR" />
+    <result column="dict_currency" property="dictCurrency" jdbcType="VARCHAR" />
+    <result column="business_amount" property="businessAmount" jdbcType="NUMERIC" />
+    <result column="business_balance" property="businessBalance" jdbcType="NUMERIC" />
+    <result column="business_day" property="businessDay" jdbcType="DATE" />
+    <result column="actual_day" property="actualDay" jdbcType="DATE" />
+    <result column="dict_level_class" property="dictLevelClass" jdbcType="VARCHAR" />
+    <result column="dict_loan_type" property="dictLoanType" jdbcType="VARCHAR" />
+    <result column="margin_level" property="marginLevel" jdbcType="INTEGER" />
+    <result column="dict_guarantee" property="dictGuarantee" jdbcType="VARCHAR" />
+    <result column="dict_exhibition" property="dictExhibition" jdbcType="VARCHAR" />
+    <result column="make_advances" property="makeAdvances" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_type, loan_code, loan_org, dict_currency, business_amount, business_balance, 
+    business_day, actual_day, dict_level_class, dict_loan_type, margin_level, dict_guarantee, 
+    dict_exhibition, make_advances, operation, create_by, create_time, modify_by, modify_time
+  </sql>
+    
+  <select id="selectByUnclearedImproperLoan" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditUnclearedImproperLoan" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_uncleared_improper_loan
+    where loan_code = #{loanCode}
+    <if test="businessType != null and businessType != ''" >
+        and business_type = #{businessType}
+    </if>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_uncleared_improper_loan
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+	<!-- 根据借款编号查询数据 -->
+	<select id="getByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		select
+			<include refid="Base_Column_List" />
+		from
+			jk.t_jk_credit_uncleared_improper_loan
+		where
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+  <!-- 根据loanCode删除相应信息 -->
+  <delete id="deleteByUnclearedImproperLoan" parameterType="com.creditharmony.approve.credit.entity.CreditUnclearedImproperLoan" >
+    delete from jk.t_jk_credit_uncleared_improper_loan
+    where loan_code = #{loanCode}
+    <if test="businessType != null and businessType != ''" >
+        and business_type = #{businessType}
+    </if>
+  </delete>
+  
+   <insert id="insertUnclearedImproperLoan" parameterType="com.creditharmony.approve.credit.entity.CreditUnclearedImproperLoan" >
+    insert into jk.t_jk_credit_uncleared_improper_loan (id, business_type, loan_code, 
+      loan_org, dict_currency, business_amount, 
+      business_balance, business_day, actual_day, 
+      dict_level_class, dict_loan_type, margin_level, 
+      dict_guarantee, dict_exhibition, make_advances, 
+      operation, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, 
+      #{loanOrg,jdbcType=VARCHAR}, #{dictCurrency,jdbcType=VARCHAR}, #{businessAmount,jdbcType=NUMERIC}, 
+      #{businessBalance,jdbcType=NUMERIC}, #{businessDay,jdbcType=DATE}, #{actualDay,jdbcType=DATE}, 
+      #{dictLevelClass,jdbcType=VARCHAR}, #{dictLoanType,jdbcType=VARCHAR}, #{marginLevel,jdbcType=INTEGER}, 
+      #{dictGuarantee,jdbcType=VARCHAR}, #{dictExhibition,jdbcType=VARCHAR}, #{makeAdvances,jdbcType=VARCHAR}, 
+      #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+</mapper>

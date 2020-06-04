@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshSbgjjDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshSbgjj" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="social_security_type" property="socialSecurityType" jdbcType="VARCHAR" />
+    <result column="company_pay_months" property="companyPayMonths" jdbcType="NUMERIC" />
+    <result column="sbgjj_pay_month" property="sbgjjPayMonth" jdbcType="NUMERIC" />
+    <result column="sbgjj_pay_base" property="sbgjjPayBase" jdbcType="NUMERIC" />
+    <result column="sbgjj_free_amount" property="sbgjjFreeAmount" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_id, dict_customer_type, social_security_type, company_pay_months, 
+    sbgjj_pay_month, sbgjj_pay_base, sbgjj_free_amount, dict_check_type, dict_source_type, 
+    create_by, create_time, modify_by, modify_time
+  </sql>
+  
+	<!-- 添加社保公积金 -->
+	<insert id="insertSbgjj" parameterType="com.creditharmony.approve.document.entity.ZlshSbgjj" >
+    insert into jk.t_jk_zlsh_sbgjj (id, loan_code, r_id, 
+      dict_customer_type, social_security_type, company_pay_months, 
+      sbgjj_pay_month, sbgjj_pay_base, sbgjj_free_amount, 
+      dict_check_type, dict_source_type, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{socialSecurityType,jdbcType=VARCHAR}, #{companyPayMonths,jdbcType=NUMERIC}, 
+      #{sbgjjPayMonth,jdbcType=NUMERIC}, #{sbgjjPayBase,jdbcType=NUMERIC}, #{sbgjjFreeAmount,jdbcType=VARCHAR}, 
+      #{dictCheckType,jdbcType=VARCHAR}, #{dictSourceType,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  	</insert>
+  	
+  	<!-- 修改社保公积金 -->
+  	<update id="updateSbgjj" parameterType="com.creditharmony.approve.document.entity.ZlshSbgjj" >
+		update jk.t_jk_zlsh_sbgjj
+		set
+			company_pay_months = #{companyPayMonths,jdbcType=NUMERIC},
+			sbgjj_pay_month = #{sbgjjPayMonth,jdbcType=NUMERIC},
+			sbgjj_pay_base = #{sbgjjPayBase,jdbcType=NUMERIC},
+			sbgjj_free_amount = #{sbgjjFreeAmount,jdbcType=VARCHAR},
+			SOCIAL_SECURITY_TYPE = #{socialSecurityType,jdbcType=VARCHAR},
+			modify_by = #{modifyBy,jdbcType=VARCHAR},
+			modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+    <!-- 获取所有经营证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshSbgjj" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		from jk.t_jk_zlsh_sbgjj
+			WHERE loan_code = #{loanCode}
+			<if test="dictCustomerType != null" >
+				and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null">
+				and R_ID = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCheckType != null">
+				and DICT_CHECK_TYPE = #{dictCheckType,jdbcType=VARCHAR}
+			</if>
+			order by create_time
+  </select>
+        <!-- 删除社保公积金-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_sbgjj
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

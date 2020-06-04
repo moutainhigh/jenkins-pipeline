@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewFileDiskInfoDao">
+   <resultMap id="baseMap" type="com.creditharmony.approve.newCar.entity.NewFileDiskInfo">
+    <id column="id" property="id" jdbcType="VARCHAR"/>
+    <result column="start_date" property="startDate" jdbcType="DATE"/>
+    <result column="end_date" property="endDate" jdbcType="DATE"/>
+    <result column="flag_hj" property="flagHj" jdbcType="VARCHAR"/>
+    <result column="flag_hc" property="flagHc" jdbcType="VARCHAR"/>
+    <result column="sys_flag" property="sysFlag" jdbcType="VARCHAR"/>
+    <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR"/>
+    <result column="modify_time" property="modifyTime" jdbcType="DATE"/>
+    <result column="dir_level_hj" property="loanDirLevel" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <sql id="baseColumn">
+     id,start_date,end_date,flag_hj,flag_hc,sys_flag,create_by,create_time,modify_by,
+     modify_time,dir_level_hj
+  </sql>
+
+	<select id="findDiskInfobyQueryTime" parameterType="java.lang.String" resultType="hashmap">
+		SELECT 
+			flag_hc, 
+			flag_hj 
+		FROM jk.t_jk_file_disk_info WHERE
+		to_char(start_date,'yyyyMMdd') &lt;=
+		#{queryTime} AND
+		to_char(end_date,'yyyyMMdd') &gt;= #{queryTime}
+		limit 1
+	</select>
+	
+  <select id="getDiskInfoListByQueryTime" parameterType="map" resultMap="baseMap">
+      select 
+        <include refid="baseColumn"/>
+      from jk.t_jk_file_disk_info 
+      where to_char(start_date,'yyyy-MM-dd')<![CDATA[<=]]>#{queryTime,jdbcType=VARCHAR} 
+       and  to_char(end_date,'yyyy-MM-dd')<![CDATA[>=]]>#{queryTime,jdbcType=VARCHAR} 
+  </select>
+  
+    <select id="getIndexComponentByQueryTime" parameterType="java.lang.String" resultType="hashmap">
+      SELECT 
+			image_index_hj, 
+			image_component_hj 
+		FROM jk.t_jk_file_disk_info 
+		WHERE to_char(start_date,'yyyyMMdd') &lt;= #{0} 
+			AND to_char(end_date,'yyyyMMdd') &gt;= #{0}
+			and sys_flag=#{1}
+		limit 1
+  </select>
+  
+  <select id="getByParam" parameterType="map" resultMap="baseMap">
+      select 
+        <include refid="baseColumn"/>
+      	from jk.t_jk_file_disk_info 
+      	where to_char(start_date,'yyyy-MM-dd')<![CDATA[<=]]>#{queryTime,jdbcType=VARCHAR} 
+       and  to_char(end_date,'yyyy-MM-dd')<![CDATA[>=]]>#{queryTime,jdbcType=VARCHAR} 
+       and sys_flag = #{sysFlag,jdbcType=VARCHAR} 
+  </select>
+</mapper>

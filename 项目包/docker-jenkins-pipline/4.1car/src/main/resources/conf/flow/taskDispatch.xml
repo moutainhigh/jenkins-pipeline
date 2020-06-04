@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dispatchRules>
+  <!-- 
+   1个流程对应一个<flow>
+     1个<flow>内：
+       @<flowConfigName>：1
+       @<initBeanName>:1
+       @<dataLoadBeanName>：1
+       @<directions>：0至1个
+       @<steps>：1至n个
+          1个<steps>内：
+             @<stepName>：1至n个  系统定义名称： @default 默认步骤; @launch 发起步骤
+             @<beanName>：1个
+             @<exceptionForward>:0至1个
+             @<event>:0至n个
+                 1个<event>
+                    @<type>类型    |before 调用流程处理动作前事件|after 调用流程处理动作后事件|exception 发生异常时 
+                                |onOpenForm 打开表单时的事件 | onSelectParticipants 选人时事件
+                                |dispatchCheck 业务上检测是否做流程处理事件
+                                |onDataMigration 数据迁移时调用的事件
+                    @<condition> 条件,只支持 before和after类型
+                    @<eventBeanName>处理事件的事件bean名称
+             @<forward>：1至n个
+                 1个<forward>内：
+                    @<dealType>：1至n个
+                    @<forwardKey>：1个
+   流程相关接口调用说明：
+         接口名称                                  注解名称
+  FlowService          appFrame_flowServiceImpl
+  -->
+   <flow>
+  	<flowConfigName>信借流程</flowConfigName>
+  	<dataLoadBeanName>Verify_Flow_Data</dataLoadBeanName>
+  	<steps>
+  		<stepName>@default</stepName>
+	  	<forward>
+	   		<dealType>1</dealType>
+	   		<forwardKey>/frame/frameView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到已办页面</directions>
+	  	<forward>
+	   		<dealType>2</dealType>
+	   		<forwardKey>/antifraud/antifraudView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到反欺诈已办页面</directions>
+	</steps>
+	<steps>
+  		<stepName>信审初审</stepName>
+  		<updateAttributes>loanStatusName;visitStartTime;timeOutFlag;timeOutPoint;riskLevel;loanStatusCode;orderField;</updateAttributes>
+  		<event>
+      		<type>before</type>
+      		<eventBeanName>Verify_Check_Flow</eventBeanName>
+      	</event>
+	  	<forward>
+	    	<dealType>0</dealType>
+	   		<forwardKey>/frame/frameFormHandle</forwardKey>
+	  	</forward>
+	  	<directions>跳转到初审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>信审复审</stepName>
+	  <updateAttributes>loanStatusName;replyProductName;replyProductCode;replyMoney;replyMonth;replyTime;outApproveTime;backFlag;model;channelCode;channelName;loanStatusCode</updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Verify_Recheck_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/frame/frameFormReview</forwardKey>
+	  </forward>
+	  <directions>跳转到复审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>信审终审</stepName>
+	  <updateAttributes>loanStatusName;replyProductName;replyProductCode;replyMoney;replyMonth;replyTime;outApproveTime;backFlag;model;channelCode;channelName;loanStatusCode</updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Verify_GroupCheck_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/frame/frameFormReview</forwardKey>
+	  </forward>
+	  <directions>跳转到终审组的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>信审高级终审</stepName>
+	  <updateAttributes>loanStatusName;replyProductName;replyProductCode;replyMoney;replyMonth;replyTime;outApproveTime;backFlag;model;channelCode;channelName;loanStatusCode</updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Verify_FinalCheck_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/frame/frameFormReview</forwardKey>
+	  </forward>
+	  <directions>跳转到终审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>反欺诈判定</stepName>
+	  <updateAttributes>loanStatusName;loanStatusCode</updateAttributes>
+	  <event>
+	  	<type>before</type>
+	  	<eventBeanName>Antifarud_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/antifraud/antifraudForm</forwardKey>
+	  </forward>
+	  <directions>跳转到反欺专员判定的办理页面</directions>
+	</steps>
+  </flow>
+  <flow>
+  	<flowConfigName>复议流程</flowConfigName>
+  	<dataLoadBeanName>Reconsider_Flow_Data</dataLoadBeanName>
+  	<steps>
+  		<stepName>@default</stepName>
+	  	<forward>
+	   		<dealType>1</dealType>
+	   		<forwardKey>/frame/frameView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到已办页面</directions>
+	  	<forward>
+	   		<dealType>2</dealType>
+	   		<forwardKey>/antifraud/antifraudView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到反欺诈已办页面</directions>
+	</steps>
+	<steps>
+  		<stepName>复议初审</stepName>
+  		<updateAttributes>loanStatusName;visitStartTime;timeOutFlag;timeOutPoint;riskLevel;loanStatusCode;orderField;</updateAttributes>
+  		<event>
+      		<type>before</type>
+      		<eventBeanName>Reconsider_Check_Flow</eventBeanName>
+      	</event>
+	  	<forward>
+	    	<dealType>0</dealType>
+	   		<forwardKey>/frame/frameFormHandle</forwardKey>
+	  	</forward>
+	  	<directions>跳转到初审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>复议复审</stepName>
+	  <updateAttributes>loanStatusName;replyProductName;replyProductCode;replyMoney;replyMonth;replyTime;outApproveTime;backFlag;model;channelCode;channelName;loanStatusCode</updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Reconsider_Recheck_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/frame/frameFormReview</forwardKey>
+	  </forward>
+	  <directions>跳转到复审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>复议终审</stepName>
+	  <updateAttributes>loanStatusName;replyProductName;replyProductCode;replyMoney;replyMonth;replyTime;outApproveTime;backFlag;model;channelCode;channelName;loanStatusCode</updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Reconsider_FinalCheck_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/frame/frameFormReview</forwardKey>
+	  </forward>
+	  <directions>跳转到终审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>反欺诈判定</stepName>
+	   <updateAttributes>loanStatusName;loanStatusCode</updateAttributes>
+	  <event>
+	  	<type>before</type>
+	  	<eventBeanName>Antifarud_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/antifraud/antifraudForm</forwardKey>
+	  </forward>
+	  <forward>
+	    <dealType>1</dealType>
+	    <forwardKey>/antifraud/antifraudView</forwardKey>
+	  </forward>
+	  <directions>跳转到反欺专员判定的办理页面</directions>
+	</steps>
+  </flow>
+  <flow>
+  	<flowConfigName>车借流程</flowConfigName>
+  	<dataLoadBeanName>Car_Loan_Flow_Data</dataLoadBeanName>
+  	<steps>
+  		<stepName>@default</stepName>
+  		<flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+  		<updateAttributes>
+  			orderField;
+			firstBackSourceStep;
+  		</updateAttributes>
+	  	<forward>
+	   		<dealType>1</dealType>
+	   		<forwardKey>/carloan/view/carVerifyDetailView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到已办页面</directions>
+	</steps>
+	<steps>
+  		<stepName>复审</stepName>
+  		<flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+  		<updateAttributes>
+  			dictStatus;
+  			recheckName;
+  			auditAmount;
+  			grossRate;
+  			conditionalThroughFlag;
+  			auditBorrowProductCode;
+  			auditBorrowProductName;
+  			auditLoanMonths;
+  			auditTime;
+  			orderField;
+			firstBackSourceStep;
+  		</updateAttributes>
+  		<event>
+      		<type>before</type>
+      		<eventBeanName>Car_Loan_Check_Flow</eventBeanName>
+      	</event>
+	  	<forward>
+	    	<dealType>0</dealType>
+	   		<forwardKey>/carloan/form/carVerifyRecheckForm</forwardKey>
+	  	</forward>
+	  	<directions>跳转到车借复审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>终审</stepName>
+	  <flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+	  <updateAttributes>
+	  	dictStatus;
+	  	auditAmount;
+	  	grossRate;
+	  	conditionalThroughFlag;
+	  	auditBorrowProductCode;
+	  	auditBorrowProductName;
+	  	auditLoanMonths;
+	  	auditTime;
+	  	orderField;
+		firstBackSourceStep;
+		loanFlag;
+		timeOutFlag;
+		contractVersion;	
+	  </updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Car_Loan_Final_Check_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/carloan/form/carVerifyFinalcheckForm</forwardKey>
+	  </forward>
+	  <directions>跳转到车借终审的办理页面</directions>
+	</steps>
+
+  </flow>
+  <flow>
+  	<flowConfigName>车借展期流程</flowConfigName>
+  	<dataLoadBeanName>Car_Loan_Flow_Data</dataLoadBeanName>
+  	<steps>
+  		<stepName>@default</stepName>
+  		<flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+  		<updateAttributes>
+  			orderField;
+			firstBackSourceStep;
+  		</updateAttributes>
+	  	<forward>
+	   		<dealType>1</dealType>
+	   		<forwardKey>/carloan/view/carVerifyDetailView</forwardKey>
+	  	</forward>
+	  	<directions>跳转到已办页面</directions>
+	</steps>
+	<steps>
+  		<stepName>复审</stepName>
+  		<updateAttributes>
+  			applyStatusCode;recheckName;auditAmount;grossRate;conditionalThroughFlag;auditBorrowProductCode;
+  			auditBorrowProductName;
+  			auditLoanMonths;
+  			auditTime;
+  			orderField;
+			firstBackSourceStep;
+  		</updateAttributes>
+  		<flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+  		<event>
+      		<type>before</type>
+      		<eventBeanName>Car_Loan_Check_Flow</eventBeanName>
+      	</event>
+	  	<forward>
+	    	<dealType>0</dealType>
+	   		<forwardKey>/carloan/form/carVerifyRecheckForm</forwardKey>
+	  	</forward>
+	  	<directions>跳转到车借复审的办理页面</directions>
+	</steps>
+	<steps>
+	  <stepName>终审</stepName>
+	  <flowPropertyClass>com.creditharmony.approve.carloan.view.FlowProperties</flowPropertyClass>
+	  <updateAttributes>applyStatusCode;auditAmount;grossRate;conditionalThroughFlag;auditBorrowProductCode;
+	  	auditBorrowProductName;
+	  	auditLoanMonths;
+	  	auditTime;
+  		orderField;
+		firstBackSourceStep;
+		contractVersion;	
+	  </updateAttributes>
+	  <event>
+	   	 <type>before</type>
+	   	 <eventBeanName>Car_Loan_Final_Check_Flow</eventBeanName>
+	  </event>
+	  <forward>
+	    <dealType>0</dealType>
+	    <forwardKey>/carloan/form/carVerifyFinalcheckForm</forwardKey>
+	  </forward>
+	  <directions>跳转到车借终审的办理页面</directions>
+	</steps>
+
+  </flow>
+  <flowAttributeMap>
+    <flows>
+      <global>      
+      </global>
+      <flow name="信借流程">
+        <map>loanStatusName:bv.loanApplyStatus</map>
+        <map>loanStatusCode:bv.loanStatusCode</map>
+        <map>replyProductName:bv.auditResultEx.borrowProduct</map>
+        <map>replyProductCode:bv.auditResultEx.productType</map>
+        <map>replyMoney:bv.auditAmount</map>
+      	<map>replyMonth:bv.auditResultEx.auditMonths</map>
+      	<map>replyTime:bv.auditResultEx.modifyTime</map>
+      	<map>visitStartTime:bv.visitStartTime</map>
+      	<map>timeOutFlag:bv.timeOutFlag</map>                               <!-- 超时标识 -->
+		<map>timeOutPoint:bv.timeOutPoint</map>                             <!-- 超时截至日期 -->
+      	<map>outApproveTime:bv.outApproveTime</map>
+      	<map>backFlag:bv.backFlag</map>
+      	<map>model:bv.model</map>
+      	<map>channelCode:bv.loanFlag</map>
+      	<map>channelName:bv.loanFlagName</map>
+      	<map>riskLevel:bv.riskLevel</map>
+      	<map>orderField:bv.orderField</map>
+      </flow>
+      <flow name="复议流程">
+        <map>loanStatusName:bv.loanApplyStatus</map>
+        <map>loanStatusCode:bv.loanStatusCode</map>
+        <map>replyProductName:bv.auditResultEx.borrowProduct</map>
+        <map>replyProductCode:bv.auditResultEx.productType</map>
+        <map>replyMoney:bv.auditAmount</map>
+      	<map>replyMonth:bv.auditResultEx.auditMonths</map>
+      	<map>replyTime:bv.auditResultEx.modifyTime</map>
+      	<map>visitStartTime:bv.visitStartTime</map>
+      	<map>timeOutFlag:bv.timeOutFlag</map>                               <!-- 超时标识 -->
+		<map>timeOutPoint:bv.timeOutPoint</map>                             <!-- 超时截至日期 -->
+      	<map>outApproveTime:bv.outApproveTime</map>
+      	<map>backFlag:bv.backFlag</map>
+      	<map>model:bv.model</map>
+      	<map>channelCode:bv.loanFlag</map>
+      	<map>channelName:bv.loanFlagName</map>
+      	<map>riskLevel:bv.riskLevel</map>
+      	<map>orderField:bv.orderField</map>
+      </flow>
+	<flow name="车借流程">
+		<map>auditBorrowProductCode:bv.auditBorrowProductCode</map>			<!--产品类型编码（批复）-->
+		<map>auditBorrowProductName:bv.auditBorrowProductName</map>	<!--产品类型（批复）    -->
+		<map>auditTime:bv.auditTime</map>							<!--批借时间            -->
+		<map>auditLoanMonths:bv.auditLoanMonths</map>				<!--借款期限（批复）    -->
+		<map>conditionalThroughFlag:bv.conditionalThroughFlag</map>	<!--附条件标识          -->
+		<map>grossRate:bv.grossRate</map>							<!--总费率              -->
+		<map>recheckName:bv.recheckName</map>						<!--复审姓名            -->
+		<map>auditAmount:bv.auditAmount</map>						<!--批借金额            -->
+		<map>dictStatus:bv.dictStatus</map>							<!--借款状态（code）    -->
+		
+		<map>firstBackSourceStep:bv.firstBackSourceStep</map>        			<!-- 第一次退回的源节点名称 -->
+		<map>orderField:bv.orderField</map>        								<!-- 排序字段 -->
+	
+		<map>loanFlag:bv.loanFlag</map>									<!-- 渠道标识 -->
+		<map>timeOutFlag:bv.timeOutFlag</map>							<!-- 开启轮询 -->
+		<map>contractVersion:bv.contractVersion</map>							<!-- 开启轮询 -->
+		<!-- <map>dictStatus:bv.loanStatus</map>
+		<map>recheckName:bv.reCheckName</map>
+		<map>auditAmount:bv.auditAmount</map>
+		<map>borrowProductCode:bv.auditProduct</map>
+		<map>loanMonths:bv.auditTerm</map> -->
+	</flow>
+	<flow name="车借展期流程">
+		<map>auditBorrowProductCode:bv.auditBorrowProductCode</map>	<!--产品类型编码（批复）-->
+		<map>auditBorrowProductName:bv.auditBorrowProductName</map>	<!--产品类型（批复）    -->
+		<map>auditTime:bv.auditTime</map>							<!--批借时间            -->
+		<map>auditLoanMonths:bv.auditLoanMonths</map>				<!--借款期限（批复）    -->
+		<map>conditionalThroughFlag:bv.conditionalThroughFlag</map>	<!--附条件标识          -->
+		<map>grossRate:bv.grossRate</map>							<!--总费率              -->
+		<map>recheckName:bv.recheckName</map>						<!--复审姓名            -->
+		<map>auditAmount:bv.auditAmount</map>						<!--批借金额            -->
+		<map>applyStatusCode:bv.dictStatus</map>					<!--借款状态（code）    -->
+		
+		<map>firstBackSourceStep:bv.firstBackSourceStep</map>        			<!-- 第一次退回的源节点名称 -->
+		<map>orderField:bv.orderField</map>        								<!-- 排序字段 -->
+		<map>contractVersion:bv.contractVersion</map>	
+	</flow>
+    </flows>
+  </flowAttributeMap>
+</dispatchRules>

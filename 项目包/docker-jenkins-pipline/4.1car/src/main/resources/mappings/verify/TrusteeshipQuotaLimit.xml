@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.TrusteeshipQuotaLimitDao" >
+	<!-- 查询TG -->
+	<select id="findTG" resultType="com.creditharmony.approve.verify.entity.TrusteeshipQuotaLimit" parameterType="com.creditharmony.approve.verify.entity.TrusteeshipQuotaLimit">
+		select 
+			id,
+			version,
+			trusteeship_using_flag,
+			use_money,
+			trusteeship_quota_limit
+		from 
+			t_jk_trusteeship_quota_limit
+		where 
+			trusteeship_using_flag = #{trusteeshipUsingFlag}
+	</select>
+	
+	<!-- 更新TG -->
+	<update id="updateTG" parameterType="com.creditharmony.approve.verify.entity.TrusteeshipQuotaLimit">
+		UPDATE 
+			JK.t_jk_trusteeship_quota_limit
+		SET 
+			VERSION = #{version}+1,
+			trusteeship_quota_limit = #{trusteeshipQuotaLimit},
+			use_money = #{useMoney}
+		WHERE 
+			id=#{id} 
+			AND VERSION=#{version}
+	</update>  
+	
+	
+</mapper>

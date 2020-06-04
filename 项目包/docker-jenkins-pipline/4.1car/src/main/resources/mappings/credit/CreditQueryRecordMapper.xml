@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditQueryRecordDao">
+	
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditQueryRecord" >
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+		<result column="distinguish" property="distinguish" jdbcType="VARCHAR" />
+		<result column="query_day" property="queryDay" jdbcType="DATE" />
+		<result column="query_type" property="queryType" jdbcType="VARCHAR" />
+		<result column="html_url" property="htmlUrl" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+	  id, relation_id, distinguish, query_day, query_type, html_url
+	</sql>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+	  delete from jk.t_jk_credit_query_record
+	  where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insertCreditQueryRecord" parameterType="com.creditharmony.approve.credit.entity.CreditQueryRecord" >
+	  insert into jk.t_jk_credit_query_record (id, relation_id, distinguish, 
+	    query_day, query_type, html_url,
+		create_by, 
+	    create_time, 
+	    modify_by,
+	    modify_time
+	    )
+	  values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{distinguish,jdbcType=VARCHAR}, 
+	    #{queryDay,jdbcType=DATE}, #{queryType,jdbcType=VARCHAR}, #{htmlUrl,jdbcType=VARCHAR},
+		#{createBy},
+		#{createTime}, 
+		#{modifyBy}, 
+		#{modifyTime}
+	    )
+	</insert>
+  
+	<!-- 根据简版id查询查询信息List -->
+	<select id="selectByCreditQueryRecord" resultMap="BaseResultMap"
+		parameterType="com.creditharmony.approve.credit.entity.CreditQueryRecord">
+		select
+		<include refid="Base_Column_List" />
+		from jk.t_jk_credit_query_record
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据简版id删除查询信息List -->
+	<delete id="deleteByRelationId" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_query_record
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 详版查询开始 -->
+	<!-- 根据参数获取数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditQueryRecord" >
+		select
+			b.id,
+			b.relation_id,
+			b.distinguish,
+			b.query_day,
+			b.query_type
+		from
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.t_jk_credit_query_record b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			order by b.query_day desc
+	</select>
+	
+	<!-- 保存数据 -->
+	<insert id="insertData" parameterType="com.creditharmony.approve.credit.entity.CreditQueryRecord">
+	INSERT INTO jk.t_jk_credit_query_record
+ 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			relation_id, 
+			</if>
+			<if test="queryDay != null and queryDay != ''" >
+			query_day, 
+			</if>
+			<if test="queryType != null and queryType != ''" >
+			query_type, 
+			</if>
+			<if test="htmlUrl != null and htmlUrl != ''" >
+			html_url, 
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			create_by, 
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			create_time, 
+			</if>
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by, 
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			#{relationId}, 
+			</if>
+			<if test="queryDay != null and queryDay != ''" >
+			#{queryDay}, 
+			</if>
+			<if test="queryType != null and queryType != ''" >
+			#{queryType}, 
+			</if>
+			<if test="htmlUrl != null and htmlUrl != ''" >
+			#{htmlUrl}, 
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			#{createBy}, 
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			#{createTime}, 
+			</if>
+			<if test="modifyBy != null and modifyBy != ''" >
+			#{modifyBy}, 
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			#{modifyTime}
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新数据 -->
+	<update id="updataDataById" parameterType="com.creditharmony.approve.credit.entity.CreditQueryRecord">
+		update jk.t_jk_credit_query_record
+		<set >
+			<if test="id != null and id != ''" >
+			id=#{id},
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			relation_id=#{relationId}, 
+			</if>
+			<if test="queryDay != null and queryDay != ''" >
+			query_day=#{queryDay}, 
+			</if>
+			<if test="queryType != null and queryType != ''" >
+			query_type=#{queryType}, 
+			</if>
+			<if test="htmlUrl != null and htmlUrl != ''" >
+			html_url=#{htmlUrl}, 
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			create_by=#{createBy}, 
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			create_time=#{createTime}, 
+			</if>
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by=#{modifyBy}, 
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time=#{modifyTime} 
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 删除数据 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditQueryRecord" >
+		delete 
+		from 
+			jk.t_jk_credit_query_record
+		where 
+			id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<!-- 详版查询结束 -->
+</mapper>

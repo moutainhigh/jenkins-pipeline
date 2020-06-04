@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCardDetailedTwoDao">
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCardDetailedTwo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="relation_id" jdbcType="VARCHAR" property="relationId" />
+    <result column="account_status" jdbcType="VARCHAR" property="accountStatus" />
+    <result column="should_repay_amount" jdbcType="NUMERIC" property="shouldRepayAmount" />
+    <result column="real_repay_amount" jdbcType="NUMERIC" property="realRepayAmount" />
+    <result column="real_repay_day" jdbcType="DATE" property="realRepayDay" />
+    <result column="current_overdue" jdbcType="INTEGER" property="currentOverdue" />
+    <result column="current_overdue_total" jdbcType="NUMERIC" property="currentOverdueTotal" />
+    <result column="overdraft_balance" jdbcType="NUMERIC" property="overdraftBalance" />
+    <result column="repayment_no" jdbcType="INTEGER" property="repaymentNo" />
+    <result column="getinfo_time" jdbcType="TIMESTAMP" property="getinfoTime" />
+    <result column="clearing_day" jdbcType="DATE" property="clearingDay" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relation_id, account_status, should_repay_amount, real_repay_amount, real_repay_day, 
+    current_overdue, current_overdue_total, overdraft_balance, repayment_no, getinfo_time, 
+    clearing_day, create_by,create_time,modify_by,modify_time
+  </sql>
+    <!-- 从信用卡一中获取ID，作为信用卡二的关联ID进行查询 -->
+  <select id="findByParams" parameterType="map"  resultMap="BaseResultMap" >
+		select
+			<include refid="Base_Column_List"/>
+		from 
+		  t_jk_credit_card_detailed_two 
+ 		where 
+			1=1
+		<if test="relationId != null and relationId != ''">
+		    
+			and relation_Id in(select id from t_jk_credit_card_detailed_one where relation_id=#{relationId,jdbcType=VARCHAR})    
+		</if>
+		order by create_time
+	</select>
+		  <delete id="deleteByRelationId" parameterType="java.lang.String">
+    delete from t_jk_credit_card_detailed_two
+    where relation_Id =#{relationId,jdbcType=VARCHAR} 
+  </delete>
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_jk_credit_card_detailed_two
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_jk_credit_card_detailed_two
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedTwo">
+    insert into t_jk_credit_card_detailed_two (id, relation_id, account_status, 
+      should_repay_amount, real_repay_amount, real_repay_day, 
+      current_overdue, current_overdue_total, overdraft_balance, 
+      repayment_no, getinfo_time, clearing_day,
+      create_by, create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{accountStatus,jdbcType=VARCHAR}, 
+      #{shouldRepayAmount,jdbcType=NUMERIC}, #{realRepayAmount,jdbcType=NUMERIC}, #{realRepayDay,jdbcType=DATE}, 
+      #{currentOverdue,jdbcType=INTEGER}, #{currentOverdueTotal,jdbcType=NUMERIC}, #{overdraftBalance,jdbcType=NUMERIC}, 
+      #{repaymentNo,jdbcType=INTEGER}, #{getinfoTime,jdbcType=TIMESTAMP}, #{clearingDay,jdbcType=DATE},
+      #{createBy,jdbcType=VARCHAR},  #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedTwo">
+    insert into t_jk_credit_card_detailed_two
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="accountStatus != null">
+        account_status,
+      </if>
+      <if test="shouldRepayAmount != null">
+        should_repay_amount,
+      </if>
+      <if test="realRepayAmount != null">
+        real_repay_amount,
+      </if>
+      <if test="realRepayDay != null">
+        real_repay_day,
+      </if>
+      <if test="currentOverdue != null">
+        current_overdue,
+      </if>
+      <if test="currentOverdueTotal != null">
+        current_overdue_total,
+      </if>
+      <if test="overdraftBalance != null">
+        overdraft_balance,
+      </if>
+      <if test="repaymentNo != null">
+        repayment_no,
+      </if>
+      <if test="getinfoTime != null">
+        getinfo_time,
+      </if>
+      <if test="clearingDay != null">
+        clearing_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStatus != null">
+        #{accountStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="shouldRepayAmount != null">
+        #{shouldRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayAmount != null">
+        #{realRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayDay != null">
+        #{realRepayDay,jdbcType=DATE},
+      </if>
+      <if test="currentOverdue != null">
+        #{currentOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="currentOverdueTotal != null">
+        #{currentOverdueTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="overdraftBalance != null">
+        #{overdraftBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="repaymentNo != null">
+        #{repaymentNo,jdbcType=INTEGER},
+      </if>
+      <if test="getinfoTime != null">
+        #{getinfoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clearingDay != null">
+        #{clearingDay,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedTwo">
+    update t_jk_credit_card_detailed_two
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountStatus != null">
+        account_status = #{accountStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="shouldRepayAmount != null">
+        should_repay_amount = #{shouldRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayAmount != null">
+        real_repay_amount = #{realRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realRepayDay != null">
+        real_repay_day = #{realRepayDay,jdbcType=DATE},
+      </if>
+      <if test="currentOverdue != null">
+        current_overdue = #{currentOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="currentOverdueTotal != null">
+        current_overdue_total = #{currentOverdueTotal,jdbcType=NUMERIC},
+      </if>
+      <if test="overdraftBalance != null">
+        overdraft_balance = #{overdraftBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="repaymentNo != null">
+        repayment_no = #{repaymentNo,jdbcType=INTEGER},
+      </if>
+      <if test="getinfoTime != null">
+        getinfo_time = #{getinfoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clearingDay != null">
+        clearing_day = #{clearingDay,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditCardDetailedTwo">
+    update t_jk_credit_card_detailed_two
+    set relation_id = #{relationId,jdbcType=VARCHAR},
+      account_status = #{accountStatus,jdbcType=VARCHAR},
+      should_repay_amount = #{shouldRepayAmount,jdbcType=NUMERIC},
+      real_repay_amount = #{realRepayAmount,jdbcType=NUMERIC},
+      real_repay_day = #{realRepayDay,jdbcType=DATE},
+      current_overdue = #{currentOverdue,jdbcType=INTEGER},
+      current_overdue_total = #{currentOverdueTotal,jdbcType=NUMERIC},
+      overdraft_balance = #{overdraftBalance,jdbcType=NUMERIC},
+      repayment_no = #{repaymentNo,jdbcType=INTEGER},
+      getinfo_time = #{getinfoTime,jdbcType=TIMESTAMP},
+      clearing_day = #{clearingDay,jdbcType=DATE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

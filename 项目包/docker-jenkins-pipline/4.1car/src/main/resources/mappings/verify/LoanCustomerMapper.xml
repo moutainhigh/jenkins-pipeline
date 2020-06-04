@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.LoanCustomerDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.LoanCustomer" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="apply_id" property="applyId" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="customer_cert_org" property="customerCertOrg" jdbcType="VARCHAR" />
+    <result column="id_start_day" property="idStartDay" jdbcType="TIMESTAMP" />
+    <result column="id_end_day" property="idEndDay" jdbcType="TIMESTAMP" />
+    <result column="customer_sex" property="customerSex" jdbcType="VARCHAR" />
+    <result column="customer_register_province" property="customerRegisterProvince" jdbcType="VARCHAR" />
+    <result column="customer_register_city" property="customerRegisterCity" jdbcType="VARCHAR" />
+    <result column="customer_register_area" property="customerRegisterArea" jdbcType="VARCHAR" />
+    <result column="customer_register_address" property="customerRegisterAddress" jdbcType="VARCHAR" />
+    <result column="customer_birthday" property="customerBirthday" jdbcType="TIMESTAMP" />
+    <result column="customer_ename" property="customerEname" jdbcType="VARCHAR" />
+    <result column="dict_marry_status" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="dict_education" property="dictEducation" jdbcType="VARCHAR" />
+    <result column="customer_graduation_day" property="customerGraduationTime" jdbcType="TIMESTAMP" />
+    <result column="customer_phone_first" property="customerPhoneFirst" jdbcType="VARCHAR" />
+    <result column="customer_phone_second" property="customerPhoneSecond" jdbcType="VARCHAR" />    
+    <result column="customer_tel" property="customerTel" jdbcType="VARCHAR" />
+    <result column="customer_email" property="customerEmail" jdbcType="VARCHAR" />
+    <result column="customer_fax" property="customerFax" jdbcType="VARCHAR" />
+    <result column="customer_have_children" property="customerHaveChildren" jdbcType="VARCHAR" />
+    <result column="customer_live_province" property="customerLiveProvince" jdbcType="VARCHAR" />
+    <result column="customer_live_city" property="customerLiveCity" jdbcType="VARCHAR" />
+    <result column="customer_live_area" property="customerLiveArea" jdbcType="VARCHAR" />
+    <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
+    <result column="customer_status" property="customerStatus" jdbcType="NUMERIC" />
+    <result column="customer_other" property="customerOther" jdbcType="VARCHAR" />
+    <result column="dict_customer_is_danger" property="dictCustomerIsDanger" jdbcType="VARCHAR" />
+    <result column="dict_customer_diff" property="dictCustomerDiff" jdbcType="VARCHAR" />
+    <result column="dict_customer_status" property="dictCustomerStatus" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictCustomerSource" jdbcType="VARCHAR" /> 
+    <result column="customer_contact_is_know" property="customerContactIsKnow" jdbcType="VARCHAR" />
+    <result column="dict_relation_type" property="dictRelationType" jdbcType="VARCHAR" />   
+    
+    <result column="customer_gold_flag" property="customerGoldFlag" jdbcType="VARCHAR" />
+	<result column="dict_customer_source" property="dictCustomerSource" jdbcType="VARCHAR" /> 
+    <result column="customer_telesales_source" property="customerTelesalesSource" jdbcType="VARCHAR" />   
+    <result column="customer_telesales_flag" property="customerTelesalesFlag" jdbcType="VARCHAR" />
+    <result column="customer_telesales_orgcode" property="customerTelesalesOrgcode" jdbcType="VARCHAR" />
+     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />  
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />   
+    <result column="cobo_house_hold_hold" property="coboHouseHoldHold" jdbcType="VARCHAR" />    
+    <result column="is_long_term" property="isLongTerm" jdbcType="VARCHAR" />
+	<result column="dict_customer_source2" property="dictCustomeSource2" jdbcType="VARCHAR" /> 
+    <result column="customer_temp_permit" property="customerTempPermit" jdbcType="VARCHAR" />   
+    <result column="customer_house_hold_property" property="customerHouseHoldProperty" jdbcType="VARCHAR" />
+    <result column="customer_first_living_day" property="customerFirstLivingDay" jdbcType="TIMESTAMP" />
+    <result column="city_phone" property="cityPhone" jdbcType="VARCHAR" />
+    
+    <result column="credit_line" property="creditLine" jdbcType="NUMERIC" />
+    <result column="jydzzm_rent_month" property="jydzzmRentMonth" jdbcType="NUMERIC" />
+    <result column="new_customer_phone" property="newCustomerPhone" jdbcType="VARCHAR" />
+    <result column="trusteeship_no" property="trusteeshipNo" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="customer_firt_arrive_year" property="customerFirtArriveYear" jdbcType="VARCHAR" />
+    <result column="message_auth_code" property="messageAuthCode" jdbcType="VARCHAR" />
+    <result column="captcha_if_confirm" property="captchaIfConfirm" jdbcType="VARCHAR" />
+    <result column="confirm_timeout" property="confirmTimeout" jdbcType="TIMESTAMP" />
+    <result column="app_sign_flag" property="appSignFlag" jdbcType="VARCHAR" />
+    <result column="id_valid_flag" property="idValidFlag" jdbcType="VARCHAR" />
+    <result column="compose_photo_id" property="composePhotoId" jdbcType="VARCHAR" />   
+    <result column="id_valid_score" property="idValidScore" jdbcType="NUMERIC" />
+    <result column="dict_source_type_pcl" property="dictSourceTypePcl" jdbcType="VARCHAR" />
+     <result column="customer_qq" property="customerQq" jdbcType="VARCHAR" />
+    <result column="customer_weibo" property="customerWeibo" jdbcType="VARCHAR" />
+     <result column="id_artificia_flag" property="idArtificiaFlag" jdbcType="VARCHAR" />
+    <result column="customer_children_count" property="customerChildrenCount" jdbcType="VARCHAR" />
+     <result column="customer_family_support" property="customerFamilySupport" jdbcType="VARCHAR" />
+    <result column="personal_year_income" property="personalYearIncome" jdbcType="NUMERIC" />
+    <result column="home_month_income" property="homeMonthIncome" jdbcType="NUMERIC" />
+    <result column="home_month_pay" property="homeMonthPay" jdbcType="NUMERIC" />
+    <result column="home_total_debt" property="homeTotalDebt" jdbcType="NUMERIC" />
+    <result column="social_security_number" property="socialSecurityNumber" jdbcType="VARCHAR" />
+    <result column="register_property" property="registerProperty" jdbcType="VARCHAR" />
+    <result column="credit_username" property="creditUsername" jdbcType="VARCHAR" />
+    <result column="credit_password" property="creditPassword" jdbcType="VARCHAR" />
+    <result column="credit_auth_code" property="creditAuthCode" jdbcType="VARCHAR" />
+     <result column="dict_customer_source_new" property="dictCustomerSourceNew" jdbcType="VARCHAR" />
+    <result column="dict_customer_source_new_other" property="dictCustomerSourceNewOther" jdbcType="VARCHAR" />
+    <result column="who_can_know_the_borrow" property="whoCanKnowTheBorrow" jdbcType="VARCHAR" /> 
+    <result column="who_can_know_the_borrow_other" property="whoCanKnowTheBorrowOther" jdbcType="VARCHAR" />
+    <result column="social_security_number" property="socialSecurityNumber" jdbcType="VARCHAR" />
+    <result column="social_security_password" property="socialSecurityPassword" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     id, apply_id, loan_code,customer_code,customer_name, dict_cert_type, customer_cert_num, customer_cert_org,
+     id_start_day, id_end_day, customer_sex,  customer_register_province,customer_register_city,customer_register_area,
+     customer_register_address,customer_birthday, customer_ename, dict_marry_status, dict_education, customer_graduation_day, customer_phone_first, 
+     customer_phone_second, customer_tel, customer_email, customer_fax,  customer_have_children,customer_live_province,
+     customer_live_city, customer_live_area, customer_address, customer_status,customer_other, dict_customer_is_danger,dict_customer_diff,
+     dict_customer_status, dict_source_type,customer_contact_is_know, dict_relation_type,
+     customer_gold_flag, dict_customer_source, customer_telesales_source, customer_telesales_flag, customer_telesales_orgcode, 
+     create_by, create_time, modify_by, modify_time, cobo_house_hold_hold, is_long_term, dict_customer_source2, customer_temp_permit, customer_house_hold_property, 
+     customer_first_living_day, city_phone,credit_line,jydzzm_rent_month,new_customer_phone,trusteeship_no,file_id,
+     file_name,customer_firt_arrive_year,message_auth_code,captcha_if_confirm,confirm_timeout,app_sign_flag,
+     id_valid_flag,compose_photo_id,id_valid_score,customer_qq,customer_weibo,id_artificia_flag,
+     customer_children_count,customer_family_support,personal_year_income,home_month_income,home_month_pay,
+	 home_total_debt,social_security_number,register_property,credit_username,credit_password,credit_auth_code,
+	 dict_customer_source_new,dict_customer_source_new_other,who_can_know_the_borrow,who_can_know_the_borrow,
+	 who_can_know_the_borrow_other,social_security_number,social_security_password
+  </sql>
+  
+  <select id="getLoanCustomer" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+  		customer_code, id, apply_id, loan_code, customer_name, dict_cert_type, customer_cert_num  		
+  	FROM JK.T_JK_LOAN_CUSTOMER 
+  	WHERE id = #{0}
+  </select>
+  
+  
+  <select id="findIdCode" resultMap="businessView" parameterType="java.lang.String">
+  	SELECT C.ID,A.LOAN_CODE,C.CUSTOMER_NAME,
+  		   C.CUSTOMER_CERT_NUM,C.CUSTOMER_SEX,A.APPLY_ID,A.OUTSIDE_FLAG,A.VISIT_FLAG,
+  		   B.COBO_NAME AS coboName,B.ID AS coboNo
+  	FROM JK.T_JK_LOAN_INFO A
+  	LEFT JOIN JK.T_JK_LOAN_COBORROWER B ON A.LOAN_CODE=B.LOAN_CODE
+  	LEFT JOIN JK.T_JK_LOAN_CUSTOMER C ON A.LOAN_CODE=C.LOAN_CODE
+  	WHERE A.LOAN_CODE=#{loanCode}
+  </select>
+  <resultMap id="businessView" type="com.creditharmony.approve.workflow.view.VerifyBusinessView">
+		<result property="customerId" column="ID" />
+		<result property="loanCode" column="LOAN_CODE" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+		<result property="customerCertNum" column="CUSTOMER_CERT_NUM" />
+		<result property="customerSex" column="CUSTOMER_SEX" />
+		<result property="applyId" column="APPLY_ID" />
+		<result property="outsideFlag" column="OUTSIDE_FLAG" />
+		<result property="visitFlag" column="VISIT_FLAG" />
+		<result property="timeOutPoint" column="CUSTOMER_INTO_TIME" />
+		<result property="dictSourceType" column="DICT_SOURCE_TYPE" />
+		<result property="loanUrgentFlag" column="LOAN_URGENT_FLAG" />
+		<result property="loanInfoOldOrNewFlag" column="loaninfo_oldornew_flag" />
+		<collection property="coborrowerList" ofType="com.creditharmony.approve.workflow.view.CoborrowerView">
+			<id property="name" column="coboName" />
+			<id property="no" column="coboNo" />
+		</collection>
+  </resultMap>
+  <select id="getInfoForVerify" resultMap="businessView" parameterType="java.lang.String">
+  	SELECT B.ID,A.LOAN_CODE,B.CUSTOMER_NAME,A.DICT_SOURCE_TYPE,
+  		   CASE WHEN A.DICT_SOURCE_TYPE='3' THEN A.CUSTOMER_INTO_TIME ELSE A.LOAN_APPLY_TIME END CUSTOMER_INTO_TIME,
+  		   B.CUSTOMER_CERT_NUM,B.CUSTOMER_SEX,A.APPLY_ID,A.OUTSIDE_FLAG,A.VISIT_FLAG,
+  		   CASE WHEN A.LOAN_URGENT_FLAG='1' THEN '0' ELSE '1' END LOAN_URGENT_FLAG,
+  		   C.COBO_NAME AS coboName,C.ID AS coboNo,A.loaninfo_oldornew_flag
+  	FROM JK.T_JK_LOAN_INFO A
+  	LEFT JOIN JK.T_JK_LOAN_CUSTOMER B ON A.LOAN_CODE=B.LOAN_CODE
+  	LEFT JOIN JK.T_JK_LOAN_COBORROWER C ON A.LOAN_CODE=C.LOAN_CODE
+  	WHERE A.APPLY_ID=#{applyId}
+  </select>
+   <select id="getInfoForReconsider" resultMap="businessView" parameterType="java.lang.String">
+  	SELECT B.ID,A.LOAN_CODE,B.CUSTOMER_NAME,INFO.DICT_SOURCE_TYPE,
+  		   CASE WHEN INFO.DICT_SOURCE_TYPE='3' THEN INFO.CUSTOMER_INTO_TIME ELSE INFO.LOAN_APPLY_TIME END CUSTOMER_INTO_TIME,
+  		   B.CUSTOMER_CERT_NUM,B.CUSTOMER_SEX,A.APPLY_ID,A.OUTSIDE_FLAG,INFO.VISIT_FLAG,
+  		   CASE WHEN INFO.LOAN_URGENT_FLAG='1' THEN '0' ELSE '1' END LOAN_URGENT_FLAG,
+  		   C.COBO_NAME AS coboName,C.ID AS coboNo,INFO.loaninfo_oldornew_flag
+  	FROM JK.T_JK_RECONSIDER_APPLY A
+  	LEFT JOIN JK.T_JK_LOAN_INFO INFO ON A.LOAN_CODE=INFO.LOAN_CODE
+  	LEFT JOIN JK.T_JK_LOAN_CUSTOMER B ON A.LOAN_CODE=B.LOAN_CODE
+  	LEFT JOIN JK.T_JK_LOAN_COBORROWER C ON A.LOAN_CODE=C.LOAN_CODE
+  	WHERE A.APPLY_ID=#{applyId}
+  </select>
+  <select id="findMainLoanInfoEx"  resultType="com.creditharmony.approve.verify.entity.ex.MainLoanInfoEx" parameterType="java.lang.String">
+  	 select a.customer_name,a.customer_cert_num,a.dict_marry_status,a.loan_code,
+	 a.customer_register_province,a.customer_register_city,a.customer_register_area,a.customer_register_address,
+	 b.mate_name,b.mate_cert_num,c.dict_loan_use as dictRealyUse
+	 from jk.T_JK_LOAN_CUSTOMER  a
+	 left join jk.t_jk_loan_mate b
+	 on a.loan_code=b.loan_code and b.loan_customter_type='0'
+	 left join jk.t_jk_loan_info c
+	 on  a.loan_code=c.loan_code
+	 where a.loan_code=#{loanCode} 
+  </select>
+  
+  <select id="viewGetByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.LoanCustomer" >
+    select 
+    	a.id,
+    	a.customer_name,
+    	a.dict_cert_type,
+    	a.customer_cert_num,
+    	c.label as customer_sex,
+    	k.label as customer_have_children,
+    	j.label as DICT_EDUCATION,
+    	a.customer_tel,
+        b.label as dict_marry_status,
+    	a.CUSTOMER_PHONE_FIRST,
+    	a.CUSTOMER_PHONE_SECOND,
+    	d.AREA_NAME as CUSTOMER_LIVE_PROVINCE,
+    	e.AREA_NAME as CUSTOMER_LIVE_CITY,
+    	f.AREA_NAME as CUSTOMER_LIVE_AREA,
+        g.AREA_NAME as CUSTOMER_REGISTER_PROVINCE,
+        h.AREA_NAME as CUSTOMER_REGISTER_CITY,
+        i.AREA_NAME as CUSTOMER_REGISTER_AREA,
+    	a.CUSTOMER_ADDRESS,
+    	a.CUSTOMER_FIRT_ARRIVE_YEAR,
+    	a.customer_register_address,
+    	a.CUSTOMER_EMAIL,
+    	a.customer_qq,
+    	a.customer_weibo,
+    	a.customer_family_support,
+		a.customer_children_count,
+		a.personal_year_income,
+		a.home_month_income,
+		a.home_month_pay,
+		a.home_total_debt,
+		a.customer_first_living_day,
+		a.credit_username,
+	    a.credit_password,
+	    a.credit_auth_code,
+    	a.CUSTOMER_EMAIL
+    from jk.t_jk_loan_customer a
+    left join jk.t_gl_dict b
+    on a.dict_marry_status = b.value and b.type = 'jk_marriage'
+    left join jk.t_gl_dict c 
+    on a.customer_sex = c.value and c.type = 'jk_sex'
+    left join jk.T_GL_PROVINCE_CITY d
+    on a.CUSTOMER_LIVE_PROVINCE = d.area_code
+    left join jk.T_GL_PROVINCE_CITY e
+    on a.CUSTOMER_LIVE_CITY = e.area_code
+    left join jk.T_GL_PROVINCE_CITY f
+    on a.CUSTOMER_LIVE_AREA = f.area_code
+    left join jk.T_GL_PROVINCE_CITY g
+    on a.CUSTOMER_REGISTER_PROVINCE = g.area_code
+    left join jk.T_GL_PROVINCE_CITY h
+    on a.CUSTOMER_REGISTER_CITY = h.area_code
+    left join jk.T_GL_PROVINCE_CITY i
+    on a.CUSTOMER_REGISTER_AREA = i.area_code
+    left join jk.t_gl_dict j
+    on a.DICT_EDUCATION = j.value and j.type = 'jk_degree'
+    left join jk.t_gl_dict k
+    on a.customer_have_children = k.value and k.type = 'jk_have_or_nohave'
+    where a.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <select id="viewGetByLoanCodeNew" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.LoanCustomer">
+    select 
+    	a.id,
+    	a.customer_name,
+    	a.dict_cert_type,
+    	a.customer_cert_num,
+    	c.label as customer_sex,
+    	k.label as customer_have_children,
+    	j.label as DICT_EDUCATION,
+    	a.customer_tel,
+        b.label as dict_marry_status,
+    	a.CUSTOMER_PHONE_FIRST,
+    	a.CUSTOMER_PHONE_SECOND,
+    	d.AREA_NAME as CUSTOMER_LIVE_PROVINCE,
+    	e.AREA_NAME as CUSTOMER_LIVE_CITY,
+    	f.AREA_NAME as CUSTOMER_LIVE_AREA,
+        g.AREA_NAME as CUSTOMER_REGISTER_PROVINCE,
+        h.AREA_NAME as CUSTOMER_REGISTER_CITY,
+        i.AREA_NAME as CUSTOMER_REGISTER_AREA,
+    	a.CUSTOMER_ADDRESS,
+    	m.CUSTOMER_FIRT_ARRIVE_YEAR,
+    	a.customer_register_address,
+    	a.CUSTOMER_EMAIL,
+    	a.customer_qq,
+    	a.customer_weibo,
+    	a.customer_family_support,
+		a.customer_children_count,
+		a.personal_year_income,
+		a.home_month_income,
+		a.home_month_pay,
+		a.home_total_debt,
+		m.customer_first_living_day,
+		a.credit_username,
+	    a.credit_password,
+	    a.credit_auth_code,
+    	a.CUSTOMER_EMAIL,
+    	a.social_security_number,
+    	a.social_security_password
+    from jk.t_jk_loan_customer a left join jk.t_jk_customer_livings m on
+	a.loan_code = m.loan_code
+	and a.id = m.r_customer_coborrower_id
+	and m.loan_customer_type = '0' left join jk.t_gl_dict b
+    on a.dict_marry_status = b.value and b.type = 'jk_marriage'
+    left join jk.t_gl_dict c 
+    on a.customer_sex = c.value and c.type = 'jk_sex'
+    left join jk.T_GL_PROVINCE_CITY d
+    on a.CUSTOMER_LIVE_PROVINCE = d.area_code
+    left join jk.T_GL_PROVINCE_CITY e
+    on a.CUSTOMER_LIVE_CITY = e.area_code
+    left join jk.T_GL_PROVINCE_CITY f
+    on a.CUSTOMER_LIVE_AREA = f.area_code
+    left join jk.T_GL_PROVINCE_CITY g
+    on a.CUSTOMER_REGISTER_PROVINCE = g.area_code
+    left join jk.T_GL_PROVINCE_CITY h
+    on a.CUSTOMER_REGISTER_CITY = h.area_code
+    left join jk.T_GL_PROVINCE_CITY i
+    on a.CUSTOMER_REGISTER_AREA = i.area_code
+    left join jk.t_gl_dict j
+    on a.DICT_EDUCATION = j.value and j.type = 'jk_degree'
+    left join jk.t_gl_dict k
+    on a.customer_have_children = k.value and k.type = 'jk_have_or_nohave'
+    where a.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+  </select>
+    <select id="getPhonesByLoanCode" resultType="com.creditharmony.approve.antifraud.entity.ex.AntifraudMeConfirm" parameterType="java.lang.String">
+  	SELECT 
+  		id as "loanId",
+  		customer_phone_first as "brhsPhone",
+  		customer_tel as homeTel
+  	FROM jk.t_jk_loan_customer
+  	WHERE loan_code = #{loanCode,jdbcType=VARCHAR}
+  	UNION ALL
+  	SELECT
+  		id as "loanId", 
+  		customer_phone_second as "brhsPhone",
+  		customer_tel as homeTel
+  	FROM jk.t_jk_loan_customer
+  	WHERE loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+    <!-- 获取主借人配偶、联系人以及共借人的联系人 -->
+  <select id="getAllContact" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckContactPersonEx" parameterType="java.util.Map" >
+  			<!-- 2016-06-24 信审或复议退回可能新增联系人，所以 进件从汇金 初次进入 信审或者复议的判断已无意义
+  			<if test="isFirstTime == 'true'">  -->  				
+  				select    				
+  					b.id as loanId,	
+  					a.loan_code,
+					a.id as rCustomerCoborrowerId, 
+					mate_name  as name, 
+					mate_tel as telNum, 					
+					(#{mateValue})::varchar as loanManRelation, 
+					(#{familyValue})::varchar as dictRelationType, 
+					(concat(x.AREA_NAME, y.AREA_NAME, z.AREA_NAME, a.customer_address))::varchar as loanLiveAddress,
+					b.dict_cert_type as dictCertType,
+					b.mate_cert_num as customerCertNum,
+					(#{dictCustomerTypeMain})::varchar as dictCustomerType,
+					(#{dictCheckType})::varchar as dictCheckType
+					,
+					b.mate_address_province   as province,
+					b.mate_address_city   as city,
+					b.mate_address_area   as arer,
+					b.mate_address   as address, 
+					c.comp_name		as unitName,
+					'' as dictUnitProvince,
+					'' as dictUnitCity,
+					'' as dictUnitArer,
+					'' as unitAddress,
+					'' as department,
+					'' as post,
+					'' as loanManRelationRemark,
+					'' as homeTel
+										
+				from jk.t_jk_loan_mate b  
+				left join jk.t_jk_loan_company c on c.r_id = b.id
+				inner join jk.t_jk_loan_customer a on a.loan_code = b.loan_code 
+				left join jk.t_gl_province_city x on a.customer_live_province = x.area_code 
+				left join jk.t_gl_province_city y on a.customer_live_city = y.area_code 
+				left join jk.t_gl_province_city z on a.customer_live_area = z.area_code 
+				where a.loan_Code = #{loanCode} and b.loan_customter_type = #{dictCustomerTypeMain} 
+					<!-- 2016-06-24 此处isReconsider针对 从汇金初次进入复议 汇诚系统的情况，这种情况已改为从信审电话照会表全面复制数据，
+						加上isFirstTime已注释，可能有复议退回后重新进入汇诚时执行这段sql（isFirstTime如果不注释，退回后重新到汇诚不会运行这段sql），
+						所以include_pool_flag条件一定要有
+					<if test="isReconsider == 'false'"> -->
+					and (b.include_pool_flag is null or b.include_pool_flag &lt;&gt; '1')
+					<!-- 
+					</if> -->
+				union all 
+				select  
+					b.id as loanId,				
+					a.loan_code,				
+					a.id as rCustomerCoborrowerId, 
+					b.contact_name as name,  
+					b.contact_mobile as telNum, 
+					b.contact_relation as loanManRelation, 
+					b.relation_type as dictRelationType, 
+					(concat(x.AREA_NAME, y.AREA_NAME, z.AREA_NAME, a.customer_address))::varchar as loanLiveAddress,
+					'' as dictCertType,
+					b.cert_num as customerCertNum,
+					(#{dictCustomerTypeMain})::varchar as dictCustomerType,
+					(#{dictCheckType})::varchar as dictCheckType 
+					,
+					''   as province,
+					''   as city,
+					''   as arer,
+					''   as address, 
+					(case when b.relation_type = '1' then c.comp_name else b.contact_sex end) as unitName,
+					c.comp_province as dictUnitProvince,
+					c.comp_city as dictUnitCity,
+					c.comp_arer as dictUnitArer,
+					c.comp_address as unitAddress,
+					b.department as department,
+					b.post as post,
+					b.remarks as loanManRelationRemark,
+					b.home_tel as homeTel
+										
+				from jk.t_jk_contact b  
+				left join jk.t_jk_loan_company c on c.r_id = b.r_customer_coborrower_id
+				inner join jk.t_jk_loan_customer a on a.id = b.r_customer_coborrower_id  
+				left join jk.t_gl_province_city x on a.customer_live_province = x.area_code 
+				left join jk.t_gl_province_city y on a.customer_live_city = y.area_code 
+				left join jk.t_gl_province_city z on a.customer_live_area = z.area_code 
+				where a.loan_Code = #{loanCode} and b.loan_customter_type = #{dictCustomerTypeMain} 
+				<!-- 2016-06-24 此处isReconsider针对 从汇金初次进入复议 汇诚系统的情况，这种情况已改为从信审电话照会表全面复制数据，
+						加上isFirstTime已注释，可能有复议退回后重新进入汇诚时执行这段sql（isFirstTime如果不注释，退回后重新到汇诚不会运行这段sql），
+						所以include_pool_flag条件一定要有
+					<if test="isReconsider == 'false'"> -->
+					and (b.include_pool_flag is null or b.include_pool_flag &lt;&gt; '1')
+					<!-- 
+					</if> -->
+				union all 
+			<!-- 
+			</if> -->
+				select  
+					d.id as loanId,
+					c.loan_code,
+					c.id as rCustomerCoborrowerId, 
+					d.contact_name as name,  
+					d.contact_mobile as telNum, 
+					d.contact_relation as loanManRelation, 
+					d.relation_type as dictRelationType, 
+					(concat(x.AREA_NAME, y.AREA_NAME, z.AREA_NAME, c.cobo_now_address))::varchar as loanLiveAddress,
+					'' as dictCertType,
+					d.cert_num as customerCertNum,
+					(#{dictCustomerTypeCo})::varchar as dictCustomerType,
+					(#{dictCheckType})::varchar as dictCheckType  
+					,
+					''   as province,
+					''   as city,
+					''   as arer,
+					''   as address, 
+					(case when d.relation_type = '1' then com.comp_name else d.contact_sex end) as unitName,
+					com.comp_province as dictUnitProvince,
+					com.comp_city as dictUnitCity,
+					com.comp_arer as dictUnitArer,
+					com.comp_address as unitAddress,
+					d.department as department,
+					d.post as post,
+					d.remarks as loanManRelationRemark,
+					d.home_tel as homeTel
+										
+				from jk.t_jk_contact d  
+				left join jk.t_jk_loan_company com on com.r_id = d.r_customer_coborrower_id 
+				inner join  jk.t_jk_loan_coborrower c on c.id = d.r_customer_coborrower_id 
+				left join jk.t_gl_province_city x on c.cobo_liveing_province = x.area_code 
+				left join jk.t_gl_province_city y on c.cobo_liveing_city = y.area_code 
+				left join jk.t_gl_province_city z on c.cobo_liveing_area = z.area_code  
+				where d.contact_name &lt;&gt; '' and d.contact_name is not null 
+					and d.contact_mobile &lt;&gt; '' and d.contact_mobile is not null
+					and c.loan_Code = #{loanCode} and d.loan_customter_type = #{dictCustomerTypeCo} 
+				<!-- 如果是复议初次预处理，下述if条件才会不成立，则不判断include_pool_flag，将数据全部拷贝到电话照会的表中-->
+				<!-- 2016-06-24 因为复议初次预处理情况已改为从信审电话照会表全面复制数据，在java代码中已经判断，下述if条件一定会满足，所以注释
+				 	<if test="isFirstTime == 'false' or isReconsider == 'false'">  --> 
+					and ((c.include_pool_flag is null or c.include_pool_flag &lt;&gt; '1') or
+					 		(d.include_pool_flag is null or d.include_pool_flag &lt;&gt; '1'))
+			  <!--  </if>  -->
+  </select>
+  
+  <select id="selectMateByLoanCode" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckContactPersonEx" parameterType="java.util.Map" >
+    select 
+    	a.loan_code,
+    	a.id as "rCustomerCoborrowerId",
+		mate_name as "name", 
+		mate_tel as "telNum",
+		customer_live_province,
+		customer_live_city,
+		customer_live_area,
+		customer_address as "loanLiveAddress"
+	from jk.t_jk_loan_customer a 
+	  right join jk.t_jk_loan_mate b 
+		on a.loan_code = b.loan_code 
+	where 1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and b.loan_customter_type = #{dictCustomerType} 
+		</if>
+  </select>
+  
+  <select id="selectMainContact" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckContactPersonEx" parameterType="java.util.Map" >
+    select 
+    	a.loan_code,
+    	a.id as "rCustomerCoborrowerId",
+		contact_name as "name", 
+		contact_mobile as "telNum",
+		contact_relation as "loanManRelation",
+		relation_type as "dictRelationType",
+		customer_live_province,
+		customer_live_city,
+		customer_live_area,
+		customer_address as "loanLiveAddress",
+		
+		b.home_tel
+	from jk.t_jk_loan_customer a left join jk.t_jk_contact b 
+		on a.id = b.r_customer_coborrower_id 
+	where 1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and b.loan_customter_type = #{dictCustomerType} 
+		</if>
+  </select>
+  
+  <select id="getPersonalConfirmInfo" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckBorrowerInfoEx" parameterType="java.util.Map" >
+  	<!-- 主借人只有一个，只有初次进入信审时才运行isFirstTime判断包含的sql -->
+  	<!-- 2016-06-24 ，初次进入复议，不执行这段sql。java代码中已做判断 -->
+    <if test="isFirstTime == 'true'">
+    select 
+		a.id as rCustomerCoborrowerId, 
+		a.loan_code,
+		a.customer_name as name,
+		a.customer_cert_num as customerCertNum, 
+		a.customer_tel as brhsFamilyTel, 
+		a.dict_customer_diff as dictCustomerDiff, 
+		a.customer_live_province as dictProvince, 
+		a.customer_live_city as dictCity, 
+		a.customer_live_area as dictArer, 
+		a.customer_address as brhsLiveAddress, 
+		a.customer_phone_first as brhsPhone, 
+		a.customer_phone_second as brhsPhoneTwo, 
+		a.dict_education as dictEducation,
+		b.product_type as applyProductType,
+		b.loan_apply_amount as brhsLoanQuota, 
+		b.dict_loan_use as dictLoanUse, 
+		b.loan_months as brhsMyselfMonths, 
+		c.comp_name as brhsUnitname, 
+		c.comp_province as dictUnitProvince,  
+		c.comp_city as dictUnitCity,  
+		c.comp_arer as dictUnitArer,  
+		c.comp_address as brhsUnitAddress,  
+		c.comp_tel as brhsUnitTel,  
+		c.dict_comp_industry as dictCompIndustry, 
+		a.DICT_MARRY_STATUS dictMarryStatus,
+		LIVE.CUSTOMER_HOUSE_HOLD_PROPERTY customerHouseHoldProperty,
+		(#{dictCustomerTypeMain})::varchar as dictCustomerType,
+		(#{dictCheckType})::varchar as dictCheckType,
+		
+		b.dict_loan_source_else as otherIncomeResource,	
+		b.dict_loan_source_else_other as otherIncomeResourceRemark,
+		c.comp_unit_scale as brhsUnitScale,
+		m.average_month_turnover as averageMonthTurnover,
+		b.other_company_payback_totalmoney as monthPaybackTotalMoney,
+		Nvl(b.other_company_payback_count,null) as comPaybackCount,		
+		live.customer_house_hold_property_new_other as customerHouseHoldPropertyRemark,
+		b.dict_loan_use as dictLoanUseDict,
+		b.dict_loan_use_new_other as dictLoanUseRemark
+		,
+		c.dict_comp_type as dictUnitProperties, 
+		'' as industryLabel, 
+		b.high_payback_month_money as brhsMonthRepayAmount, 
+		b.other_month_income as otherMonthInput, 
+		a.home_month_pay as familyMonthOutput
+		
+	FROM  JK.T_JK_LOAN_CUSTOMER A  
+	LEFT JOIN JK.T_JK_CUSTOMER_LIVINGS LIVE ON A.ID=LIVE.R_CUSTOMER_COBORROWER_ID AND LIVE.LOAN_CUSTOMER_TYPE=#{dictCustomerTypeMain}
+	LEFT JOIN JK.T_JK_LOAN_INFO B ON A.LOAN_CODE=B.LOAN_CODE 
+	LEFT JOIN JK.T_JK_LOAN_COMPANY C  
+		ON C.R_ID=A.ID AND C.LOAN_CODE=A.LOAN_CODE AND C.DICT_R_CUSTOMTER_TYPE = #{dictCustomerTypeMain} 
+	left join jk.t_jk_comp_manage m on m.loan_code = a.loan_code
+	where a.loan_code= #{loanCode} 
+	union all 
+	</if>
+	select 
+		a.id as rCustomerCoborrowerId, 
+		a.loan_code,
+		a.cobo_name as name,
+		a.cobo_cert_num as customerCertNum, 	
+		a.cobo_now_tel as brhsFamilyTel, 
+		a.dict_customer_diff as dictCustomerDiff, 
+		a.cobo_liveing_province as dictProvince, 
+		a.cobo_liveing_city as dictCity, 
+		a.cobo_liveing_area as dictArer, 
+		a.cobo_now_address as brhsLiveAddress, 
+		a.cobo_mobile as brhsPhone, 
+		a.cobo_mobile2 as brhsPhoneTwo,
+		a.dict_education as dictEducation,
+		b.product_type as applyProductType,
+		b.loan_apply_amount as brhsLoanQuota, 
+		b.dict_loan_use as dictLoanUse, 
+		b.loan_months as brhsMyselfMonths, 
+		c.comp_name as brhsUnitname, 
+		c.comp_province as dictUnitProvince,  
+		c.comp_city as dictUnitCity,  
+		c.comp_arer as dictUnitArea,  
+		c.comp_address as brhsUnitAddress,  
+		c.comp_tel as brhsUnitTel,  
+		c.dict_comp_industry as dictCompIndustry,
+		a.DICT_MARRY_STATUS dictMarryStatus,
+		a.CUSTOMER_HOUSE_HOLD_PROPERTY customerHouseHoldProperty,
+		(#{dictCustomerTypeCo})::varchar as dictCustomerType,
+		(#{dictCheckType})::varchar as dictCheckType,
+		
+		b.dict_loan_source_else as otherIncomeResource,	
+		b.dict_loan_source_else_other as otherIncomeResourceRemark,
+		c.comp_unit_scale as brhsUnitScale,
+		m.average_month_turnover as averageMonthTurnover,
+		b.other_company_payback_totalmoney as monthPaybackTotalMoney,
+		Nvl(b.other_company_payback_count,null) as comPaybackCount,		
+		a.residential_category_remark as customerHouseHoldPropertyRemark,
+		b.dict_loan_use as dictLoanUseDict,
+		b.dict_loan_use_new_other as dictLoanUseRemark  
+		,
+		c.dict_comp_type as dictUnitProperties, 
+		'' as industryLabel, 
+		b.high_payback_month_money as brhsMonthRepayAmount, 
+		b.other_month_income as otherMonthInput, 
+		a.home_month_pay as familyMonthOutput
+		 
+	from jk.t_jk_loan_coborrower a  
+	left join jk.t_jk_loan_info b on a.loan_code=b.loan_code 
+	left join jk.t_jk_loan_company c 
+		on c.r_id=a.id and c.loan_code=a.loan_code and c.dict_r_customter_type = #{dictCustomerTypeCo} 
+	left join jk.t_jk_comp_manage m on m.loan_code = a.loan_code
+	where a.loan_Code = #{loanCode}  
+		<!-- 如果是复议初次预处理，下述if条件才会不成立，则不判断include_pool_flag，将数据全部拷贝到电话照会的表中-->
+		<!-- 2016-06-24 因为复议初次预处理情况已改为从信审电话照会中取数，在java代码中已经判断，下述if条件一定会满足，所以注释-->
+	<!-- 	<if test="isFirstTime == 'false' or isReconsider == 'false'">  --> 
+		and (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1')
+	<!-- </if>  -->
+
+  </select>  
+  
+  <select id="getPersonalConfirmInfoNew" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckBorrowerInfoEx" parameterType="java.util.Map" >
+  	<!-- 主借人只有一个，只有初次进入信审时才运行isFirstTime判断包含的sql -->
+  	<!-- 2016-06-24 ，初次进入复议，不执行这段sql。java代码中已做判断 -->
+    <if test="isFirstTime == 'true'">
+    select 
+		a.id as rCustomerCoborrowerId, 
+		a.loan_code,
+		a.customer_name as name,
+		a.customer_cert_num as customerCertNum, 
+		a.customer_tel as brhsFamilyTel, 
+		a.dict_customer_diff as dictCustomerDiff, 
+		a.customer_live_province as dictProvince, 
+		a.customer_live_city as dictCity, 
+		a.customer_live_area as dictArer, 
+		a.customer_address as brhsLiveAddress, 
+		a.customer_phone_first as brhsPhone, 
+		a.customer_phone_second as brhsPhoneTwo, 
+		a.dict_education as dictEducation,
+		b.product_type as applyProductType,
+		b.loan_apply_amount as brhsLoanQuota, 
+		b.dict_loan_use as dictLoanUse, 
+		b.loan_months as brhsMyselfMonths, 
+		c.comp_name as brhsUnitname, 
+		c.comp_province as dictUnitProvince,  
+		c.comp_city as dictUnitCity,  
+		c.comp_arer as dictUnitArer,  
+		c.comp_address as brhsUnitAddress,  
+		c.comp_tel as brhsUnitTel,  
+		c.dict_comp_industry as dictCompIndustry, 
+		a.DICT_MARRY_STATUS dictMarryStatus,
+		LIVE.CUSTOMER_HOUSE_HOLD_PROPERTY customerHouseHoldProperty,
+		(#{dictCustomerTypeMain})::varchar as dictCustomerType,
+		(#{dictCheckType})::varchar as dictCheckType,
+		
+		b.dict_loan_source_else as otherIncomeResource,	
+		b.dict_loan_source_else_other as otherIncomeResourceRemark,
+		c.comp_unit_scale as brhsUnitScale,
+		m.average_month_turnover as averageMonthTurnover,
+		b.other_company_payback_totalmoney as monthPaybackTotalMoney,
+		Nvl(b.other_company_payback_count,null) as comPaybackCount,		
+		live.customer_house_hold_property_new_other as customerHouseHoldPropertyRemark,
+		b.dict_loan_use as dictLoanUseDict,
+		b.dict_loan_use_new_other as dictLoanUseRemark
+		,
+		c.dict_comp_type as dictUnitProperties, 
+		'' as industryLabel, 
+		b.high_payback_month_money as brhsMonthRepayAmount, 
+		b.other_month_income as otherMonthInput, 
+		a.home_month_pay as familyMonthOutput
+		
+	FROM  JK.T_JK_LOAN_CUSTOMER A  
+	LEFT JOIN JK.T_JK_CUSTOMER_LIVINGS LIVE ON A.ID=LIVE.R_CUSTOMER_COBORROWER_ID AND LIVE.LOAN_CUSTOMER_TYPE=#{dictCustomerTypeMain}
+	LEFT JOIN JK.T_JK_LOAN_INFO B ON A.LOAN_CODE=B.LOAN_CODE 
+	LEFT JOIN JK.T_JK_LOAN_COMPANY C  
+		ON C.R_ID=A.ID AND C.LOAN_CODE=A.LOAN_CODE AND C.DICT_R_CUSTOMTER_TYPE = #{dictCustomerTypeMain} 
+	left join jk.t_jk_comp_manage m on m.loan_code = a.loan_code
+	where a.loan_code= #{loanCode} 
+	union all 
+	</if>
+	select 
+		a.id as rCustomerCoborrowerId, 
+		a.loan_code,
+		a.cobo_name as name,
+		a.cobo_cert_num as customerCertNum, 	
+		a.cobo_now_tel as brhsFamilyTel, 
+		a.dict_customer_diff as dictCustomerDiff, 
+		a.cobo_liveing_province as dictProvince, 
+		a.cobo_liveing_city as dictCity, 
+		a.cobo_liveing_area as dictArer, 
+		a.cobo_now_address as brhsLiveAddress, 
+		a.cobo_mobile as brhsPhone, 
+		a.cobo_mobile2 as brhsPhoneTwo,
+		a.dict_education as dictEducation,
+		cb.product_type as applyProductType,
+		cb.loan_apply_amount as brhsLoanQuota, 
+		cb.borrowing_purposes as dictLoanUse, 
+		cb.loan_months as brhsMyselfMonths, 
+		c.comp_name as brhsUnitname, 
+		c.comp_province as dictUnitProvince,  
+		c.comp_city as dictUnitCity,  
+		c.comp_arer as dictUnitArea,  
+		c.comp_address as brhsUnitAddress,  
+		c.comp_tel as brhsUnitTel,  
+		c.dict_comp_industry as dictCompIndustry,
+		a.DICT_MARRY_STATUS dictMarryStatus,
+		a.CUSTOMER_HOUSE_HOLD_PROPERTY customerHouseHoldProperty,
+		(#{dictCustomerTypeCo})::varchar as dictCustomerType,
+		(#{dictCheckType})::varchar as dictCheckType,
+		
+		cb.main_payback_resource as otherIncomeResource,	
+		cb.main_payback_resource_remark as otherIncomeResourceRemark,
+		c.comp_unit_scale as brhsUnitScale,
+		m.average_month_turnover as averageMonthTurnover,
+		b.other_company_payback_totalmoney as monthPaybackTotalMoney,
+		Nvl(b.other_company_payback_count,null) as comPaybackCount,		
+		a.residential_category_remark as customerHouseHoldPropertyRemark,
+		cb.borrowing_purposes as dictLoanUseDict,
+		cb.borrowing_purposes_remark as dictLoanUseRemark  
+		,
+		c.dict_comp_type as dictUnitProperties, 
+		'' as industryLabel, 
+		cb.high_payback_month_money as brhsMonthRepayAmount, 
+		b.other_month_income as otherMonthInput, 
+		a.home_month_pay as familyMonthOutput
+		
+	from jk.t_jk_loan_coborrower a  
+	left join jk.t_jk_loan_info b on a.loan_code=b.loan_code 
+	left join jk.t_jk_loan_info_coborrower cb on a.id = cb.rid and cb.loan_code=a.loan_code
+	left join jk.t_jk_loan_company c 
+		on c.r_id=a.id and c.loan_code=a.loan_code and c.dict_r_customter_type = #{dictCustomerTypeCo} 
+	left join jk.t_jk_comp_manage m on m.loan_code = a.loan_code
+	where a.loan_Code = #{loanCode}  
+		<!-- 如果是复议初次预处理，下述if条件才会不成立，则不判断include_pool_flag，将数据全部拷贝到电话照会的表中-->
+		<!-- 2016-06-24 因为复议初次预处理情况已改为从信审电话照会中取数，在java代码中已经判断，下述if条件一定会满足，所以注释-->
+	<!-- 	<if test="isFirstTime == 'false' or isReconsider == 'false'">  --> 
+		and (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1')
+	<!-- </if>  -->
+
+  </select>  
+  
+  <!-- 查询借借款人居住地址 -->
+  <select id="getLiveAddress" resultType="java.lang.String" parameterType="java.lang.String">
+  	SELECT 
+		CONCAT(b.area_name,'-',c.area_name,'-',d.area_name,'-',customer_address) 
+	FROM jk.t_jk_loan_customer a
+	LEFT JOIN jk.t_gl_province_city b ON a.customer_live_province = b.area_code
+	LEFT JOIN jk.t_gl_province_city c ON a.customer_live_city = c.area_code
+	LEFT JOIN jk.t_gl_province_city d ON a.customer_live_area = d.area_code
+  	WHERE loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+	<!-- 查询对比基本信息 -->
+	<select id="getCustomerInfo" parameterType="java.lang.String" resultType="com.creditharmony.approve.verify.entity.ex.LoanCustomerEx" >
+		select 
+			a.CUSTOMER_CERT_NUM as customerCertNum,
+			a.CUSTOMER_PHONE_FIRST as customerPhoneFirst,
+			a.CUSTOMER_PHONE_SECOND as customerPhoneSecond,
+			b.COMP_NAME as compName,
+			a.CUSTOMER_TEL as customerTel,
+			b.COMP_TEL as compTel,
+			concat( b.COMP_PROVINCE,b.COMP_CITY,b.COMP_ARER,b.COMP_ADDRESS ) as compAddress,
+			concat( a.CUSTOMER_LIVE_PROVINCE,a.CUSTOMER_LIVE_CITY,a.CUSTOMER_LIVE_AREA,a.CUSTOMER_ADDRESS ) as customerAddress,
+			a.DICT_MARRY_STATUS,
+			c.COMP_NAME as pCompName,
+			d.MATE_TEL as mateTel,
+			d.MATE_CERT_NUM as mateCertNum,
+			d.MATE_NAME as mateName,
+			gd.label customerSex
+		from 
+			t_jk_loan_customer a
+		left join
+			T_JK_LOAN_COMPANY b
+		on a.loan_code = b.loan_code
+		left join 
+			T_JK_LOAN_COMPANY c
+		on a.loan_code = c.loan_code
+		left join 
+			jk.T_JK_LOAN_MATE d
+		on a.loan_code = d.loan_code
+		left join 
+			jk.T_gl_dict gd
+		on gd.value = a.customer_sex and gd.type = 'jk_sex'
+		where 
+			a.loan_code=#{loanCode,jdbcType=VARCHAR}
+		and
+			b.DICT_R_CUSTOMTER_TYPE = '0'
+		and 
+			c.DICT_R_CUSTOMTER_TYPE = '2'
+		and 
+			d.LOAN_CUSTOMTER_TYPE = '0'
+	</select>
+	
+	<select id="findCustomerByLoanCode" parameterType="java.lang.String" resultType="com.creditharmony.approve.verify.entity.ex.LoanCustomerEx" >
+		select lc.customer_name customerName, lc.customer_cert_num customerCertNum,  lc.customer_family_support customerFamilySupport,
+			d2.label dictEducation,	d1.label dictMarryStatus, d3.label dictPositionLevel, 
+			concat(pc1.area_name, pc2.area_name, pc3.area_name, lc.customer_register_address) registAddr,
+			concat(pc4.area_name, pc5.area_name, pc6.area_name, lc.customer_address) livingAddr,
+			lc.customer_tel customerTel, lc.city_phone cityPhone, li.company_name compName, 
+			concat(pc7.area_name, pc8.area_name, pc9.area_name, li.company_address) compAddress,
+			li.dict_department dictDepartment, lc.customer_phone_first customerPhoneFirst,
+			li.monthly_pay monthlyPay, d5.label isOtherRevenue,lc.customer_family_support customerFamilySupport,
+			d4.label customerHouseHoldProperty
+		from t_jk_loan_customer lc 
+		left join t_cj_customer_company li on li.loan_code = lc.loan_code 
+		LEFT JOIN (select * from jk.t_gl_province_city where area_code not in ('310000', '120000', '500000', '110000')) pc1 ON lc.customer_register_province = pc1.area_code
+		LEFT JOIN jk.t_gl_province_city pc2 ON lc.customer_register_city = pc2.area_code
+		LEFT JOIN jk.t_gl_province_city pc3 ON lc.customer_register_area = pc3.area_code
+		LEFT JOIN (select * from jk.t_gl_province_city where area_code not in ('310000', '120000', '500000', '110000')) pc4 ON lc.customer_live_province = pc4.area_code
+		LEFT JOIN jk.t_gl_province_city pc5 ON lc.customer_live_city = pc5.area_code
+		LEFT JOIN jk.t_gl_province_city pc6 ON lc.customer_live_area = pc6.area_code
+		LEFT JOIN (select * from jk.t_gl_province_city where area_code not in ('310000', '120000', '500000', '110000')) pc7 ON li.dict_company_province = pc7.area_code
+		LEFT JOIN jk.t_gl_province_city pc8 ON li.dict_company_city = pc8.area_code
+		LEFT JOIN jk.t_gl_province_city pc9 ON li.dict_company_area = pc9.area_code
+		LEFT JOIN jk.t_gl_dict d1 ON lc.dict_marry_status = d1.value and d1.type = 'jk_marriage'
+		LEFT JOIN jk.t_gl_dict d2 ON lc.dict_education = d2.value and d2.type = 'jk_degree'
+		LEFT JOIN jk.t_gl_dict d3 ON li.dict_position_level = d3.value and d3.type = 'jk_job_type'
+		LEFT JOIN jk.t_gl_dict d4 ON lc.customer_house_hold_property = d4.value and d4.type = 'jk_house_nature'
+		LEFT JOIN jk.t_gl_dict d5 ON li.is_other_revenue = d5.value and d5.type = 'jk_have_or_nohave'
+		where lc.loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+  <sql id="Base_Column_List_Ex">
+    customer_code, id, apply_id, loan_code, customer_name, dict_cert_type, customer_cert_num, 
+    customer_cert_org, id_start_day, id_end_day, customer_sex, customer_register_province, 
+    customer_register_city, customer_register_area, customer_register_address, customer_birthday, 
+    customer_ename, dict_marry_status, dict_education, customer_graduation_day, customer_phone_first, 
+    customer_phone_second, customer_tel, customer_email, customer_fax,customer_have_children, customer_live_province, customer_live_city, customer_live_area, 
+    customer_address,customer_other,dict_customer_is_danger,dict_customer_diff, dict_customer_status, customer_contact_is_know, 
+    dict_relation_type,customer_gold_flag, dict_customer_source, customer_telesales_source,customer_telesales_flag,customer_telesales_orgcode,
+    trusteeship_no,create_by, create_time, modify_by, modify_time
+  </sql>
+    <select id="selectByApplyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List_Ex" /> 
+    from jk.t_jk_loan_customer 
+    where loan_code in 
+    	(select loan_code from jk.t_jk_loan_customer where 
+		<if test="_parameter != null" >
+	        apply_id = #{_parameter,jdbcType=VARCHAR}
+		</if>
+		union all
+		select loan_code from t_jk_reconsider_apply where 
+		<if test="_parameter != null" >
+        	apply_id = #{_parameter,jdbcType=VARCHAR})
+        </if>
+  </select>
+  
+  <select id="getLoanCodeByCustomer" parameterType="java.lang.String" resultType="java.lang.String">
+    select loan_code 
+    from jk.t_jk_loan_customer 
+    where customer_code = #{customerCode,jdbcType=VARCHAR}
+    	order by create_time desc limit 1
+  </select>
+  
+  <!-- 获取客户信息 -->
+  <select id="findCustomerInfo" parameterType="java.lang.String" resultType="com.creditharmony.approve.verify.entity.ex.LoanCustomerEx" >
+	select 
+		a.customer_cert_num customerCertNum,
+		a.customer_code customerCode,
+		gd.label customerSex
+	from t_jk_loan_customer a
+	left join T_gl_dict gd on gd.value = a.customer_sex and gd.type = 'jk_sex'
+	where a.loan_code = #{loanCode, jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getConsultTimeFlag" resultType="java.lang.String">	
+	select (case when count(info.id)>0 then 'true' else 'false' end)::varchar  
+		from jk.t_jk_loan_info info  
+		join jk.t_jk_customer_consultation consult on info.r_id=consult.id
+		where info.loan_code=#{0} and consult.create_time &gt;=to_date(#{1})
+  </select>
+   <select id="getCustomerByLoanCode" parameterType="java.lang.String"  resultMap="BaseResultMap">
+     select customer_code, id, apply_id, loan_code, customer_name, dict_cert_type, customer_cert_num,dict_marry_status,register_property
+      from jk.t_jk_loan_customer 
+      where loan_code=#{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="getCertNumByLoanCode" parameterType="java.lang.String" resultType="java.util.HashMap">
+  	 select
+  	     m.id as &quot;corporateId&quot;,
+		 t.customer_cert_num as &quot;customerCertNum&quot;,
+		 j.mate_cert_num as &quot;mateCertNum&quot;,
+		 m.cert_num as &quot;certNum&quot;,
+		 m.corporate_represent_mobile as &quot;corporateRepresentMobile&quot;
+	 from  
+		 t_jk_loan_customer t
+		 left join t_jk_loan_mate j on t.loan_code = j.loan_code and j.loan_customter_type='0'
+		 left join t_jk_comp_manage m on t.loan_code = m.loan_code
+	where t.loan_code = #{loanCode,jdbcType=VARCHAR}
+  
+  </select>
+</mapper>

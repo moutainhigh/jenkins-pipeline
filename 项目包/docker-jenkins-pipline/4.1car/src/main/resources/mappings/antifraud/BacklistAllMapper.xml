@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.BacklistAllDao" >
+	<select id="getBlackListType"  resultType="com.creditharmony.approve.antifraud.entity.ex.BlacklistAllEx">
+		select value as dictCaseResult,label as caseResult from t_gl_dict where type = 'jk_black_grey_list' and value IN('0','1')
+	</select> 
+	<select id="findByParams" parameterType="java.util.Map" resultType="com.creditharmony.approve.antifraud.entity.ex.BlacklistAllEx">
+		select 
+			j.judge_proc_by, 
+			j.id,
+			j.judge_proc_date,
+			i.customer_into_time ,
+			j.loan_code ,
+			i.loan_customer_name,
+			j.judge_case_code,
+			uer.name as loan_managercode,
+			i.apply_id,
+			city.area_name as province,
+			org.name as org_name,
+			ptype.product_name as product_type,
+			u.name as user_name,
+			<if test=" blackMsg != null and blackMsg != '' ">	
+				dic.label as dict_black_type,
+				a.black_msg,
+				di.label as dict_source,
+				a.loan_code as black_loan_code,
+			</if>
+			dict.label as dict_case_result
+		FROM 	
+			(select * from t_jk_antifraud_judge  where dict_case_result IN ('0','1') ) j
+			
+		<if test=" blackMsg != null and blackMsg != '' ">								
+			full join
+				t_jk_backlist_all a
+			on 
+				a.loan_code = j.loan_code
+		</if>
+		left join
+			t_jk_loan_info i
+		on
+			j.loan_code = i.loan_code
+		left join 
+			t_gl_org org
+		on
+			i.loan_store_orgid = org.id
+		left join
+			t_gl_province_city city
+		on 
+			org.province_id = city.id
+		left join
+			t_gl_jk_product ptype
+		on
+			i.product_type = ptype.product_code
+		left join
+			t_gl_user u
+		on
+			i.loan_managercode = u.user_code
+		left join
+			t_gl_dict dict
+		on
+			j.dict_case_result = dict.value and dict.type = 'jk_black_grey_list'
+		left join
+			t_gl_user uer
+		on
+			 i.loan_managercode = uer.id
+		<if test=" blackMsg != null and blackMsg != '' ">		
+			left join
+				t_gl_dict dic
+			on
+				a.dict_black_type = dic.value and dic.type = 'jk_afraud_list_type'
+			left join
+				t_gl_dict di
+			on
+				a.dict_source = di.value and di.type = 'jk_afraud_list_source'
+		</if>	
+		where 1=1
+		<if test="judgeProcBy != null and judgeProcBy != ''">
+			and j.JUDGE_PROC_BY  = #{judgeProcBy}
+		</if>
+		<if test="judgeProcDateFrom != null and judgeProcDateFrom != '' and judgeProcDateTo != null and judgeProcDateTo != ''">
+			and j.JUDGE_PROC_DATE  between #{judgeProcDateFrom} and #{judgeProcDateTo}
+		</if>
+		<if test="customerIntoTimeFrom != null and customerIntoTimeFrom != '' and customerIntoTimeTo != null and customerIntoTimeTo != ''">
+			and i.CUSTOMER_INTO_TIME  between #{customerIntoTimeFrom} and #{customerIntoTimeTo}
+		</if>
+		<if test="loanCode != null and loanCode != ''">
+			and j.LOAN_CODE  = #{loanCode}
+		</if>
+		<if test="loanCustomerName != null and loanCustomerName != ''">
+			and i.loan_customer_name  = #{loanCustomerName}
+		</if>
+		<if test="province != null and province != ''">
+			and org.province_id  = #{province}
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and org.name  = #{orgName}
+		</if>
+		<if test="productType != null and productType != ''">
+			and ptype.product_code  = #{productType}
+		</if>
+		<if test="userName != null and userName != ''">
+			and u.name  = #{userName}
+		</if>
+		<if test="dictCaseResult != null and dictCaseResult != ''">
+			and j.DICT_CASE_RESULT  = #{dictCaseResult}
+		</if>
+		<if test=" blackMsg != null and blackMsg != '' ">	
+			and a.black_msg  = #{blackMsg}
+		</if>		
+		<if test=" judgeCaseCode != null and judgeCaseCode != '' ">	
+			and j.judge_case_code  = #{judgeCaseCode}
+		</if>		
+		<if test=" loanManagercode != null and loanManagercode != '' ">	
+			and uer.name  = #{loanManagercode}
+		</if>		
+	</select>
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.ContractDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.Contract" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="contract_code" property="contractCode" jdbcType="VARCHAR" />
+    <result column="contract_due_day" property="contractDueDay" jdbcType="DATE" />
+    <result column="contract_fact_day" property="contractFactDay" jdbcType="DATE" />
+    <result column="contract_replay_day" property="contractReplayDay" jdbcType="DATE" />
+    <result column="contract_end_day" property="contractEndDay" jdbcType="DATE" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="audit_amount" property="auditAmount" jdbcType="NUMERIC" />
+    <result column="contract_months" property="contractMonths" jdbcType="INTEGER" />
+    <result column="mid_id" property="midId" jdbcType="VARCHAR" />
+    <result column="dict_repay_method" property="dictRepayMethod" jdbcType="VARCHAR" />
+    <result column="contract_amount" property="contractAmount" jdbcType="NUMERIC" />
+    <result column="contract_expect_amount" property="contractExpectAmount" jdbcType="NUMERIC" />
+    <result column="contract_month_repay_amount" property="contractMonthRepayAmount" jdbcType="NUMERIC" />
+    <result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+    <result column="contract_back_result" property="contractBackResult" jdbcType="VARCHAR" />
+    <result column="contract_version" property="contractVersion" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, id, contract_code, contract_due_day, contract_fact_day, contract_replay_day, 
+    contract_end_day, product_type, audit_amount, contract_months, mid_id, dict_repay_method, 
+    contract_amount, contract_expect_amount, contract_month_repay_amount, dict_check_status, 
+    contract_back_result, contract_version, create_by, create_time, modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_contract
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_cj_contract
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.Contract" >
+    insert into jk.t_cj_contract (loan_code, id, contract_code, 
+      contract_due_day, contract_fact_day, contract_replay_day, 
+      contract_end_day, product_type, audit_amount, 
+      contract_months, mid_id, dict_repay_method, 
+      contract_amount, contract_expect_amount, contract_month_repay_amount, 
+      dict_check_status, contract_back_result, contract_version, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{loanCode,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{contractCode,jdbcType=VARCHAR}, 
+      #{contractDueDay,jdbcType=DATE}, #{contractFactDay,jdbcType=DATE}, #{contractReplayDay,jdbcType=DATE}, 
+      #{contractEndDay,jdbcType=DATE}, #{productType,jdbcType=VARCHAR}, #{auditAmount,jdbcType=NUMERIC}, 
+      #{contractMonths,jdbcType=INTEGER}, #{midId,jdbcType=VARCHAR}, #{dictRepayMethod,jdbcType=VARCHAR}, 
+      #{contractAmount,jdbcType=NUMERIC}, #{contractExpectAmount,jdbcType=NUMERIC}, #{contractMonthRepayAmount,jdbcType=NUMERIC}, 
+      #{dictCheckStatus,jdbcType=VARCHAR}, #{contractBackResult,jdbcType=VARCHAR}, #{contractVersion,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.carloan.entity.Contract" >
+    insert into jk.t_cj_contract
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="contractCode != null" >
+        contract_code,
+      </if>
+      <if test="contractDueDay != null" >
+        contract_due_day,
+      </if>
+      <if test="contractFactDay != null" >
+        contract_fact_day,
+      </if>
+      <if test="contractReplayDay != null" >
+        contract_replay_day,
+      </if>
+      <if test="contractEndDay != null" >
+        contract_end_day,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="auditAmount != null" >
+        audit_amount,
+      </if>
+      <if test="contractMonths != null" >
+        contract_months,
+      </if>
+      <if test="midId != null" >
+        mid_id,
+      </if>
+      <if test="dictRepayMethod != null" >
+        dict_repay_method,
+      </if>
+      <if test="contractAmount != null" >
+        contract_amount,
+      </if>
+      <if test="contractExpectAmount != null" >
+        contract_expect_amount,
+      </if>
+      <if test="contractMonthRepayAmount != null" >
+        contract_month_repay_amount,
+      </if>
+      <if test="dictCheckStatus != null" >
+        dict_check_status,
+      </if>
+      <if test="contractBackResult != null" >
+        contract_back_result,
+      </if>
+      <if test="contractVersion != null" >
+        contract_version,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCode != null" >
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDueDay != null" >
+        #{contractDueDay,jdbcType=DATE},
+      </if>
+      <if test="contractFactDay != null" >
+        #{contractFactDay,jdbcType=DATE},
+      </if>
+      <if test="contractReplayDay != null" >
+        #{contractReplayDay,jdbcType=DATE},
+      </if>
+      <if test="contractEndDay != null" >
+        #{contractEndDay,jdbcType=DATE},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="auditAmount != null" >
+        #{auditAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractMonths != null" >
+        #{contractMonths,jdbcType=INTEGER},
+      </if>
+      <if test="midId != null" >
+        #{midId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRepayMethod != null" >
+        #{dictRepayMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="contractAmount != null" >
+        #{contractAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractExpectAmount != null" >
+        #{contractExpectAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractMonthRepayAmount != null" >
+        #{contractMonthRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCheckStatus != null" >
+        #{dictCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="contractBackResult != null" >
+        #{contractBackResult,jdbcType=VARCHAR},
+      </if>
+      <if test="contractVersion != null" >
+        #{contractVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.carloan.entity.Contract" >
+    update jk.t_cj_contract
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCode != null" >
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDueDay != null" >
+        contract_due_day = #{contractDueDay,jdbcType=DATE},
+      </if>
+      <if test="contractFactDay != null" >
+        contract_fact_day = #{contractFactDay,jdbcType=DATE},
+      </if>
+      <if test="contractReplayDay != null" >
+        contract_replay_day = #{contractReplayDay,jdbcType=DATE},
+      </if>
+      <if test="contractEndDay != null" >
+        contract_end_day = #{contractEndDay,jdbcType=DATE},
+      </if>
+      <if test="productType != null" >
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="auditAmount != null" >
+        audit_amount = #{auditAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractMonths != null" >
+        contract_months = #{contractMonths,jdbcType=INTEGER},
+      </if>
+      <if test="midId != null" >
+        mid_id = #{midId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRepayMethod != null" >
+        dict_repay_method = #{dictRepayMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="contractAmount != null" >
+        contract_amount = #{contractAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractExpectAmount != null" >
+        contract_expect_amount = #{contractExpectAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="contractMonthRepayAmount != null" >
+        contract_month_repay_amount = #{contractMonthRepayAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCheckStatus != null" >
+        dict_check_status = #{dictCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="contractBackResult != null" >
+        contract_back_result = #{contractBackResult,jdbcType=VARCHAR},
+      </if>
+      <if test="contractVersion != null" >
+        contract_version = #{contractVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.carloan.entity.Contract" >
+    update jk.t_cj_contract
+    set id = #{id,jdbcType=VARCHAR},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      contract_due_day = #{contractDueDay,jdbcType=DATE},
+      contract_fact_day = #{contractFactDay,jdbcType=DATE},
+      contract_replay_day = #{contractReplayDay,jdbcType=DATE},
+      contract_end_day = #{contractEndDay,jdbcType=DATE},
+      product_type = #{productType,jdbcType=VARCHAR},
+      audit_amount = #{auditAmount,jdbcType=NUMERIC},
+      contract_months = #{contractMonths,jdbcType=INTEGER},
+      mid_id = #{midId,jdbcType=VARCHAR},
+      dict_repay_method = #{dictRepayMethod,jdbcType=VARCHAR},
+      contract_amount = #{contractAmount,jdbcType=NUMERIC},
+      contract_expect_amount = #{contractExpectAmount,jdbcType=NUMERIC},
+      contract_month_repay_amount = #{contractMonthRepayAmount,jdbcType=NUMERIC},
+      dict_check_status = #{dictCheckStatus,jdbcType=VARCHAR},
+      contract_back_result = #{contractBackResult,jdbcType=VARCHAR},
+      contract_version = #{contractVersion,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

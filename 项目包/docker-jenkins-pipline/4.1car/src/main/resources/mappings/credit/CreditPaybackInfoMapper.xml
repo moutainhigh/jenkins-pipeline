@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditPaybackInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+    <result column="recently_payback_time" property="recentlyPaybackTime" jdbcType="TIMESTAMP" />
+    <result column="payback_org" property="paybackOrg" jdbcType="VARCHAR" />
+    <result column="total_payback_amount" property="totalPaybackAmount" jdbcType="NUMERIC" />
+    <result column="last_payback_date" property="lastPaybackDate" jdbcType="TIMESTAMP" />
+    <result column="residual_amount" property="residualAmount" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, relation_id, recently_payback_time, payback_org, total_payback_amount, last_payback_date, 
+    residual_amount, create_by, create_time, modify_by, modify_time
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_payback_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertCreditPaybackInfo" parameterType="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+    insert into jk.t_jk_credit_payback_info (id, relation_id, recently_payback_time, 
+      payback_org, total_payback_amount, last_payback_date, 
+      residual_amount, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{recentlyPaybackTime,jdbcType=TIMESTAMP}, 
+      #{paybackOrg,jdbcType=VARCHAR}, #{totalPaybackAmount,jdbcType=NUMERIC}, #{lastPaybackDate,jdbcType=TIMESTAMP}, 
+      #{residualAmount,jdbcType=NUMERIC}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertData" parameterType="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+    insert into jk.t_jk_credit_payback_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="relationId != null" >
+        relation_id,
+      </if>
+      <if test="recentlyPaybackTime != null" >
+        recently_payback_time,
+      </if>
+      <if test="paybackOrg != null" >
+        payback_org,
+      </if>
+      <if test="totalPaybackAmount != null" >
+        total_payback_amount,
+      </if>
+      <if test="lastPaybackDate != null" >
+        last_payback_date,
+      </if>
+      <if test="residualAmount != null" >
+        residual_amount,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null" >
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="recentlyPaybackTime != null" >
+        #{recentlyPaybackTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paybackOrg != null" >
+        #{paybackOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPaybackAmount != null" >
+        #{totalPaybackAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="lastPaybackDate != null" >
+        #{lastPaybackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residualAmount != null" >
+        #{residualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updataDataById" parameterType="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+    update jk.t_jk_credit_payback_info
+    <set>
+      <if test="relationId != null" >
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="recentlyPaybackTime != null" >
+        recently_payback_time = #{recentlyPaybackTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paybackOrg != null" >
+        payback_org = #{paybackOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPaybackAmount != null" >
+        total_payback_amount = #{totalPaybackAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="lastPaybackDate != null" >
+        last_payback_date = #{lastPaybackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residualAmount != null" >
+        residual_amount = #{residualAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<!-- 根据简版id查询保证人代偿信息List -->
+	<select id="selectByCreditPaybackInfo" resultMap="BaseResultMap"
+		parameterType="com.creditharmony.approve.credit.entity.CreditPaybackInfo">
+		select
+		<include refid="Base_Column_List" />
+		from jk.t_jk_credit_payback_info
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据简版id删除保证人代偿信息List -->
+	<delete id="deleteByRelationId" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_payback_info
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 详版保证人代偿信息开始 -->
+	<!-- 根据参数获取数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+		select
+			b.id,
+            b.relation_id,
+            b.recently_payback_time,
+            b.payback_org,
+            b.total_payback_amount,
+            b.last_payback_date,
+            b.residual_amount
+		from
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.t_jk_credit_payback_info b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 删除数据 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditPaybackInfo" >
+		delete 
+		from 
+			jk.t_jk_credit_payback_info
+		where 
+			id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<!-- 详版保证人代偿信息结束 -->
+	
+</mapper>

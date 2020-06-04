@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.PersonalCertificateDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.PersonalCertificate" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="customer_rel_master" property="customerRelMaster" jdbcType="VARCHAR" />
+    <result column="customer_rel_master_remark" property="customerRelMasterRemark" jdbcType="VARCHAR" />
+    <result column="master_name" property="masterName" jdbcType="VARCHAR" />
+    <result column="master_cert_num" property="masterCertNum" jdbcType="VARCHAR" />
+    <result column="master_address_province" property="masterAddressProvince" jdbcType="VARCHAR" />
+    <result column="master_address_city" property="masterAddressCity" jdbcType="VARCHAR" />
+    <result column="master_address_area" property="masterAddressArea" jdbcType="VARCHAR" />
+    <result column="master_address" property="masterAddress" jdbcType="VARCHAR" />
+    <result column="children_name" property="childrenName" jdbcType="VARCHAR" />
+    <result column="children_cert_num" property="childrenCertNum" jdbcType="VARCHAR" />
+    <result column="educational_certificate_type" property="educationalCertificateType" jdbcType="VARCHAR" />
+    <result column="graduation_school" property="educationalSchool" jdbcType="VARCHAR" />
+    <result column="educational_certificate_num" property="educationalCertificateNum" jdbcType="VARCHAR" />  
+    <result column="educational_certificate_time" property="educationalCertificateTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />  
+    <result column="wedding_time" property="weddingTime" jdbcType="TIMESTAMP" /> 
+   <result column="license_issuing_agency" property="licenseIssuingAgency" jdbcType="VARCHAR" /> 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, customer_rel_master, customer_rel_master_remark, master_name, master_cert_num, master_address_province, 
+    master_address_city,master_address_area,master_address, children_name, children_cert_num, educational_certificate_type,
+    graduation_school, educational_certificate_num, educational_certificate_time, create_by, 
+    create_time, modify_by, modify_time,wedding_time,license_issuing_agency
+  </sql>
+  <select id="getListByLoanCode"  resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from jk.T_JK_PERSONAL_CERTIFICATE
+    where loan_code = #{loanCode}
+  </select>
+</mapper>

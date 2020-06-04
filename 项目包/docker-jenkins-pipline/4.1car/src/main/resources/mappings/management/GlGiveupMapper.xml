@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.management.dao.GlGiveupDao">
+	
+    <sql id="GlGiveupColumns">
+    	id,giveup_code,giveup_name,giveup_grade,parent_id
+    </sql>
+	<!-- 获取所有的一级码 -->
+	<select id="findGlGiveups" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.GlGiveup">
+		SELECT
+			<include refid="GlGiveupColumns"/>
+		FROM jk.t_gl_giveup
+		WHERE parent_id = '0' and delete_flag='0'
+	</select>
+	
+	<!-- 通过一级码 获取对应的二级码 -->
+	<select id="findGlGiveupsByParentId" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.GlGiveup">
+		SELECT
+			<include refid="GlGiveupColumns"/>
+		FROM jk.t_gl_giveup
+		WHERE parent_id=#{id} and delete_flag='0'
+	</select>
+	<!-- 客户放弃码表维护部分开始 -->
+	<sql id="giveupManagerColumns" >
+      a.id, 
+      a.giveup_code,
+      a.giveup_name,
+      a.giveup_grade, 
+      a.parent_id AS "parent.id",
+      a.giveup_index,
+      a.create_by, 
+      a.delete_flag,
+      a.create_time, 
+      a.modify_by,
+      a.modify_time
+    </sql>
+    <sql id="giveupJoins">
+	  LEFT JOIN jk.t_gl_giveup p ON p.id = a.parent_id
+    </sql>
+	<!-- 根据ID查询数据 -->
+	<select id="get" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.GlGiveup">
+		SELECT
+		<include refid="giveupManagerColumns"/>
+		FROM jk.t_gl_giveup a
+		<include refid="giveupJoins"/>
+		WHERE a.id = #{id,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询列表 -->
+	<select id="findAllList" resultType="com.creditharmony.approve.management.entity.GlGiveup">
+		SELECT
+		<include refid="giveupManagerColumns"/>
+		FROM jk.t_gl_giveup a
+		<include refid="giveupJoins"/>
+		WHERE a.delete_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.giveup_code
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insert">
+		INSERT INTO jk.t_gl_giveup(
+		    id, 
+		    giveup_code, 
+		    giveup_name, 
+		    giveup_grade, 
+		    parent_id,
+		    giveup_index,
+		    create_by, 
+		    delete_flag,
+		    create_time, 
+		    modify_by,
+		    modify_time
+		) VALUES (
+			#{id}, 
+			#{giveupCode}, 
+			#{giveupName}, 
+			#{giveupGrade}, 
+			#{parent.id}, 
+			#{sort}, 
+			#{createBy},
+			#{delFlag}, 
+			#{createTime}, 
+			#{modifyBy}, 
+			#{modifyTime}
+		)
+	</insert>
+	<!-- 更新数据 -->
+	<update id="update">
+		UPDATE jk.t_gl_giveup SET 
+			parent_id = #{parent.id}, 
+			giveup_code = #{giveupCode}, 
+			giveup_name = #{giveupName}, 
+			giveup_index = #{sort}, 
+			giveup_grade = #{giveupGrade}, 
+			modify_by = #{modifyBy}, 
+			modify_time = #{modifyTime}
+		WHERE id = #{id}
+	</update>
+	<!-- 删除数据 -->
+	<update id="delete">
+		UPDATE jk.t_gl_giveup SET 
+			delete_flag = #{DEL_FLAG_DELETE}
+		<!-- WHERE id = #{id} OR parent_ids LIKE CONCAT('%,', #{id}, ',%') -->
+		WHERE id = #{id}  
+	</update>
+	
+	<!-- 根据参数查询数据 -->
+	<select id="findByParam" parameterType="com.creditharmony.approve.management.entity.GlGiveup" resultType="com.creditharmony.approve.management.entity.GlGiveup">
+		select 
+			id 
+		from 
+			jk.t_gl_giveup
+		where
+			1=1
+		<if test="giveupName != null and giveupName != ''">
+			and giveup_name = #{giveupName}
+		</if>
+		<if test="giveupCode != null and giveupCode != ''">
+			and giveup_code = #{giveupCode}
+		</if>
+	</select>
+	
+	<!-- 客户放弃码表维护部分结束 -->
+	
+	<!-- 根据参数查询数据 -->
+	<select id="getNameByCode" parameterType="java.lang.String" resultType="java.lang.String">
+		<if test="{0} != null and {0} != ''">
+		select 
+			giveup_name 
+		from 
+			jk.t_gl_giveup 
+		where giveup_code = #{0} limit 1
+		</if>
+	</select>	
+	
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<jmxConfigurator />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 典型的日志pattern -->
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 按时间滚动的策略 -->
+	<appender name="defaultLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/chp-approve/approve.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/chp-approve/approve.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 保留 30天数据，默认无限-->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 按文件大小滚动的策略 -->
+	<appender name="metricsLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/chp-approve/metrics.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>logs/chp-approve/metrics.%i.log</fileNamePattern>
+			<!-- 最多保留10个文件，默认是7 -->
+      		<maxIndex>10</maxIndex>
+		</rollingPolicy>
+		
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      		<maxFileSize>10MB</maxFileSize>
+      	</triggeringPolicy>
+		
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 综合时间与大小的滚动策略，先按小时滚动，小时内的文件大于10mb时再按大小滚动 -->
+	<appender name="businessLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/chp-approve/business.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/chp-approve/business-%d{yyyy-MM-dd_HH}.%i.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS},%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="com.creditharmony.approve" level="DEBUG" />
+		<logger name="com.creditharmony.bpm" level="DEBUG" >
+		<appender-ref ref="metricsLogFile" />
+	</logger>
+	<!-- business log 使用独立的appender，不继承Root的appender -->
+	<logger name="business" level="INFO" additivity="false">
+		<appender-ref ref="businessLogFile" />
+	</logger>
+	
+	<!-- metrics log 使用独立的appender，不继承Root的appender -->
+	<logger name="metrics" level="INFO" additivity="false">
+		<appender-ref ref="metricsLogFile" />
+	</logger>
+	
+	<!-- chp-core -->
+	<logger name="com.creditharmony.core" level="ERROR" />
+	
+	<!-- apache logger -->
+	<logger name="org.apache" level="ERROR" />
+	
+	<logger name="com.ibatis" level="DEBUG" />  
+	<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />  
+	<logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />  
+	<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />  
+	<logger name="java.sql.Connection" level="DEBUG" />  
+	<logger name="java.sql.Statement" level="DEBUG" />  
+	<logger name="java.sql.PreparedStatement" level="DEBUG" />  
+
+	<!-- root -->
+	<root level="WARN">
+		<appender-ref ref="console" />
+		<appender-ref ref="businessLogFile" />
+	</root>
+	
+</configuration>

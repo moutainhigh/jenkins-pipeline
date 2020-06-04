@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.localnet.dao.InnerCustomerHisDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.localnet.entity.InnerCustomerHis" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="his_time_interval" property="hisTimeInterval" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+    <result column="his_refuse_reson" property="hisRefuseReson" jdbcType="VARCHAR" />
+    <result column="his_unitname" property="hisUnitname" jdbcType="VARCHAR" />
+    <result column="his_amount_months" property="hisAmountMonths" jdbcType="VARCHAR" />
+    <result column="his_over_months" property="hisOverMonths" jdbcType="VARCHAR" />
+    <result column="his_month_money" property="hisMonthMoney" jdbcType="NUMERIC" />
+    <result column="his_surplus_capital" property="hisSurplusCapital" jdbcType="VARCHAR" />
+    <result column="max_overdue_days" property="maxOverdueDays" jdbcType="NUMERIC" />
+    <result column="total_overdue_days" property="totalOverdueDays" jdbcType="NUMERIC" />
+    <result column="total_overdue_times" property="totalOverdueTimes" jdbcType="NUMERIC" />
+    <result column="loan_customter_code" property="loanCustomterCode" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="his_amount" property="hisAmount" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="his_loan_code" property="hisLoanCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findListByLoanCode" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="BaseResultMap">
+	SELECT A.HIS_LOAN_CODE,INFO.OUTTO_LOAN_TIME AS APPLY_TIME,A.DICT_CUSTOMER_TYPE, A.LOAN_CODE,A.PRODUCT_TYPE,
+		DICT.LABEL AS DICT_CHECK_STATUS,C.REFUSE_REASON AS HIS_REFUSE_RESON,INFO.LOAN_AUDIT_AMOUNT AS HISAMOUNT,
+		INFO.LOAN_AUDIT_MONTHS AS HIS_AMOUNT_MONTHS,
+		SUM(CASE WHEN G.DICT_MONTH_STATUS='2' OR (G.DICT_MONTH_STATUS='3' AND (COALESCE(MONTH_CAPITAL_PAYACTUAL,0)+COALESCE(MONTH_INTEREST_PAYACTUAL,0)+COALESCE(ACTUAL_MONTH_FEE_SERVICE,0))>0) THEN 1 ELSE 0 END) AS HIS_OVER_MONTHS,
+        PB.PAYBACK_MONTH_AMOUNT HIS_MONTH_MONEY,
+        SUM(CASE WHEN PB.DICT_PAY_STATUS='3' THEN 0 ELSE COALESCE(G.MONTH_PAY_AMOUNT,0)-COALESCE(G.MONTH_CAPITAL_PAYACTUAL,0) END) HIS_SURPLUS_CAPITAL,
+        MAX(G.MONTH_OVERDUE_DAYS) AS MAX_OVERDUE_DAYS,SUM(G.MONTH_OVERDUE_DAYS) AS TOTAL_OVERDUE_DAYS,
+        SUM(CASE WHEN G.IS_OVERDUE='1' THEN 1 ELSE 0 END) AS TOTAL_OVERDUE_TIMES
+	FROM JK.T_JK_INNER_CUSTOMER_HIS A 
+		  LEFT JOIN JK.T_JK_CONTRACT F ON A.HIS_LOAN_CODE=F.LOAN_CODE
+		  LEFT JOIN JK.T_JK_PAYBACK PB ON F.CONTRACT_CODE=PB.CONTRACT_CODE AND PB.EFFECTIVE_FLAG='1'
+		  LEFT JOIN JK.T_JK_PAYBACK_MONTH G ON PB.CONTRACT_CODE=G.CONTRACT_CODE
+		  LEFT JOIN JK.T_JK_LOAN_INFO INFO ON A.HIS_LOAN_CODE=INFO.LOAN_CODE
+		  LEFT JOIN JK.T_JK_AUDIT_RECORD C ON INFO.AUDIT_ID=C.ID
+		  LEFT JOIN JK.T_GL_DICT DICT ON INFO.DICT_LOAN_STATUS = DICT.VALUE AND DICT.TYPE='jk_loan_apply_status'
+	WHERE 1=1 
+		<if test="loanCode != null and loanCode != ''">
+			AND A.LOAN_CODE = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			AND A.DICT_CUSTOMER_TYPE = #{type} 
+		</if>
+		<if test="relId != null and relId != ''">
+			AND A.CUSTOMER_CODE = #{relId} 
+		</if>
+	GROUP BY A.HIS_LOAN_CODE,INFO.OUTTO_LOAN_TIME,A.DICT_CUSTOMER_TYPE,A.LOAN_CODE,A.PRODUCT_TYPE,
+		   	 C.REFUSE_REASON,INFO.LOAN_AUDIT_AMOUNT,DICT.LABEL,INFO.LOAN_AUDIT_MONTHS,PB.PAYBACK_MONTH_AMOUNT
+	ORDER BY A.HIS_LOAN_CODE
+  </select>
+</mapper>

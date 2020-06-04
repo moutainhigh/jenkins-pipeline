@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditGuaranteeDetailedDao">
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="relation_id" jdbcType="VARCHAR" property="relationId" />
+    <result column="other_guarantee_amount" jdbcType="NUMERIC" property="otherGuaranteeAmount" />
+    <result column="real_principal" jdbcType="NUMERIC" property="realPrincipal" />
+    <result column="actual_day" jdbcType="DATE" property="actualDay" />
+    <result column="customer_cert_num" jdbcType="VARCHAR" property="customerCertNum" />
+    <result column="guaranteed_name" jdbcType="VARCHAR" property="guaranteedName" />
+     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, relation_id, other_guarantee_amount, real_principal, actual_day, customer_cert_num, 
+    guaranteed_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_jk_credit_guarantee_detailed
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  	<!-- 查询数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+		SELECT 
+			b.*
+		FROM 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_guarantee_detailed b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_jk_credit_guarantee_detailed
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+    insert into t_jk_credit_guarantee_detailed (id, relation_id, other_guarantee_amount, 
+      real_principal, actual_day, customer_cert_num, 
+      guaranteed_name,
+       create_by, 
+      create_time, modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{otherGuaranteeAmount,jdbcType=NUMERIC}, 
+      #{realPrincipal,jdbcType=NUMERIC}, #{actualDay,jdbcType=DATE}, #{customerCertNum,jdbcType=VARCHAR}, 
+      #{guaranteedName,jdbcType=VARCHAR},
+       #{createBy,jdbcType=VARCHAR},  #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+    insert into t_jk_credit_guarantee_detailed
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="otherGuaranteeAmount != null">
+        other_guarantee_amount,
+      </if>
+      <if test="realPrincipal != null">
+        real_principal,
+      </if>
+      <if test="actualDay != null">
+        actual_day,
+      </if>
+      <if test="customerCertNum != null">
+        customer_cert_num,
+      </if>
+      <if test="guaranteedName != null">
+        guaranteed_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="otherGuaranteeAmount != null">
+        #{otherGuaranteeAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realPrincipal != null">
+        #{realPrincipal,jdbcType=NUMERIC},
+      </if>
+      <if test="actualDay != null">
+        #{actualDay,jdbcType=DATE},
+      </if>
+      <if test="customerCertNum != null">
+        #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteedName != null">
+        #{guaranteedName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+    update t_jk_credit_guarantee_detailed
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="otherGuaranteeAmount != null">
+        other_guarantee_amount = #{otherGuaranteeAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="realPrincipal != null">
+        real_principal = #{realPrincipal,jdbcType=NUMERIC},
+      </if>
+      <if test="actualDay != null">
+        actual_day = #{actualDay,jdbcType=DATE},
+      </if>
+      <if test="customerCertNum != null">
+        customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteedName != null">
+        guaranteed_name = #{guaranteedName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditGuaranteeDetailed">
+    update t_jk_credit_guarantee_detailed
+    set relation_id = #{relationId,jdbcType=VARCHAR},
+      other_guarantee_amount = #{otherGuaranteeAmount,jdbcType=NUMERIC},
+      real_principal = #{realPrincipal,jdbcType=NUMERIC},
+      actual_day = #{actualDay,jdbcType=DATE},
+      customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      guaranteed_name = #{guaranteedName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.common.dao.ProcedureDao">
+    <select id="antifraudCheck" statementType="CALLABLE">  
+	<![CDATA[
+		    {call jk.antifraudcheck(#{loanCode,mode=IN,jdbcType=VARCHAR},
+		    				 #{result,mode=OUT,jdbcType=VARCHAR})}  
+	]]> 
+	</select>  
+	<update id="verifyRepeatCheck" statementType="CALLABLE" parameterType="java.lang.String">  
+	<![CDATA[
+		    {call jk.verifyRepeatCheck(#{loanCode,mode=IN,jdbcType=VARCHAR})}  
+	]]> 
+	</update>
+	<update id="antifraudInit" statementType="CALLABLE" parameterType="java.lang.String">  
+	<![CDATA[
+		    {call jk.antifraudinit(#{loanCode,mode=IN,jdbcType=VARCHAR})}
+	]]> 
+	</update> 
+	<insert id="initPoolFirst" statementType="CALLABLE" parameterType="java.lang.String">
+		<![CDATA[
+		    {call jk.insertpoolforfirst(#{loanCode,mode=IN,jdbcType=VARCHAR})}
+	]]> 
+	</insert>
+	<insert id="initPoolOther" statementType="CALLABLE" parameterType="java.lang.String">
+		<![CDATA[
+		    {call jk.insertpoolforother(#{loanCode,mode=IN,jdbcType=VARCHAR})}
+	]]> 
+	</insert>
+	<select id="verifyRepeate" statementType="CALLABLE">  
+	<![CDATA[
+		    {call jk.verifyRepeate(#{loanCode,mode=IN,jdbcType=VARCHAR},
+		    				 #{result,mode=OUT,jdbcType=INTEGER })}  
+	]]> 
+	</select>  
+	<insert id="verifyrepeatSecond" statementType="CALLABLE">  
+	<![CDATA[
+		    {call jk.verifyrepeatSecond(#{loanCode,mode=IN,jdbcType=VARCHAR},
+		    							#{checkType,mode=IN,jdbcType=VARCHAR})}  
+	]]> 
+	</insert> 
+</mapper>

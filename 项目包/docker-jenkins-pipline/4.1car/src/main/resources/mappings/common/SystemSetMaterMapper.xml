@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.SystemSetMaterDao">
+
+	<sql id="secretColumn">
+		a.id as id
+		,a.sys_flag as sysFlag
+		,a.sys_name as sysName
+		,a.sys_value as sysValue
+	</sql>
+	<select id="get" parameterType="com.creditharmony.approve.common.entity.SystemSetting" resultType="com.creditharmony.approve.common.entity.SystemSetting">
+	  select 
+	     a.id as id
+		,a.sys_flag as sysFlag
+		,a.sys_name as sysName
+		,a.sys_value as sysValue from t_jk_system_setting  a
+		where 1=1
+		<if test="id != null and id != ''">
+			and a.id=#{id}
+		</if>
+		<if test="sysFlag != null and sysFlag != ''">
+			and a.sys_flag=#{sysFlag}
+		</if>
+		<if test="sysValue != null and sysValue != ''">
+			and a.sys_value=#{sysValue}
+		</if>
+	</select>
+	<select id="findList" parameterType="com.creditharmony.approve.common.entity.SystemSetting" resultType="com.creditharmony.approve.common.entity.SystemSetting">
+	  select 
+	     a.id as id
+		,a.sys_flag as sysFlag
+		,a.sys_name as sysName
+		,a.sys_value as sysValue from t_jk_system_setting  a
+	</select>
+	
+	<insert id="insert"  parameterType="com.creditharmony.approve.common.entity.SystemSetting">
+	INSERT INTO jk.t_jk_system_setting
+	(id, sys_flag, sys_name, sys_value)
+	VALUES( #{id}, #{sysFlag}, #{sysName}, #{sysValue})
+	</insert>
+	
+	<update id="update"  parameterType="com.creditharmony.approve.common.entity.SystemSetting">
+		update jk.t_jk_system_setting set sys_flag = #{sysFlag},
+		sys_name = #{sysName},sys_value = #{sysValue}
+		 where id = #{id}
+	</update>
+	
+	<update id="updateBySysFlag"  parameterType="com.creditharmony.approve.common.entity.SystemSetting">
+		update jk.t_jk_system_setting set sys_value = #{sysValue}
+		 where sys_flag = #{sysFlag}
+	</update>
+	
+	<delete  id="delete"  parameterType="com.creditharmony.approve.common.entity.SystemSetting">
+		update jk.t_jk_system_setting set sys_flag = #{sysFlag},
+		sys_name = #{sysName},sys_value = #{sysValue}
+		 where id = #{id}
+	</delete>
+	 
+</mapper>

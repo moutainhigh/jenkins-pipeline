@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.loan.common.dao.ConsultDao">
+	
+    <sql id="consultColumns">
+    	a.id,
+		a.customer_name,
+		a.mobile_no,
+		a.card_type,
+		a.card_no,
+		a.plan_loan_money,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "modifyBy.id",
+		a.update_date,
+		a.del_flag
+    </sql>
+	
+	<!-- 根据ID获取客户咨询-->
+	<select id="get" resultType="com.creditharmony.approve.common.entity.Consult">
+		SELECT
+			<include refid="consultColumns"/>
+		FROM CHP_dev.loan_consult a
+		WHERE a.id = #{id}
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findList" resultType="com.creditharmony.approve.common.entity.Consult">
+		SELECT
+			<include refid="consultColumns"/>
+		FROM CHP_dev.loan_consult a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="customerName != null and customerName != ''">
+			and a.customer_name LIKE CONCAT('%', #{customerName}, '%')
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 查询全部数据 -->
+	<select id="findAllList" resultType="com.creditharmony.approve.verify.entity.User">
+		SELECT
+			<include refid="consultColumns"/>
+		FROM CHP_dev.loan_consult a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.id
+	</select>
+	
+	<!-- 查询全部客户咨询的数量-->
+	<select id="findAllCount" resultType="long">
+		SELECT
+			COUNT(1)
+		FROM CHP_dev.loan_consult a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 插入数据 -->
+	<insert id="insert">
+		INSERT INTO t_jk_customer_consultation(
+			id, 
+			<!--  
+			customer_name, 
+			mobile_no,
+		    card_type,
+	        card_no,
+			plan_loan_money,
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+			-->
+		) VALUES (
+			#{id},
+			<!--  
+			#{customerName}, 
+			#{mobileNo}, 
+			#{cardType}, 
+			#{cardNo}, 
+			#{planLoanMoney}, 
+			#{createBy.id}, 
+			#{createTime}, 
+			#{modifyBy.id}, 
+			#{modifyTime}, 
+			#{remarks}, 
+			#{delFlag}
+			-->
+		)
+	</insert>
+	
+	<!-- 插入客户沟通日志-->
+	<insert id="insertConsultRecord">
+		INSERT INTO t_jk_consultation_log(
+			id,
+			r_id, 
+			cons_loan_record,
+		    cons_oper_status ,
+	        cons_communicate_date,
+			create_by,
+			create_time, 
+			modify_by, 
+			modify_time			
+		) VALUES (
+			#{consultRecord.id},
+			#{id}, 
+			#{consultRecord.consLoanRecord}, 
+			#{consultRecord.consOperStatus}, 
+			#{consultRecord.consCommunicateDate}, 
+			#{consultRecord.createBy.id}, 
+			#{consultRecord.createTime}, 
+			#{consultRecord.modifyBy.id}, 
+			#{consultRecord.modifyTime} 
+
+		)
+	</insert>
+	
+	<!-- 插入客户信息数据 -->
+	<insert id="insertCustomerBaseInfo">
+		INSERT INTO t_jk_loan_customer_base(
+			id,			 
+			customer_code, 
+			customer_name,
+		    customer_sex,
+	        customer_mobile_phone,
+			dict_cert_type,
+			customer_cert_num, 
+			id_start_date, 
+			id_end_date, 
+			dict_comp_industry, 
+			create_by, 
+			create_time,
+			modify_by,
+			modify_time
+			
+		) VALUES (
+			#{customerBaseInfo.id}, 
+			#{customerBaseInfo.customerCode}, 
+			#{customerBaseInfo.customerName}, 
+			#{customerBaseInfo.customerSex}, 
+			#{customerBaseInfo.customerMobilePhone}, 
+			#{customerBaseInfo.dictCertType}, 
+			#{customerBaseInfo.mateCertNum}, 
+			#{customerBaseInfo.idStartDate}, 
+			#{customerBaseInfo.idEndDate}, 
+			#{customerBaseInfo.dictCompIndustry}, 
+			#{customerBaseInfo.createBy.id}, 
+			#{customerBaseInfo.createTime},
+			#{customerBaseInfo.modifyBy.id}, 
+			#{customerBaseInfo.modifyTime}
+			
+		)
+	</insert>
+	
+	<!-- 更新客户咨询信息  -->
+	<update id="update">
+		UPDATE CHP_dev.loan_consult SET 
+		 plan_loan_money = #{planLoanMoney},
+		 customer_name = #{customer_name},
+		 mobile_no = #{mobileNo}, 
+		 card_type = #{cardType},
+		 card_no = #{cardNo}, 
+		 update_by = #{modifyBy.id}, 
+		 update_date = #{modifyTime}, 
+		 remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新客户信息  -->
+	<update id="updateCustomerBaseInfo">
+		UPDATE t_jk_loan_customer_base SET 
+		 customer_name = #{customerName},
+		 customer_sex = #{customerSex},
+		 customer_mobile_phone = #{customerMobilePhone}, 
+		 dict_cert_type = #{dictCertType},
+		 customer_cert_num = #{mateCertNum}, 
+		 id_start_date = #{modifyBy.id}, 
+		 id_end_date = #{idEndDate}, 
+		 dict_comp_industry = #{dictCompIndustry}
+		 create_by = #{createBy.id}, 
+		 createTime = #{createTime}, 
+		 modify_by = #{modifyBy.id}, 
+		 modify_time = #{modifyTime}, 
+		WHERE id = #{id}
+	</update>
+	<!-- 逻辑删除客户咨询信息 -->
+	<update id="delete">
+		UPDATE CHP_dev.loan_consult SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

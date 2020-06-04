@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhDhgxshDhxxDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckContactNumEx" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_dhgxsh_id" property="rDhgxshId" jdbcType="VARCHAR" />
+    <result column="brhs_phone" property="brhsPhone" jdbcType="VARCHAR" />
+    <result column="brhs_assess_result" property="brhsAssessResult" jdbcType="VARCHAR" />
+    <result column="brhs_new_add" property="brhsNewAdd" jdbcType="VARCHAR" />
+    <result column="work_net_assess_result" property="workNetAssessResult" jdbcType="VARCHAR" />
+    <result column="work_check_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+    <result column="brhs_remark" property="brhsRemark" jdbcType="VARCHAR" />
+    <result column="is_repeat" property="isRepeat" jdbcType="VARCHAR" />
+    <result column="is_in_pool" property="isInPool" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="edit_remark" property="editRemark" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="clan_phone_net_result" property="clanPhoneNetResult" jdbcType="VARCHAR" />
+    <result column="clan_phone_net_remark" property="clanPhoneNetRemark" jdbcType="VARCHAR" />
+    <collection property="dhlyxx" resultMap="dhly" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  
+  <resultMap id="dhly" type="com.creditharmony.approve.phone.entity.DhzhDhlyxx">
+  	<result column="ly_id" property="id" jdbcType="VARCHAR" />
+  	<result column="r_gx_id" property="rGxId" jdbcType="VARCHAR" />
+  	<result column="dhlyxx_tel" property="dhlyxxTel" jdbcType="VARCHAR" />
+    <result column="dhlyxx_call_time" property="dhlyxxCallTime" jdbcType="TIMESTAMP" />
+    <result column="dhlyxx_answer_state" property="dhlyxxAnswerState" jdbcType="VARCHAR" />
+    <result column="dhlyxx_answer_inf" property="dhlyxxAnswerInf" jdbcType="VARCHAR" />
+    <result column="LY_CODE" property="lyCode" jdbcType="VARCHAR" />
+    <result column="dict_voice_source" property="dictVoiceSource" jdbcType="VARCHAR" />
+    <result column="file_path" property="dhlyxxFilePath" jdbcType="VARCHAR" />
+	<result column="dhlyxx_remark" property="dhlyxxRemark" jdbcType="VARCHAR" />
+	<result column="source_type" property="dictSourceType" jdbcType="VARCHAR" />
+  </resultMap>  
+  
+  <sql id="Base_Column_List" >
+    id, r_dhgxsh_id, brhs_phone, brhs_assess_result, work_net_assess_result, 
+    work_check_remark, brhs_remark, is_repeat, is_in_pool, loan_id, create_by, create_time, 
+    modify_by, modify_time
+  </sql> 
+    
+  <insert id="insert" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxshDhxx" >
+    insert into jk.t_jk_dhzh_dhgxsh_dhxx (id, r_dhgxsh_id, brhs_phone, brhs_assess_result, 
+      work_net_assess_result, work_check_remark, brhs_remark, is_repeat, is_in_pool, 
+      create_by, create_time, modify_by, modify_time,type,source,edit_remark,loan_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{rDhgxshId,jdbcType=VARCHAR}, #{brhsPhone,jdbcType=VARCHAR}, 
+      #{brhsAssessResult,jdbcType=VARCHAR}, #{workNetAssessResult,jdbcType=VARCHAR}, #{workCheckRemark,jdbcType=VARCHAR},
+      #{brhsRemark,jdbcType=VARCHAR}, #{isRepeat,jdbcType=VARCHAR}, 
+      #{isInPool,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{type,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{editRemark,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxshDhxx" >
+    insert into jk.t_jk_dhzh_dhgxsh_dhxx
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rDhgxshId != null" >
+        r_dhgxsh_id,
+      </if>
+      <if test="brhsPhone != null" >
+        brhs_phone,
+      </if>
+      <if test="brhsAssessResult != null" >
+        brhs_assess_result,
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result,
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark,
+      </if>      
+      <if test="brhsRemark != null" >
+        brhs_remark,
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat,
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool,
+      </if>
+       <if test="type != null" >
+        type,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="editRemark != null">
+        edit_remark,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="clanPhoneNetResult != null" >
+        clan_phone_net_result,
+      </if>
+      <if test="clanPhoneNetRemark != null" >
+        clan_phone_net_remark
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rDhgxshId != null" >
+        #{rDhgxshId,jdbcType=NUMERIC},
+      </if>
+      <if test="brhsPhone != null" >
+        #{brhsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsAssessResult != null" >
+        #{brhsAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsRemark != null" >
+        #{brhsRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        #{isInPool,jdbcType=VARCHAR},
+      </if>   
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null" >
+        #{editRemark,jdbcType=VARCHAR},
+      </if>   
+      <if test="loanId != null" >
+        #{loanId,jdbcType=VARCHAR},
+      </if>   
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clanPhoneNetResult != null" >
+        #{clanPhoneNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="clanPhoneNetRemark != null" >
+        #{clanPhoneNetRemark,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>   
+  
+  <select id="getDhgxshDhxxListByRid" resultMap="BaseResultMap" parameterType="java.util.Map">
+	select
+    	a.id,
+    	a.r_dhgxsh_id,
+    	a.brhs_phone,
+    	a.brhs_assess_result,
+    	a.brhs_new_add,
+    	a.work_net_assess_result,
+    	a.work_check_remark,
+    	a.brhs_remark,
+    	a.is_repeat,
+    	a.type,
+    	a.source,
+    	a.edit_remark,
+    	a.is_in_pool,
+    	a.loan_id,
+    	b.id as ly_id,
+  		b.r_gx_id,
+  		b.dhlyxx_tel,
+  		b.dhlyxx_call_time,
+  		b.dhlyxx_answer_state,
+  		b.dhlyxx_answer_inf,  
+  		b.LY_CODE,  		
+  		b.dict_voice_source,
+  		b.file_path,
+  		b.dhlyxx_remark,
+  		b.dict_source_type as source_type,
+  		a.clan_phone_net_result,
+  		a.clan_phone_net_remark     	      	
+      from jk.t_jk_dhzh_dhgxsh_dhxx a
+      	left join jk.t_jk_dhzh_dhlyxx b ON a.id = b.r_gx_id		
+	where 1=1 and type = #{type}
+		<if test="rContactInfoId != null and rContactInfoId != ''">
+			and a.r_dhgxsh_id = #{rContactInfoId}
+		</if>
+		order by a.create_time, b.create_time
+	</select>  
+  
+  <update id="update" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxshDhxx" >
+    update jk.t_jk_dhzh_dhgxsh_dhxx
+    <set >
+    	<if test="rDhgxshId != null" >
+        r_dhgxsh_id = #{rDhgxshId,jdbcType=VARCHAR},
+      </if>    
+      <if test="brhsPhone != null" >
+        brhs_phone = #{brhsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsAssessResult != null" >
+        brhs_assess_result = #{brhsAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsNewAdd != null" >
+        brhs_new_add = #{brhsNewAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result = #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark = #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsRemark != null" >
+        brhs_remark = #{brhsRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat = #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool = #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null">
+        EDIT_REMARK = #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>	
+   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_dhzh_dhgxsh_dhxx
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByRid" parameterType="java.lang.String" >
+    delete from jk.t_jk_dhzh_dhgxsh_dhxx
+    where r_dhgxsh_id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewApplicationInterviewInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewApplicationInterviewInfo" >
+    <id column="loan_code" property="loanCode" jdbcType="CHAR" />
+    <result column="dict_id_istrue" property="dictIdIstrue" jdbcType="VARCHAR" />
+    <result column="query_result" property="queryResult" jdbcType="VARCHAR" />
+    <result column="query_result_phone" property="queryResultPhone" jdbcType="VARCHAR" />
+    <result column="customer_job_review" property="customerJobReview" jdbcType="VARCHAR" />
+    <result column="credit_report" property="creditReport" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code,  dict_id_istrue, query_result, 
+    query_result_phone, customer_job_review, credit_report, create_by, create_time
+  </sql>
+  <select id="findByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_application_interview_info
+    where loan_code = #{loanCode,jdbcType=CHAR}
+  </select>
+</mapper>

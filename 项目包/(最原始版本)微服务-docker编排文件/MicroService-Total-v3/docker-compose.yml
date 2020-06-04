@@ -1,0 +1,57 @@
+version: '2'
+services:
+  microservice-customerinfo-client:
+    image: 10.150.33.104/microservice-uat/microservice-customerinfo-client:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=client
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-config:
+    image: 10.150.33.104/microservice-uat/microservice-config:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-customerinfo-server:
+    image: 10.150.33.104/microservice-uat/microservice-customerinfo-server:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.hostname_override: container_name
+  microservice-eureka:
+    image: 10.150.33.104/microservice-uat/microservice-eureka:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=eureka
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-redis:
+    image: redis:alpine
+    stdin_open: true
+    volumes:
+    - /redis/data/:/data/
+    tty: true
+    ports:
+    - 6379:6379/tcp
+    command:
+    - redis-server
+    - --appendonly
+    - 'yes'
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=redis
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-sleuth:
+    image: 10.150.33.104/microservice-uat/microservice-sleuth:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    ports:
+    - 7002:7002/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: test=aa
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always

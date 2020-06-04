@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.outvisit.dao.OutsideCheckInfoDao" >
+  
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.outvisit.entity.OutsideCheckInfo" >
+    insert into jk.t_jk_outside_task_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="checkJson != null" >
+        check_json,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="liveProvince != null" >
+        live_province,
+      </if>
+      <if test="liveCity != null" >
+        live_city,
+      </if>
+      <if test="liveArea != null" >
+        live_area,
+      </if>
+      <if test="liveAddress != null" >
+        live_address,
+      </if>
+      <if test="houseProvince != null" >
+        house_province,
+      </if>
+      <if test="houseCity != null" >
+        house_city,
+      </if>
+      <if test="houseArea != null" >
+        house_area,
+      </if>
+      <if test="houseAddress != null" >
+        house_address,
+      </if>
+      <if test="workUnitProvince != null" >
+        work_uinit_province,
+      </if>
+      <if test="workUnitCity != null" >
+        work_unit_city,
+      </if>
+      <if test="workUnitArea != null" >
+        work_unit_area,
+      </if>
+      <if test="workUnitAddress != null" >
+        work_unit_address,
+      </if>
+      <if test="operationProvince != null" >
+        operation_province,
+      </if>
+      <if test="operationCity != null" >
+        operation_city,
+      </if>
+      <if test="operationArea != null" >
+        operation_area,
+      </if>
+      <if test="operationAddress != null" >
+        operation_address,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="visitWorkRemark != null" >
+        visit_work_remark,
+      </if> 
+      <if test="visitType != null" >
+        visit_type,
+      </if> 
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkJson != null" >
+        #{checkJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="liveProvince != null" >
+        #{liveProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="liveCity != null" >
+        #{liveCity,jdbcType=VARCHAR},
+      </if>
+      <if test="liveArea != null" >
+        #{liveArea,jdbcType=VARCHAR},
+      </if>
+      <if test="liveAddress != null" >
+        #{liveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="houseProvince != null" >
+        #{houseProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCity != null" >
+        #{houseCity,jdbcType=VARCHAR},
+      </if>
+      <if test="houseArea != null" >
+        #{houseArea,jdbcType=VARCHAR},
+      </if>
+      <if test="houseAddress != null" >
+        #{houseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitProvince != null" >
+        #{workUnitProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitCity != null" >
+        #{workUnitCity,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitArea != null" >
+        #{workUnitArea,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnitAddress != null" >
+        #{workUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="operationProvince != null" >
+        #{operationProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="operationCity != null" >
+        #{operationCity,jdbcType=VARCHAR},
+      </if>
+      <if test="operationArea != null" >
+        #{operationArea,jdbcType=VARCHAR},
+      </if>
+      <if test="operationAddress != null" >
+        #{operationAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+	  <if test="visitWorkRemark != null" >
+        #{visitWorkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="visitType != null" >
+        #{visitType,jdbcType=VARCHAR},
+      </if> 
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据历史ID和借款编号获取外访清单 -->
+  <select id="getInfosByRid" resultType="com.creditharmony.approve.outvisit.entity.OutsideCheckInfo" parameterType="com.creditharmony.approve.outvisit.entity.OutsideCheckList">
+  	SELECT
+  		LA.PNAME liveProvince,
+  		LA.CNAME liveCity,
+  		LA.ANAME liveArea,
+  		B.LIVE_ADDRESS,
+  		WA.PNAME workUnitProvince,
+  		WA.CNAME workUnitCity,
+  		WA.ANAME workUnitArea,
+  		B.WORK_UNIT_ADDRESS,
+  		OA.PNAME operationProvince,
+  		OA.CNAME operationCity,
+  		OA.ANAME operationArea,
+  		B.OPERATION_ADDRESS,
+  		B.CUSTOMER_NAME,
+  		B.REMARK,
+  		B.VISIT_WORK_REMARK,
+  		B.VISIT_TYPE
+  	FROM JK.T_JK_OUTSIDE_TASK_LIST A 
+  		INNER JOIN JK.T_JK_OUTSIDE_TASK_INFO B ON A.ID=B.TASK_ID
+		LEFT JOIN JK.MVIEW_PROVINCE_CITY LA ON B.LIVE_AREA = LA.AID
+		LEFT JOIN JK.MVIEW_PROVINCE_CITY WA ON B.WORK_UNIT_AREA = WA.AID
+		LEFT JOIN JK.MVIEW_PROVINCE_CITY OA ON B.OPERATION_AREA = OA.AID
+	WHERE A.LOAN_CODE = #{loanCode,jdbcType=VARCHAR} AND A.R_STATUS_HIS_ID = #{rId,jdbcType=VARCHAR}
+	LIMIT 1;
+  </select>
+    
+  <!-- 通过借款编码查询主借人的 居住地址、公司地址 -->
+  <select id="getAddressSimple" resultType="com.creditharmony.approve.outvisit.entity.ex.OutsideCheckInfoEx">
+	  	SELECT A.CUSTOMER_NAME,A.CUSTOMER_PHONE_FIRST telephone,B.LIVE_PROVINCE liveProvince,B.LIVE_CITY liveCity,
+			   B.LIVE_AREA liveArea,B.LIVE_ADDRESS liveAddress,C.WORK_PROVINCE workUnitProvince,C.WORK_CITY workUnitCity,
+			   C.WORK_DISTRICT workUnitArea,C.WORK_ADDRESS workUnitAddress,D.PNAME liveProvinceName,D.CNAME liveCityName,
+			   D.ANAME liveAreaName,E.PNAME workProvinceName,E.CNAME workCityName,E.ANAME workAreaName
+		FROM JK.T_JK_LOAN_CUSTOMER A LEFT JOIN (
+		           SELECT BR.LOAN_CODE,HD.LIVE_PROVINCE,HD.LIVE_CITY,HD.LIVE_AREA,HD.LIVE_ADDRESS
+		           FROM JK.T_JK_DHZH_BRHS BR LEFT JOIN JK.T_JK_DHZH_DHGXBRSHD HD ON HD.R_CUSTOMER_COBORROWER_ID=BR.ID
+		           WHERE BR.LOAN_CODE = #{loanCode} AND BR.DICT_CUSTOMER_TYPE=#{mainLoan}
+		           ORDER BY HD.MODIFY_TIME DESC
+		           LIMIT 1) B ON B.LOAN_CODE=A.LOAN_CODE
+			LEFT JOIN (
+					SELECT ID,LOAN_CODE,WORK_PROVINCE,WORK_CITY,WORK_DISTRICT,WORK_ADDRESS,DICT_CUSTOMER_TYPE
+					FROM JK.T_JK_TEL_AUDIT_WORK 
+					WHERE LOAN_CODE = #{loanCode} AND DICT_CUSTOMER_TYPE=#{mainLoan} AND WORK_CITY IS NOT NULL
+					ORDER BY CREATE_TIME 
+					LIMIT 1) C ON A.LOAN_CODE = C.LOAN_CODE AND C.DICT_CUSTOMER_TYPE=#{mainLoan}
+			LEFT JOIN JK.MVIEW_PROVINCE_CITY D ON D.AID = B.LIVE_AREA
+			LEFT JOIN JK.MVIEW_PROVINCE_CITY E ON E.AID = C.WORK_DISTRICT
+		WHERE A.LOAN_CODE = #{loanCode}
+		LIMIT 1;
+  </select>
+  
+  <!-- 获取外访经营地址作为保证人的经营地址 -->
+  <select id="getVisitAddress" parameterType="java.lang.String" resultType="com.creditharmony.approve.verify.entity.AuditResult">
+	  	SELECT B.OPERATION_PROVINCE ensuremanBusinessProvince,B.OPERATION_CITY ensuremanBusinessCity,
+	  		   B.OPERATION_AREA ensuremanBusinessArea,B.OPERATION_ADDRESS ensuremanBusinessPlace
+		FROM JK.T_JK_OUTSIDE_TASK_LIST A INNER JOIN JK.T_JK_OUTSIDE_TASK_INFO B
+			 ON A.ID = B.TASK_ID
+		WHERE A.LOAN_CODE = #{loanCode} AND B.OPERATION_PROVINCE IS NOT NULL AND B.OPERATION_ADDRESS IS NOT NULL
+		ORDER BY B.CREATE_TIME DESC
+		LIMIT 1;
+  </select>
+  
+</mapper>

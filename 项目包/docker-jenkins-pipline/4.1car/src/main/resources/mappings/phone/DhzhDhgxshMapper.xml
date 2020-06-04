@@ -1,0 +1,1103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhDhgxshDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckContactPersonEx" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="loan_man_relation" property="loanManRelation" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="dict_tel_source" property="dictTelSource" jdbcType="VARCHAR" />
+    <result column="dhgxsh_tel" property="telNum" jdbcType="VARCHAR" /> 
+    <result column="dict_relation_type" property="dictRelationType" jdbcType="VARCHAR" />
+    <result column="dhgxsh_assess_result" property="dhgxshAssessResult" jdbcType="VARCHAR" />
+    <result column="dhgxsh_employee_num" property="dhgxshEmployeeNum" jdbcType="NUMERIC" />
+    <result column="loan_live_address" property="loanLiveAddress" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="work_net_assess_result" property="workNetAssessResult" jdbcType="VARCHAR" />
+    <result column="work_check_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+    <result column="is_repeat" property="isRepeat" jdbcType="VARCHAR" />      
+    <result column="is_in_pool" property="isInPool" jdbcType="VARCHAR" />
+    <result column="edit_remark" property="editRemark" jdbcType="VARCHAR" />    
+    <result column="is_ready" property="isReady" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />     
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />     
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />     
+    <result column="tel_remark" property="telRemark" jdbcType="VARCHAR" />
+    <result column="mate_certnum_net_result" property="mateCertnumNetResult" jdbcType="VARCHAR" />
+    <result column="mate_certnum_net_remark" property="mateCertnumNetRemark" jdbcType="VARCHAR" />
+    <result column="net_check_result" property="netCheckResult" jdbcType="VARCHAR" />
+    <result column="net_check_remark" property="netCheckRemark" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+  	<result column="province" property="province" jdbcType="VARCHAR" />
+  	<result column="city" property="city" jdbcType="VARCHAR" />
+  	<result column="arer" property="arer" jdbcType="VARCHAR" />
+  	<result column="address" property="address" jdbcType="VARCHAR" />
+
+  	<result column="dict_unit_province" property="dictUnitProvince" jdbcType="VARCHAR" />
+ 	<result column="dict_unit_city" property="dictUnitCity" jdbcType="VARCHAR" />
+  	<result column="dict_unit_arer" property="dictUnitArer" jdbcType="VARCHAR" />
+  	<result column="unit_address" property="unitAddress" jdbcType="VARCHAR" />
+  	<result column="department" property="department" jdbcType="VARCHAR" />
+  	<result column="post" property="post" jdbcType="VARCHAR" />  	
+  	<result column="loan_man_relation_remark" property="loanManRelationRemark" jdbcType="VARCHAR" />
+  	<result column="mate_unitname_net_result" property="mateUnitnameNetResult" jdbcType="VARCHAR" />
+  	<result column="mate_unitname_net_remark" property="mateUnitnameNetRemark" jdbcType="VARCHAR" />
+  	<result column="mate_address_net_result" property="mateAddressNetResult" jdbcType="VARCHAR" />
+  	<result column="mate_address_net_remark" property="mateAddressNetRemark" jdbcType="VARCHAR" />  
+   	<result column="data_sources" property="dataSources" jdbcType="VARCHAR" />	
+  	
+  	<collection property="dhlyxx" resultMap="myDhly" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, name, loan_man_relation, r_customer_coborrower_id, dict_customer_type, dict_tel_source, dhgxsh_tel,
+    dict_relation_type, dhgxsh_assess_result, dhgxsh_employee_num, loan_live_address, 
+    dict_check_type, work_net_assess_result, work_check_remark, is_repeat, is_in_pool, loan_id,
+    create_by, create_time, modify_time, modify_by
+  </sql>
+  <select id="findPhone" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  	select DHGXSH_TEL,r_customer_coborrower_id,DICT_CUSTOMER_TYPE 
+  	from jk.T_JK_DHZH_DHGXSH 
+	where DICT_TEL_SOURCE &lt;&gt; '01'
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+	union
+	select b.BRHS_PHONE as DHGXSH_TEL,a.R_CUSTOMER_COBORROWER_ID,a.DICT_CUSTOMER_TYPE
+	from jk.T_JK_DHZH_BRHS	a
+	left join jk.T_JK_DHZH_BRHS_DHXX b
+	on a.id=b.R_BRHS_ID
+	where BRHS_NEW_ADD = '1' 
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and a.dict_check_type = #{checkType} 
+		</if>
+  </select>  
+  <resultMap id="myDhly" type="com.creditharmony.approve.phone.entity.DhzhDhlyxx">
+  	<result column="ly_id" property="id" jdbcType="VARCHAR" />
+  	<result column="r_gx_id" property="rGxId" jdbcType="VARCHAR" />
+  	<result column="dhlyxx_tel" property="dhlyxxTel" jdbcType="VARCHAR" />
+    <result column="dhlyxx_call_time" property="dhlyxxCallTime" jdbcType="TIMESTAMP" />
+    <result column="dhlyxx_answer_state" property="dhlyxxAnswerState" jdbcType="VARCHAR" />
+    <result column="dhlyxx_answer_inf" property="dhlyxxAnswerInf" jdbcType="VARCHAR" />
+    <result column="LY_CODE" property="lyCode" jdbcType="VARCHAR" />
+    <result column="dict_voice_source" property="dictVoiceSource" jdbcType="VARCHAR" />
+    <result column="file_path" property="dhlyxxFilePath" jdbcType="VARCHAR" />
+	<result column="dhlyxx_remark" property="dhlyxxRemark" jdbcType="VARCHAR" />
+	<result column="source_type" property="dictSourceType" jdbcType="VARCHAR" />
+  </resultMap>  
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_dhzh_dhgxsh
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxsh" >
+    insert into jk.t_jk_dhzh_dhgxsh (id, loan_code, name, 
+      loan_man_relation, r_customer_coborrower_id, dict_customer_type, 
+      dict_tel_source, dhgxsh_tel, dict_relation_type, dhgxsh_assess_result, 
+      dhgxsh_employee_num, loan_live_address, dict_check_type, 
+      work_net_assess_result, work_check_remark, is_repeat, is_in_pool, create_by, 
+      create_time, modify_time, modify_by,dict_cert_type,customer_cert_num)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{loanManRelation,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=NUMERIC}, #{dictCustomerType,jdbcType=VARCHAR}, 
+      #{dictTelSource,jdbcType=VARCHAR}, #{telNum,jdbcType=VARCHAR}, #{dictRelationType,jdbcType=VARCHAR}, #{dhgxshAssessResult,jdbcType=VARCHAR}, 
+      #{dhgxshEmployeeNum,jdbcType=NUMERIC}, #{loanLiveAddress,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR},
+      #{workNetAssessResult,jdbcType=VARCHAR}, #{workCheckRemark,jdbcType=VARCHAR}, #{isRepeat,jdbcType=VARCHAR}, 
+      #{isInPool,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR},#{dictCertType,jdbcType=VARCHAR},#{customerCertNum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxsh" >
+    insert into jk.t_jk_dhzh_dhgxsh
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="netCheckRemark != null" >
+        net_check_remark,
+      </if>
+     <if test="netCheckResult != null" >
+        net_check_result,
+      </if>
+     <if test="isReady != null" >
+        is_ready,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="loanManRelation != null" >
+        loan_man_relation,
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="dictTelSource != null" >
+        dict_tel_source,
+      </if>
+      <if test="dictRelationType != null" >
+        dict_relation_type,
+      </if>
+      <if test="telNum != null" >
+        dhgxsh_tel,
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        dhgxsh_assess_result,
+      </if>
+      <if test="dhgxshEmployeeNum != null" >
+        dhgxsh_employee_num,
+      </if>
+      <if test="loanLiveAddress != null" >
+        loan_live_address,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result,
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark,
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat,
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool,
+      </if>
+     <if test="editRemark != null" >
+        edit_remark,
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type,
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num,
+      </if>
+      <if test="telRemark != null" >
+        tel_remark,
+      </if>
+      <if test="mateCertnumNetResult != null" >
+        mate_certnum_net_result,
+      </if>
+      <if test="mateCertnumNetRemark != null" >
+        mate_certnum_net_remark,
+      </if>
+      <if test="dictSourceType != null" >
+        dict_source_type,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="unitName != null" >
+        unit_name,
+      </if> 
+      
+      <if test="dictUnitProvince != null" >
+        dict_unit_province,
+      </if> 
+      <if test="dictUnitCity != null" >
+        dict_unit_city,
+      </if> 
+      <if test="dictUnitArer != null" >
+        dict_unit_arer,
+      </if>
+      <if test="unitAddress != null" >
+        unit_address,
+      </if>   
+      <if test="department != null" >
+        department,
+      </if>  
+      <if test="post != null" >
+        post,
+      </if> 
+      <if test="loanManRelationRemark != null" >
+        loan_man_relation_remark,
+      </if>
+      <if test="mateUnitnameNetResult != null" >
+        mate_unitname_net_result,
+      </if>
+      <if test="mateUnitnameNetRemark != null" >
+        mate_unitname_net_remark,
+      </if>
+      <if test="mateAddressNetResult != null" >
+        mate_address_net_result,
+      </if>
+      <if test="mateAddressNetRemark != null" >
+        mate_address_net_remark,
+      </if> 
+      
+      <if test="homeTel != null" >
+        home_tel,
+      </if> 
+      
+      <if test="province != null" >
+        province,
+      </if> 
+      <if test="city != null" >
+        city,
+      </if> 
+      <if test="arer != null" >
+        arer,
+      </if> 
+      <if test="address != null" >
+        address,
+      </if>  
+      <if test="dataSources != null" >
+        data_sources,
+      </if>                         
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    <if test="netCheckRemark != null" >
+        #{netCheckRemark,jdbcType=VARCHAR},
+      </if>
+     <if test="netCheckResult != null" >
+        #{netCheckResult,jdbcType=VARCHAR},
+      </if>
+     <if test="isReady != null" >
+        #{isReady,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="loanManRelation != null" >
+        #{loanManRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        #{rCustomerCoborrowerId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null" >
+        #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRelationType != null" >
+        #{dictRelationType,jdbcType=VARCHAR},
+      </if>
+      <if test="telNum != null" >
+        #{telNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        #{dhgxshAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshEmployeeNum != null" >
+        #{dhgxshEmployeeNum,jdbcType=NUMERIC},
+      </if>
+      <if test="loanLiveAddress != null" >
+        #{loanLiveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null" >
+        #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="telRemark != null" >
+        #{telRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="mateCertnumNetResult != null" >
+        #{mateCertnumNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateCertnumNetRemark != null" >
+        #{mateCertnumNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSourceType != null" >
+        #{dictSourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="loanId != null" >
+        #{loanId,jdbcType=VARCHAR},
+      </if>      
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="unitName != null" >
+        #{unitName,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="dictUnitProvince != null" >
+        #{dictUnitProvince,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitCity != null" >
+        #{dictUnitCity,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitArer != null" >
+        #{dictUnitArer,jdbcType=VARCHAR},
+      </if>
+      <if test="unitAddress != null" >
+        #{unitAddress,jdbcType=VARCHAR},
+      </if>   
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>  
+      <if test="post != null" >
+        #{post,jdbcType=VARCHAR},
+      </if> 
+      <if test="loanManRelationRemark != null" >
+        #{loanManRelationRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="mateUnitnameNetResult != null" >
+        #{mateUnitnameNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateUnitnameNetRemark != null" >
+        #{mateUnitnameNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="mateAddressNetResult != null" >
+        #{mateAddressNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateAddressNetRemark != null" >
+        #{mateAddressNetRemark,jdbcType=VARCHAR},
+      </if> 
+      
+      <if test="homeTel != null" >
+        #{homeTel,jdbcType=VARCHAR},
+      </if> 
+      
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="arer != null" >
+        #{arer,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSources != null" >
+        #{dataSources,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!-- 刘燕军 通过id更新数据 -->
+  <update id="update" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxsh" >
+    update jk.t_jk_dhzh_dhgxsh
+    <set >
+      <if test="netCheckResult != null" >
+        NET_CHECK_RESULT = #{netCheckResult,jdbcType=VARCHAR},
+      </if>
+      <if test="netCheckRemark != null" >
+        NET_CHECK_REMARK = #{netCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="loanManRelation != null" >
+        loan_man_relation = #{loanManRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null" >
+        dict_tel_source = #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRelationType != null" >
+        dict_relation_type = #{dictRelationType,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        dhgxsh_assess_result = #{dhgxshAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshEmployeeNum != null" >
+        dhgxsh_employee_num = #{dhgxshEmployeeNum,jdbcType=NUMERIC},
+      </if>
+      <if test="loanLiveAddress != null" >
+        loan_live_address = #{loanLiveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result = #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark = #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat = #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool = #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null">
+        EDIT_REMARK = #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="telNum != null" >
+        dhgxsh_tel= #{telNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type= #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num= #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+       <if test="mateCertnumNetResult != null" >
+        MATE_CERTNUM_NET_RESULT= #{mateCertnumNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateCertnumNetRemark != null" >
+        MATE_CERTNUM_NET_REMARK= #{mateCertnumNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="unitName != null" >
+        unit_name= #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="clanNameNetResult != null" >
+        clan_name_net_result=#{clanNameNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="clanNameNetRemark != null" >
+        clan_name_net_remark=#{clanNameNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="clanCertnumNetResult != null" >
+        clan_certnum_net_result=#{clanCertnumNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="clanCertnumNeRemark != null" >
+        clan_certnum_net_remark=#{clanCertnumNeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="mateUnitnameNetResult != null" >
+        mate_unitname_net_result=#{mateUnitnameNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateUnitnameNetRemark != null" >
+        mate_unitname_net_remark=#{mateUnitnameNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="mateAddressNetResult != null" >
+        mate_address_net_result=#{mateAddressNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="mateAddressNetRemark != null" >
+        mate_address_net_remark=#{mateAddressNetRemark,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="dictUnitProvince != null" >
+        dict_unit_province=#{dictUnitProvince,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitCity != null" >
+        dict_unit_city=#{dictUnitCity,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitArer != null" >
+        dict_unit_arer=#{dictUnitArer,jdbcType=VARCHAR},
+      </if>
+      <if test="unitAddress != null" >
+        unit_address=#{unitAddress,jdbcType=VARCHAR},
+      </if>   
+      <if test="department != null" >
+        department=#{department,jdbcType=VARCHAR},
+      </if>  
+      <if test="post != null" >
+        post=#{post,jdbcType=VARCHAR},
+      </if> 
+      <if test="loanManRelationRemark != null" >
+        loan_man_relation_remark=#{loanManRelationRemark,jdbcType=VARCHAR},
+      </if> 
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <update id="updateNewApply" parameterType="com.creditharmony.approve.phone.entity.DhzhDhgxsh">
+    update jk.t_jk_dhzh_dhgxsh
+    <set>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=NUMERIC},
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        dhgxsh_assess_result = #{dhgxshAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result = #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark = #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat = #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool = #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null">
+        EDIT_REMARK = #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="clanNameNetResult != null" >
+        NET_CHECK_RESULT = #{clanNameNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="clanNameNetRemark != null" >
+        NET_CHECK_REMARK = #{clanNameNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="clanCertnumNetResult != null">
+        MATE_CERTNUM_NET_RESULT = #{clanCertnumNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="clanCertnumNeRemark != null">
+        MATE_CERTNUM_NET_REMARK = #{clanCertnumNeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanManRelationRemark != null">
+        loan_man_relation_remark = #{loanManRelationRemark,jdbcType=VARCHAR},
+      </if> 
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <!-- 下载意见书 电话核查结果 -->
+  <select id="getWork" resultType="com.creditharmony.approve.internet.entity.ex.UploadPhoneResult" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+	SELECT CONTENT,DHLYXX_TEL as dhlyxxTel,DHLYXX_CALL_TIME as dhlyxxCallTime,DHLYXX_ANSWER_INF as dhlyxxAnswerInf, DHLYXX_ANSWER_STATE AS dhlyxxAnswerState
+	FROM 
+		(
+		SELECT A.WORK_UNITNAME AS CONTENT,C.DHLYXX_TEL,C.DHLYXX_CALL_TIME,C.DHLYXX_ANSWER_STATE,C.DHLYXX_ANSWER_INF
+		FROM T_JK_TEL_AUDIT_WORK A
+		LEFT JOIN T_JK_DHZH_WORK_TELNUM B ON A.ID=B.WORK_ID
+		LEFT JOIN T_JK_DHZH_DHLYXX C ON B.ID=C.R_GX_ID
+		WHERE A.DICT_CUSTOMER_TYPE='0' AND A.LOAN_CODE=#{loanCode} AND A.DICT_CHECK_TYPE=#{checkType}
+		UNION ALL
+		SELECT CONCAT(D.LABEL,'(',E.LABEL,')') AS CONTENT,C.DHLYXX_TEL,C.DHLYXX_CALL_TIME,C.DHLYXX_ANSWER_STATE,C.DHLYXX_ANSWER_INF
+		FROM JK.T_JK_DHZH_DHGXSH A
+		LEFT JOIN JK.T_JK_DHZH_DHLYXX C ON A.ID=C.R_GX_ID
+		LEFT JOIN JK.T_GL_DICT D ON D.TYPE='jk_relation_type' AND A.DICT_RELATION_TYPE = D.VALUE
+		LEFT JOIN JK.T_GL_DICT E ON E.PARENT_ID=D.ID AND A.LOAN_MAN_RELATION = E.VALUE  
+		WHERE A.DICT_CUSTOMER_TYPE='0' AND A.LOAN_CODE=#{loanCode} AND A.DICT_CHECK_TYPE=#{checkType}
+		UNION ALL
+		SELECT CASE WHEN A.DICT_CUSTOMER_TYPE = '1' THEN CONCAT(D.LABEL,'-',A.NAME) ELSE D.LABEL END AS CONTENT
+		,C.DHLYXX_TEL,C.DHLYXX_CALL_TIME,C.DHLYXX_ANSWER_STATE,C.DHLYXX_ANSWER_INF
+		FROM JK.T_JK_DHZH_BRHS A
+		LEFT JOIN JK.T_JK_DHZH_BRHS_DHXX B ON A.ID=B.R_BRHS_ID
+		LEFT JOIN JK.T_JK_DHZH_DHLYXX C ON B.ID=C.R_GX_ID
+		LEFT JOIN JK.T_GL_DICT D ON D.VALUE = A.DICT_CUSTOMER_TYPE AND D.TYPE='jk_loan_man_flag'
+		WHERE A.LOAN_CODE=#{loanCode} AND A.DICT_CHECK_TYPE=#{checkType}
+	)
+	ORDER BY CONTENT,DHLYXX_TEL,DHLYXX_CALL_TIME
+
+  </select>
+  
+  <!-- 联系人核实 -->
+  <select id="getContact" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckResultEx" parameterType="java.lang.String">
+		select 
+			CONCAT(c.label,'-',d.label) as dictRelationType,
+			b.NAME as name,
+			b.DHGXSH_ASSESS_RESULT,a.label as DICT_CUSTOMER_TYPE
+		from jk.T_JK_DHZH_DHGXSH b
+		inner join jk.t_gl_dict a
+		on a.type='jk_loan_man_flag' and a.value=b.DICT_CUSTOMER_TYPE
+		left join jk.t_gl_dict c
+		on c.type='jk_relation_type' and c.value=b.DICT_RELATION_TYPE
+		left join jk.t_gl_dict d
+		on d.parent_id=c.id and d.value=b.LOAN_MAN_RELATION
+		where (b.DHGXSH_ASSESS_RESULT = '0' or b.DHGXSH_ASSESS_RESULT = '1') and b.LOAN_CODE = #{loanCode} and b.DICT_CHECK_TYPE=#{checkType}
+  </select>
+  
+  <!-- 本人核实 -->
+  <select id="getSelf" resultType="com.creditharmony.approve.phone.entity.ex.TelCheckResultEx" parameterType="java.lang.String">
+	SELECT 
+		'本人核实' as dictRelationType,
+		case when a.value='0' then e.customer_name else f.cobo_name end as name,
+		(case 
+			when d.brhs_assess_result='1' and count(d.brhs_assess_result)>0 then 1				    
+			when d.brhs_assess_result='0' and count(d.brhs_assess_result)>0 then 0 END) as dhgxshAssessResult,
+	a.label as DICT_CUSTOMER_TYPE,a.value
+	FROM jk.t_jk_dhzh_brhs_dhxx d
+	inner join jk.T_JK_DHZH_BRHS y
+	on d.R_BRHS_ID = y.id
+	left join jk.t_gl_dict a
+	on a.type='jk_loan_man_flag' and a.value=y.DICT_CUSTOMER_TYPE
+	left join jk.t_jk_loan_customer e on y.R_CUSTOMER_COBORROWER_ID=e.id and y.DICT_CUSTOMER_TYPE='0'
+	left join jk.t_jk_loan_coborrower f on y.R_CUSTOMER_COBORROWER_ID=f.id and y.DICT_CUSTOMER_TYPE='1'
+	where y.LOAN_CODE = #{loanCode} and y.DICT_CHECK_TYPE=#{checkType}
+	group by d.brhs_assess_result,a.label,a.value,e.customer_name,f.cobo_name
+  </select>
+  
+  <!-- 联电话录音 -->
+  <sql id="queryJoin">
+  	LEFT JOIN 
+		(SELECT r_gx_id,MAX(dhlyxx_call_time) AS dhlyxx_call_time FROM jk.t_jk_dhzh_dhlyxx GROUP BY r_gx_id) b 
+		ON a.id = b.r_gx_id
+	LEFT JOIN jk.t_jk_dhzh_dhlyxx c ON b.r_gx_id=c.r_gx_id AND b.dhlyxx_call_time=c.dhlyxx_call_time
+  </sql>
+  
+  <!-- 初审决策>电话核查结果 关系审核、电话审核 复用查询条件 -->
+  <sql id="queryTerms">
+	WHERE a.loan_code = #{loanCode}
+	AND a.dict_customer_type = #{type}
+	AND a.dict_check_type = #{checkType}
+  </sql>
+  
+  <select id="getListByCodeAndType" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT 
+  		a.id,
+  		a.loan_code,
+  		a.name,
+  		a.loan_man_relation,
+  		a.r_customer_coborrower_id,
+  		a.dict_customer_type,
+  		a.dict_tel_source,
+  		a.dhgxsh_tel,
+  		a.dict_relation_type,
+  		a.dhgxsh_assess_result,
+  		a.dhgxsh_employee_num,
+  		a.loan_live_address,
+  		a.dict_check_type,
+  		a.work_net_assess_result,
+  		a.work_check_remark,  		
+  		a.is_repeat,
+  		a.EDIT_REMARK,
+  		a.dict_cert_type,
+  		a.customer_cert_num,
+		a.tel_remark,
+		a.mate_certnum_net_result,
+		a.mate_certnum_net_remark,
+  		a.is_ready,
+		a.dict_source_type,
+  		a.is_in_pool,
+  		a.loan_id,
+  		b.id as ly_id,
+  		b.r_gx_id,
+  		b.dhlyxx_tel,
+  		b.dhlyxx_call_time,
+  		b.dhlyxx_answer_state,
+  		b.dhlyxx_answer_inf,
+  		b.LY_CODE,   		  		
+  		b.dict_voice_source,
+  		b.file_path,
+  		b.dhlyxx_remark,
+  		b.dict_source_type as source_type,
+  		a.net_check_remark,
+  		a.net_check_result,
+  		a.unit_name,
+  		a.province, 
+  		a.city, 
+  		a.arer, 
+  		a.address,
+  		
+  		a.dict_unit_province,
+ 		a.dict_unit_city,
+  		a.dict_unit_arer,
+  		a.unit_address,
+  		a.department,
+  		a.post,
+  		a.loan_man_relation_remark,
+  		a.mate_unitname_net_result,
+  		a.mate_unitname_net_remark,
+  		a.mate_address_net_result,
+  		a.mate_address_net_remark,
+  		a.data_sources
+  		
+  	FROM jk.t_jk_dhzh_dhgxsh a
+  	LEFT JOIN jk.t_jk_dhzh_dhlyxx b ON a.id = b.r_gx_id
+  	WHERE 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and a.dict_customer_type = #{dictCustomerType} 
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and a.dict_check_type = #{dictCheckType} 
+		</if>
+		<if test="relationType != null and relationType != ''">
+			and a.dict_relation_type = #{relationType} 
+		</if>
+		<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+			and r_customer_coborrower_id = #{rCustomerCoborrowerId} 
+		</if>
+  	ORDER BY a.create_time, b.create_time
+  </select>  
+    
+  <!-- 获取反欺诈联系人列表 -->
+  <select id="getContacts" resultMap="antifraudResultMap" parameterType="java.util.Map">
+  	SELECT 
+  		a.id,
+  		a.loan_code,
+  		a.name,
+  		a.loan_man_relation,
+  		a.dhgxsh_tel,
+  		a.loan_live_address,
+  		a.dhgxsh_assess_result,
+  		a.edit_remark,
+  		a.tel_remark,
+  		a.loan_man_relation_remark,
+		b.id as subId,
+  		b.dhlyxx_call_time,
+  		b.dhlyxx_answer_state,
+  		b.dhlyxx_answer_inf,
+  		b.file_path
+  		,
+  		a.home_tel,
+  		a.home_tel_assess_result,
+  		a.home_tel_remark
+  	FROM jk.t_jk_dhzh_dhgxsh a
+  	LEFT JOIN jk.t_jk_dhzh_dhlyxx b ON a.id = b.r_gx_id
+  	WHERE 1=1 
+  	<include refid="query"></include>
+  	ORDER BY a.create_time,b.create_time
+  </select>
+  
+  <!-- 获取反欺诈联系人 count -->
+  <select id="getAntifraudCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+  	SELECT 
+		COUNT(*)
+  	FROM jk.t_jk_dhzh_dhgxsh a
+  	WHERE 1=1 
+  	<include refid="query"></include>
+  </select>
+  
+  <resultMap id="antifraudResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckContactPersonEx" >
+  	<result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="loan_man_relation" property="loanManRelation" jdbcType="VARCHAR" />
+    <result column="dhgxsh_tel" property="telNum" jdbcType="VARCHAR" />
+    <result column="loan_live_address" property="loanLiveAddress" jdbcType="VARCHAR" />
+    <result column="dhgxsh_assess_result" property="dhgxshAssessResult" jdbcType="VARCHAR" />
+    <result column="edit_remark" property="editRemark" jdbcType="VARCHAR" />    
+    <result column="tel_remark" property="telRemark" jdbcType="VARCHAR" />
+    <result column="loan_man_relation_remark" property="loanManRelationRemark" jdbcType="VARCHAR" />
+    <result column="home_tel" property="homeTel" jdbcType="VARCHAR" />
+    <result column="home_tel_assess_result" property="homeTelAssessResult" jdbcType="VARCHAR" />
+    <result column="home_tel_remark" property="homeTelRemark" jdbcType="VARCHAR" />
+    <collection property="dhlyxx" resultMap="myResult" javaType="java.util.ArrayList"></collection>
+  </resultMap>
+  
+  <resultMap id="myResult" type="com.creditharmony.approve.phone.entity.DhzhDhlyxx">
+  	<result column="subId" property="id" jdbcType="VARCHAR" />
+    <result column="dhlyxx_call_time" property="dhlyxxCallTime" jdbcType="TIMESTAMP" />
+    <result column="dhlyxx_answer_state" property="dhlyxxAnswerState" jdbcType="VARCHAR" />
+    <result column="dhlyxx_answer_inf" property="dhlyxxAnswerInf" jdbcType="VARCHAR" />
+    <result column="file_path" property="dhlyxxFilePath" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 共用查询条件 -->
+  <sql id="query">
+  	<if test="loanCode != null and loanCode != ''">
+		and a.loan_Code = #{loanCode}
+	</if>
+	<if test="dictCheckType != null and dictCheckType != ''">
+		and a.dict_check_type = #{dictCheckType}
+	</if>
+	<if test="dictRelationType != null and dictRelationType != ''">
+		and a.dict_relation_type = #{dictRelationType} 
+	</if>
+  </sql>
+  
+  <update id="updateByKeyAndit">
+  	UPDATE jk.t_jk_dhzh_dhgxsh
+	SET 
+		dhgxsh_assess_result = #{dhgxshAssessResult},
+		modify_by = #{modifyBy},
+     	modify_time = #{modifyTime}
+	WHERE id = #{id}	
+  </update>
+  
+  <!-- 更新编辑标识 -->
+  <update id="updateEditRemark" parameterType="java.util.Map">
+  	UPDATE 
+  		jk.t_jk_dhzh_dhgxsh
+  	SET 
+  		edit_remark = #{editRemark}
+  	WHERE loan_code=#{loanCode} AND dict_check_type=#{checkType}
+  </update>  
+  
+  <!--反欺诈电话照会添加联系人，工作证明人或家庭联系人- wanglidong  -->
+  <insert id="addContacts" parameterType="com.creditharmony.approve.antifraud.entity.ex.PhoneWorkProvesEx" >
+    insert into jk.t_jk_dhzh_dhgxsh
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="loanManRelation != null" >
+        loan_man_relation,
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="dictTelSource != null" >
+        dict_tel_source,
+      </if>
+      <if test="dictRelationType != null" >
+        dict_relation_type,
+      </if>
+      <if test="dhgxshTel != null" >
+        dhgxsh_tel,
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        dhgxsh_assess_result,
+      </if>
+      <if test="loanLiveAddress != null" >
+        loan_live_address,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="workNetAssessResult != null" >
+        work_net_assess_result,
+      </if>
+      <if test="workCheckRemark != null" >
+        work_check_remark,
+      </if>
+      <if test="isRepeat != null" >
+        is_repeat,
+      </if>
+      <if test="isInPool != null" >
+        is_in_pool,
+      </if>
+     <if test="editRemark != null" >
+        edit_remark,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="telRemark != null" >
+        tel_remark,
+      </if>
+      <if test="otherTelRemark != null" >
+        loan_man_relation_remark,
+      </if>
+      
+      <if test="homeTel != null" >
+        home_tel,
+      </if>
+      <if test="homeTelAssessResult != null" >
+        home_tel_assess_result,
+      </if>
+      <if test="homeTelRemark != null" >
+        home_tel_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="loanManRelation != null" >
+        #{loanManRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        #{rCustomerCoborrowerId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictTelSource != null" >
+        #{dictTelSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRelationType != null" >
+        #{dictRelationType,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshTel != null" >
+        #{dhgxshTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dhgxshAssessResult != null" >
+        #{dhgxshAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="loanLiveAddress != null" >
+        #{loanLiveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="workNetAssessResult != null" >
+        #{workNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="workCheckRemark != null" >
+        #{workCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isRepeat != null" >
+        #{isRepeat,jdbcType=VARCHAR},
+      </if>
+      <if test="isInPool != null" >
+        #{isInPool,jdbcType=VARCHAR},
+      </if>
+      <if test="editRemark != null" >
+        #{editRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="telRemark != null" >
+        #{telRemark,jdbcType=VARCHAR},
+      </if>
+       <if test="otherTelRemark != null" >
+        #{otherTelRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTel != null" >
+        #{homeTel,jdbcType=VARCHAR},
+      </if> 
+      <if test="homeTelAssessResult != null" >
+        #{homeTelAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="homeTelRemark != null" >
+        #{homeTelRemark,jdbcType=VARCHAR},
+      </if>     
+    </trim>
+  </insert>
+    <!--删除反欺诈电话照会联系人（工作证明人或家庭联系人） -->
+	<delete id="delProves" parameterType="java.lang.String" >
+	  delete from jk.t_jk_dhzh_dhgxsh
+	  where id = #{0}
+	</delete>
+	  <!--修改联系人（单位，家庭） wanglidong-->
+	<update id="updataContacts"  parameterType="com.creditharmony.approve.antifraud.entity.ex.PhoneWorkProvesEx">
+	      update jk.t_jk_dhzh_dhgxsh
+	      <set>      
+		      <if test="name != null" >
+					NAME = #{name},
+		      </if>
+		      <if test="loanManRelation != null" >
+					LOAN_MAN_RELATION = #{loanManRelation},
+		      </if>
+		      <if test="dhgxshTel != null" >
+					DHGXSH_TEL = #{dhgxshTel},
+		      </if>
+		      <if test="dictRelationType != null" >
+					DICT_RELATION_TYPE = #{dictRelationType},
+		      </if>
+		      <if test="dictTelSource != null" >
+					DICT_TEL_SOURCE = #{dictTelSource},
+		      </if>
+		      <if test="dictRelationType != null" >
+					DICT_RELATION_TYPE = #{dictRelationType},
+		      </if>
+		      <if test="dhgxshAssessResult != null" >
+					DHGXSH_ASSESS_RESULT = #{dhgxshAssessResult},
+		      </if>
+		      <if test="loanLiveAddress != null" >
+					LOAN_LIVE_ADDRESS = #{loanLiveAddress},
+		      </if>
+		      <if test="modifyBy != null" >
+					modify_by = #{modifyBy},
+		      </if>
+		      <if test="modifyTime != null" >
+			     	modify_time = #{modifyTime},
+		      </if>
+		      <if test="telRemark != null" >
+			     	tel_remark = #{telRemark},
+		      </if>
+		      <if test="otherTelRemark != null" >
+			     	loan_man_relation_remark = #{otherTelRemark},
+		      </if>
+		      
+		      <if test="homeTel != null" >
+			     	home_tel = #{homeTel},
+		      </if>		
+		      <if test="homeTelAssessResult != null" >
+			     	home_tel_assess_result = #{homeTelAssessResult},
+		      </if>
+		      <if test="homeTelRemark != null" >
+			     	home_tel_remark = #{homeTelRemark},
+		      </if>      
+	      </set>
+	      WHERE id = #{id}	
+	</update>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.localnet.dao.LoanRemarkDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.localnet.entity.LoanRemark" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_remark_type" property="dictRemarkType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="remark_time" property="remarkTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="findListByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT LOAN_CODE,REMARK,REMARK_TIME
+         FROM JK.T_JK_LONG_REMARK
+    	 WHERE LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

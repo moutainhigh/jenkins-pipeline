@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.AuditBackDao" >
+
+	<!-- 插入回退清单 -->
+	<insert id="insertAuditBack" parameterType="com.creditharmony.approve.common.entity.AuditBack" >
+		insert into jk.t_jk_audit_back (
+			id, r_status_his_id, loan_code, 
+		  	dict_check_type, audit_json, back_start_time, 
+		  	feed_back, create_time, create_by, 
+		 	modify_time, modify_by
+		)
+		values (
+			#{id,jdbcType=NUMERIC}, #{rId,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, 
+		  	#{dictCheckType,jdbcType=VARCHAR}, #{json,jdbcType=VARCHAR}, #{backStartTime,jdbcType=TIMESTAMP}, 
+		  	#{feedBack,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+		  	#{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<!-- 根据历史ID获取回退清单 -->
+	<select id="getById" resultType="com.creditharmony.approve.common.entity.AuditBack" parameterType="java.lang.String">
+		SELECT 
+			audit_json AS "json",
+			feed_back
+		FROM jk.t_jk_audit_back
+		WHERE r_status_his_id = #{relationId}
+	</select>
+  
+</mapper>

@@ -1,0 +1,95 @@
+version: '2'
+.catalog:
+  name: fegin-ribbon-test-lb
+  version: 0.0.1-rancher-proxy
+  description: |
+    前端使用Rancher-proxy做后端服务的负载均衡，后端容器数量可以随意定义
+services:
+  fegin-ribbon-test-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-fegin-ribbon-test
+        source_port: 7008
+        target_port: 7008
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  boss-logs-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-boss-logs
+        source_port: 7004
+        target_port: 7004
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  eureka-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-eureka
+        source_port: 8761
+        target_port: 8761
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate
+  microservice-config:
+    scale: 2
+    start_on_create: true
+  microservice-fegin-ribbon-test:
+    scale: 1
+    start_on_create: true
+  microservice-eureka01:
+    start_on_create: true
+  microservice-eureka02:
+    start_on_create: true
+  microservice-boss-logs:
+    scale: 2
+    start_on_create: true
+  microservice-eureka:
+    scale: 1
+    start_on_create: true
+  config-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - priority: 1
+        protocol: tcp
+        service: microservice-config
+        source_port: 7001
+        target_port: 7001
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+      strategy: recreate

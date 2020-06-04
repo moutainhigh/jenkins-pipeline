@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditPaidNotesDiscountedDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditPaidNotesDiscounted" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="loan_org" property="loanOrg" jdbcType="VARCHAR" />
+    <result column="dict_currency" property="dictCurrency" jdbcType="VARCHAR" />
+    <result column="discount_amount" property="discountAmount" jdbcType="NUMERIC" />
+    <result column="discount_day" property="discountDay" jdbcType="DATE" />
+    <result column="accept_actual_day" property="acceptActualDay" jdbcType="DATE" />
+    <result column="paid_day" property="paidDay" jdbcType="DATE" />
+    <result column="dict_level_class" property="dictLevelClass" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, loan_org, dict_currency, discount_amount, discount_day, accept_actual_day, 
+    paid_day, dict_level_class, operation, create_by, create_time, modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_paid_notes_discounted
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_paid_notes_discounted
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.credit.entity.CreditPaidNotesDiscounted" >
+    insert into jk.t_jk_credit_paid_notes_discounted (id, loan_code, loan_org, 
+      dict_currency, discount_amount, discount_day, 
+      accept_actual_day, paid_day, dict_level_class, 
+      operation, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{loanOrg,jdbcType=VARCHAR}, 
+      #{dictCurrency,jdbcType=VARCHAR}, #{discountAmount,jdbcType=NUMERIC}, #{discountDay,jdbcType=DATE}, 
+      #{acceptActualDay,jdbcType=DATE}, #{paidDay,jdbcType=DATE}, #{dictLevelClass,jdbcType=VARCHAR}, 
+      #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditPaidNotesDiscounted" >
+    insert into jk.t_jk_credit_paid_notes_discounted
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="loanOrg != null" >
+        loan_org,
+      </if>
+      <if test="dictCurrency != null" >
+        dict_currency,
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount,
+      </if>
+      <if test="discountDay != null" >
+        discount_day,
+      </if>
+      <if test="acceptActualDay != null" >
+        accept_actual_day,
+      </if>
+      <if test="paidDay != null" >
+        paid_day,
+      </if>
+      <if test="dictLevelClass != null" >
+        dict_level_class,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanOrg != null" >
+        #{loanOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCurrency != null" >
+        #{dictCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="discountAmount != null" >
+        #{discountAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="discountDay != null" >
+        #{discountDay,jdbcType=DATE},
+      </if>
+      <if test="acceptActualDay != null" >
+        #{acceptActualDay,jdbcType=DATE},
+      </if>
+      <if test="paidDay != null" >
+        #{paidDay,jdbcType=DATE},
+      </if>
+      <if test="dictLevelClass != null" >
+        #{dictLevelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditPaidNotesDiscounted" >
+    update jk.t_jk_credit_paid_notes_discounted
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanOrg != null" >
+        loan_org = #{loanOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCurrency != null" >
+        dict_currency = #{dictCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount = #{discountAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="discountDay != null" >
+        discount_day = #{discountDay,jdbcType=DATE},
+      </if>
+      <if test="acceptActualDay != null" >
+        accept_actual_day = #{acceptActualDay,jdbcType=DATE},
+      </if>
+      <if test="paidDay != null" >
+        paid_day = #{paidDay,jdbcType=DATE},
+      </if>
+      <if test="dictLevelClass != null" >
+        dict_level_class = #{dictLevelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditPaidNotesDiscounted" >
+    update jk.t_jk_credit_paid_notes_discounted
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      loan_org = #{loanOrg,jdbcType=VARCHAR},
+      dict_currency = #{dictCurrency,jdbcType=VARCHAR},
+      discount_amount = #{discountAmount,jdbcType=NUMERIC},
+      discount_day = #{discountDay,jdbcType=DATE},
+      accept_actual_day = #{acceptActualDay,jdbcType=DATE},
+      paid_day = #{paidDay,jdbcType=DATE},
+      dict_level_class = #{dictLevelClass,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

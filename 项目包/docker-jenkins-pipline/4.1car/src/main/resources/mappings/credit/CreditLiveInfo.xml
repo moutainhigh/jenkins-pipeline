@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditliveInfoDao">
+	
+	<insert id="saveData" parameterType="com.creditharmony.approve.credit.entity.CreditLiveInfo">
+		INSERT INTO jk.t_jk_credit_live_info
+ 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			relation_id,
+			</if>
+			<if test="mail != null and mail != ''" >
+			mail,
+			</if>
+			<if test="liveSituation != null and liveSituation != ''" >
+			live_situation,
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			getinfo_time,
+			</if>
+			<if test="liveProvince != null and liveProvince != ''" >
+			live_province,
+			</if>
+			<if test="liveCity != null and liveCity != ''" >
+			live_city,
+			</if>
+			<if test="liveArea != null and liveArea != ''" >
+			live_area,
+			</if>
+			<if test="liveAddress != null and liveAddress != ''" >
+			live_address,
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			create_by,
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			create_time,
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by,
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time
+			</if> 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			#{relationId},
+			</if>
+			<if test="mail != null and mail != ''" >
+			#{mail},
+			</if>
+			<if test="liveSituation != null and liveSituation != ''" >
+			#{liveSituation},
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			#{getinfoTime},
+			</if>
+			<if test="liveProvince != null and liveProvince != ''" >
+			#{liveProvince},
+			</if>
+			<if test="liveCity != null and liveCity != ''" >
+			#{liveCity},
+			</if>
+			<if test="liveArea != null and liveArea != ''" >
+			#{liveArea},
+			</if>
+			<if test="liveAddress != null and liveAddress != ''" >
+			#{liveAddress},
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			#{createBy},
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			#{createTime},
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			#{modifyBy},
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			#{modifyTime}
+			</if> 
+		</trim>
+	</insert>
+	
+	<select id="getByParam" parameterType="java.lang.String" resultType="com.creditharmony.approve.credit.entity.CreditLiveInfo">
+		select
+			id,
+			relation_id,
+			mail,
+			live_situation,
+			getinfo_time,
+			live_province,
+			live_city,
+			live_area,
+			live_address
+		from
+			jk.t_jk_credit_live_info 
+		where 
+			relation_id = #{relationId}
+		order by create_time
+	</select>
+	
+	<update id="updataById" parameterType="com.creditharmony.approve.credit.entity.CreditLiveInfo">
+		update jk.t_jk_credit_live_info
+			<set >
+				<if test="id != null and id != ''" >
+				id=#{id},
+				</if> 
+				<if test="relationId != null and relationId != ''" >
+				relation_id = #{relationId},
+				</if>
+				<if test="mail != null and mail != ''" >
+				mail = #{mail},
+				</if>
+				<if test="liveSituation != null and liveSituation != ''" >
+				live_situation = #{liveSituation},
+				</if>
+				<if test="getinfoTime != null and getinfoTime != ''" >
+				getinfo_time = #{getinfoTime},
+				</if>
+				<if test="liveProvince != null and liveProvince != ''" >
+				live_province = #{liveProvince},
+				</if>
+				<if test="liveCity != null and liveCity != ''" >
+				live_city = #{liveCity},
+				</if>
+				<if test="liveArea != null and liveArea != ''" >
+				live_area = #{liveArea},
+				</if>
+				<if test="liveAddress != null and liveAddress != ''" >
+				live_address = #{liveAddress},
+				</if>
+				<if test="createBy != null and createBy != ''" >
+				create_by = #{createBy},
+				</if> 
+				<if test="createTime != null and createTime != ''" >
+				create_time = #{createTime},
+				</if> 
+				<if test="modifyBy != null and modifyBy != ''" >
+				modify_by = #{modifyBy},
+				</if> 
+				<if test="modifyTime != null and modifyTime != ''" >
+				modify_time = #{modifyTime}
+				</if> 
+			</set>
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<!-- 删除数据 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditLiveInfo" >
+		delete from jk.t_jk_credit_live_info
+		where id = #{id,jdbcType=NUMERIC}
+	</delete>
+	
+</mapper>

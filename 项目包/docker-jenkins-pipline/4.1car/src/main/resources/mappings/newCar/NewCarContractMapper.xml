@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewCarContractDao">
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewCarContract">
+		<id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="contract_code" property="contractCode" jdbcType="VARCHAR" />
+		<result column="contract_due_day" property="contractDueDay" jdbcType="DATE" />
+		<result column="contract_fact_day" property="contractFactDay" jdbcType="DATE" />
+		<result column="contract_replay_day" property="contractReplayDay" jdbcType="DATE" />
+		<result column="contract_end_day" property="contractEndDay" jdbcType="DATE" />
+		<result column="product_type" property="productType" jdbcType="VARCHAR" />
+		<result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+		<result column="audit_amount" property="auditAmount" jdbcType="NUMERIC" />
+		<result column="contract_months" property="contractMonths" jdbcType="INTEGER" />
+		<result column="mid_id" property="midId" jdbcType="VARCHAR" />
+		<result column="dict_repay_method" property="dictRepayMethod" jdbcType="VARCHAR" />
+		<result column="dict_fee_method" property="dictFeeMethod" jdbcType="VARCHAR" />
+		<result column="contract_amount" property="contractAmount" jdbcType="NUMERIC" />
+		<result column="contract_expect_amount" property="contractExpectAmount" jdbcType="NUMERIC" />
+		<result column="contract_month_repay_amount" property="contractMonthRepayAmount" jdbcType="NUMERIC" />
+		<result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+		<result column="contract_back_result" property="contractBackResult" jdbcType="VARCHAR" />
+		<result column="contract_version" property="contractVersion" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="gross_rate" property="grossRate" jdbcType="TIMESTAMP" />
+		<result column="extension_fee" property="extensionFee" jdbcType="NUMERIC" />
+		<result column="derate" property="derate" jdbcType="NUMERIC" />
+		<result column="mid_id_name" property="midIdName" jdbcType="VARCHAR" />
+	</resultMap> 
+	
+	<select id="getLastByLoanCodeOfExtend" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select p.product_name product_type_name, c.*
+		from t_cj_contract c
+		left join t_cj_loan_info li1 on li1.loan_code = c.loan_code
+		left join t_cj_loan_info li2 on li2.loan_additional_applyid = li1.id
+		left join t_gl_jk_product p on p.product_type = 'products_type_car_credit' and p.product_code = c.product_type
+		where li2.loan_code = #{loanCode}
+	</select>
+</mapper>

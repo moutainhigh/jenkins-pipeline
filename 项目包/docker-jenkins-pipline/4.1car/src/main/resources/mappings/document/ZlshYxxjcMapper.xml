@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshYxxjcDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshYxxjc" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="check_json" property="yxxjcJson" typeHandler="JSONTypeHandler" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="yxxjc_check_remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+  </resultMap>
+  	
+  <insert id="insert" parameterType="com.creditharmony.approve.document.entity.ZlshYxxjc" >
+    insert into jk.t_jk_zlsh_yxxjc (id, loan_code, r_id, 
+      dict_customer_type, check_json, dict_check_type, yxxjc_check_remark,
+      create_by, create_time, modify_by, 
+      modify_time, dict_source_type)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{yxxjcJson,typeHandler=JSONTypeHandler}, #{dictCheckType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{dictSourceType,jdbcType=VARCHAR})
+  </insert>
+  <select id="findZlshYxxjc"  parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="BaseResultMap">
+  	select a.yxxjc_check_remark,a.loan_code,b.label as dict_customer_type
+  	 from jk.t_jk_zlsh_yxxjc a
+  	 left join jk.t_gl_dict b
+  	 on b.type='jk_loan_man_flag' and b.value=a.dict_customer_type
+  	 where 
+  	 	1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+		<if test="type != null">
+			and DICT_CUSTOMER_TYPE = #{type}
+		</if>
+		<if test="relId != null">
+			and R_ID = #{relId}
+		</if>
+		
+  </select>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.document.entity.ZlshYxxjc" >
+    insert into jk.t_jk_zlsh_yxxjc
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="yxxjcJson != null" >
+        yxxjcJson,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="dictSourceType != null" >
+        dict_source_type,
+      </if>
+      <if test="remark != null" >
+        yxxjc_check_remark,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="yxxjcJson != null" >
+        #{yxxjcJson,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictSourceType != null" >
+      	#{dictSourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+      	#{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    
+  <select id="findYxx"  parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="BaseResultMap">
+	select 
+		id, 
+		check_json,
+		yxxjc_check_remark
+	from jk.t_jk_zlsh_yxxjc 
+	where 
+		1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType}
+		</if>
+		<if test="type != null and type != ''">
+			and DICT_CUSTOMER_TYPE = #{type}
+		</if>
+		<if test="relId != null and relId != ''">
+			and R_ID = #{relId}
+		</if>
+  </select>
+	
+  <select id="findYxxByCode"  parameterType="com.creditharmony.approve.document.entity.ZlshYxxjc"  resultMap="BaseResultMap">
+	select 
+		id, loan_code, r_id, dict_customer_type, check_json, dict_check_type, yxxjc_check_remark,	
+		dict_source_type, create_by, create_time, modify_by, modify_time
+	from jk.t_jk_zlsh_yxxjc 
+	where 
+		1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and dict_check_type = #{dictCheckType}
+		</if>
+  </select>
+	
+	<update id="update" parameterType="com.creditharmony.approve.document.entity.ZlshYxxjc" >
+	update jk.t_jk_zlsh_yxxjc
+		<set >
+			<if test="id != null" >
+				id = #{id},
+			</if>
+			<if test="loanCode != null" >
+				loan_code = #{loanCode},
+			</if>
+			<if test="rId != null" >
+				r_id = #{rId},
+			</if>
+			<if test="dictCustomerType != null" >
+				dict_customer_type = #{dictCustomerType},
+			</if>
+			<if test="yxxjcJson != null" >
+				check_json = #{yxxjcJson,typeHandler=JSONTypeHandler},
+			</if>
+			<if test="dictCheckType != null" >
+				dict_check_type = #{dictCheckType},
+			</if>
+			<if test="remark != null">
+				yxxjc_check_remark = #{remark},
+			</if>
+			<if test="createBy != null" >
+				create_by = #{createBy},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime},
+			</if>
+			<if test="modifyBy != null" >
+				modify_by = #{modifyBy},
+			</if>
+			<if test="modifyTime != null" >
+				modify_time = #{modifyTime} 
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

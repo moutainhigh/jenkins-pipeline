@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditGradeDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditGrade" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="grade_time" property="gradeTime" jdbcType="TIMESTAMP" />
+    <result column="dict_org_name" property="dictOrgName" jdbcType="VARCHAR" />
+    <result column="dict_rank" property="dictRank" jdbcType="VARCHAR" />
+    <result column="add_day" property="addDay" jdbcType="TIMESTAMP" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, grade_time, dict_org_name, dict_rank, add_day, operation, create_by, 
+    create_time, modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_grade
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_grade
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertCreditGrade" parameterType="com.creditharmony.approve.credit.entity.CreditGrade" >
+    insert into jk.t_jk_credit_grade (id, loan_code, grade_time, 
+      dict_org_name, dict_rank, add_day, 
+      operation, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{gradeTime,jdbcType=TIMESTAMP}, 
+      #{dictOrgName,jdbcType=VARCHAR}, #{dictRank,jdbcType=VARCHAR}, #{addDay,jdbcType=TIMESTAMP}, 
+      #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditGrade" >
+    insert into jk.t_jk_credit_grade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="gradeTime != null" >
+        grade_time,
+      </if>
+      <if test="dictOrgName != null" >
+        dict_org_name,
+      </if>
+      <if test="dictRank != null" >
+        dict_rank,
+      </if>
+      <if test="addDay != null" >
+        add_day,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeTime != null" >
+        #{gradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictOrgName != null" >
+        #{dictOrgName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRank != null" >
+        #{dictRank,jdbcType=VARCHAR},
+      </if>
+      <if test="addDay != null" >
+        #{addDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditGrade" >
+    update jk.t_jk_credit_grade
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeTime != null" >
+        grade_time = #{gradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictOrgName != null" >
+        dict_org_name = #{dictOrgName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictRank != null" >
+        dict_rank = #{dictRank,jdbcType=VARCHAR},
+      </if>
+      <if test="addDay != null" >
+        add_day = #{addDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditGrade" >
+    update jk.t_jk_credit_grade
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      grade_time = #{gradeTime,jdbcType=TIMESTAMP},
+      dict_org_name = #{dictOrgName,jdbcType=VARCHAR},
+      dict_rank = #{dictRank,jdbcType=VARCHAR},
+      add_day = #{addDay,jdbcType=TIMESTAMP},
+      operation = #{operation,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectByGradeInfo" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditGrade" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_grade
+    where loan_code = #{loanCode}
+  </select>  
+  
+    <delete id="deleteGradeByLoanCode" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_grade
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  
+</mapper>

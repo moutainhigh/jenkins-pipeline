@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditInvestorInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditInvestorInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="contribution_amount" property="contributionAmount" jdbcType="NUMERIC" />
+    <result column="investor_name" property="investorName" jdbcType="VARCHAR" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="dict_currency" property="dictCurrency" jdbcType="VARCHAR" />
+    <result column="contribution_proportion" property="contributionProportion" jdbcType="INTEGER" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, contribution_amount, investor_name, dict_cert_type, customer_cert_num, 
+    dict_currency, contribution_proportion, operation, create_by, create_time, modify_by, 
+    modify_time
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_investor_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertCreditInvestorInfo" parameterType="com.creditharmony.approve.credit.entity.CreditInvestorInfo" >
+    insert into jk.t_jk_credit_investor_info (id, loan_code, contribution_amount, 
+      investor_name, dict_cert_type, customer_cert_num, 
+      dict_currency, contribution_proportion, operation, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{contributionAmount,jdbcType=NUMERIC}, 
+      #{investorName,jdbcType=VARCHAR}, #{dictCertType,jdbcType=VARCHAR}, #{customerCertNum,jdbcType=VARCHAR}, 
+      #{dictCurrency,jdbcType=VARCHAR}, #{contributionProportion,jdbcType=INTEGER}, #{operation,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+	<!-- 根据借款编码检索出资人信息List -->
+	<select id="selectByLoanCode" resultMap="BaseResultMap"
+		parameterType="com.creditharmony.approve.credit.entity.CreditInvestorInfo">
+		select
+		<include refid="Base_Column_List" />
+		from jk.t_jk_credit_investor_info
+		where loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据借款编码删除出资人信息 -->
+	<delete id="deleteByLoanCode" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_investor_info
+		where loan_code = #{loanCode,jdbcType=VARCHAR}
+	</delete>
+</mapper>

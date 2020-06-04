@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.SystemDictDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.SystemDict" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="dict_id" property="dictId" jdbcType="VARCHAR" />
+    <result column="dict_value" property="dictValue" jdbcType="VARCHAR" />
+    <result column="dict_description" property="dictDescription" jdbcType="VARCHAR" />
+    <result column="dict_index" property="dictIndex" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, dict_id, dict_value, dict_description, dict_index
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_gl_system_dict
+    where id = #{id,jdbcType=NUMERIC}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from jk.t_gl_system_dict
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.SystemDict" >
+    insert into jk.t_gl_system_dict (id, dict_id, dict_value, 
+      dict_description, dict_index)
+    values (#{id,jdbcType=NUMERIC}, #{dictId,jdbcType=VARCHAR}, #{dictValue,jdbcType=VARCHAR}, 
+      #{dictDescription,jdbcType=VARCHAR}, #{dictIndex,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.SystemDict" >
+    insert into jk.t_gl_system_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="dictId != null" >
+        dict_id,
+      </if>
+      <if test="dictValue != null" >
+        dict_value,
+      </if>
+      <if test="dictDescription != null" >
+        dict_description,
+      </if>
+      <if test="dictIndex != null" >
+        dict_index,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="dictId != null" >
+        #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDescription != null" >
+        #{dictDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="dictIndex != null" >
+        #{dictIndex,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.verify.entity.SystemDict" >
+    update jk.t_gl_system_dict
+    <set >
+      <if test="dictId != null" >
+        dict_id = #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        dict_value = #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDescription != null" >
+        dict_description = #{dictDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="dictIndex != null" >
+        dict_index = #{dictIndex,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.verify.entity.SystemDict" >
+    update jk.t_gl_system_dict
+    set dict_id = #{dictId,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=VARCHAR},
+      dict_description = #{dictDescription,jdbcType=VARCHAR},
+      dict_index = #{dictIndex,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+</mapper>

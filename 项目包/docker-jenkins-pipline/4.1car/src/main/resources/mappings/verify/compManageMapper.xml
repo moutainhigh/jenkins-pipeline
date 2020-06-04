@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.CompManageDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.CompManage" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="business_licence_register_num" property="businessLicenceRegisterNum" jdbcType="VARCHAR" />
+    <result column="comp_create_date" property="compCreateDate" jdbcType="TIMESTAMP" />
+    <result column="comp_type" property="compType" jdbcType="VARCHAR" />
+    <result column="average_month_turnover" property="averageMonthTurnover" jdbcType="NUMERIC" />
+    <result column="manage_business" property="manageBusiness" jdbcType="TIMESTAMP" />
+    <result column="comp_register_capital" property="compRegisterCapital" jdbcType="NUMERIC" />
+    <result column="customer_ratio_comp" property="customerRatioComp" jdbcType="NUMERIC" />
+    <result column="corporate_represent" property="corporateRepresent" jdbcType="VARCHAR" />   
+    <result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+    <result column="manage_address_province" property="manageAddressProvince" jdbcType="VARCHAR" />
+    <result column="manage_address_city" property="manageAddressCity" jdbcType="VARCHAR" />
+    <result column="manage_address_area" property="manageAddressArea" jdbcType="VARCHAR" />
+    <result column="manage_address" property="manageAddress" jdbcType="VARCHAR" /> 
+    <result column="manage_place" property="managePlace" jdbcType="NUMERIC" />   
+    <result column="business_area" property="businessArea" jdbcType="NUMERIC" />  
+    <result column="corporate_represent_mobile" property="corporateRepresentMobile" jdbcType="NUMERIC" />
+    <result column="comp_email" property="compEmail" jdbcType="VARCHAR" /> 
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />  
+    <result column="month_rent_money" property="monthRentMoney" jdbcType="VARCHAR" /> 
+    <result column="month_pay_money" property="monthPayMoney" jdbcType="VARCHAR" /> 
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" /> 
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" /> 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,loan_code, business_licence_register_num,comp_create_date,comp_type,average_month_turnover,manage_business,   
+    comp_register_capital,customer_ratio_comp,corporate_represent, cert_num, manage_address_province, manage_address_city, 
+    manage_address_area,manage_address,manage_place,business_area,corporate_represent_mobile,comp_email,create_by, 
+    create_time, modify_by, modify_time,month_rent_money,month_pay_money,credit_code,org_code
+  </sql>
+  <select id="getListByLoanCode"  resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from jk.T_JK_COMP_MANAGE
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

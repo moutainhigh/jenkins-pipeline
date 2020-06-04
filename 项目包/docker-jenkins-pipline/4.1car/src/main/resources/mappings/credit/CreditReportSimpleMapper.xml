@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditReportSimpleDao">
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+		<result column="credit_source" property="creditSource" jdbcType="VARCHAR" />
+		<result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+		<result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+		<result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+		<result column="query_time" property="queryTime" jdbcType="DATE" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="CERT_NO" property="certNo" jdbcType="VARCHAR" />
+		<result column="MARRY_STATUS" property="marryStatus" jdbcType="VARCHAR" />
+		<result column="HIGHEST_EDUCATION" property="highestEducation" jdbcType="VARCHAR" />
+		<result column="html_url" property="htmlUrl" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+	   	id, loan_code, credit_source, credit_code, dict_customer_type, r_customer_coborrower_id, query_time, html_url,
+	   	NAME,CERT_NO,MARRY_STATUS,HIGHEST_EDUCATION
+	   </sql>
+	<select id="getCardByLoanCode" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk" resultType="com.creditharmony.approve.credit.entity.CreditCardInfo">
+		select 
+			SUM(b."LIMIT") as limit,
+			SUM(b.used_limit) as usedLimit,
+			SUM(b.overdue_amount) as overdueAmount
+		from 
+			jk.t_jk_credit_report_simple a
+		left join
+			jk.t_jk_credit_card_info b
+		on
+			a.id = b.relation_id
+		where
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null and rId != ''">
+				and a.r_customer_coborrower_id = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="riskEffectiveRemark != null and riskEffectiveRemark != ''">
+				and b.account_status = #{riskEffectiveRemark,jdbcType=VARCHAR}
+			</if>
+			<if test="effectiveFlag != null and effectiveFlag != ''">
+				and b.currency = #{effectiveFlag,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<select id="getLoanByLoanCode" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx" resultType="com.creditharmony.approve.credit.entity.CreditLoanInfo" >
+		select 
+			SUM(case when ceiling((b.abort_day - b.issue_day)*1.0/30) &gt; 0 and b.CONTEACT_AMOUNT &gt; 0  then b.CONTEACT_AMOUNT/(ceiling((b.abort_day - b.issue_day)*1.0/30))
+			else 0 end) as overdueAmount,
+			sum(b.CONTEACT_AMOUNT) as conteactAmount,
+			sum(b.LOAN_BALANCE) as loanBalance
+		from
+			jk.t_jk_credit_report_simple a
+		left join 
+			jk.t_jk_credit_loan_info b
+		on 
+			a.id = b.relation_id
+		where
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null and rId != ''">
+				a.r_customer_coborrower_id = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="moneyType != null and moneyType != ''">
+				and b.currency in 
+				<foreach item="item" index="index" collection="moneyType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+			<if test="accountStatus != null and accountStatus != ''">
+				and account_status = #{accountStatus,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 根据借款ID查询查询所有简版信息 -->
+	<select id="getAllByLoanCode" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" resultType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+		select 
+			id,
+			loan_code,
+			dict_customer_type,
+			r_customer_coborrower_id
+		from 
+			jk.t_jk_credit_report_simple 
+		where
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 【信用卡明细信息】或【贷款明细信息】中【逾期金额】不为0，则打勾；均为0则打勾。 -->
+	<select id="getMaxOVerdue" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" resultType="com.creditharmony.approve.credit.entity.CreditCardInfo">
+		select
+			max(overdueAmount) as overdueNo
+		from(
+			(select 
+				max(b.OVERDUE_AMOUNT) as overdueAmount
+			from 
+				jk.t_jk_credit_report_simple a
+			left join 
+				jk.t_jk_credit_card_info b
+			on a.id = b.relation_id
+			where 
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>
+				)
+			union all
+			(select 
+				max(b.OVERDUE_AMOUNT) as overdueAmount
+			from 
+				jk.t_jk_credit_report_simple a
+			left join 
+				jk.t_jk_credit_loan_info b
+			on a.id = b.relation_id
+			where 
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>
+				)
+			)
+	</select>
+	<!-- 【账户状态为正常】且【到期日期】已在此次判定时间之前，则打勾；否则不打。 -->
+	<select id="getSimpleStatus" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx">
+		select 
+			count(*) as overdueNo
+		from
+			jk.t_jk_credit_report_simple a
+		left join
+			jk.t_jk_credit_loan_info b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null and rId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="accountStatus != null and accountStatus != ''">
+				and b.ACCOUNT_STATUS = #{accountStatus,jdbcType=VARCHAR}
+			</if>
+			and b.abort_day &lt; now()
+	</select>
+	
+	<!-- 进件产品为薪水借，精英借A/B，优卡借，优房借，楼易借，且【账户状态为止付】则打勾，否则不打。  -->
+	<select id="getCheckProduct" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx">
+		select 
+			count(*) as overdueNo
+		from
+			jk.t_jk_credit_report_simple a
+		left join
+			jk.t_jk_credit_card_info b
+		on a.id = b.relation_id
+		left join
+			jk.T_JK_LOAN_INFO c
+		on a.loan_code = c.loan_code 
+		where 
+			1=1
+	 			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null and rId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="moneyType != null and moneyType != ''">
+				and c.LOAN_AUDIT_PRODUCT in 
+				<foreach item="item" index="index" collection="moneyType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+	</select>
+
+	<!-- 查询信息中，近半年，查询原因中出现5次及以上【信用卡审批】或3次及以上【贷款审批】，或信用卡审批次数+贷款审批次数超过5次（含5次）则打勾，否则不打。 -->
+	<select id="getSimpleReason" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanInfoEx" resultType="java.lang.Integer" >
+		select 
+			count(*) 
+		from 
+			jk.t_jk_credit_report_simple a
+		left join 
+			jk.T_JK_CREDIT_QUERY_RECORD b
+		on a.id = b.RELATION_ID
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rId != null and rId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rId,jdbcType=VARCHAR}
+			</if>
+			<if test="accountStatus != null and accountStatus != ''">
+				and b.QUERY_TYPE = #{accountStatus,jdbcType=VARCHAR}
+			</if>
+			and b.QUERY_DAY &gt; (now()-interval '6 month')
+	</select>
+	
+	<!-- 下载页面获取简版贷记卡信息 -->
+	<select id="downloadUseSimpleCard" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" resultType="com.creditharmony.approve.credit.entity.CreditCardInfo" >
+		select 
+			SUM(b."LIMIT") as "LIMIT",
+			SUM(b.USED_LIMIT) as USED_LIMIT
+		from 
+			jk.t_jk_credit_report_simple a
+		left join
+			jk.T_JK_CREDIT_CARD_INFO b
+		on a.id = b.relation_id
+		where 
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and b.account_status = #{name,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<select id="downloadUseSimpleLoan" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" resultType="com.creditharmony.approve.credit.entity.CreditLoanInfo" >
+		select 
+			c.label as CURRENCY,
+			SUM(b.CONTEACT_AMOUNT) as CONTEACT_AMOUNT,
+			SUM( (b.ACTUAL_DAY-b.ISSUE_DAY)/30 ) as OVERDUE_NO,
+			SUM(b.LOAN_BALANCE) as LOAN_BALANCE,
+			SUM(b.OVERDUE_AMOUNT) as OVERDUE_AMOUNT
+		from 
+			jk.t_jk_credit_report_simple a
+		left join 
+			jk.t_jk_credit_loan_info b
+		on a.id = b.relation_id
+		left join
+			jk.t_gl_dict c
+		on b.CURRENCY = c.value and c.type = 'jk_credit_loan_type_flag'
+		where 
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+		group by c.label
+	</select>
+	<!-- 自动生成的代码 -->
+	<!-- 根据主键查询 -->
+	   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from jk.t_jk_credit_report_simple
+	    where id = #{id,jdbcType=VARCHAR}
+	   </select>
+	   <!-- 根据主键删除 -->
+	 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+	   	delete from jk.t_jk_credit_report_simple
+	   	where id = #{id,jdbcType=VARCHAR}
+	 	</delete>
+	 	<!-- 新增所有列数据 -->
+	 	<insert id="insertCreditReportSimple" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+	    insert into jk.t_jk_credit_report_simple (id, loan_code, credit_source, 
+	      	credit_code, dict_customer_type, r_customer_coborrower_id,
+	      	create_by, 
+		    create_time, 
+		    modify_by,
+		    modify_time,
+		    html_url
+	      )
+	    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{creditSource,jdbcType=VARCHAR}, 
+	      	#{creditCode,jdbcType=VARCHAR}, #{dictCustomerType,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+	      	#{createBy},
+			#{createTime}, 
+			#{modifyBy}, 
+			#{modifyTime},
+			#{htmlUrl}
+	      )
+	 	</insert>
+	 	<!-- 新增有数据的列数据 -->
+	 	<insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+	    insert into jk.t_jk_credit_report_simple
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="loanCode != null" >
+	        loan_code,
+	      </if>
+	      <if test="creditSource != null" >
+	        credit_source,
+	      </if>
+	      <if test="creditCode != null" >
+	        credit_code,
+	      </if>
+	      <if test="dictCustomerType != null" >
+	        dict_customer_type,
+	      </if>
+	      <if test="rCustomerCoborrowerId != null" >
+	        r_customer_coborrower_id,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id,jdbcType=VARCHAR},
+	      </if>
+	      <if test="loanCode != null" >
+	        #{loanCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creditSource != null" >
+	        #{creditSource,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creditCode != null" >
+	        #{creditCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictCustomerType != null" >
+	        #{dictCustomerType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rCustomerCoborrowerId != null" >
+	        #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+	      </if>
+	    </trim>
+	 	</insert>
+	 	<!-- 更新有数据的列数据 -->
+	 	<update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+	    update jk.t_jk_credit_report_simple
+	    <set >
+	      <if test="loanCode != null" >
+	        loan_code = #{loanCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creditSource != null" >
+	        credit_source = #{creditSource,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creditCode != null" >
+	        credit_code = #{creditCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictCustomerType != null" >
+	        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rCustomerCoborrowerId != null" >
+	        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+	      </if>
+	      
+	      <if test="createBy != null" >
+	        create_by = #{createBy,jdbcType=VARCHAR},
+	      </if>
+	      <if test="createTime != null" >
+	        create_time = #{createTime,jdbcType=DATE},
+	      </if>
+	      <if test="modifyBy != null" >
+	        modify_by = #{modifyBy,jdbcType=VARCHAR},
+	      </if>
+	      <if test="modifyTime != null" >
+	        modify_time = #{modifyTime,jdbcType=DATE},
+	      </if>	  
+	      <if test="queryTime != null" >
+	        query_time = #{queryTime,jdbcType=DATE},
+	      </if>	
+	      <if test="queryTime != null" >
+	        html_url = #{htmlUrl},
+	      </if>	
+	      
+	          
+	    </set>
+	    where id = #{id,jdbcType=VARCHAR}
+	 	</update>
+	 	<!-- 更新所有列数据 -->
+	 	<update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+	    update jk.t_jk_credit_report_simple
+	    set loan_code = #{loanCode,jdbcType=VARCHAR},
+	      credit_source = #{creditSource,jdbcType=VARCHAR},
+	      credit_code = #{creditCode,jdbcType=VARCHAR},
+	      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+	      r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=VARCHAR}
+	 	</update>
+	 	
+	<!-- 根据有值得列查询 -->
+	   <select id="selectByCreditReportSimple" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditReportSimple" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from jk.t_jk_credit_report_simple 
+	    where
+	    	1=1
+			<if test="id != null and id != ''" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="loanCode != null" >
+	        	and loan_code = #{loanCode,jdbcType=VARCHAR}
+	      	</if>
+	      	<if test="creditSource != null" >
+	        	and credit_source = #{creditSource,jdbcType=VARCHAR}
+	     	 </if>
+	      	<if test="creditCode != null" >
+	        	and credit_code = #{creditCode,jdbcType=VARCHAR}
+	      	</if>
+	      	<if test="dictCustomerType != null" >
+	        	and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+	      	</if>
+	      	<if test="rCustomerCoborrowerId != null" >
+	        	and r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+	      	</if>
+	   </select>
+	
+</mapper>

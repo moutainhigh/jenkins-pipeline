@@ -1,0 +1,1238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditReportDetailedDao">
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditReportDetailed" >
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="credit" property="credit" jdbcType="VARCHAR" />
+		<result column="relation_id" property="loanCode" jdbcType="VARCHAR" />
+		<result column="credit_source" property="creditSource" jdbcType="VARCHAR" />
+		<result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+		<result column="query_time" property="queryTime" jdbcType="TIMESTAMP" />
+		<result column="report_time" property="reportTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="cert_type" property="certType" jdbcType="VARCHAR" />
+		<result column="cert_no" property="certNo" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="highest_degree" property="highestDegree" jdbcType="VARCHAR" />
+		<result column="highest_education" property="highestEducation" jdbcType="VARCHAR" />
+		<result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+		<result column="native_address" property="nativeAddress" jdbcType="VARCHAR" />
+		<result column="home_phone" property="homePhone" jdbcType="VARCHAR" />
+		<result column="unit_phone" property="unitPhone" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="marry_status" property="marryStatus" jdbcType="VARCHAR" />
+		<result column="mate_name" property="mateName" jdbcType="VARCHAR" />
+		<result column="mate_cert_type" property="mateCertType" jdbcType="VARCHAR" />
+		<result column="mate_cert_no" property="mateCertNo" jdbcType="VARCHAR" />
+		<result column="mate_company" property="mateCompany" jdbcType="VARCHAR" />
+		<result column="mate_phone" property="matePhone" jdbcType="VARCHAR" />
+		<result column="native_add_province" property="nativeAddProvince" jdbcType="VARCHAR" />
+		<result column="native_add_city" property="nativeAddCity" jdbcType="VARCHAR" />
+		<result column="native_add_area" property="nativeAddArea" jdbcType="VARCHAR" />
+		<result column="contact_add_province" property="contactAddProvince" jdbcType="VARCHAR" />
+		<result column="contact_add_city" property="contactAddCity" jdbcType="VARCHAR" />
+		<result column="contact_add_area" property="contactAddArea" jdbcType="VARCHAR" />
+		<result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+		<result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 征信详版录入用start -->
+	<!-- 添加征信个人数据 -->
+	<insert id="saveData" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed">
+		INSERT INTO jk.t_jk_credit_report_detailed
+ 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if> 
+			<if test="loanCode != null and loanCode != ''" >
+			loan_Code,
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''" >
+			r_customer_coborrower_id,
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+			dict_customer_type,
+			</if>
+			<if test="credit != null and credit != ''" >
+			credit,
+			</if>
+			<if test="creditSource != null and creditSource != ''" >
+			CREDIT_SOURCE,
+			</if>
+			<if test="creditCode != null and creditCode != ''" >
+			CREDIT_CODE,
+			</if>
+			<if test="queryTime != null and queryTime != ''" >
+			QUERY_TIME,
+			</if>
+			<if test="reportTime != null and reportTime != ''" >
+			REPORT_TIME,
+			</if>
+			<if test="name != null and name != ''" >
+			name,
+			</if>
+			<if test="sex != null and sex != ''" >
+			sex,
+			</if>
+			<if test="certType != null and certType != ''" >
+			CERT_TYPE,
+			</if>
+			<if test="certNo != null and certNo != ''" >
+			CERT_NO,
+			</if>
+			<if test="birthday != null and birthday != ''" >
+			birthday,
+			</if>
+			<if test="highestDegree != null and highestDegree != ''" >
+			HIGHEST_DEGREE,
+			</if>
+			<if test="highestEducation != null and highestEducation != ''" >
+			HIGHEST_EDUCATION,
+			</if>
+			<if test="zipCode != null and zipCode != ''" >
+			ZIP_CODE,
+			</if>
+			<if test="homePhone != null and homePhone != ''" >
+			HOME_PHONE,
+			</if>
+			<if test="unitPhone != null and unitPhone != ''" >
+			UNIT_PHONE,
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''" >
+			MOBILE_PHONE,
+			</if>
+			<if test="email != null and email != ''" >
+			EMAIL,
+			</if>
+			<if test="marryStatus != null and marryStatus != ''" >
+			MARRY_STATUS,
+			</if>
+			<if test="mateName != null and mateName != ''" >
+			MATE_NAME,
+			</if>
+			<if test="mateCertType != null and mateCertType != ''" >
+			MATE_CERT_TYPE,
+			</if>
+			<if test="mateCertNo != null and mateCertNo != ''" >
+			MATE_CERT_NO,
+			</if>
+			<if test="mateCompany != null and mateCompany != ''" >
+			MATE_COMPANY,
+			</if>
+			<if test="matePhone != null and matePhone != ''" >
+			MATE_PHONE,
+			</if>
+			<if test="contactAddProvince != null and contactAddProvince != ''" >
+			CONTACT_ADD_PROVINCE,
+			</if>
+			<if test="contactAddCity != null and contactAddCity != ''" >
+			CONTACT_ADD_CITY,
+			</if>
+			<if test="contactAddArea != null and contactAddArea != ''" >
+			CONTACT_ADD_AREA,
+			</if>
+			<if test="contactAddress != null and contactAddress != ''" >
+			CONTACT_ADDRESS,
+			</if>
+			<if test="nativeAddProvince != null and nativeAddProvince != ''" >
+			NATIVE_ADD_PROVINCE,
+			</if>
+			<if test="nativeAddCity != null and nativeAddCity != ''" >
+			NATIVE_ADD_CITY,
+			</if>
+			<if test="nativeAddArea != null and nativeAddArea != ''" >
+			NATIVE_ADD_AREA,
+			</if>
+			<if test="nativeAddress != null and nativeAddress != ''" >
+			NATIVE_ADDRESS,
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			create_by,
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			create_time,
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by,
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time
+			</if> 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if> 
+			<if test="loanCode != null and loanCode != ''" >
+			#{loanCode},
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''" >
+			#{rCustomerCoborrowerId},
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+			#{dictCustomerType},
+			</if>
+			<if test="credit != null and credit != ''" >
+			#{credit},
+			</if>
+			<if test="creditSource != null and creditSource != ''" >
+			#{creditSource},
+			</if>
+			<if test="creditCode != null and creditCode != ''" >
+			#{creditCode},
+			</if>
+			<if test="queryTime != null and queryTime != ''" >
+			#{queryTime},
+			</if>
+			<if test="reportTime != null and reportTime != ''" >
+			#{reportTime},
+			</if>
+			<if test="name != null and name != ''" >
+			#{name},
+			</if>
+			<if test="sex != null and sex != ''" >
+			#{sex},
+			</if>
+			<if test="certType != null and certType != ''" >
+			#{certType},
+			</if>
+			<if test="certNo != null and certNo != ''" >
+			#{certNo},
+			</if>
+			<if test="birthday != null and birthday != ''" >
+			#{birthday},
+			</if>
+			<if test="highestDegree != null and highestDegree != ''" >
+			#{highestDegree},
+			</if>
+			<if test="highestEducation != null and highestEducation != ''" >
+			#{highestEducation},
+			</if>
+			<if test="zipCode != null and zipCode != ''" >
+			#{zipCode},
+			</if>
+			<if test="homePhone != null and homePhone != ''" >
+			#{homePhone},
+			</if>
+			<if test="unitPhone != null and unitPhone != ''" >
+			#{unitPhone},
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''" >
+			#{mobilePhone},
+			</if>
+			<if test="email != null and email != ''" >
+			#{email},
+			</if>
+			<if test="marryStatus != null and marryStatus != ''" >
+			#{marryStatus},
+			</if>
+			<if test="mateName != null and mateName != ''" >
+			#{mateName},
+			</if>
+			<if test="mateCertType != null and mateCertType != ''" >
+			#{mateCertType},
+			</if>
+			<if test="mateCertNo != null and mateCertNo != ''" >
+			#{mateCertNo},
+			</if>
+			<if test="mateCompany != null and mateCompany != ''" >
+			#{mateCompany},
+			</if>
+			<if test="matePhone != null and matePhone != ''" >
+			#{matePhone},
+			</if>
+			<if test="contactAddProvince != null and contactAddProvince != ''" >
+			#{contactAddProvince},
+			</if>
+			<if test="contactAddCity != null and contactAddCity != ''" >
+			#{contactAddCity},
+			</if>
+			<if test="contactAddArea != null and contactAddArea != ''" >
+			#{contactAddArea},
+			</if>
+			<if test="contactAddress != null and contactAddress != ''" >
+			#{contactAddress},
+			</if>
+			<if test="nativeAddProvince != null and nativeAddProvince != ''" >
+			#{nativeAddProvince},
+			</if>
+			<if test="nativeAddCity != null and nativeAddCity != ''" >
+			#{nativeAddCity},
+			</if>
+			<if test="nativeAddArea != null and nativeAddArea != ''" >
+			#{nativeAddArea},
+			</if>
+			<if test="nativeAddress != null and nativeAddress != ''" >
+			#{nativeAddress},
+			</if>
+			<if test="createBy != null and createBy != ''" >
+			#{createBy},
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			#{createTime},
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			#{modifyBy},
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			#{modifyTime}
+			</if> 
+		</trim>
+	</insert>
+	
+	<update id="updataById" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed">
+		update jk.t_jk_credit_report_detailed
+			<set >
+				<if test="id != null and id != ''" >
+				id=#{id},
+				</if> 
+				<if test="loanCode != null and loanCode != ''" >
+				loan_Code = #{loanCode},
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''" >
+				r_customer_coborrower_id = #{rCustomerCoborrowerId},
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+				dict_customer_type = #{dictCustomerType},
+				</if>
+				<if test="credit != null and credit != ''" >
+				credit = #{credit},
+				</if>
+				<if test="creditSource != null and creditSource != ''" >
+				CREDIT_SOURCE = #{creditSource},
+				</if>
+				<if test="creditCode != null and creditCode != ''" >
+				CREDIT_CODE = #{creditCode},
+				</if>
+				<if test="queryTime != null and queryTime != ''" >
+				QUERY_TIME = #{queryTime},
+				</if>
+				<if test="reportTime != null and reportTime != ''" >
+				REPORT_TIME = #{reportTime},
+				</if>
+				<if test="name != null and name != ''" >
+				name = #{name},
+				</if>
+				<if test="sex != null and sex != ''" >
+				sex = #{sex},
+				</if>
+				<if test="certType != null and certType != ''" >
+				CERT_TYPE = #{certType},
+				</if>
+				<if test="certNo != null and certNo != ''" >
+				CERT_NO = #{certNo},
+				</if>
+				<if test="birthday != null and birthday != ''" >
+				birthday = #{birthday},
+				</if>
+				<if test="highestDegree != null and highestDegree != ''" >
+				HIGHEST_DEGREE = #{highestDegree},
+				</if>
+				<if test="highestEducation != null and highestEducation != ''" >
+				HIGHEST_EDUCATION = #{highestEducation},
+				</if>
+				<if test="zipCode != null and zipCode != ''" >
+				ZIP_CODE = #{zipCode},
+				</if>
+				<if test="homePhone != null and homePhone != ''" >
+				HOME_PHONE = #{homePhone},
+				</if>
+				<if test="unitPhone != null and unitPhone != ''" >
+				UNIT_PHONE = #{unitPhone},
+				</if>
+				<if test="mobilePhone != null and mobilePhone != ''" >
+				MOBILE_PHONE = #{mobilePhone},
+				</if>
+				<if test="email != null and email != ''" >
+				EMAIL = #{email},
+				</if>
+				<if test="marryStatus != null and marryStatus != ''" >
+				MARRY_STATUS = #{marryStatus},
+				</if>
+				<if test="mateName != null and mateName != ''" >
+				MATE_NAME = #{mateName},
+				</if>
+				<if test="mateCertType != null and mateCertType != ''" >
+				MATE_CERT_TYPE = #{mateCertType},
+				</if>
+				<if test="mateCertNo != null and mateCertNo != ''" >
+				MATE_CERT_NO = #{mateCertNo},
+				</if>
+				<if test="mateCompany != null and mateCompany != ''" >
+				MATE_COMPANY = #{mateCompany},
+				</if>
+				<if test="matePhone != null and matePhone != ''" >
+				MATE_PHONE = #{matePhone},
+				</if>
+				<if test="contactAddProvince != null and contactAddProvince != ''" >
+				CONTACT_ADD_PROVINCE = #{contactAddProvince},
+				</if>
+				<if test="contactAddCity != null and contactAddCity != ''" >
+				CONTACT_ADD_CITY = #{contactAddCity},
+				</if>
+				<if test="contactAddArea != null and contactAddArea != ''" >
+				CONTACT_ADD_AREA = #{contactAddArea},
+				</if>
+				<if test="contactAddress != null and contactAddress != ''" >
+				CONTACT_ADDRESS = #{contactAddress},
+				</if>
+				<if test="nativeAddProvince != null and nativeAddProvince != ''" >
+				NATIVE_ADD_PROVINCE = #{nativeAddProvince},
+				</if>
+				<if test="nativeAddCity != null and nativeAddCity != ''" >
+				NATIVE_ADD_CITY = #{nativeAddCity},
+				</if>
+				<if test="nativeAddArea != null and nativeAddArea != ''" >
+				NATIVE_ADD_AREA = #{nativeAddArea},
+				</if>
+				<if test="nativeAddress != null and nativeAddress != ''" >
+				NATIVE_ADDRESS = #{nativeAddress},
+				</if>
+				<if test="createBy != null and createBy != ''" >
+				create_by = #{createBy},
+				</if> 
+				<if test="createTime != null and createTime != ''" >
+				create_time = #{createTime},
+				</if> 
+				<if test="modifyBy != null and modifyBy != ''" >
+				modify_by = #{modifyBy},
+				</if> 
+				<if test="modifyTime != null and modifyTime != ''" >
+				modify_time = #{modifyTime}
+				</if> 
+			</set>
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 征信详版录入用end -->
+	
+	<!-- 根据条件获取特定数据 -->
+	<select id="getIdByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditReportDetailed">
+		select
+			*
+		from
+			jk.t_jk_credit_report_detailed
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 查询详版基本信息  -->
+	<select id="getBaseInfo" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx" >
+		select
+			c.id, 
+			c.mobilePhone,
+			c.homePhone,
+			c.marryStatus,
+			c.matePhone,
+			c.unitPhone,
+			c.liveProvince,
+			c.liveCity,
+			c.liveArea,
+			c.liveAddress,
+			c.queryTime,
+			d.getinfo_time,
+			d.unit_name as unitName,
+			pr.AREA_NAME as unitProvince,
+			ci.AREA_NAME as unitCity,
+			ar.AREA_NAME as unitArea,
+			d.unit_address as unitAddress
+		from
+			(select
+				a.id,
+				a.query_time as queryTime,
+				a.mobile_phone as mobilePhone,
+				a.home_phone as homePhone,
+				dic.label as marryStatus,
+				a.mate_phone as matePhone,
+				a.unit_phone as unitPhone,
+				pro.AREA_NAME as liveProvince,
+				cit.AREA_NAME as liveCity,
+				are.AREA_NAME as liveArea,
+				b.live_address as liveAddress
+			from
+				jk.t_jk_credit_report_detailed a
+			left join 
+				jk.t_jk_credit_live_info b
+			on a.id = b.relation_id
+			left join
+				jk.t_gl_dict dic
+			on a.marry_status = dic.value and dic.type='jk_marriage'
+			left join
+				jk.T_GL_PROVINCE_CITY pro
+			on b.live_province = pro.AREA_CODE
+			left join 
+				jk.T_GL_PROVINCE_CITY cit
+			on b.live_city = cit.AREA_CODE
+			left join 
+				jk.T_GL_PROVINCE_CITY are
+			on b.live_area = are.AREA_CODE
+			where 
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>
+			order by 
+				b.getinfo_time desc
+			limit 1) c
+		left join 
+			jk.t_jk_credit_occupation_info d
+		on c.id = d.relation_id
+		left join
+			jk.T_GL_PROVINCE_CITY pr
+		on d.unit_province = pr.AREA_CODE
+		left join
+			jk.T_GL_PROVINCE_CITY ci
+		on d.unit_city = ci.AREA_CODE
+		left join
+			jk.T_GL_PROVINCE_CITY ar
+		on d.unit_area = ar.AREA_CODE
+		order by d.getinfo_time desc
+		limit 1
+	</select>
+	
+	<!-- 查询详版贷记卡负债信息 -->
+	<select id="getDetailedCard" parameterType="com.creditharmony.approve.credit.entity.ex.CreditCardDetailedEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditCardDetailedEx">
+		select
+			sum(b.CERDIT_LINE) as CerditLine,
+			sum(b.USED_AMOUNT) as UsedAmount,
+			sum(c.should_repay_amount) as shouldRepayAmount,
+			sum(c.current_overdue_total) as currentOverdueTotal
+		from 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_card_detailed_one b
+		on a.id = b.relation_id
+		left join
+			jk.t_jk_credit_card_detailed_two c
+		on b.id = c.relation_id
+		where 
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if  test="cardType != null and cardType != ''">
+				and b.CARD_TYPE = #{cardType,jdbcType=VARCHAR}
+			</if>
+			<if  test="currency != null and currency != ''">
+				and b.CURRENCY = #{currency,jdbcType=VARCHAR}
+			</if>
+			<if test="accountStatus != null and accountStatus != ''">
+				and c.account_status = #{accountStatus,jdbcType=VARCHAR}
+			</if>
+			
+	</select>
+	
+	<!-- 查询详版贷款信息 -->
+	<select id="getDetailedLoan" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx">
+		select 
+			sum(b.CONTEACT_AMOUNT) as conteactAmount,
+			sum(b.LOAN_BALANCE) as loanBalance,
+			f.shouldRepayAmount
+		from 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_loan_detailed_one b
+		on a.id = b.relation_id
+		left join
+		(select
+			a.id,
+			sum(c.SHOULD_REPAY_AMOUNT) as shouldRepayAmount 
+		from
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.t_jk_credit_loan_detailed_one b
+		on a.id = b.relation_id
+		left join 
+			jk.t_jk_credit_loan_detailed_two c
+		on b.id = c.relation_id
+		where
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="moneyType != null and moneyType.size() > 0">
+				and b.LOAN_TYPE in 
+				<foreach item="item" index="index" collection="moneyType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+			<if test="dkfsType != null and dkfsType.size() > 0">
+				and b.GUARANTEE_TYPE in 
+				<foreach item="item" index="index" collection="dkfsType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+			<if test="accountStatu != null and accountStatu != ''">
+				and b.account_status = #{accountStatu,jdbcType=VARCHAR}
+			</if>
+			<if test="currency != null and currency != ''">
+				and b.currency = #{currency,jdbcType=VARCHAR}
+			</if>
+		group by a.id ) f
+		on a.id = f.id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="moneyType != null and moneyType.size() > 0">
+				and b.LOAN_TYPE in 
+				<foreach item="item" index="index" collection="moneyType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+			<if test="dkfsType != null and dkfsType.size() > 0">
+				and b.GUARANTEE_TYPE in 
+				<foreach item="item" index="index" collection="dkfsType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+			<if test="accountStatu != null and accountStatu != ''">
+				and b.account_status = #{accountStatu,jdbcType=VARCHAR}
+			</if>
+			<if test="currency != null and currency != ''">
+				and b.currency = #{currency,jdbcType=VARCHAR}
+			</if>
+		group by f.shouldRepayAmount
+	</select>
+	
+	<!-- 查询对比信息 (0为非选中状态，1为选中状态)  -->
+	<select id="getDetailInfo" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx" >
+		select	
+			(case when report.certNo&lt;&gt;loaninfo.customerCertNum and CHAR_LENGTH(report.certNo)&gt;0 and CHAR_LENGTH(loaninfo.customerCertNum)&gt;0 then '1'
+			else '0' end)::varchar as certNo,
+			(case when CHAR_LENGTH(loaninfo.customerPhoneFirst)&gt;0 and CHAR_LENGTH(loaninfo.customerPhoneSecond)&lt;1 and CHAR_LENGTH(report.mobilePhone)&gt;0 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneFirst then '1'
+			when CHAR_LENGTH(loaninfo.customerPhoneFirst)&lt;1 and CHAR_LENGTH(loaninfo.customerPhoneSecond)&gt;0 and CHAR_LENGTH(report.mobilePhone)&gt;0 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneSecond then '1'
+			when CHAR_LENGTH(loaninfo.customerPhoneFirst)&gt;0 and CHAR_LENGTH(loaninfo.customerPhoneSecond)&gt;0 and CHAR_LENGTH(report.mobilePhone)&gt;0 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneSecond 
+			and report.mobilePhone&lt;&gt;loaninfo.customerPhoneSecond then '1'
+			else '0' end)::varchar as mobilePhone,
+			(case when report.unitName&lt;&gt;loaninfo.compName and CHAR_LENGTH(report.unitName)&gt;0 and CHAR_LENGTH(loaninfo.compName)&gt;0 then '1'
+			else '0' end)::varchar as unitName,
+			(case when report.homePhone&lt;&gt;loaninfo.customerTel and CHAR_LENGTH(report.homePhone)&gt;0 and CHAR_LENGTH(loaninfo.customerTel)&gt;0 then '1'
+			else '0' end)::varchar as homePhone,
+			(case when report.unitPhone&lt;&gt;loaninfo.compTel and CHAR_LENGTH(report.unitPhone)&gt;0 and CHAR_LENGTH(loaninfo.compTel)&gt;0 then '1'
+			else '0' end)::varchar as unitPhone,
+			(case when report.nuitAddress&lt;&gt;loaninfo.compAddress and CHAR_LENGTH(report.nuitAddress)&gt;0 and CHAR_LENGTH(loaninfo.compAddress)&gt;0 then '1'
+			else '0' end)::varchar as unitAddress,
+			(case when report.liveAddress&lt;&gt;loaninfo.customerAddress and CHAR_LENGTH(report.liveAddress)&gt;0 and CHAR_LENGTH(loaninfo.customerAddress)&gt;0 then '1'
+			else '0' end)::varchar as liveAddress,
+			(case when report.marryStatus&lt;&gt;loaninfo.dictMartyStatus and CHAR_LENGTH(report.marryStatus)&gt;0 and CHAR_LENGTH(loaninfo.dictMartyStatus)&gt;0 then '1'
+			else '0' end)::varchar as marryStatus,
+			(case when report.mateCompany&lt;&gt;loaninfo.pCompName and CHAR_LENGTH(report.mateCompany)&gt;0 and CHAR_LENGTH(loaninfo.pCompName)&gt;0 then '1'
+			else '0' end)::varchar as mateCompany,
+			(case when report.matePhone&lt;&gt;loaninfo.mateTel and CHAR_LENGTH(report.matePhone)&gt;0 and CHAR_LENGTH(loaninfo.mateTel)&gt;0 then '1'
+			else '0' end)::varchar as matePhone,
+			(case when report.mateCertNo&lt;&gt;loaninfo.mateCertNum and CHAR_LENGTH(report.mateCertNo)&gt;0 and CHAR_LENGTH(loaninfo.mateCertNum)&gt;0 then '1'
+			else '0' end)::varchar as mateCertNo,
+			(case when report.mateName&lt;&gt;loaninfo.mateName and CHAR_LENGTH(report.mateName)&gt;0 and CHAR_LENGTH(loaninfo.mateName)&gt;0 then '1'
+			else '0' end)::varchar as mateName
+		from
+			(select 
+				a.loan_code,
+				a.CERT_NO as certNo,
+				a.MOBILE_PHONE as mobilePhone,
+				b.unitName as unitName,
+				a.HOME_PHONE as homePhone,
+				a.UNIT_PHONE as unitPhone,
+				b.nuitAddress as nuitAddress,
+				c.liveAddress as liveAddress,
+				a.MARRY_STATUS as marryStatus,
+				a.MATE_COMPANY as mateCompany,
+				a.MATE_PHONE as matePhone,
+				a.MATE_CERT_NO as mateCertNo,
+				a.MATE_NAME as mateName,
+				a.DICT_CUSTOMER_TYPE as dictCustomerType,
+				a.R_CUSTOMER_COBORROWER_ID as rCustomerCoborrowerId
+			from 
+				jk.t_jk_credit_report_detailed a
+			left join
+				( select
+					det.id, 
+					occ.UNIT_NAME as unitName,
+					concat(occ.UNIT_PROVINCE,occ.UNIT_CITY,occ.UNIT_AREA,occ.UNIT_ADDRESS) as nuitAddress
+				from 
+					jk.t_jk_credit_report_detailed det
+				left join
+					jk.T_JK_CREDIT_OCCUPATION_INFO occ
+				on det.id = occ.RELATION_ID
+				where
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and det.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and det.id = #{id,jdbcType=VARCHAR}
+					</if>
+				order by occ.GETINFO_TIME desc
+				limit 1 ) b
+			on a.id=b.id
+			left join
+				( select 
+					det.id,
+					concat(liv.LIVE_PROVINCE,liv.LIVE_CITY,liv.LIVE_AREA,liv.LIVE_ADDRESS) as liveAddress
+				from
+					jk.t_jk_credit_report_detailed det
+				left join
+					jk.T_JK_CREDIT_LIVE_INFO liv
+				on det.id = liv.RELATION_ID
+				where 
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and det.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and det.id = #{id,jdbcType=VARCHAR}
+					</if>
+				order by liv.GETINFO_TIME desc
+				limit 1 )c
+				on a.id=c.id
+				where
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and a.id = #{id,jdbcType=VARCHAR}
+					</if>
+					) report
+		left join 
+			(select 
+				a.id,
+				a.loan_code,
+				a.CUSTOMER_CERT_NUM as customerCertNum,
+				a.CUSTOMER_PHONE_FIRST as customerPhoneFirst,
+				a.CUSTOMER_PHONE_SECOND as customerPhoneSecond,
+				b.COMP_NAME as compName,
+				a.CUSTOMER_TEL as customerTel,
+				b.COMP_TEL as compTel,
+				concat( b.COMP_PROVINCE,b.COMP_CITY,b.COMP_ARER,b.COMP_ADDRESS ) as compAddress,
+				concat( a.CUSTOMER_LIVE_PROVINCE,a.CUSTOMER_LIVE_CITY,a.CUSTOMER_LIVE_AREA,a.CUSTOMER_ADDRESS ) as customerAddress,
+				a.DICT_MARRY_STATUS as dictMartyStatus,
+				c.COMP_NAME as pCompName,
+				d.MATE_TEL as mateTel,
+				d.MATE_CERT_NUM as mateCertNum,
+				d.MATE_NAME as mateName
+			from 
+				t_jk_loan_customer a
+			left join
+				T_JK_LOAN_COMPANY b
+			on a.loan_code = b.loan_code and b.DICT_R_CUSTOMTER_TYPE = '0'
+			left join 
+				T_JK_LOAN_COMPANY c
+			on a.loan_code = c.loan_code and c.DICT_R_CUSTOMTER_TYPE = '2'
+			left join 
+				jk.T_JK_LOAN_MATE d
+			on a.loan_code = d.loan_code and d.LOAN_CUSTOMTER_TYPE = '0'
+			where
+				1=1 
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+			) loaninfo
+		on report.loan_code = loaninfo.loan_code and report.rCustomerCoborrowerId = loaninfo.id
+	</select>
+	<!-- 根据借款编号获取数据 -->
+	<select id="getAllByLoanCode" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx" >
+		select 
+			id,
+			loan_code,
+			dict_customer_type,
+			r_customer_coborrower_id
+		from 
+			jk.t_jk_credit_report_detailed 
+		where 
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 获取共借人信息 -->
+	<select id="getDetailBorrow" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx" >
+		select	
+			(case when report.certNo&lt;&gt;loaninfo.customerCertNum and CHAR_LENGTH(report.certNo)&gt;0 and CHAR_LENGTH(loaninfo.customerCertNum)&gt;0 then '1'
+			else '0' end)::varchar as certNo,
+			(case when CHAR_LENGTH(loaninfo.customerPhoneFirst)&gt;0  and CHAR_LENGTH(loaninfo.customerPhoneSecond)&lt;1 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneFirst then '1'
+			when CHAR_LENGTH(loaninfo.customerPhoneFirst)&lt;1  and CHAR_LENGTH(loaninfo.customerPhoneSecond)&gt;0 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneSecond then '1' 
+			when CHAR_LENGTH(loaninfo.customerPhoneFirst)&lt;1  and CHAR_LENGTH(loaninfo.customerPhoneSecond)&gt;0 and report.mobilePhone&lt;&gt;loaninfo.customerPhoneFirst and report.mobilePhone&lt;&gt;loaninfo.customerPhoneSecond
+			then '1' else '0' end)::varchar as mobilePhone,
+			(case when report.unitName&lt;&gt;loaninfo.compName and CHAR_LENGTH(report.unitName)&gt;0 and CHAR_LENGTH(loaninfo.compName)&gt;0 then '1'
+			else '0' end)::varchar as unitName,
+			(case when report.homePhone&lt;&gt;loaninfo.customerTel and CHAR_LENGTH(report.homePhone)&gt;0 and CHAR_LENGTH(loaninfo.customerTel)&gt;0 then '1'
+			else '0' end)::varchar as homePhone,
+			(case when report.unitPhone&lt;&gt;loaninfo.compTel and CHAR_LENGTH(report.unitPhone)&gt;0 and CHAR_LENGTH(loaninfo.compTel)&gt;0 then '1'
+			else '0' end)::varchar as unitPhone,
+			(case when report.nuitAddress&lt;&gt;loaninfo.compAddress and CHAR_LENGTH(report.nuitAddress)&gt;0 and CHAR_LENGTH(loaninfo.compAddress)&gt;0 then '1'
+			else '0' end)::varchar as unitAddress,
+			(case when report.liveAddress&lt;&gt;loaninfo.customerAddress and CHAR_LENGTH(report.liveAddress)&gt;0 and CHAR_LENGTH(loaninfo.customerAddress)&gt;0 then '1'
+			else '0' end)::varchar as liveAddress,
+			(case when report.marryStatus&lt;&gt;loaninfo.dictMartyStatus and CHAR_LENGTH(report.marryStatus)&gt;0 and CHAR_LENGTH(loaninfo.dictMartyStatus)&gt;0 then '1'
+			else '0' end)::varchar as marryStatus,
+			(case when report.mateCompany&lt;&gt;loaninfo.pCompName and CHAR_LENGTH(report.mateCompany)&gt;0 and CHAR_LENGTH(loaninfo.pCompName)&gt;0 then '1'
+			else '0' end)::varchar as mateCompany,
+			(case when report.matePhone&lt;&gt;loaninfo.mateTel and CHAR_LENGTH(report.matePhone)&gt;0 and CHAR_LENGTH(loaninfo.mateTel)&gt;0 then '1'
+			else '0' end)::varchar as matePhone,
+			(case when report.mateCertNo&lt;&gt;loaninfo.mateCertNum and CHAR_LENGTH(report.mateCertNo)&gt;0 and CHAR_LENGTH(loaninfo.mateCertNum)&gt;0 then '1'
+			else '0' end)::varchar as mateCertNo,
+			(case when report.mateName&lt;&gt;loaninfo.mateName and CHAR_LENGTH(report.mateName)&gt;0 and CHAR_LENGTH(loaninfo.mateName)&gt;0 then '1'
+			else '0' end)::varchar as mateName
+		from
+			(select 
+				a.loan_code,
+				a.CERT_NO as certNo,
+				a.MOBILE_PHONE as mobilePhone,
+				b.unitName as unitName,
+				a.HOME_PHONE as homePhone,
+				a.UNIT_PHONE as unitPhone,
+				b.nuitAddress as nuitAddress,
+				c.liveAddress as liveAddress,
+				a.MARRY_STATUS as marryStatus,
+				a.MATE_COMPANY as mateCompany,
+				a.MATE_PHONE as matePhone,
+				a.MATE_CERT_NO as mateCertNo,
+				a.MATE_NAME as mateName,
+				a.DICT_CUSTOMER_TYPE as dictCustomerType,
+				a.R_CUSTOMER_COBORROWER_ID as rCustomerCoborrowerId
+			from 
+				jk.t_jk_credit_report_detailed a
+			left join
+				( select
+					det.id, 
+					occ.UNIT_NAME as unitName,
+					concat(occ.UNIT_PROVINCE,occ.UNIT_CITY,occ.UNIT_AREA,occ.UNIT_ADDRESS) as nuitAddress
+				from 
+					jk.t_jk_credit_report_detailed det
+				left join
+					jk.T_JK_CREDIT_OCCUPATION_INFO occ
+				on det.id = occ.RELATION_ID
+				where
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and det.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and det.id = #{id,jdbcType=VARCHAR}
+					</if>
+				order by occ.GETINFO_TIME desc
+				limit 1 ) b
+			on a.id=b.id
+			left join
+				( select 
+					det.id,
+					concat(liv.LIVE_PROVINCE,liv.LIVE_CITY,liv.LIVE_AREA,liv.LIVE_ADDRESS) as liveAddress
+				from
+					jk.t_jk_credit_report_detailed det
+				left join
+					jk.T_JK_CREDIT_LIVE_INFO liv
+				on det.id = liv.RELATION_ID
+				where 
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and det.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and det.id = #{id,jdbcType=VARCHAR}
+					</if>
+				order by liv.GETINFO_TIME desc
+				limit 1 )c
+				on a.id=c.id
+				where
+					1=1
+					<if test="loanCode != null and loanCode != ''" >
+						and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+					</if>
+					<if test="id != null and id != ''" >
+						and a.id = #{id,jdbcType=VARCHAR}
+					</if>
+					) report
+		left join 
+			(select 
+				a.id,
+				a.loan_code,
+				a.COBO_CERT_NUM as customerCertNum,
+				a.COBO_MOBILE as customerPhoneFirst,
+				a.COBO_MOBILE2 as customerPhoneSecond,
+				b.COMP_NAME as compName,
+				a.COBO_FAMILY_TEL as customerTel,
+				b.COMP_TEL as compTel,
+				concat( b.COMP_PROVINCE,b.COMP_CITY,b.COMP_ARER,b.COMP_ADDRESS ) as compAddress,
+				concat( a.COBO_LIVEING_PROVINCE,a.COBO_LIVEING_CITY,a.COBO_LIVEING_AREA,a.COBO_NOW_ADDRESS ) as customerAddress,
+				a.DICT_MARRY_STATUS as dictMartyStatus,
+				c.COMP_NAME as pCompName,
+				d.MATE_TEL as mateTel,
+				d.MATE_CERT_NUM as mateCertNum,
+				d.MATE_NAME as mateName
+			from 
+				jk.T_JK_LOAN_COBORROWER a
+			left join 
+				jk.T_JK_LOAN_MATE d
+			on a.loan_code = d.loan_code and d.r_customer_coborrower_id = a.id and d.LOAN_CUSTOMTER_TYPE = '1'
+			left join
+				jk.T_JK_LOAN_COMPANY b
+			on a.loan_code = b.loan_code and b.R_ID = a.id and b.DICT_R_CUSTOMTER_TYPE = '1'
+			left join 
+				jk.T_JK_LOAN_COMPANY c
+			on d.loan_code = c.loan_code and c.R_ID = d.id and c.DICT_R_CUSTOMTER_TYPE = '2'
+			where
+				1=1 
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+			) loaninfo
+		on report.loan_code = loaninfo.loan_code and loaninfo.id = report.rCustomerCoborrowerId
+	</select>
+	
+	<!-- 获取申请信息的单位信息 -->
+	<select id="getApplyCompany" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx" >
+		select 
+			a.COMP_NAME as unitName,
+			a.COMP_ENTRY_DAY as getinfoTime
+		from 
+			jk.T_JK_LOAN_COMPANY a
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_R_CUSTOMTER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 获取征信报告单位信息 -->
+	<select id="getReportCompany" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditReportDetailedEx">
+		select 
+			b.UNIT_NAME as unitName,
+			b.GETINFO_TIME as getinfoTime
+		from 
+			jk.T_JK_CREDIT_REPORT_DETAILED a
+		left join 
+			jk.T_JK_CREDIT_OCCUPATION_INFO b
+		on a.id = b.RELATION_ID
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			order by b.GETINFO_TIME desc
+			limit 1
+	</select>
+	<!-- 获取详版信用卡（二）和详版贷款信息（二）中 当前逾期期数*的最大值 -->
+	<select id="getMaxOverdue" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditCardDetailedEx" >
+		select 
+			max(currentOverdue) as currentOverdue  
+		from
+			(select 
+				max(c.current_overdue) as currentOverdue
+			from 
+				jk.t_jk_credit_report_detailed a
+			left join 
+				jk.t_jk_credit_card_detailed_one b
+			on a.id = b.relation_id  
+			left join 
+				jk.t_jk_credit_card_detailed_two c
+			on b.id = c.relation_id
+			where 
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>
+	
+			union all
+	
+			select 
+				max(c.current_overdue) as currentOverdue
+			from 
+				jk.t_jk_credit_report_detailed a
+			left join 
+				jk.t_jk_credit_loan_detailed_one b
+			on a.id = b.relation_id  
+			left join 
+				jk.t_jk_credit_loan_detailed_two c
+			on b.id = c.relation_id
+			where
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>)
+	</select>
+	
+	<!-- 征信报告显示贷款到期，但仍显示正常还款状态 -->
+	<select id="getNormalStatus" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx"  >
+		 select 
+			(case count(*) when 0 then '0'
+			else '1' end)::varchar as accountStatu
+		from 
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.t_jk_credit_loan_detailed_one b
+		on a.id = b.relation_id
+		where
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="accountStatu != null and accountStatu != ''">
+			and b.ACCOUNT_STATUS = #{accountStatu,jdbcType=VARCHAR}
+			</if>
+			and b.ACTUAL_DAY &lt; now() 
+	</select>
+	
+	<!-- 非经营类申请人存有止付状态的信用卡 （进件产品为薪水借，精英借A/B，优卡借，优房借，楼易借，且信用卡明细信息（二）中【账户状态为止付】则打勾，否则不打。） -->
+	<select id="getProductStatus" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" >
+		select 
+			count(*) as repayMonths
+		from 
+			jk.T_JK_CREDIT_REPORT_DETAILED a
+		left join 
+			jk.T_JK_CREDIT_CARD_DETAILED_one b
+		on a.id = b.RELATION_ID
+		left join
+			jk.T_JK_CREDIT_CARD_DETAILED_two c
+		on b.id = c.RELATION_ID
+		left join
+			jk.T_JK_LOAN_INFO d
+		on a.loan_code = d.loan_code
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="moneyType != null and moneyType != ''">
+				and d.LOAN_AUDIT_PRODUCT in 
+				<foreach item="item" index="index" collection="moneyType" open="(" separator="," close=")"> 
+					#{item}
+				</foreach>
+			</if>
+	</select>
+	<!-- 为他人贷款担保明细信息中，有值则打勾，否则不打。 -->
+	<select id="getForOther" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="java.lang.Integer" >
+		select 
+			count(*) 
+		from 
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.T_JK_CREDIT_GUARANTEE_DETAILED b
+		on a.id = b.RELATION_ID
+		where
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if> 
+	</select>
+	
+	<!-- 公积金信息中【单位名称】与【申请表中单位名称不一致】，则打勾，否则不打。若公积金信息中出现两个单位，取开户日期距今较近的单位名称进行比对。 -->
+	<select id="getAccumulation" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx">
+		select
+			(case when CHAR_LENGTH(apply.compName)&gt;0 and CHAR_LENGTH(report.unitName)&gt;0
+			and apply.compName&lt;&gt;report.unitName then '1' 
+			when CHAR_LENGTH(apply.compName)&gt;0 and CHAR_LENGTH(report.unitName)&lt;1 then '0' 
+			when CHAR_LENGTH(apply.compName)&lt;1 and CHAR_LENGTH(report.unitName)&gt;0 then '0' 
+			else '0' end)::varchar as accountStatu
+		from
+			(select
+				a.loan_code as loanCode, 
+				a.COMP_NAME as compName
+			from 
+				jk.T_JK_LOAN_COMPANY a
+			where
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_R_CUSTOMTER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			) apply
+			left join  
+			(select
+				a.loan_code as loanCode, 
+				b.UNIT_NAME as unitName
+			from 
+				jk.T_JK_CREDIT_REPORT_DETAILED a
+			left join 
+				T_JK_CREDIT_CPF_DETAILED b
+			on a.id = b.RELATION_ID
+			where
+				1=1
+				<if test="loanCode != null and loanCode != ''" >
+					and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+				</if>
+				<if test="dictCustomerType != null and dictCustomerType != ''" >
+					and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+				</if>
+				<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+					and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+				</if>
+			order by b.ACCOUNT_DAY desc
+			limit 1) report
+		on apply.loanCode = report.loanCode
+	</select>
+	
+	<select id="getDetailedReason" parameterType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx" resultType="java.lang.Integer" >
+		select 
+			count(*) 
+		from 
+			jk.T_JK_CREDIT_REPORT_DETAILED a
+		left join 
+			jk.T_JK_CREDIT_QUERY_RECORD b
+		on a.id = b.RELATION_ID
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.DICT_CUSTOMER_TYPE = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="loanType != null and loanType != ''">
+				and b.QUERY_TYPE = #{loanType,jdbcType=VARCHAR}
+			</if>
+			and b.QUERY_DAY &gt; (now()-interval '6 month')
+	</select>
+	<!-- 下载页面详版贷记卡 -->
+	<select id="downloadUseDetailCard" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditCardDetailedEx" >
+		select 
+			SUM(b.CERDIT_LINE) as CERDIT_LINE,
+			SUM(b.USED_AMOUNT) as USED_AMOUNT,
+			SUM(c.SHOULD_REPAY_AMOUNT) as SHOULD_REPAY_AMOUNT
+		from
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_card_detailed_one b
+		on a.id = b.relation_id
+		left join 
+			jk.t_jk_credit_card_detailed_two c
+		on b.id = c.relation_id
+		where 
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and c.account_status = #{name,jdbcType=VARCHAR}
+			</if>
+			
+	</select>
+	
+	<!-- 下载页面详版贷款 -->
+	<select id="downloadUseDetailLoan" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.ex.CreditLoanDetailedEx">
+		select 
+			d.label as loan_type,
+			SUM(b.CONTEACT_AMOUNT) as CONTEACT_AMOUNT,
+			SUM(b.REPAY_MONTHS) as REPAY_MONTHS,
+			SUM(b.LOAN_BALANCE) as LOAN_BALANCE,
+			SUM(c.SHOULD_REPAY_AMOUNT) as SHOULD_REPAY_AMOUNT,
+			SUM(c.CURRENT_OVERDUE_TOTAL) as CURRENT_OVERDUE_TOTAL
+		from 
+			jk.t_jk_credit_report_detailed a
+		left join
+			jk.t_jk_credit_loan_detailed_one b
+		on a.id = b.relation_id
+		left join 
+			jk.t_jk_credit_loan_detailed_two c
+		on b.id = c.relation_id
+		left join 
+			jk.t_gl_dict d
+		on b.loan_type = d.value and d.type = 'jk_credit_loan_type_flag'
+		where 
+			b.id is not null
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+		group by d.label
+	</select>
+
+</mapper>

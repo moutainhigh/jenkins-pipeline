@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudJudgeDao">
+	<insert id="insert" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudJudge">
+		insert into jk.t_jk_antifraud_judge (id, loan_code,
+		judge_case_code,
+		judge_proc_date, judge_proc_by, dict_case_result,
+		dict_judge_2code, dict_judge_3code, judge_risk_msg,
+		judge_report_emp_code, judge_into_source, judge_object_id,
+		create_by,
+		create_time, modify_by,
+		modify_time)
+		values (#{id,jdbcType=NUMERIC},
+		#{loanCode,jdbcType=OTHER},
+		#{judgeCaseCode,jdbcType=OTHER},
+		#{judgeProcDate,jdbcType=DATE}, #{judgeProcBy,jdbcType=OTHER},
+		#{dictCaseResult,jdbcType=OTHER},
+		#{dictJudge2code,jdbcType=OTHER},
+		#{dictJudge3code,jdbcType=OTHER},
+		#{judgeRiskMsg,jdbcType=OTHER},
+		#{judgeReportEmpCode,jdbcType=OTHER},
+		#{judgeIntoSource,jdbcType=OTHER}, #{judgeObjectId,jdbcType=OTHER},
+		#{createBy,jdbcType=OTHER}, #{createTime,jdbcType=DATE},
+		#{modifyBy,jdbcType=OTHER},
+		#{modifyTime,jdbcType=DATE})
+	</insert>
+	<!-- 刘燕军 -->
+	<insert id="insertJudge"
+		parameterType="com.creditharmony.approve.antifraud.entity.AntifraudJudge">
+		insert into jk.t_jk_antifraud_judge
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="id != null">
+			id,
+		</if>
+		<if test="rReportId != null">
+			r_report_id,
+		</if>
+		<if test="loanCode != null">
+			loan_code,
+		</if>
+		<if test="judgeCaseCode != null">
+			judge_case_code,
+		</if>
+		<if test="judgeProcDate != null">
+			judge_proc_date,
+		</if>
+		<if test="judgeProcBy != null">
+			judge_proc_by,
+		</if>
+		<if test="dictCaseResult != null">
+			dict_case_result,
+		</if>
+		<if test="dictJudgeSecondCode != null">
+			dict_judge_second_code,
+		</if>
+		<if test="dictJudgeThredCode != null">
+			dict_judge_thred_code,
+		</if>
+		<if test="judgeRiskMsg != null">
+			judge_risk_msg,
+		</if>
+		<if test="judgeReportEmpCode != null">
+			judge_report_emp_code,
+		</if>
+		<if test="dictIntoSource != null">
+			dict_into_source,
+		</if>
+		<if test="judgeObjectId != null">
+			judge_object_id,
+		</if>
+		<if test="createBy != null">
+			create_by,
+		</if>
+		<if test="createTime != null">
+			create_time,
+		</if>
+		<if test="modifyBy != null">
+			modify_by,
+		</if>
+		<if test="modifyTime != null">
+			modify_time,
+		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test="id != null">
+			#{id,jdbcType=VARCHAR},
+		</if>
+		<if test="rReportId != null">
+			#{rReportId,jdbcType=VARCHAR},
+		</if>
+		<if test="loanCode != null">
+			#{loanCode,jdbcType=VARCHAR},
+		</if>
+		<if test="judgeCaseCode != null">
+			#{judgeCaseCode,jdbcType=VARCHAR},
+		</if>
+		<if test="judgeProcDate != null">
+			#{judgeProcDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="judgeProcBy != null">
+			#{judgeProcBy,jdbcType=VARCHAR},
+		</if>
+		<if test="dictCaseResult != null">
+			#{dictCaseResult,jdbcType=VARCHAR},
+		</if>
+		<if test="dictJudgeSecondCode != null">
+			#{dictJudgeSecondCode,jdbcType=VARCHAR},
+		</if>
+		<if test="dictJudgeThredCode != null">
+			#{dictJudgeThredCode,jdbcType=VARCHAR},
+		</if>
+		<if test="judgeRiskMsg != null">
+			#{judgeRiskMsg,jdbcType=VARCHAR},
+		</if>
+		<if test="judgeReportEmpCode != null">
+			#{judgeReportEmpCode,jdbcType=VARCHAR},
+		</if>
+		<if test="dictIntoSource != null">
+			#{dictIntoSource,jdbcType=VARCHAR},
+		</if>
+		<if test="judgeObjectId != null">
+			#{judgeObjectId,jdbcType=VARCHAR},
+		</if>
+		<if test="createBy != null">
+			#{createBy,jdbcType=VARCHAR},
+		</if>
+		<if test="createTime != null">
+			#{createTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="modifyBy != null">
+			#{modifyBy,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyTime != null">
+			#{modifyTime,jdbcType=TIMESTAMP},
+		</if>
+		</trim>
+	</insert>
+	<!--wanglidong 保存反欺诈决策 -->
+	<update id="updateJudge" parameterType="com.creditharmony.approve.antifraud.entity.ex.AntiFraudJudgeEx">
+		UPDATE t_jk_antifraud_judge
+		<set>
+		<if test="relationId != null">
+			relation_id=#{relationId},
+		</if>
+		<if test="judgeCaseCode != null">
+			judge_case_code=#{judgeCaseCode},
+		</if>
+			judge_proc_date=now(),
+		<if test="judgeProcBy != null">
+			judge_proc_by=#{judgeProcBy},
+		</if>
+		<if test="dictCaseResult != null">
+			dict_case_result=#{dictCaseResult},
+		</if>
+		<if test="twoBlack != null">
+			dict_judge_second_code=#{twoBlack},
+		</if>
+		<if test="threeBlack != null">
+			dict_judge_thred_code=#{threeBlack},
+		</if>
+		<if test="judgeRiskMsg != null">
+			judge_risk_msg=#{judgeRiskMsg},
+		</if>
+		<if test="detailJudgeRiskMsg != null">
+			detail_judge_risk_msg=#{detailJudgeRiskMsg},
+		</if>
+		<if test="modifyBy != null">
+			modify_by=#{modifyBy},
+		</if>
+		<if test="modifyTime != null">
+			modify_time=#{modifyTime},
+		</if>
+		<if test="loanCustomerName != null">
+			loan_customer_name=#{loanCustomerName}
+		</if>
+		</set>
+		WHERE r_report_id = #{rReportId};
+	</update>
+	<!--wanglidong 保存内/外部拉黑 -->
+	<insert id="addBlackList" parameterType="java.util.List">
+		insert into 
+			jk.t_jk_backlist_all 
+			(
+				id,
+				loan_code,
+				dict_source,
+				dict_mark_type,
+				dict_black_type,
+				black_msg,
+				loan_customter_type,
+				r_customer_coborrower_id,
+				create_by,
+				create_time,
+				modify_by,
+				modify_time
+			)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.id},
+				#{item.loanCode},
+				#{item.dictSource},
+				#{item.dictMarkType},
+				#{item.dictBlackType},
+				#{item.blackMsg},
+				#{item.loanCustomterType},
+				#{item.rCustomerCoborrowerId},
+				#{item.createBy},
+				#{item.createTime},
+				#{item.modifyBy},
+				#{item.modifyTime}
+			)
+		</foreach>
+	</insert>
+	<!--wanglidong 更新借款信息表中的审核结果ID -->
+	<update id="updateLoanInfo" parameterType="java.util.Map">
+		UPDATE t_jk_loan_info
+		<set>
+			<if test="auditId != null">
+				audit_id=#{auditId},
+			</if>
+		</set>
+		WHERE loan_code = #{loanCode};
+	</update>
+	<!--wanglidong 获取黑名单二级拒借码 -->
+	<select id="getBlackTwoLevel" resultType="com.creditharmony.approve.antifraud.entity.Refuse">
+		SELECT
+			id, refuse_code, refuse_name, refuse_grade,parent_id,delete_flag
+		FROM
+			t_gl_refuse 
+		where 
+			parent_id= (SELECT id FROM t_gl_refuse where refuse_code='N1' and refuse_grade='0' and  delete_flag='0' )
+		and
+			refuse_grade='0'
+		and 
+			delete_flag='0'
+	</select>
+	<!--wanglidong 获取灰名单二级拒借码 -->
+	<select id="getGrayTwoLevel" resultType="com.creditharmony.approve.antifraud.entity.Refuse">
+		SELECT
+			id, refuse_code, refuse_name, refuse_grade,parent_id,delete_flag
+		FROM
+			t_gl_refuse 
+		where 
+			parent_id= (SELECT id FROM t_gl_refuse where refuse_code='N0' and refuse_grade='0' and  delete_flag='0' )
+		and
+			refuse_grade='0'
+		and 
+			delete_flag='0'
+	</select>
+	<!--wanglidong 获取黑名单三级拒借码 -->
+	<select id="getBlackThreeLevel"  resultType="com.creditharmony.approve.antifraud.entity.Refuse">
+		select 
+			id, refuse_code, refuse_name, refuse_grade,parent_id,delete_flag
+		FROM
+			t_gl_refuse refuse
+		where
+			parent_id in(
+		SELECT
+			id
+		FROM
+			t_gl_refuse refuse
+		where 
+			parent_id= (SELECT id FROM t_gl_refuse where refuse_code='N1' and refuse_grade='0' and  delete_flag='0' )
+		and
+			refuse_grade='0'
+		and 
+			delete_flag='0' 
+		)
+	</select>
+
+	<!--wanglidong 获取加黑项 -->
+	<select id="getAntifraudOption" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.ex.AntiFraudJudgeOptionEx">
+		SELECT	
+		a.id,
+		a.CUSTOMER_PHONE_FIRST,  
+		a.CUSTOMER_PHONE_SECOND, 
+		a.CUSTOMER_CERT_NUM, 
+		a.CUSTOMER_TEL, 
+		concat(province.area_name,'-',city.area_name,'-',area.area_name,'-',a.customer_address) as customerAddress ,
+		COMPANY.COMP_NAME, 
+		concat(pro.area_name,'-',cy.area_name,'-',are.area_name,'-',COMPANY.comp_address) as compAddress,COMPANY.comp_tel,
+		MATE.MATE_TEL ,
+		MATE.MATE_CERT_NUM 
+		FROM
+			T_JK_LOAN_CUSTOMER a 
+		left join
+			t_gl_province_city province	
+		on	
+			a.CUSTOMER_LIVE_PROVINCE = province.area_code
+		left join
+			t_gl_province_city city	
+		on
+			a.CUSTOMER_LIVE_CITY  = city.area_code
+		left join
+			t_gl_province_city area	
+		on
+			a.CUSTOMER_LIVE_AREA  = area.area_code
+		left join
+			T_JK_LOAN_COMPANY COMPANY
+		on 
+			a.loan_code=COMPANY.loan_code   and COMPANY.dict_r_customter_type= #{customterType}
+		left join
+			t_gl_province_city pro 
+		on 
+			COMPANY.comp_province=pro.area_code
+		left join
+			t_gl_province_city cy	
+		on
+			COMPANY.comp_city  = cy.area_code
+		left join
+			t_gl_province_city are
+		on
+			COMPANY.comp_arer  = are.area_code
+		left join
+			T_JK_LOAN_MATE MATE
+		on 
+			a.loan_code=MATE.loan_code 
+		where 
+			a.loan_code=#{loanCode} 
+	</select>
+	<!--wanglidong 获取共借人内部加黑项 -->
+	<select id="getCoborrowerOption" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.ex.CoborrowerOptionEx">
+		SELECT 
+			cob.id,
+			cob.cobo_name,
+			cob.cobo_cert_num,	
+			cob.cobo_family_tel,			
+			cob.cobo_mobile,			
+			cob.cobo_mobile2,
+			concat(prov.area_name,'-',city.area_name,'-',are.area_name,'-',cob.cobo_now_address) as cobo_now_address
+		FROM 
+			t_jk_loan_coborrower cob
+		left join t_gl_province_city prov on prov.area_code = cob.cobo_liveing_province
+		left join t_gl_province_city city on city.area_code = cob.cobo_liveing_city
+		left join t_gl_province_city are on are.area_code = cob.cobo_liveing_area
+		where 
+			loan_code=#{loanCode} 
+	</select>
+	<!--wanglidong 获取共借人内部加灰项 -->
+	<select id="getCoborrowerGrayOption" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.ex.CoborrowerOptionEx">
+		SELECT 
+			id,
+			cobo_name,
+			cobo_cert_num,	
+			cobo_mobile,			
+			cobo_mobile2
+		FROM 
+			t_jk_loan_coborrower
+		where 
+			loan_code=#{loanCode} 
+	</select>
+	<!--wanglidong 查询共借人的联系人手机号-->
+	<select id="getCoborrowerContactMobile" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			contact_mobile
+		FROM 
+			t_jk_contact 
+		where 
+			r_customer_coborrower_id = #{0}
+	</select>
+	<!--张虎 新版申请表add 查询共借人的联系人宅电-->
+	<select id="getCoborrowerContactHomeTel" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			home_tel
+		FROM 
+			t_jk_contact 
+		where 
+			r_customer_coborrower_id = #{0}
+	</select>
+	
+	<!--wanglidong 查询联系人手机号-->
+	<select id="getContactMobile" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT	
+		d.CONTACT_MOBILE
+		FROM
+			T_JK_LOAN_CUSTOMER a
+		left join
+			T_JK_CONTACT d
+		on
+			a.id=d.R_CUSTOMER_COBORROWER_ID
+		where 
+			a.loan_code=#{loanCode} and d.LOAN_CUSTOMTER_TYPE = #{customterType};
+	</select>
+	<!--zhanghu 新版申请表 查询联系人宅电-->
+	<select id="getContactHomeTel" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT	
+		d.home_tel
+		FROM
+			T_JK_LOAN_CUSTOMER a
+		left join
+			T_JK_CONTACT d
+		on
+			a.id=d.R_CUSTOMER_COBORROWER_ID
+		where 
+			a.loan_code=#{loanCode} and d.LOAN_CUSTOMTER_TYPE = #{customterType};
+	</select>
+	<!--wanglidong 查询加灰项-->
+	<select id="getGrayListOption" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.ex.AntiFraudJudgeOptionEx">
+		SELECT	
+			a.CUSTOMER_PHONE_FIRST,  
+			a.CUSTOMER_PHONE_SECOND, 
+			a.CUSTOMER_CERT_NUM,
+			MATE.MATE_TEL ,
+			MATE.MATE_CERT_NUM 
+		FROM
+			T_JK_LOAN_CUSTOMER a
+		left join
+			T_JK_LOAN_MATE MATE
+		on 
+			a.loan_code=MATE.loan_code 
+		where 
+			a.loan_code=#{0};
+	</select>
+	<!--wanglidong 查询是否全部解除 -->
+	<select id="getRelieveStatus" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			offend_relieve_status
+		FROM
+			t_jk_antifraud_offend_info 
+		where
+			loan_code = #{0}
+	</select>
+	<!--wanglidong 获取反欺诈判定次数 -->
+	<select id="getJudgeTime" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+			count(judge_proc_by)
+		FROM 
+			t_jk_antifraud_judge
+		where 
+			judge_proc_by = #{userCode} and judge_proc_date 
+		between #{dateFrom} and #{dateTo}
+	</select>
+	<!--wanglidong 获取提报类型 -->
+	<select id="getAntifraudReportType" resultType="com.creditharmony.approve.antifraud.entity.AntifraudReport" parameterType="java.lang.String">
+		select 
+			report.id,
+			report.dict_check_type 
+		from 
+			t_jk_antifraud_judge judge
+		left join
+			t_jk_antifraud_report report
+		on
+			judge.r_report_id = report.id
+		where 
+			judge.loan_code = #{0} 
+		and 
+			judge.dict_case_result =  #{1}
+	</select>
+	<!--wanglidong 获取历史提报反欺诈信息 -->
+	<select id="getAntifraudReportTypeView" resultType="com.creditharmony.approve.antifraud.entity.AntifraudReport" parameterType="java.lang.String">
+		SELECT 
+			report.dict_check_type,
+			refuse.refuse_name as dict_report_type,
+			refu.refuse_name as dict_black_gray_type,
+			report.antifraud_msg,
+			report.mention_group_id,
+			report.mention_user_id
+		FROM 
+			t_jk_antifraud_judge judge  
+		left join
+			t_jk_antifraud_report report
+		on
+			judge.r_report_id = report.id
+		left join
+			t_gl_refuse refuse
+		on
+			report.dict_report_type = refuse.refuse_code
+		left join
+			t_gl_refuse refu
+		on
+			report.dict_black_gray_type = refu.refuse_code			
+		where  
+			judge.loan_code = #{0} 
+		order by  judge.modify_time desc Nulls last limit 1
+	</select>
+	<!--wanglidong 获取提报反欺诈信息 -->
+	<select id="getAntifraudReport" resultType="com.creditharmony.approve.antifraud.entity.AntifraudReport" parameterType="java.lang.String">
+		select 
+			report.mention_user_id,
+			report.mention_group_id,
+			report.antifraud_msg,
+			refuse.refuse_name as dict_report_type
+		from 
+			t_jk_antifraud_judge judge
+		left join
+			t_jk_antifraud_report report
+		on
+			judge.r_report_id = report.id
+		left join
+			t_gl_refuse refuse
+		on
+			report.dict_report_type = refuse.refuse_code
+		where 
+			judge.loan_code = #{0} 
+		and 
+			judge.dict_case_result = #{1}
+	</select>
+	<!--wanglidong 获取决策信息 -->
+	<select id="getAntiFraudJudgeView" resultType="com.creditharmony.approve.antifraud.entity.ex.AntiFraudJudgeEx" parameterType="java.util.Map">
+		SELECT 
+			r_report_id, 
+			loan_code, 
+			judge_case_code, 
+			judge_proc_date, 
+			judge_proc_by, 
+			dict_case_result, 
+			dict_judge_second_code, 
+			dict_judge_thred_code, 
+			judge_risk_msg,
+			detail_judge_risk_msg, 
+			judge_report_emp_code, 
+			dict_into_source, 
+			judge_object_id
+		FROM 
+			t_jk_antifraud_judge  where  dict_case_result != #{caseResult}  and   loan_code = #{loanCode} 
+		order by 
+			modify_time desc Nulls last limit 1
+	</select>
+	<!--wanglidong 获取外部加黑信息 -->
+	<select id="getBlackListAll" resultType="com.creditharmony.approve.antifraud.entity.BacklistAll" parameterType="java.lang.String">
+		SELECT 
+			dict.label as dict_black_type, 
+			al.black_msg, 
+			al.id
+		FROM 
+			t_jk_backlist_all al
+		LEFT JOIN 
+			t_gl_dict dict 
+		ON 
+			al.dict_black_type=dict.value and 	dict.type = 'jk_afraud_list_type'
+		where 
+			al.loan_code = #{loanCode} 
+		and 
+			al.dict_source=#{source}
+	</select>
+	<!--wanglidong 删除外部拉黑 -->
+	<select id="delOutBlack" parameterType="java.lang.String">
+		DELETE FROM
+			t_jk_backlist_all
+		WHERE 
+			id = #{0};
+	</select>
+	<!--wanglidong 查看黑灰名单在数据库中是否存在 -->
+	<select id="getCheckExists" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT 
+			count(black_msg)
+		FROM 
+			t_jk_backlist_all 
+		where 
+			black_msg= #{0};
+	</select>
+	<!--wanglidong 查看省份 -->
+	<select id="getArea" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			city.area_name
+		FROM 
+			t_jk_loan_info info
+		left join
+			t_gl_org org
+		on
+			info.loan_store_orgid = org.id
+		left join
+			t_gl_province_city city 
+		on
+			org.province_id = city.id
+		where 
+			loan_code = #{0}
+	</select>
+	<!--wanglidong 查看决策历史纪录 -->
+	<select id="getJudgeHistory" parameterType="java.util.Map" resultType="com.creditharmony.approve.antifraud.entity.AntifraudJudge">
+		SELECT 
+			judge.judge_case_code,
+			dict.label as dict_case_result,
+			refuse.refuse_name as dict_judge_second_code, 
+			refu.refuse_name as dict_judge_thred_code, 
+			judge.judge_risk_msg
+		FROM 
+			t_jk_antifraud_judge judge
+		left join
+			t_gl_dict dict
+		on
+			judge.dict_case_result = dict.value and dict.type ='jk_black_grey_list'
+		left join
+			t_gl_refuse refuse
+		on
+			judge.dict_judge_second_code = refuse.refuse_code and refuse.refuse_grade='0' and refuse.delete_flag='0'
+		left join
+			t_gl_refuse refu
+		on
+			judge.dict_judge_thred_code = refu.refuse_code and refuse.refuse_grade='0' and refuse.delete_flag='0'
+		where 
+			judge.relation_id = #{id}
+	</select>
+	<!--wanglidong 查看决策历史纪录 -->
+	<select id="getLoanStatus" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT  
+			dict_loan_status
+		FROM 
+			t_jk_loan_info
+		where 
+			loan_code = #{0}		
+	</select>
+	<!--wanglidong 获取系统提报原因 -->
+	<select id="getAntifraudMsg" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			dict.label
+		FROM 
+			t_jk_antifraud_offend_info offend_info
+		left join
+			t_gl_dict dict
+		on
+			offend_info.dict_offend_type = dict.value and dict.type='jk_offend_info'
+		where 
+			loan_code = #{0}	
+		group by 
+			dict.label		
+	</select>
+	<!--wanglidong 获取反欺诈员工编号 -->
+	<select id="getAfraudCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+			commissioner_code
+		FROM 
+			t_jk_antifraud_commissioner 
+		where 
+			job_num = #{0};	
+	</select>
+	<!--wanglidong 获取chp2.0内部加黑项 -->
+	<select id="getOldBlackGrayListOption" parameterType="java.util.Map" resultType="com.creditharmony.approve.antifraud.entity.BacklistAll">
+		SELECT 
+			dict.label as dict_black_type, 
+			black.black_msg,
+			black.loan_customter_type,
+			black.r_customer_coborrower_id
+		FROM 
+			t_jk_backlist_all black
+		left join
+			t_gl_dict dict 
+		on 
+			black.dict_black_type = dict.value and dict.type = 'jk_afraud_list_type'
+		where 
+			black.loan_code = #{loanCode} 
+		and 
+			black.dict_mark_type=#{type} 
+		and 
+			black.dict_source = #{inside} 
+	</select>
+
+</mapper>

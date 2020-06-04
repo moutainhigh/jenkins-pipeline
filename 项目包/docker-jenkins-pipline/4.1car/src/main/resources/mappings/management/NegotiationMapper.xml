@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.management.dao.NegotiationDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.management.entity.Negotiation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="negotiation_code" property="negotiationCode" jdbcType="VARCHAR" />
+    <result column="negotiation_name" property="negotiationName" jdbcType="VARCHAR" />
+    <result column="negotiation_grade" property="negotiationGrade" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, negotiation_code, negotiation_name, negotiation_grade, parent_id, create_by, 
+    create_time, modify_by, modify_time
+  </sql>
+  
+  <select id="getNegotiationCodeOne" resultType="com.creditharmony.approve.management.entity.Negotiation" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_gl_negotiation
+    where parent_id = #{0}
+  </select>  
+  <select id="getNegotiationCodeTwo" resultType="com.creditharmony.approve.management.entity.Negotiation" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_gl_negotiation
+    where parent_id = #{0}
+  </select>  
+  <!-- 协商码表维护开始 -->
+  <sql id="negotiationManagerColumns" >
+      a.id, 
+      a.negotiation_code, 
+      a.negotiation_name,
+      a.negotiation_grade, 
+      a.parent_id AS "parent.id",
+      a.negotiation_index,
+      a.create_by, 
+      a.delete_flag,
+      a.create_time, 
+      a.modify_by,
+      a.modify_time
+    </sql>
+    <sql id="negotiationJoins">
+	  LEFT JOIN jk.t_gl_negotiation p ON p.id = a.parent_id
+    </sql>
+    <!-- 根据ID查询数据 -->
+	<select id="get" parameterType="java.lang.String" resultType="com.creditharmony.approve.management.entity.Negotiation">
+		SELECT
+		<include refid="negotiationManagerColumns"/>
+		FROM jk.t_gl_negotiation a
+		<include refid="negotiationJoins"/>
+		WHERE a.id = #{id,jdbcType=VARCHAR}
+	</select>
+    <!-- 查询列表 -->
+	<select id="findAllList" resultType="com.creditharmony.approve.management.entity.Negotiation">
+		SELECT
+		<include refid="negotiationManagerColumns"/>
+		FROM jk.t_gl_negotiation a
+		<include refid="negotiationJoins"/>
+		WHERE a.delete_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.negotiation_code
+	</select>
+    <!-- 添加数据 -->
+	 <insert id="insert">
+		INSERT INTO jk.t_gl_negotiation(
+		    id, 
+		    negotiation_code, 
+		    negotiation_name, 
+		    negotiation_grade, 
+		    parent_id,
+		    negotiation_index,
+		    create_by, 
+		    delete_flag,
+		    create_time, 
+		    modify_by,
+		    modify_time
+		) VALUES (
+			#{id}, 
+			#{negotiationCode}, 
+			#{negotiationName}, 
+			#{negotiationGrade}, 
+			#{parent.id}, 
+			#{sort}, 
+			#{createBy},
+			#{delFlag}, 
+			#{createTime}, 
+			#{modifyBy}, 
+			#{modifyTime}
+		)
+	</insert>
+    <!-- 更新数据 -->
+	<update id="update">
+		UPDATE jk.t_gl_negotiation SET 
+			parent_id = #{parent.id}, 
+			negotiation_code = #{negotiationCode}, 
+			negotiation_name = #{negotiationName}, 
+			negotiation_index = #{sort}, 
+			negotiation_grade = #{negotiationGrade}, 
+			modify_by = #{modifyBy}, 
+			modify_time = #{modifyTime}
+		WHERE id = #{id}
+	</update>
+    <!-- 删除数据 -->
+	<update id="delete">
+		UPDATE jk.t_gl_negotiation SET 
+			delete_flag = #{DEL_FLAG_DELETE}
+		<!-- WHERE id = #{id} OR parent_ids LIKE CONCAT('%,', #{id}, ',%') -->
+		WHERE id = #{id}  
+	</update>
+	
+	<!-- 根据参数查询数据 -->
+	<select id="findByParam" parameterType="com.creditharmony.approve.management.entity.Negotiation" resultType="com.creditharmony.approve.management.entity.Negotiation">
+		select 
+			id 
+		from 
+			jk.t_gl_negotiation
+		where
+			1=1
+		<if test="negotiationName != null and negotiationName != ''">
+			and negotiation_name = #{negotiationName}
+		</if>
+		<if test="negotiationCode != null and negotiationCode != ''">
+			and negotiation_code = #{negotiationCode}
+		</if>
+	</select>
+	
+	
+    <!-- 协商码表维护结束 -->
+</mapper>

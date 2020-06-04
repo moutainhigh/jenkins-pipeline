@@ -1,0 +1,20 @@
+version: '2'
+services:
+  microservice-customerinfo-client:
+    scale: 1
+    start_on_create: true
+  microservice-config:
+    scale: 1
+    start_on_create: true
+  microservice-customerinfo-server:
+    scale: 1
+    start_on_create: true
+  microservice-eureka:
+    scale: 2
+    start_on_create: true
+  microservice-redis:
+    scale: 1
+    start_on_create: true
+  microservice-sleuth:
+    scale: 1
+    start_on_create: true

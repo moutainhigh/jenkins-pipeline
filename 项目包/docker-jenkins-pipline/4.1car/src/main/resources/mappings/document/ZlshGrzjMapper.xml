@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshGrzjDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshGrzj" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="customer_rel_master" property="customerRelMaster" jdbcType="VARCHAR" />   
+    <result column="master_name" property="masterName" jdbcType="VARCHAR" />
+    <result column="master_cert_num" property="masterCertNum" jdbcType="VARCHAR" />
+    <result column="master_province" property="masterProvince" jdbcType="VARCHAR" />
+    <result column="master_city" property="masterCity" jdbcType="VARCHAR" />
+    <result column="master_area" property="masterArea" jdbcType="VARCHAR" />
+    <result column="master_address" property="masterAddress" jdbcType="VARCHAR" />
+    <result column="register_property" property="registerProperty" jdbcType="VARCHAR" />
+    <result column="children_cert_num" property="childrenCertNum" jdbcType="VARCHAR" />
+    <result column="children_name" property="childrenName" jdbcType="VARCHAR" />
+    <result column="dict_marry_status" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="marriage_date" property="marriageDate" jdbcType="TIMESTAMP" />
+    <result column="certificatio_unit" property="certificationUnit" jdbcType="VARCHAR" />   
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+     <result column="customer_rel_master_remark" property="customerRelMasterRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_customer_coborrower_id, dict_customer_type, customer_rel_master, master_name, 
+    master_cert_num, master_province, master_city, master_area, master_address, 
+    register_property, children_cert_num, children_name,dict_marry_status,marriage_date, certificatio_unit,dict_check_type,
+    create_by,create_time, modify_by, modify_time,dict_source_type,customer_rel_master_remark
+  </sql> 
+  <!-- 保存资个人证件信息-->
+  <insert id="insertGrzj" parameterType="com.creditharmony.approve.document.entity.ZlshGrzj" >
+    insert into jk.t_jk_zlsh_grzj(id, loan_code, r_customer_coborrower_id, 
+    dict_customer_type, customer_rel_master, master_name,master_cert_num, master_province, master_city, master_area, master_address, 
+    register_property, children_cert_num, children_name,dict_marry_status, marriage_date,certificatio_unit,dict_check_type,create_by,create_time, 
+    modify_by, modify_time,dict_source_type,customer_rel_master_remark)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=VARCHAR}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{customerRelMaster,jdbcType=VARCHAR},
+      #{masterName,jdbcType=VARCHAR}, #{masterCertNum,jdbcType=VARCHAR}, #{masterProvince,jdbcType=VARCHAR}, #{masterCity,jdbcType=VARCHAR}, 
+      #{masterArea,jdbcType=VARCHAR}, #{masterAddress,jdbcType=VARCHAR}, 
+      #{registerProperty,jdbcType=VARCHAR}, #{childrenCertNum,jdbcType=VARCHAR}, #{childrenName,jdbcType=VARCHAR}, 
+      #{dictMarryStatus,jdbcType=VARCHAR}, #{marriageDate,jdbcType=TIMESTAMP}, #{certificationUnit,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP},#{dictSourceType,jdbcType=VARCHAR},#{customerRelMasterRemark,jdbcType=VARCHAR})
+  </insert>
+  <!-- 修改资产证明信息-->
+  <update id="updateGrzj" parameterType="com.creditharmony.approve.document.entity.ZlshGrzj" >
+    update jk.t_jk_zlsh_grzj
+    set
+      r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},     
+      customer_rel_master = #{customerRelMaster,jdbcType=VARCHAR},        
+      master_name = #{masterName,jdbcType=VARCHAR},
+      master_cert_num = #{masterCertNum,jdbcType=VARCHAR},
+      master_province = #{masterProvince,jdbcType=VARCHAR},
+      master_city = #{masterCity,jdbcType=VARCHAR},
+      master_area = #{masterArea,jdbcType=VARCHAR},
+      master_address = #{masterAddress,jdbcType=VARCHAR},     
+      register_property = #{registerProperty,jdbcType=VARCHAR},
+      children_cert_num = #{childrenCertNum,jdbcType=VARCHAR},
+      children_name = #{childrenName,jdbcType=VARCHAR},
+      dict_marry_status = #{dictMarryStatus,jdbcType=VARCHAR},  
+      marriage_date = #{marriageDate,jdbcType=TIMESTAMP},   
+      certificatio_unit = #{certificationUnit,jdbcType=VARCHAR},
+      dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      customer_rel_master_remark = #{customerRelMasterRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<select id="findZlshGrzjs" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+	    select 
+	   a.id, a.loan_code, a.r_customer_coborrower_id, a.dict_customer_type, a.customer_rel_master, 
+	   a.master_name, a.master_cert_num, a.master_province, a.master_city,a.master_area, 
+	   a.master_address, a.register_property, a.children_cert_num,a.children_name,a.marriage_date,
+	   a.certificatio_unit, b.label as dictCustomerType
+	   from jk.t_jk_zlsh_grzj a 
+	   LEFT JOIN jk.t_gl_dict b
+	   ON type='jk_loan_man_flag' and value=a.DICT_CUSTOMER_TYPE
+	   where loan_code = #{loanCode} and dict_check_type = #{checkType}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_zlsh_grzj
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.document.entity.ZlshGrzj" >
+    update jk.t_jk_zlsh_grzj
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerRelMaster != null" >
+        customer_rel_master = #{customerRelMaster,jdbcType=VARCHAR},
+      </if>
+      <if test="masterName != null" >
+        master_name = #{masterName,jdbcType=VARCHAR},
+      </if>
+      <if test="masterCertNum != null" >
+        master_cert_num = #{masterCertNum,jdbcType=VARCHAR},
+      </if>
+       <if test="masterProvince != null" >
+        master_province = #{masterProvince,jdbcType=VARCHAR},
+      </if>   
+      <if test="masterCity != null" >
+        master_city = #{masterCity,jdbcType=VARCHAR},
+      </if>
+      <if test="masterArea != null" >
+        master_area = #{masterArea,jdbcType=VARCHAR},
+      </if>
+      <if test="masterAddress != null" >
+        master_address = #{masterAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registerProperty != null" >
+        register_property = #{registerProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="childrenCertNum != null" >
+        children_cert_num = #{childrenCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="childrenName != null" >
+        children_name = #{childrenName,jdbcType=VARCHAR},
+      </if>
+       <if test="dictMarryStatus != null" >
+       dict_marry_status = #{dictMarryStatus,jdbcType=VARCHAR},  
+      </if>
+      <if test="marriageDate != null" >
+        marriage_date = #{marriageDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="certificationUnit != null" >
+        certificatio_unit = #{certificationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<!-- 获取所有资产证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshGrzj" resultMap="BaseResultMap">
+		SELECT 
+     		<include refid="Base_Column_List" />
+		FROM JK.T_JK_ZLSH_GRZJ
+		WHERE LOAN_CODE = #{loanCode}
+		<if test="dictCustomerType != null" >
+			AND dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+		</if>
+		<if test="dictCheckType != null">
+			AND DICT_CHECK_TYPE = #{dictCheckType,jdbcType=VARCHAR}
+		</if>
+		<if test="rCustomerCoborrowerId != null">
+			AND R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY CREATE_TIME
+  </select>
+
+</mapper>

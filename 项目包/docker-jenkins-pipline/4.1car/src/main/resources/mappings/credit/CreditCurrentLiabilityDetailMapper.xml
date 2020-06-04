@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCurrentLiabilityDetailDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCurrentLiabilityDetail" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="info_summary" property="infoSummary" jdbcType="VARCHAR" />
+    <result column="normal_transaction_count" property="normalTransactionCount" jdbcType="INTEGER" />
+    <result column="normal_balance" property="normalBalance" jdbcType="NUMERIC" />
+    <result column="concern_transaction_count" property="concernTransactionCount" jdbcType="INTEGER" />
+    <result column="concern_balance" property="concernBalance" jdbcType="NUMERIC" />
+    <result column="badness_transaction_count" property="badnessTransactionCount" jdbcType="INTEGER" />
+    <result column="badness_balance" property="badnessBalance" jdbcType="NUMERIC" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="completion_date" property="completionDate" jdbcType="DATE" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, info_summary, normal_transaction_count, normal_balance, concern_transaction_count, 
+    concern_balance, badness_transaction_count, badness_balance, sort, completion_date, 
+    create_by, create_time, modify_by, modify_time
+  </sql>
+  
+  <insert id="insertCreditCurrentLiabilityDetail" parameterType="com.creditharmony.approve.credit.entity.CreditCurrentLiabilityDetail" >
+    insert into jk.t_jk_credit_current_liability_detail (id, loan_code, info_summary, 
+      normal_transaction_count, normal_balance, 
+      concern_transaction_count, concern_balance, 
+      badness_transaction_count, badness_balance, 
+      sort, completion_date, create_by, 
+      create_time, modify_by, modify_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{infoSummary,jdbcType=VARCHAR}, 
+      #{normalTransactionCount,jdbcType=INTEGER}, #{normalBalance,jdbcType=NUMERIC}, 
+      #{concernTransactionCount,jdbcType=INTEGER}, #{concernBalance,jdbcType=NUMERIC}, 
+      #{badnessTransactionCount,jdbcType=INTEGER}, #{badnessBalance,jdbcType=NUMERIC}, 
+      #{sort,jdbcType=INTEGER}, #{completionDate,jdbcType=DATE}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditCurrentLiabilityDetail" >
+    update jk.t_jk_credit_current_liability_detail
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSummary != null" >
+        info_summary = #{infoSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="normalTransactionCount != null" >
+        normal_transaction_count = #{normalTransactionCount,jdbcType=INTEGER},
+      </if>
+      <if test="normalBalance != null" >
+        normal_balance = #{normalBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="concernTransactionCount != null" >
+        concern_transaction_count = #{concernTransactionCount,jdbcType=INTEGER},
+      </if>
+      <if test="concernBalance != null" >
+        concern_balance = #{concernBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="badnessTransactionCount != null" >
+        badness_transaction_count = #{badnessTransactionCount,jdbcType=INTEGER},
+      </if>
+      <if test="badnessBalance != null" >
+        badness_balance = #{badnessBalance,jdbcType=NUMERIC},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="completionDate != null" >
+        completion_date = #{completionDate,jdbcType=DATE},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<!-- 根据借款编号查询 -->
+	<select id="getByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select 
+			<include refid="Base_Column_List" />
+		from
+			jk.t_jk_credit_current_liability_detail
+		where
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+			order by sort
+	</select>
+</mapper>

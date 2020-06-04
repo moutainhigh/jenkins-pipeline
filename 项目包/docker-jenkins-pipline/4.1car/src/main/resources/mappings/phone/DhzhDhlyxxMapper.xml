@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhDhlyxxDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.DhzhDhlyxx" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_gx_id" property="rGxId" jdbcType="VARCHAR" />
+    <result column="dhlyxx_tel" property="dhlyxxTel" jdbcType="VARCHAR" />
+    <result column="dhlyxx_call_time" property="dhlyxxCallTime" jdbcType="TIMESTAMP" />
+    <result column="dhlyxx_answer_state" property="dhlyxxAnswerState" jdbcType="VARCHAR" />
+    <result column="dhlyxx_answer_inf" property="dhlyxxAnswerInf" jdbcType="VARCHAR" />
+    <result column="dict_voice_source" property="dictVoiceSource" jdbcType="VARCHAR" />
+    <result column="file_path" property="dhlyxxFilePath" jdbcType="VARCHAR" />
+    <result column="dhlyxx_remark" property="dhlyxxRemark" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="LY_CODE" property="lyCode" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+  	  id, r_gx_id, dhlyxx_tel, dhlyxx_call_time, dhlyxx_answer_state, 
+  	  dhlyxx_answer_inf, dict_voice_source, file_path, dhlyxx_remark, 
+  	  create_by, create_time, modify_by, modify_time, ly_code, dict_source_type	
+  </sql>
+  <insert id="insert" parameterType="com.creditharmony.approve.phone.entity.DhzhDhlyxx" >
+    insert into jk.t_jk_dhzh_dhlyxx (
+      id, 
+      r_gx_id, 
+      dhlyxx_tel, 
+      dhlyxx_call_time, 
+      dhlyxx_answer_state, 
+      dhlyxx_answer_inf, 
+      dict_voice_source, 
+      file_path, 
+      dhlyxx_remark, 
+      create_by, 
+      create_time, 
+      modify_by, 
+      modify_time,
+      ly_code,
+      dict_source_type)
+    values (
+      #{id,jdbcType=NUMERIC}, 
+      #{rGxId,jdbcType=NUMERIC}, 
+      #{dhlyxxTel,jdbcType=VARCHAR}, 
+      #{dhlyxxCallTime,jdbcType=TIMESTAMP}, 
+      #{dhlyxxAnswerState,jdbcType=VARCHAR}, 
+      #{dhlyxxAnswerInf,jdbcType=VARCHAR}, 
+      #{dictVoiceSource,jdbcType=VARCHAR}, 
+      #{dhlyxxFilePath,jdbcType=VARCHAR}, 
+      #{dhlyxxRemark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP},
+      #{lyCode,jdbcType=VARCHAR},
+      #{dictSourceType,jdbcType=VARCHAR})
+  </insert>
+  <!-- 保存电话录音信息 -->
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhDhlyxx" >
+    insert into jk.t_jk_dhzh_dhlyxx
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rGxId != null" >
+        r_gx_id,
+      </if>
+      <if test="dhlyxxTel != null" >
+        dhlyxx_tel,
+      </if>
+      <if test="dhlyxxCallTime != null" >
+        dhlyxx_call_time,
+      </if>
+      <if test="dhlyxxAnswerState != null" >
+        dhlyxx_answer_state,
+      </if>
+      <if test="dhlyxxAnswerInf != null" >
+        dhlyxx_answer_inf,
+      </if>
+      <if test="dictVoiceSource != null" >
+        dict_voice_source,
+      </if>
+      <if test="dhlyxxFilePath != null" >
+        file_path,
+      </if>
+      <if test="dhlyxxRemark != null" >
+        dhlyxx_remark,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="lyCode != null" >
+        ly_code,
+      </if>
+      <if test="dictSourceType != null" >
+        dict_source_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=NUMERIC},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rGxId != null" >
+        #{rGxId,jdbcType=NUMERIC},
+      </if>
+      <if test="dhlyxxTel != null" >
+        #{dhlyxxTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxCallTime != null" >
+        #{dhlyxxCallTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dhlyxxAnswerState != null" >
+        #{dhlyxxAnswerState,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxAnswerInf != null" >
+        #{dhlyxxAnswerInf,jdbcType=VARCHAR},
+      </if>
+      <if test="dictVoiceSource != null" >
+        #{dictVoiceSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxFilePath != null" >
+        #{dhlyxxFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxRemark != null" >
+        #{dhlyxxRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lyCode != null" >
+        #{lyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSourceType != null" >
+        #{dictSourceType,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+    
+  <update id="updateByKeyAndit">
+  	  UPDATE jk.t_jk_dhzh_dhlyxx
+		SET 
+			dhlyxx_answer_state = #{dhlyxxAnswerState},
+			dhlyxx_answer_inf = #{dhlyxxAnswerInf},
+			modify_by = #{modifyBy},
+      		modify_time = #{modifyTime}
+		WHERE id = #{id}	
+  </update>
+  
+    <update id="updateSelective" parameterType="com.creditharmony.approve.phone.entity.DhzhDhlyxx" >
+    update jk.t_jk_dhzh_dhlyxx
+    <set >
+      <if test="lyCode != null" >
+        ly_code = #{rGxId,jdbcType=VARCHAR},
+      </if>
+      <if test="rGxId != null" >
+        r_gx_id = #{rGxId,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxTel != null" >
+        dhlyxx_tel = #{dhlyxxTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxCallTime != null" >
+        dhlyxx_call_time = #{dhlyxxCallTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dhlyxxAnswerState != null" >
+        dhlyxx_answer_state = #{dhlyxxAnswerState,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxAnswerInf != null" >
+        dhlyxx_answer_inf = #{dhlyxxAnswerInf,jdbcType=VARCHAR},
+      </if>
+      <if test="dictVoiceSource != null" >
+        dict_voice_source = #{dictVoiceSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxFilePath != null" >
+        file_path = #{dhlyxxFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="dhlyxxRemark != null" >
+        dhlyxx_remark = #{dhlyxxRemark,jdbcType=VARCHAR},
+      </if> 
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update> 
+  <update id="updateFromRecord" parameterType="com.creditharmony.adapter.service.outbound.bean.OutboundCallStateInBean">
+  	 update jk.t_jk_dhzh_dhlyxx  set ly_code=#{callId}
+  	 where id=#{strUUI}
+  </update>
+  <delete id="delRecord" parameterType="java.lang.String">
+  	DELETE FROM jk.t_jk_dhzh_dhlyxx
+  	WHERE id = #{id}
+  </delete>  
+  <delete id="delRecordByRID" parameterType="java.lang.String">
+  	DELETE FROM jk.t_jk_dhzh_dhlyxx
+  	WHERE r_gx_id = #{rId}
+  </delete>  
+  <select id="findByParam" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  	SELECT ID,DHLYXX_TEL,DHLYXX_CALL_TIME,DHLYXX_ANSWER_STATE,DHLYXX_ANSWER_INF,LY_CODE
+  	FROM JK.T_JK_DHZH_DHLYXX
+  	WHERE R_GX_ID = #{relId} AND LOAN_CODE =#{loanCode} AND DICT_CHECK_TYPE=#{checkType}
+  </select>
+  <update id="updateByList" parameterType="java.util.HashMap" >
+	  <foreach collection="recordData" item="record" separator=";">
+	 	UPDATE JK.T_JK_DHZH_DHLYXX 
+	 	SET DHLYXX_ANSWER_INF = #{record.dhlyxxAnswerInf},DHLYXX_ANSWER_STATE = #{record.dhlyxxAnswerState}
+	 	WHERE ID = #{record.id}
+	  </foreach>
+  </update>
+	<!-- 根据关联id 获取电话录音信息 -->
+	<select id="getByRid" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT 
+			ID,
+			DICT_VOICE_SOURCE,
+			DHLYXX_TEL,
+			DHLYXX_CALL_TIME,
+			DHLYXX_ANSWER_STATE,
+			DHLYXX_ANSWER_INF
+		FROM JK.T_JK_DHZH_DHLYXX
+			WHERE R_GX_ID = #{rGxId}
+	</select>
+	
+</mapper>

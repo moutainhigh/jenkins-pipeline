@@ -1,0 +1,68 @@
+version: '2'
+services:
+  eureka-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 8761:8761/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=eureka
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-customerinfo-client:
+    image: 10.150.33.104/microservice-uat/microservice-customerinfo-client:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.hostname_override: container_name
+  CUSTOMERINFO-CLIENT-LB:
+    image: rancher/lb-service-haproxy:v0.7.5
+    ports:
+    - 7005:7005/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-config:
+    image: 10.150.33.104/microservice-uat/microservice-config:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  microservice-customerinfo-server:
+    image: 10.150.33.104/microservice-uat/microservice-customerinfo-server:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.hostname_override: container_name
+  microservice-eureka:
+    image: 10.150.33.104/microservice-uat/microservice-eureka:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=eureka
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+  config-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    ports:
+    - 7001:7001/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  sleuth-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    ports:
+    - 7002:7002/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-sleuth:
+    image: 10.150.33.104/microservice-uat/microservice-sleuth:0.0.1-SNAPSHOT
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.hostname_override: container_name

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.outvisit.dao.OutSideCheckListDao" >
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.outvisit.entity.OutsideCheckList" >
+    insert into jk.t_jk_outside_task_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="surveyStartTime != null" >
+        survey_start_time,
+      </if>
+      <if test="dictSurveyStatus != null" >
+        dict_survey_status,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="rId != null" >
+        r_status_his_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="surveyStartTime != null" >
+        #{surveyStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSurveyStatus != null" >
+        #{dictSurveyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据借款编号获取外访清单 -->
+  <select id="getCheckListByLoanCode" resultType="com.creditharmony.approve.outvisit.entity.OutsideCheckList" parameterType="com.creditharmony.approve.outvisit.entity.ex.OutsideDatacheckEx">
+  	SELECT A.LOAN_CODE loanCode,
+  		   A.SURVEY_START_TIME surveyStartTime,
+  	       A.ITEM_DISTANCE itemDistance,
+  		   A.R_STATUS_HIS_ID rId
+  	FROM JK.T_JK_OUTSIDE_TASK_LIST A
+	WHERE A.LOAN_CODE = #{loanCode} 
+	AND A.DICT_CHECK_TYPE =  #{checkType}
+  </select>
+</mapper>

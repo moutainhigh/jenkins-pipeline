@@ -1,0 +1,70 @@
+version: '2'
+services:
+  fegin-ribbon-test-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7008:7008/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=fegin-ribbon-test
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  boss-logs-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7004:7004/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=boss-logs
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  eureka-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 8761:8761/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=eureka
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
+  microservice-config:
+    image: 10.150.33.104/microservice-uat/microservice-config:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.hostname_override: container_name
+  microservice-fegin-ribbon-test:
+    image: 10.150.33.104/microservice-uat/microservice-fegin-ribbon-test:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=fegin-ribbon-test
+      io.rancher.container.hostname_override: container_name
+  microservice-eureka01:
+    image: rancher/dns-service
+    links:
+    - eureka-lb:eureka-lb
+  microservice-eureka02:
+    image: rancher/dns-service
+    links:
+    - eureka-lb:eureka-lb
+  microservice-boss-logs:
+    image: 10.150.33.104/microservice-uat/microservice-boss-01-logs:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=boss-logs
+      io.rancher.container.hostname_override: container_name
+  microservice-eureka:
+    image: 10.150.33.104/microservice-uat/microservice-eureka:0.0.1-SNAPSHOT
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=eureka
+      io.rancher.container.hostname_override: container_name
+  config-lb:
+    image: rancher/lb-service-haproxy:v0.7.5
+    stdin_open: true
+    tty: true
+    ports:
+    - 7001:7001/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: microservice=config
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'

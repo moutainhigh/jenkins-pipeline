@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshZczmDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshZczm" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="zczm_house_type" property="zczmHouseType" jdbcType="VARCHAR" />
+    <result column="dict_province" property="dictProvince" jdbcType="VARCHAR" />
+    <result column="dict_city" property="dictCity" jdbcType="VARCHAR" />
+    <result column="dict_arer" property="dictArer" jdbcType="VARCHAR" />
+    <result column="zczm_house_address" property="zczmHouseAddress" jdbcType="VARCHAR" />
+    <result column="zczm_property_man" property="zczmPropertyMan" jdbcType="VARCHAR" />
+    <result column="zczm_property_relation" property="zczmPropertyRelation" jdbcType="VARCHAR" />
+    <result column="zczm_house_area" property="zczmHouseArea" jdbcType="NUMERIC" />
+    <result column="zczm_house_value" property="zczmHouseValue" jdbcType="NUMERIC" />
+    <result column="zczm_pledge_flag" property="zczmPledgeFlag" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="confirm_type" property="confirmStr" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="net_check_result" property="netCheckResult" jdbcType="VARCHAR" />
+    <result column="net_check_remark" property="netCheckRemark" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="owner_house_ratio" property="ownerHouseRatio" jdbcType="VARCHAR" />
+    <result column="mate_house_ratio" property="mateHouseRatio" jdbcType="VARCHAR" />
+    <result column="house_buyway" property="houseBuyway" jdbcType="VARCHAR" />
+    <result column="house_create_day" property="houseCreateDay" jdbcType="TIMESTAMP" />
+    <result column="house_amount" property="houseAmount" jdbcType="NUMERIC" />
+    <result column="house_loan_amount" property="houseLoanAmount" jdbcType="NUMERIC" />
+    <result column="house_less_amount" property="houseLessAmount" jdbcType="NUMERIC" />
+    <result column="house_month_repay_amount" property="houseMonthRepayAmount" jdbcType="NUMERIC" />
+    <result column="house_loan_year" property="houseLoanYear" jdbcType="NUMERIC" />
+    <result column="house_buy_day" property="houseBuyDay" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, r_customer_coborrower_id, dict_customer_type, zczm_house_type, dict_province, 
+    dict_city, dict_arer, zczm_house_address, zczm_property_man, zczm_property_relation, 
+    zczm_house_area, zczm_house_value, zczm_pledge_flag, dict_check_type,confirm_type,dict_source_type,create_by, 
+    create_time, modify_by, modify_time,net_check_result,net_check_remark,remark,owner_house_ratio,
+    mate_house_ratio,house_buyway,house_create_day,house_amount,house_loan_amount,house_less_amount,
+    house_month_repay_amount,house_loan_year,house_buy_day
+  </sql>
+  
+  <!-- 保存资产证明信息  黄维-->
+  <insert id="insertZczm" parameterType="com.creditharmony.approve.document.entity.ZlshZczm" >
+    insert into jk.t_jk_zlsh_zczm (id, loan_code, r_customer_coborrower_id, 
+      dict_customer_type, zczm_house_type, dict_province, 
+      dict_city, dict_arer, zczm_house_address, 
+      zczm_property_man, zczm_property_relation, 
+      zczm_house_area, zczm_house_value, zczm_pledge_flag, 
+      dict_check_type, confirm_type ,dict_source_type, create_by, create_time, net_check_result,net_check_remark,
+      modify_by, modify_time,remark,owner_house_ratio,mate_house_ratio,house_buyway,house_create_day,
+      house_amount,house_loan_amount,house_less_amount,house_month_repay_amount,house_loan_year,house_buy_day)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=VARCHAR}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{zczmHouseType,jdbcType=VARCHAR}, #{dictProvince,jdbcType=VARCHAR}, 
+      #{dictCity,jdbcType=VARCHAR}, #{dictArer,jdbcType=VARCHAR}, #{zczmHouseAddress,jdbcType=VARCHAR}, 
+      #{zczmPropertyMan,jdbcType=VARCHAR}, #{zczmPropertyRelation,jdbcType=VARCHAR}, 
+      #{zczmHouseArea,jdbcType=NUMERIC}, #{zczmHouseValue,jdbcType=NUMERIC}, #{zczmPledgeFlag,jdbcType=VARCHAR}, 
+      #{dictCheckType,jdbcType=VARCHAR}, #{confirmStr,jdbcType=VARCHAR}, #{dictSourceType,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{netCheckResult,jdbcType=VARCHAR},#{netCheckRemark,jdbcType=VARCHAR},
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},
+      #{ownerHouseRatio,jdbcType=VARCHAR},#{mateHouseRatio,jdbcType=VARCHAR},#{houseBuyway,jdbcType=VARCHAR},
+      #{houseCreateDay,jdbcType=TIMESTAMP}, #{houseAmount,jdbcType=NUMERIC},#{houseLoanAmount,jdbcType=NUMERIC},
+      #{houseLessAmount,jdbcType=NUMERIC},#{houseMonthRepayAmount,jdbcType=NUMERIC},#{houseLoanYear,jdbcType=NUMERIC},#{houseBuyDay,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <!-- 修改资产证明信息  黄维-->
+  <update id="updateZczm" parameterType="com.creditharmony.approve.document.entity.ZlshZczm" >
+    update jk.t_jk_zlsh_zczm
+    set
+      r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      zczm_house_type = #{zczmHouseType,jdbcType=VARCHAR},
+      dict_province = #{dictProvince,jdbcType=VARCHAR},
+      dict_city = #{dictCity,jdbcType=VARCHAR},
+      dict_arer = #{dictArer,jdbcType=VARCHAR},
+      zczm_house_address = #{zczmHouseAddress,jdbcType=VARCHAR},
+      zczm_property_man = #{zczmPropertyMan,jdbcType=VARCHAR},
+      zczm_property_relation = #{zczmPropertyRelation,jdbcType=VARCHAR},
+      zczm_house_area = #{zczmHouseArea,jdbcType=NUMERIC},
+      zczm_house_value = #{zczmHouseValue,jdbcType=NUMERIC},
+      zczm_pledge_flag = #{zczmPledgeFlag,jdbcType=VARCHAR},
+      dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      confirm_type = #{confirmStr,jdbcType=VARCHAR},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},     
+      remark = #{remark,jdbcType=VARCHAR},
+      owner_house_ratio = #{ownerHouseRatio,jdbcType=VARCHAR},
+      mate_house_ratio = #{mateHouseRatio,jdbcType=VARCHAR},
+      house_buyway = #{houseBuyway,jdbcType=VARCHAR},
+      house_create_day = #{houseCreateDay,jdbcType=TIMESTAMP},
+      house_amount = #{houseAmount,jdbcType=NUMERIC},
+      house_loan_amount = #{houseLoanAmount,jdbcType=NUMERIC},
+      house_less_amount = #{houseLessAmount,jdbcType=NUMERIC},
+      house_month_repay_amount = #{houseMonthRepayAmount,jdbcType=NUMERIC},
+      house_loan_year = #{houseLoanYear,jdbcType=NUMERIC},
+      house_buy_day = #{houseBuyDay,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<select id="findZlshZczms" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+	    select 
+	     a.id, a.loan_code, a.r_customer_coborrower_id, a.zczm_house_type, a.dict_province, 
+	    a.dict_city, dict_arer, a.zczm_house_address, a.zczm_property_man,a. zczm_property_relation, 
+	   a.zczm_house_area, a.zczm_house_value, a.zczm_pledge_flag, b.label as dictCustomerType,
+	   a.remark,a.owner_house_ratio,a.mate_house_ratio,a.house_buyway,a.house_create_day,a.house_amount,
+	   a.house_loan_amount,a.house_less_amount,a.house_month_repay_amount,a.house_loan_year,house_create_day
+	   from jk.t_jk_zlsh_zczm a 
+	   LEFT JOIN jk.t_gl_dict b
+	   ON type='jk_loan_man_flag' and value=a.DICT_CUSTOMER_TYPE
+	   where loan_code = #{loanCode} and dict_check_type = #{checkType}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_zlsh_zczm
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.document.entity.ZlshZczm" >
+    update jk.t_jk_zlsh_zczm
+    <set >
+      <if test="netCheckResult != null" >
+        NET_CHECK_RESULT = #{netCheckResult,jdbcType=VARCHAR},
+      </if>
+      <if test="netCheckRemark != null" >
+        NET_CHECK_REMARK = #{netCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="zczmHouseType != null" >
+        zczm_house_type = #{zczmHouseType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictProvince != null" >
+        dict_province = #{dictProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCity != null" >
+        dict_city = #{dictCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dictArer != null" >
+        dict_arer = #{dictArer,jdbcType=VARCHAR},
+      </if>
+      <if test="zczmHouseAddress != null" >
+        zczm_house_address = #{zczmHouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="zczmPropertyMan != null" >
+        zczm_property_man = #{zczmPropertyMan,jdbcType=VARCHAR},
+      </if>
+      <if test="zczmPropertyRelation != null" >
+        zczm_property_relation = #{zczmPropertyRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="zczmHouseArea != null" >
+        zczm_house_area = #{zczmHouseArea,jdbcType=NUMERIC},
+      </if>
+      <if test="zczmHouseValue != null" >
+        zczm_house_value = #{zczmHouseValue,jdbcType=NUMERIC},
+      </if>
+      <if test="zczmPledgeFlag != null" >
+        zczm_pledge_flag = #{zczmPledgeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerHouseRatio != null" >
+        owner_house_ratio = #{ownerHouseRatio,jdbcType=VARCHAR},
+      </if>
+       <if test="mateHouseRatio != null" >
+        mate_house_ratio = #{mateHouseRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="houseBuyway != null" >
+        house_buyway = #{houseBuyway,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCreateDay != null" >
+        house_create_day = #{houseCreateDay,jdbcType=TIMESTAMP},
+      </if>
+       <if test="houseAmount != null" >
+        house_amount = #{houseAmount,jdbcType=NUMERIC},
+      </if>
+       <if test="houseLoanAmount != null" >
+        house_loan_amount = #{houseLoanAmount,jdbcType=NUMERIC},
+      </if>
+       <if test="houseLessAmount != null" >
+        house_less_amount = #{houseLessAmount,jdbcType=NUMERIC},
+      </if>
+       <if test="houseMonthRepayAmount != null" >
+        house_month_repay_amount = #{houseMonthRepayAmount,jdbcType=NUMERIC},
+      </if>
+       <if test="houseLoanYear != null" >
+        house_loan_year = #{houseLoanYear,jdbcType=NUMERIC},
+      </if>
+      <if test="houseBuyDay != null" >
+        house_create_day = #{houseBuyDay,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<!-- 获取所有资产证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshZczm" resultMap="BaseResultMap">
+		SELECT 
+     		<include refid="Base_Column_List" />
+		FROM JK.T_JK_ZLSH_ZCZM
+		WHERE LOAN_CODE = #{loanCode}
+		<if test="dictCustomerType != null" >
+			AND dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+		</if>
+		<if test="dictCheckType != null">
+			AND DICT_CHECK_TYPE = #{dictCheckType,jdbcType=VARCHAR}
+		</if>
+		<if test="rCustomerCoborrowerId != null">
+			AND R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY CREATE_TIME
+  </select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.JkProductsDao" >
+  <select id="getAllProducts" resultType="com.creditharmony.approve.verify.entity.JkProducts" parameterType="java.lang.String">
+    select 
+      product_type,
+      product_name,
+      product_code,
+      limit_lower,
+      limit_upper,
+      interest_rate,
+      cautioner_limit_amount
+    from jk.t_gl_jk_product
+    where product_status = #{0} and product_type = #{1}
+  </select>
+  <select id="findRate" parameterType="java.lang.String"  resultType="java.lang.String">
+  		SELECT INTEREST_RATE FROM T_GL_JK_PRODUCT WHERE PRODUCT_CODE=#{code}
+  </select>
+</mapper>

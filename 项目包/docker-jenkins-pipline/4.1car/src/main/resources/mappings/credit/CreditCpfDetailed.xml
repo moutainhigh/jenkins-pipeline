@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCpfDetailedDao">
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCpfDetailed" >
+		<result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+		<result column="person_account" property="personAccount" jdbcType="VARCHAR" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+		<result column="account_day" property="accountDay" jdbcType="TIMESTAMP" />
+		<result column="pay_day" property="payDay" jdbcType="TIMESTAMP" />
+		<result column="pay_to_day" property="payToDay" jdbcType="TIMESTAMP" />
+		<result column="pay_day_near" property="payDayNear" jdbcType="TIMESTAMP" />
+		<result column="unit_ration" property="unitRation" jdbcType="VARCHAR" />
+		<result column="person_ration" property="personRation" jdbcType="VARCHAR" />
+		<result column="deposit" property="deposit" jdbcType="VARCHAR" />
+		<result column="getinfo_time" property="getinfoTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertData" parameterType="com.creditharmony.approve.credit.entity.CreditCpfDetailed">
+		INSERT INTO jk.t_jk_credit_cpf_detailed
+ 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			relation_id, 
+			</if>
+			<if test="personAccount != null and personAccount != ''" >
+			person_account, 
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			unit_name, 
+			</if>
+			<if test="accountDay != null and accountDay != ''" >
+			account_day, 
+			</if>
+			<if test="payDay != null and payDay != ''" >
+			pay_day, 
+			</if>
+			<if test="payToDay != null and payToDay != ''" >
+			pay_to_day, 
+			</if>
+			<if test="payDayNear != null and payDayNear != ''" >
+			pay_day_near, 
+			</if>
+			<if test="unitRation != null and unitRation != ''" >
+			unit_ration, 
+			</if>
+			<if test="personRation != null and personRation != ''" >
+			person_ration, 
+			</if>
+			<if test="deposit != null and deposit != ''" >
+			deposit, 
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			getinfo_time
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			#{relationId},
+			</if>
+			<if test="personAccount != null and personAccount != ''" >
+			#{personAccount}, 
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			#{unitName}, 
+			</if>
+			<if test="accountDay != null and accountDay != ''" >
+			#{accountDay}, 
+			</if>
+			<if test="payDay != null and payDay != ''" >
+			#{payDay}, 
+			</if>
+			<if test="payToDay != null and payToDay != ''" >
+			#{payToDay}, 
+			</if>
+			<if test="payDayNear != null and payDayNear != ''" >
+			#{payDayNear}, 
+			</if>
+			<if test="unitRation != null and unitRation != ''" >
+			#{unitRation}, 
+			</if>
+			<if test="personRation != null and personRation != ''" >
+			#{personRation}, 
+			</if>
+			<if test="deposit != null and deposit != ''" >
+			#{deposit}, 
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			#{getinfoTime}
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 查询数据 -->
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditCpfDetailed">
+		SELECT 
+			b.id, 
+			b.relation_id, 
+			b.person_account, 
+			b.unit_name, 
+			b.account_day, 
+			b.pay_day, 
+			b.pay_to_day, 
+			b.pay_day_near, 
+			b.unit_ration, 
+			b.person_ration, 
+			b.deposit, 
+			b.getinfo_time
+		FROM 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_cpf_detailed b
+		on a.id = b.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 根据id删除数据 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditCpfDetailed">
+		delete 
+		from 
+			jk.t_jk_credit_cpf_detailed
+		where 
+			id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<update id="updateData" parameterType="com.creditharmony.approve.credit.entity.CreditCpfDetailed">
+		update jk.t_jk_credit_cpf_detailed
+		<set >
+			<if test="id != null and id != ''" >
+			id=#{id},
+			</if> 
+			<if test="relationId != null and relationId != ''" >
+			relation_id=#{relationId}, 
+			</if>
+			<if test="personAccount != null and personAccount != ''" >
+			person_account=#{personAccount}, 
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			unit_name=#{unitName}, 
+			</if>
+			<if test="accountDay != null and accountDay != ''" >
+			account_day=#{accountDay}, 
+			</if>
+			<if test="payDay != null and payDay != ''" >
+			pay_day=#{payDay}, 
+			</if>
+			<if test="payToDay != null and payToDay != ''" >
+			pay_to_day=#{payToDay}, 
+			</if>
+			<if test="payDayNear != null and payDayNear != ''" >
+			pay_day_near=#{payDayNear}, 
+			</if>
+			<if test="unitRation != null and unitRation != ''" >
+			unit_ration=#{unitRation}, 
+			</if>
+			<if test="personRation != null and personRation != ''" >
+			person_ration=#{personRation}, 
+			</if>
+			<if test="deposit != null and deposit != ''" >
+			deposit=#{deposit}, 
+			</if>
+			<if test="getinfoTime != null and getinfoTime != ''" >
+			getinfo_time=#{getinfoTime}
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

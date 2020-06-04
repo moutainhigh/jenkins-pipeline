@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshJyzmGdxxDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshJyzmGdxx" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="r_jyzm_id" property="rJyzmId" jdbcType="VARCHAR" />
+    <result column="gdxx_gdname" property="gdxxGdname" jdbcType="VARCHAR" />
+    <result column="gdxx_relation" property="gdxxRelation" jdbcType="VARCHAR" />
+    <result column="gdxx_ratio" property="gdxxRatio" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+      id, r_jyzm_id, gdxx_gdname, 
+      gdxx_relation, gdxx_ratio, dict_check_type, 
+      create_by, create_time, modify_by, 
+      modify_time
+  </sql>
+  <insert id="insertJyzmGdxx" parameterType="com.creditharmony.approve.document.entity.ZlshJyzmGdxx" >
+    insert into jk.t_jk_zlsh_jyzm_gdxx (id, r_jyzm_id, gdxx_gdname, 
+      gdxx_relation, gdxx_ratio, dict_check_type, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{rJyzmId,jdbcType=NUMERIC}, #{gdxxGdname,jdbcType=VARCHAR}, 
+      #{gdxxRelation,jdbcType=VARCHAR}, #{gdxxRatio,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- <insert id="insertSelective" parameterType="com.creditharmony.approve.document.entity.ZlshJyzmGdxx" > 
+    insert into jk.t_jk_zlsh_jyzm_gdxx
+    <trim prefix="(" suffix=")" suffixOverrJyzmIdes="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rJyzmId != null" >
+        r_jyzm_id,
+      </if>
+      <if test="gdxxGdname != null" >
+        gdxx_gdname,
+      </if>
+      <if test="gdxxRelation != null" >
+        gdxx_relation,
+      </if>
+      <if test="gdxxRatio != null" >
+        gdxx_ratio,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrJyzmIdes="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rJyzmId != null" >
+        #{rJyzmId,jdbcType=NUMERIC},
+      </if>
+      <if test="gdxxGdname != null" >
+        #{gdxxGdname,jdbcType=VARCHAR},
+      </if>
+      <if test="gdxxRelation != null" >
+        #{gdxxRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="gdxxRatio != null" >
+        #{gdxxRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  -->
+   <!-- 获取所有股东信息 -->
+   <select id="selectByRid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_zlsh_jyzm_gdxx
+    where r_jyzm_id = #{rJyzmId,jdbcType=VARCHAR}
+  </select>
+   <delete id="deleteByRid" parameterType="java.lang.String" >
+    delete from jk.t_jk_zlsh_jyzm_gdxx
+    where r_jyzm_id = #{rJyzmId,jdbcType=VARCHAR}
+  </delete>
+   <delete id="deleteById" parameterType="java.lang.String" >
+    delete from jk.t_jk_zlsh_jyzm_gdxx
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

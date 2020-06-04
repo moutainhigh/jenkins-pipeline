@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+	default-lazy-init="true">
+	
+	<bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+		<property name="maxTotal" value="200"></property>  
+        <property name="maxIdle" value="50"></property>  
+        <property name="minIdle" value="10"></property>  
+        <property name="maxWaitMillis" value="15000"></property>  
+        <property name="lifo" value="true"></property>  
+        <property name="blockWhenExhausted" value="true"></property>  
+        <property name="testOnBorrow" value="false"></property>  
+        <property name="testOnReturn" value="false"></property>  
+        <property name="testWhileIdle" value="true"></property>  
+        <property name="timeBetweenEvictionRunsMillis" value="30000"></property>  
+	</bean>
+	
+	<bean id="jedisCluster" class="com.creditharmony.cache.redis.cluster.JedisClusterFactory">
+		<property name="connectionTimeout" value="3000" />
+		<property name="soTimeout" value="3000" />
+		<property name="maxRedirections" value="5" />
+		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
+		<property name="jedisClusterNodes">
+			<set>
+				<value>${redis.host1}</value>
+				<value>${redis.host2}</value>
+				<value>${redis.host3}</value>
+				<value>${redis.host4}</value>
+				<value>${redis.host5}</value>
+				<value>${redis.host6}</value>
+			</set>
+		</property>
+	</bean>
+	
+</beans>

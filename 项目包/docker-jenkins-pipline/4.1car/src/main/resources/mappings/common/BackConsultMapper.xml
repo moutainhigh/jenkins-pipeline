@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.BackConsultDao" >
+  <insert id="addBackConsult" parameterType="com.creditharmony.approve.common.entity.BackConsult" >
+	INSERT INTO t_jk_back_consult(
+	id, 
+	r_his_id, 
+	loan_code, 
+	back_code,
+	 back_code2, 
+	 back_consult, 
+	back_remark, 
+	dict_check_type, 
+	back_start_time,  
+	stepname,
+	create_time, create_by, modify_time, modify_by)
+    values (
+     #{id},
+     #{rHisId},
+     #{loanCode},
+     #{backCode},
+   #{backCode2}, 
+   #{backConsult},  
+   #{backRemark}, 
+   #{dictCheckType}, 
+   #{backStartTime}, 
+   #{stepname}, 
+    #{createTime}, #{createBy}, #{modifyTime}, #{modifyBy} )
+  </insert>  
+  <!--获取退回协商  -->
+  <select id="getBackConsultView" resultType="com.creditharmony.approve.common.entity.BackConsult"   parameterType="java.lang.String"  >
+	SELECT 
+		nego.negotiation_name as back_code, 
+		negoa.negotiation_name as back_code2, 
+		consult.back_remark
+	FROM 
+		(select * from t_jk_back_consult consult where r_his_id = #{0}) consult
+	left join
+		t_gl_negotiation nego
+	on 
+		consult.back_code = nego.negotiation_code
+	left join
+		t_gl_negotiation negoa
+	on 
+		consult.back_code2 = negoa.negotiation_code
+  </select>
+</mapper>
+
+
+
+

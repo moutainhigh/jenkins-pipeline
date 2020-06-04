@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.rule.dao.LoanApplyInfoDao" >  
+  <select id="selectByLoanCode" resultType="com.creditharmony.approve.rule.applyengine.client.LoanApply" parameterType="java.util.Map" >
+  	select 	
+  		a.loan_code as applyCode,
+	    loan_apply_amount as loanAmount,
+	    a.product_type as productType,
+		b.customer_cert_num as identityNo, 
+		c.mate_cert_num as coupleIdentityNo,
+		d.cobo_cert_num as coborrowIdentityNo,
+		(concat(v.pname, v.cname, v.aname, e.comp_address))::varchar as workCity,<!-- 主借人工作地 -->
+		(concat(w.pname, w.cname, w.aname, f.comp_address))::varchar as coupleWorkCity,	<!-- 配偶工作地 -->
+		(concat(u.pname, u.cname, u.aname, g.comp_address))::varchar as coborrowWorkCity,	<!-- 共借人工作地 -->				
+		(case when e.comp_entry_day is not null then (case when e.comp_entry_day &lt; now() then (extract(year from age(e.comp_entry_day))*12 + extract(month from age(e.comp_entry_day))) else 0 end) else -1 end)::int as workMonths,		
+		(case when b.dict_cert_type='0' and length(b.customer_cert_num)=18 then extract(year from age(to_timestamp(substring(b.customer_cert_num from 7 for 8),'YYYYMMDD'))) else -1 end)::int as age,
+		(case when d.dict_cert_type='0' then extract(year from age(to_timestamp(substring(d.cobo_cert_num from 7 for 8),'YYYYMMDD'))) else -1 end)::int as coborrowAge,
+		(concat(x.pname, x.cname, x.aname, b.customer_register_address))::varchar as birthPlace, <!-- 主借人户籍地 -->
+		(concat(p.pname, p.cname, p.aname, d.cobo_household_address))::varchar as coborrowBirthPlace, <!-- 共借人户籍地 -->
+		(concat(r.pname, r.cname, r.aname, b.customer_address))::varchar as liveCity, <!-- 主借人居住地 -->
+		(concat(s.pname, s.cname, s.aname, d.cobo_now_address))::varchar as coborrowLiveCity, <!-- 共借人居住地 -->
+		(case when b.dict_marry_status='0' then 'false' else 'true' end)::varchar as notUnMarried,
+		(case when b.customer_register_city=org.city_id then 'true' else 'false' end)::varchar as fromLocal
+	from  jk.t_jk_loan_info a 
+	left join jk.t_jk_loan_customer b on a.loan_code = b.loan_code
+	left join jk.t_jk_loan_mate c on c.loan_code = a.loan_code and c.r_customer_coborrower_id = b.id
+	left join jk.t_jk_loan_coborrower d on d.loan_code = a.loan_code 
+	left join jk.t_jk_loan_company e on e.loan_code = b.loan_code and e.r_id=b.id
+	left join jk.t_jk_loan_company f on f.loan_code = c.loan_code and f.r_id=c.id	
+	left join jk.t_jk_loan_company g on g.loan_code = d.loan_code and g.r_id=d.id			
+	left join jk.mview_province_city v on e.comp_arer = v.aid 
+	left join jk.mview_province_city w on f.comp_arer = w.aid 
+	left join jk.mview_province_city u on g.comp_arer = u.aid 
+	left join jk.mview_province_city x on b.customer_register_area = x.aid 
+	left join jk.mview_province_city p on d.cobo_household_area = p.aid 
+	left join jk.mview_province_city r on b.customer_live_area = r.aid
+	left join jk.mview_province_city s on d.cobo_liveing_area = s.aid  
+	left join jk.t_gl_org org on org.id=a.loan_store_orgid
+	where a.loan_code = #{loanCode}	
+  </select>
+  
+  <select id="findCoborrowerExist" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when co_count>0 then 'true' else 'false' end)::varchar as coborrowerExist
+	from (select count(id) as co_count from t_jk_loan_coborrower where loan_code = #{loanCode}	)	
+  </select>
+  
+  <select id="findLegalPersonExist" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when lp_count>0 then 'true' else 'false' end)::varchar as legalPersonExist
+	from (select count(id) as lp_count from jk.t_jk_loan_info li where li.loan_apply_amount > 300000 and li.product_type in('A005','A006') and loan_code = #{loanCode})	
+  </select>
+  
+  <!-- 历史借款尚未结清，或者拒借客户放弃等状态；具体逻辑参见chp-loan项目 ConsultController.java -->
+  <select id="findHisLoanUnpaid" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when count>0 then 'true' else 'false' end)::varchar as hisLoanUnpaid
+	from 
+		(select count(a.id) as count  
+			from t_jk_loan_info a 
+			left join  t_jk_loan_customer b on a.loan_code=b.loan_code
+			where b.customer_cert_num=(select customer_cert_num from t_jk_loan_customer where loan_code=#{loanCode} ) 
+			and b.loan_code != #{loanCode}	
+			and not (a.dict_loan_status in ('81','74','89','90','91','92','54','55','56','57','97','8','101') <!-- 进件引擎拒借、客户放弃、
+  		  				结清，提前结清、门店外访超时、 退回超时、 复议门店外访超时、复议退回超时、签约超时、欺诈认定灰名单，随时可以重新进件 -->
+						<!-- 复审拒借、终审拒借、高级终审拒借、复议复审拒借、复议终审拒借，6个月以后可以进件 -->
+						or (a.dict_loan_status in ('34','35','36','52','53') and a.customer_into_time &lt; now()-180)
+						<!-- 门店拒绝，1个月以后可以进件 -->
+						or (a.dict_loan_status in ('73') and a.customer_into_time &lt; now()-30))
+			) 
+  </select>
+  
+  <!-- 配偶历史借款尚未结清，或者拒借客户放弃等状态；具体逻辑参见chp-loan项目 ConsultController.java -->
+  <select id="findCoupleHisLoanUnpaid" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when count>0 then 'true' else 'false' end)::varchar as coupleHisLoanUnpaid
+	from  
+		(select count(a.id) as count  
+		from t_jk_loan_info a 
+		left join t_jk_loan_customer b on a.loan_code=b.loan_code
+		where b.customer_cert_num=(select mate_cert_num from t_jk_loan_mate where loan_code = #{loanCode}) 
+			and b.loan_code != #{loanCode}
+			and not (a.dict_loan_status in ('81','74','89','90','91','92','54','55','56','57','97','8','101') <!-- 进件引擎拒借、客户放弃、
+  		  				结清，提前结清、门店外访超时、 退回超时、 复议门店外访超时、复议退回超时、签约超时、欺诈认定灰名单，随时可以重新进件 -->
+						<!-- 复审拒借、终审拒借、高级终审拒借、复议复审拒借、复议终审拒借，6个月以后可以进件 -->
+						or (a.dict_loan_status in ('34','35','36','52','53') and a.customer_into_time &lt; now()-180)
+						<!-- 门店拒绝，1个月以后可以进件 -->
+						or (a.dict_loan_status in ('73') and a.customer_into_time &lt; now()-30))
+			)
+  </select>
+  
+  <!-- 作为共借人有历史借款尚未结清，或者拒借客户放弃等状态；具体逻辑参见chp-loan项目 ConsultController.java -->
+  <select id="findHisLoanUnpaidAsCoborrow" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when count>0 then 'true' else 'false' end)::varchar as hisLoanUnpaidAsCoborrow
+	from 
+		(select count(a.id) as count 
+		from t_jk_loan_info a
+		where a.loan_code in (select loan_code from t_jk_loan_coborrower 
+					where cobo_cert_num=(select customer_cert_num from t_jk_loan_customer where loan_code = #{loanCode}	)) 
+			and a.loan_code != #{loanCode}		
+			and not (a.dict_loan_status in ('81','74','89','90','91','92','54','55','56','57','97','8','101') <!-- 进件引擎拒借、客户放弃、
+  		  				结清，提前结清、门店外访超时、 退回超时、 复议门店外访超时、复议退回超时、签约超时、欺诈认定灰名单，随时可以重新进件 -->
+						<!-- 复审拒借、终审拒借、高级终审拒借、复议复审拒借、复议终审拒借，6个月以后可以进件 -->
+						or (a.dict_loan_status in ('34','35','36','52','53') and a.customer_into_time &lt; now()-180)
+						<!-- 门店拒绝，1个月以后可以进件 -->
+						or (a.dict_loan_status in ('73') and a.customer_into_time &lt; now()-30))	
+			)
+  </select>
+  
+  <!-- 配偶作为历史借款的共借人，有历史借款尚未结清，或者拒借客户放弃等状态；具体逻辑参见chp-loan项目 ConsultController.java -->
+  <select id="findCoupleHisLoanUnpaidAsCoborrow" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when count>0 then 'true' else 'false' end)::varchar as coupleHisLoanUnpaidAsCoborrow
+	from 
+		(select count(a.id) as count 
+		from t_jk_loan_info a
+		where a.loan_code in (select loan_code from t_jk_loan_coborrower 
+					where cobo_cert_num=(select mate_cert_num from t_jk_loan_mate where loan_code = #{loanCode}))
+			and a.loan_code != #{loanCode}
+		    and not (a.dict_loan_status in ('81','74','89','90','91','92','54','55','56','57','97','8','101') <!-- 进件引擎拒借、客户放弃、
+  		  				结清，提前结清、门店外访超时、 退回超时、 复议门店外访超时、复议退回超时、签约超时、欺诈认定灰名单，随时可以重新进件 -->
+						<!-- 复审拒借、终审拒借、高级终审拒借、复议复审拒借、复议终审拒借，6个月以后可以进件 -->
+						or (a.dict_loan_status in ('34','35','36','52','53') and a.customer_into_time &lt; now()-180)
+						<!-- 门店拒绝，1个月以后可以进件 -->
+						or (a.dict_loan_status in ('73') and a.customer_into_time &lt; now()-30))
+		      )
+  </select>    
+  
+  <!-- 配偶历史借款当前逾期 -->
+  <select id="findCoupleCurrentLoanOverdue" resultType="java.lang.String" parameterType="java.util.Map" >
+  	select (case when count>0 then 'true' else 'false' end)::varchar as coupleCurrentLoanOverdue
+	from  
+		(select count(a.id) as count  
+		from t_jk_loan_info a 
+		left join t_jk_loan_customer b on a.loan_code=b.loan_code
+		where b.customer_cert_num=(select mate_cert_num from t_jk_loan_mate where loan_code = #{loanCode}) 
+			and a.loan_code != #{loanCode} and a.dict_loan_status = '88'
+		)
+  </select>
+  
+  <select id="getContactParents" resultType="java.lang.String" parameterType="java.util.Map" >	
+	select (case when count>0 then 'true' else 'false' end)::varchar as parentsContactExists
+		from 
+		  (select count(c.id) as count 
+		     from jk.t_jk_contact c 
+		     join jk.t_jk_loan_customer cust on cust.id=c.r_customer_coborrower_id and cust.loan_code=c.loan_code
+		     where c.relation_type='0' and c.contact_relation='0' and c.loan_code=#{loanCode}       
+		   )
+  </select> 
+  <!-- 主借人，所有共借人都要分别要录入至少一个简版或者祥版征信 -->
+  <select id="getNoCreditReport" resultType="java.lang.String" parameterType="java.util.Map" >
+	select (case when min(count) >0  then 'false' else 'true' end)::varchar as noCreditReport 
+	from (
+		select count(si.id)+count(de.id) as count 
+				from t_jk_loan_customer lc
+				left join T_JK_CREDIT_REPORT_SIMPLE si on si.loan_code=lc.loan_code and si.r_customer_coborrower_id=lc.id
+					 and si.del_flag=#{delFlag}    	
+				left join T_JK_CREDIT_REPORT_DETAILED de on de.loan_code=lc.loan_code and de.r_customer_coborrower_id=lc.id
+					 and de.del_flag=#{delFlag}   	
+				where lc.loan_code=#{loanCode} 	
+		union all
+		select count(si.id)+count(de.id) as count 
+				from t_jk_loan_coborrower lb
+				left join T_JK_CREDIT_REPORT_SIMPLE si on si.loan_code=lb.loan_code and si.r_customer_coborrower_id=lb.id
+					 and si.del_flag=#{delFlag}    	
+				left join T_JK_CREDIT_REPORT_DETAILED de on de.loan_code=lb.loan_code and de.r_customer_coborrower_id=lb.id
+					 and de.del_flag=#{delFlag}    	
+				where lb.loan_code=#{loanCode}
+				group by lb.id 
+		)
+  </select>   
+  
+  <!-- 主借人录入一个贷款或者信用卡信息 -->
+  <select id="getNoCreditCardAndLoan" resultType="java.lang.String" parameterType="java.util.Map" >
+	select (case when (simpleCreditCount + simpleLoanCount + detailCreditCount + detailLoanCount)::int >0 
+		then 'false' else 'true' end)::varchar as noCreditHistory from (
+			select 
+			(select count(credit.id) as simpleCreditCount 
+				from T_JK_CREDIT_REPORT_SIMPLE si
+				join T_JK_CREDIT_CARD_INFO credit on si.id=credit.relation_id 
+				where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}  
+						and si.del_flag=#{delFlag}),
+			(select count(loan.id) as simpleLoanCount 
+				from T_JK_CREDIT_REPORT_SIMPLE si 
+				join T_JK_CREDIT_LOAN_INFO loan on si.id=loan.relation_id
+				where si.loan_code=#{loanCode} and si.r_customer_coborrower_id=#{customerId}
+						and si.del_flag=#{delFlag}),
+			(select count(credit.id) as detailCreditCount 
+				from T_JK_CREDIT_REPORT_DETAILED de
+				join T_JK_CREDIT_CARD_DETAILED_ONE credit on de.id=credit.relation_id 
+				where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag}),
+			(select count(loan.id) as detailLoanCount 
+				from T_JK_CREDIT_REPORT_DETAILED de 
+				join T_JK_CREDIT_LOAN_DETAILED_ONE loan on de.id=loan.relation_id
+				where de.loan_code=#{loanCode} and de.r_customer_coborrower_id=#{customerId} 
+						and de.del_flag=#{delFlag})  )
+  </select>   
+  
+  <select id="getCompanyHisLoanUnpaid" resultType="boolean" parameterType="java.util.Map" >  	
+  select (case when count(1)>0 then 1 else 0 end) as companyHisLoanUnpaid
+  	from t_jk_loan_info 
+  	where loan_code in (
+		select 	B.LOAN_CODE 
+			FROM
+			(SELECT A.LOAN_CODE,A.COMP_NAME
+				FROM JK.T_JK_LOAN_COMPANY A LEFT JOIN JK.T_JK_LOAN_CUSTOMER B ON A.LOAN_CODE=B.LOAN_CODE AND A.R_ID=B.ID
+           	 	LEFT JOIN JK.T_JK_LOAN_COBORROWER C ON A.LOAN_CODE=C.LOAN_CODE AND A.R_ID=C.ID
+				WHERE A.LOAN_CODE=#{loanCode} AND A.DICT_R_CUSTOMTER_TYPE IN('0','1') AND COALESCE(A.COMP_NAME,'')<![CDATA[<>]]>''
+			) A 
+			INNER JOIN JK.T_JK_WORK_NAME_POOL B ON FILTERCOMPANYNAME(A.COMP_NAME)=FILTERCOMPANYNAME(B.WORK_NAME) 
+					AND B.LOAN_CODE!=#{loanCode}
+			LEFT JOIN JK.T_JK_INNER_CUSTOMER_HIS B1 ON A.LOAN_CODE=B1.LOAN_CODE AND B.LOAN_CODE=B1.HIS_LOAN_CODE
+		) and product_type in ('A005','A006')		
+  		  and not (dict_loan_status in ('81','74','89','90','91','92','54','55','56','57','97','8','101') <!-- 进件引擎拒借、客户放弃、
+  		  				结清，提前结清、门店外访超时、 退回超时、 复议门店外访超时、复议退回超时、签约超时、欺诈认定灰名单，随时可以重新进件 -->
+						<!-- 复审拒借、终审拒借、高级终审拒借、复议复审拒借、复议终审拒借，6个月以后可以进件 -->
+						or (dict_loan_status in ('34','35','36','52','53') and customer_into_time &lt; now()-180)
+						<!-- 门店拒绝，1个月以后可以进件 -->
+						or (dict_loan_status in ('73') and customer_into_time &lt; now()-30))		
+  </select>  
+  
+</mapper>

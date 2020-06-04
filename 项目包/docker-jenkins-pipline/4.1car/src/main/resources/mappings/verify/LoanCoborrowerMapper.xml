@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.LoanCoborrowerDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.LoanCoborrower" >
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="cobo_name" property="coboName" jdbcType="VARCHAR" />
+    <result column="cobo_age" property="coboAge" jdbcType="VARCHAR" />
+    <result column="cobo_sex" property="coboSex" jdbcType="VARCHAR" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="cobo_cert_num" property="coboCertNum" jdbcType="VARCHAR" />
+	<result column="id_start_day" property="idStartDay" jdbcType="NUMERIC" />
+    <result column="id_end_day" property="idEndDay" jdbcType="NUMERIC" />
+    <result column="cobo_birthday" property="coboBirthday" jdbcType="VARCHAR" />
+    <result column="dict_education" property="dictEducation" jdbcType="VARCHAR" />
+    <result column="customer_graduation_day" property="customerGraduationDay" jdbcType="VARCHAR" />
+    <result column="cobo_house_hold_hold" property="coboHouseHoldHold" jdbcType="NUMERIC" />    
+    <result column="cobo_household_province" property="coboHouseholdProvince" jdbcType="VARCHAR" />
+    <result column="cobo_household_city" property="coboHouseholdCity" jdbcType="VARCHAR" />
+    <result column="cobo_household_area" property="coboHouseholdArea" jdbcType="VARCHAR" />
+    <result column="cobo_household_address" property="coboHouseholdAddress" jdbcType="VARCHAR" />
+    <result column="cobo_family_tel" property="coboFamilyTel" jdbcType="VARCHAR" />
+    <result column="cobo_mobile" property="coboMobile" jdbcType="VARCHAR" />
+    <result column="cobo_mobile2" property="coboMobile2" jdbcType="NUMERIC" />    
+    <result column="cobo_liveing_province" property="coboLiveingProvince" jdbcType="VARCHAR" />
+    <result column="cobo_liveing_city" property="coboLiveingCity" jdbcType="VARCHAR" />
+    <result column="cobo_liveing_area" property="coboLiveingArea" jdbcType="VARCHAR" />
+    <result column="cobo_now_address" property="coboNowAddress" jdbcType="VARCHAR" />
+    <result column="cobo_now_tel" property="coboNowTel" jdbcType="VARCHAR" />
+    <result column="cobo_email" property="coboEmail" jdbcType="VARCHAR" />
+    <result column="dict_marry_status" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="cobo_have_child_flag" property="coboHaveChildFlag" jdbcType="VARCHAR" />
+    <result column="cobo_contact_is_know" property="coboContactIsKnow" jdbcType="VARCHAR" />
+    <result column="dict_relation_type" property="dictRelationType" jdbcType="NUMERIC" />
+    <result column="dict_relation_customer" property="dictRelationCustomer" jdbcType="VARCHAR" />
+	<result column="cobo_social_security" property="coboSocialSecurity" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="customer_firt_arrive_year" property="customerFirtArriveYear" jdbcType="VARCHAR" />
+    <result column="customer_house_hold_property" property="customerHouseHoldProperty" jdbcType="VARCHAR" />
+    
+    <result column="credit_user_name" property="creditUserName" jdbcType="VARCHAR" />
+    <result column="credit_password" property="creditPassword" jdbcType="VARCHAR" />
+    <result column="credit_auth_code" property="creditAuthCode" jdbcType="VARCHAR" />
+    <result column="children_num" property="childrenNum" jdbcType="NUMERIC" />
+    <result column="support_num" property="supportNum" jdbcType="NUMERIC" />
+    <result column="personal_year_income" property="personalYearIncome" jdbcType="NUMERIC" />
+    <result column="home_month_income" property="homeMonthIncome" jdbcType="NUMERIC" />
+    <result column="home_month_pay" property="homeMonthPay" jdbcType="NUMERIC" />
+    <result column="home_total_debt" property="homeTotalDebt" jdbcType="NUMERIC" />
+    <result column="cobo_qq" property="coboQq" jdbcType="VARCHAR" />
+    <result column="cobo_weibo" property="coboWeibo" jdbcType="VARCHAR" />
+    <result column="customer_first_living_day" property="customerFirstLivingDay" jdbcType="TIMESTAMP" />
+    <result column="social_security_number" property="socialSecurityNumber" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getCoborrower" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+  		id, loan_code, cobo_name
+	FROM jk.t_jk_loan_coborrower 	
+	WHERE id=#{0}
+  </select>
+  
+  
+  <select id="findJointlyEx" resultType="com.creditharmony.approve.verify.entity.ex.JointlyLoanInfoEx" parameterType="java.lang.String">
+  	SELECT A.ID, A.LOAN_CODE, A.COBO_NAME, 
+           A.COBO_CERT_NUM, A.DICT_MARRY_STATUS,
+           A.COBO_HOUSEHOLD_PROVINCE,A.COBO_HOUSEHOLD_CITY,A.COBO_HOUSEHOLD_AREA,A.COBO_HOUSEHOLD_ADDRESS,
+           B.MATE_NAME,B.MATE_CERT_NUM
+	FROM JK.T_JK_LOAN_COBORROWER A
+    LEFT JOIN JK.T_JK_LOAN_MATE B
+	ON A.LOAN_CODE=B.LOAN_CODE  AND B.LOAN_CUSTOMTER_TYPE=#{1} AND A.ID=B.R_CUSTOMER_COBORROWER_ID
+	WHERE A.LOAN_CODE=#{0}
+  </select>
+  <select id="findJotinly" resultType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" parameterType="java.lang.String">
+  	select 
+  	b.APPLY_ID as applyId,
+  	a.cobo_name as customerName,
+  	a.cobo_sex as customerSex,
+  	a.cobo_cert_num as customerCertNum,
+  	a.loan_code,
+  	a.id as relId
+  	from jk.t_jk_loan_coborrower a
+  	left join jk.T_JK_LOAN_INFO b
+  	on a.loan_code = b.loan_code
+  	where a.id=#{id}
+  </select>
+  <select id="viewGetByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.LoanCoborrower" >
+		select 
+			a.COBO_NAME,
+			a.dict_cert_type,
+			a.COBO_CERT_NUM,
+			c.label as COBO_SEX,
+			k.label as COBO_HAVE_CHILD_FLAG,
+			j.label as DICT_EDUCATION,
+			a.COBO_FAMILY_TEL,
+			b.label as DICT_MARRY_STATUS,
+			a.COBO_MOBILE,
+			a.COBO_MOBILE2,
+			d.AREA_NAME as COBO_LIVEING_PROVINCE,
+			e.AREA_NAME as COBO_LIVEING_CITY,
+			f.AREA_NAME as COBO_LIVEING_AREA,
+			a.COBO_NOW_ADDRESS,
+			g.AREA_NAME as cobo_household_province,
+			h.AREA_NAME as cobo_household_city,
+			i.AREA_NAME as cobo_household_area,
+			a.cobo_household_address,
+			m.label as customer_house_hold_property,
+			a.customer_firt_arrive_year,
+			a.COBO_EMAIL,
+			a.credit_user_name,
+	        a.credit_password,
+	        a.credit_auth_code,
+	        a.children_num,
+	        a.support_num,
+	        a.personal_year_income,
+	        a.home_month_income,
+	        a.home_month_pay,
+	        a.home_total_debt
+		from jk.T_JK_LOAN_COBORROWER a
+		left join jk.t_gl_dict b
+		on a.dict_marry_status = b.value and b.type = 'jk_marriage'
+		left join jk.t_gl_dict c
+		on a.COBO_SEX = c.value and c.type = 'jk_sex'
+		left join jk.T_GL_PROVINCE_CITY d
+		on a.COBO_LIVEING_PROVINCE = d.area_code
+		left join jk.T_GL_PROVINCE_CITY e
+		on a.COBO_LIVEING_CITY = e.area_code
+		left join jk.T_GL_PROVINCE_CITY f
+		on a.COBO_LIVEING_AREA = f.area_code
+		left join jk.T_GL_PROVINCE_CITY g
+		on a.cobo_household_province = g.area_code
+		left join jk.T_GL_PROVINCE_CITY h
+		on a.cobo_household_city = h.area_code
+		left join jk.T_GL_PROVINCE_CITY i
+		on a.cobo_household_area = i.area_code
+		left join jk.t_gl_dict j
+		on a.DICT_EDUCATION = j.value and j.type = 'jk_degree'
+		left join jk.t_gl_dict k
+		on a.COBO_HAVE_CHILD_FLAG = k.value and k.type = 'jk_have_or_nohave'
+		left join 
+		jk.t_gl_dict m
+		on a.CUSTOMER_HOUSE_HOLD_PROPERTY = m.value and m.type= 'jk_house_nature'
+		where 
+			1=1
+			<if test="loanCode != null and loanCode !=''">
+				and a.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="id != null and id !=''">
+				and a.id = #{id,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<select id="viewGetByLoanCodeNew" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.LoanCoborrower">
+		select 
+			a.COBO_NAME,
+			a.dict_cert_type,
+			a.COBO_CERT_NUM,
+			c.label as COBO_SEX,
+			k.label as COBO_HAVE_CHILD_FLAG,
+			j.label as DICT_EDUCATION,
+			a.COBO_FAMILY_TEL,
+			b.label as DICT_MARRY_STATUS,
+			a.COBO_MOBILE,
+			a.COBO_MOBILE2,
+			d.AREA_NAME as COBO_LIVEING_PROVINCE,
+			e.AREA_NAME as COBO_LIVEING_CITY,
+			f.AREA_NAME as COBO_LIVEING_AREA,
+			a.COBO_NOW_ADDRESS,
+			g.AREA_NAME as cobo_household_province,
+			h.AREA_NAME as cobo_household_city,
+			i.AREA_NAME as cobo_household_area,
+			a.cobo_household_address,
+			m.label as customer_house_hold_property,
+			a.customer_firt_arrive_year,
+			a.customer_first_living_day,
+			a.COBO_EMAIL,
+			a.credit_user_name,
+	        a.credit_password,
+	        a.credit_auth_code,
+	        a.children_num,
+	        a.support_num,
+	        a.personal_year_income,
+	        a.home_month_income,
+	        a.home_month_pay,
+	        a.home_total_debt,
+	        a.cobo_qq,
+	        a.cobo_weibo,
+	        a.social_security_number
+		from jk.T_JK_LOAN_COBORROWER a
+		left join jk.t_gl_dict b
+		on a.dict_marry_status = b.value and b.type = 'jk_marriage'
+		left join jk.t_gl_dict c
+		on a.COBO_SEX = c.value and c.type = 'jk_sex'
+		left join jk.T_GL_PROVINCE_CITY d
+		on a.COBO_LIVEING_PROVINCE = d.area_code
+		left join jk.T_GL_PROVINCE_CITY e
+		on a.COBO_LIVEING_CITY = e.area_code
+		left join jk.T_GL_PROVINCE_CITY f
+		on a.COBO_LIVEING_AREA = f.area_code
+		left join jk.T_GL_PROVINCE_CITY g
+		on a.cobo_household_province = g.area_code
+		left join jk.T_GL_PROVINCE_CITY h
+		on a.cobo_household_city = h.area_code
+		left join jk.T_GL_PROVINCE_CITY i
+		on a.cobo_household_area = i.area_code
+		left join jk.t_gl_dict j
+		on a.DICT_EDUCATION = j.value and j.type = 'jk_degree'
+		left join jk.t_gl_dict k
+		on a.COBO_HAVE_CHILD_FLAG = k.value and k.type = 'jk_have_or_nohave'
+		left join 
+		jk.t_gl_dict m
+		on a.CUSTOMER_HOUSE_HOLD_PROPERTY = m.value and m.type= 'jk_house_nature'
+		where 
+			1=1
+			<if test="loanCode != null and loanCode !=''">
+				and a.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="id != null and id !=''">
+				and a.id = #{id,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<!-- 根据借款编号查询 -->
+	<select id="getByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.LoanCoborrower">
+		select 
+			id,
+			loan_code,
+			cobo_name,
+			cobo_age,
+			cobo_sex,
+			dict_cert_type,
+			cobo_cert_num,
+			id_start_day,
+			id_end_day,
+			cobo_birthday,
+			dict_education,
+			customer_graduation_day,
+			cobo_house_hold_hold,
+			cobo_household_province,
+			cobo_household_city,
+			cobo_household_area,
+			cobo_household_address,
+			cobo_family_tel,
+			cobo_mobile,
+			cobo_mobile2,
+			cobo_liveing_province,
+			cobo_liveing_city,
+			cobo_liveing_area,
+			cobo_now_address,
+			cobo_now_tel,
+			cobo_email,
+			dict_marry_status,
+			cobo_have_child_flag,
+			cobo_contact_is_know,
+			dict_relation_type,
+			dict_relation_customer,
+			cobo_social_security
+		from 
+			jk.T_JK_LOAN_COBORROWER
+		where
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+  	
+  	  <!-- 获取新添加的共借人 -->
+  <select id="findNewCoborrowers" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  select 
+		a.id, 
+		a.loan_code
+	from jk.t_jk_loan_coborrower a  
+	where a.loan_code = #{0} 
+		and (a.include_pool_flag is null or a.include_pool_flag &lt;&gt; '1')
+  </select>  	
+   <select id="getCoborrowersByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+	    select id, cobo_name
+		from jk.t_jk_loan_coborrower a  
+		where a.loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>  	
+  	
+</mapper>

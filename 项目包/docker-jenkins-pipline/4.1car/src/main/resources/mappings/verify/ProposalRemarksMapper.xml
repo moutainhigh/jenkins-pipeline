@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.verify.dao.ProposalRemarksDao">
+	<!--根据条件获取对应的信息 --> 
+	<select id="getRemark" resultType="com.creditharmony.approve.verify.entity.ProposalRemarks" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+		SELECT *		
+		FROM jk.t_jk_proposal_remarks
+		WHERE loan_code=#{loanCode} and dict_loan_status=#{checkType}
+	</select>
+	<!-- 插入备注信息 -->
+	<insert id="insert" parameterType="com.creditharmony.approve.verify.entity.ProposalRemarks" >
+    insert into jk.t_jk_proposal_remarks
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="companyInfo != null" >
+        company_info,
+      </if>
+      <if test="traceInfo != null" >
+        trace_info,
+      </if>
+      <if test="liabilitiesInfo != null" >
+        liabilities_info,
+      </if>
+      <if test="assetsInfo != null" >
+        assets_info,
+      </if>
+      <if test="visitInfo != null" >
+        visit_info,
+      </if>
+      <if test="riskInfo != null" >
+        risk_info,
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyInfo != null" >
+        #{companyInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="traceInfo != null" >
+        #{traceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="liabilitiesInfo != null" >
+        #{liabilitiesInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="assetsInfo != null" >
+        #{assetsInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="visitInfo != null" >
+        #{visitInfo,jdbcType=VARCHAR},
+      </if>
+       <if test="riskInfo != null" >
+        #{riskInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+	<update id="update" parameterType="com.creditharmony.approve.verify.entity.ProposalRemarks" >
+    update jk.t_jk_proposal_remarks
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode},
+      </if>
+      <if test="companyInfo != null" >
+        company_info=#{companyInfo},
+      </if>
+      <if test="traceInfo != null" >
+        trace_info=#{traceInfo},
+      </if>
+      <if test="liabilitiesInfo != null" >
+        liabilities_info=#{liabilitiesInfo},
+      </if>
+      <if test="assetsInfo != null" >
+        assets_info=#{assetsInfo},
+      </if>
+      <if test="visitInfo != null" >
+        visit_info=#{visitInfo},
+      </if>
+      <if test="riskInfo != null" >
+        risk_info=#{riskInfo},
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status=#{dictLoanStatus},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if> 
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update> 
+</mapper>

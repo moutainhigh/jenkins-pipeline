@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditUnclearedTradeFinancingDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditUnclearedTradeFinancing" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="loan_org" property="loanOrg" jdbcType="VARCHAR" />
+    <result column="dict_currency" property="dictCurrency" jdbcType="VARCHAR" />
+    <result column="financing_amount" property="financingAmount" jdbcType="NUMERIC" />
+    <result column="financing_balance" property="financingBalance" jdbcType="NUMERIC" />
+    <result column="lending_day" property="lendingDay" jdbcType="DATE" />
+    <result column="actual_day" property="actualDay" jdbcType="DATE" />
+    <result column="dict_guarantee" property="dictGuarantee" jdbcType="VARCHAR" />
+    <result column="dict_exhibition" property="dictExhibition" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="dict_level_class" property="dictLevelClass" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, loan_org, dict_currency, financing_amount, financing_balance, lending_day, 
+    actual_day, dict_guarantee, dict_exhibition, operation, create_by, create_time, modify_by, 
+    modify_time, dict_level_class
+  </sql>
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_uncleared_trade_financing
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertCreditUnclearedTradeFinancing" parameterType="com.creditharmony.approve.credit.entity.CreditUnclearedTradeFinancing" >
+    insert into jk.t_jk_credit_uncleared_trade_financing (id, loan_code, loan_org, 
+      dict_currency, financing_amount, financing_balance, 
+      lending_day, actual_day, dict_guarantee, 
+      dict_exhibition, operation, create_by, 
+      create_time, modify_by, modify_time, dict_level_class
+      )
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{loanOrg,jdbcType=VARCHAR}, 
+      #{dictCurrency,jdbcType=VARCHAR}, #{financingAmount,jdbcType=NUMERIC}, #{financingBalance,jdbcType=NUMERIC}, 
+      #{lendingDay,jdbcType=DATE}, #{actualDay,jdbcType=DATE}, #{dictGuarantee,jdbcType=VARCHAR}, 
+      #{dictExhibition,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{dictLevelClass,jdbcType=VARCHAR})
+  </insert>
+  
+  	<!-- 根据借款编号查询数据 -->
+	<select id="selectByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			jk.t_jk_credit_uncleared_trade_financing
+		where 
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+			order by modify_time desc
+	</select>
+	
+	<!-- 根据借款编码删除信息 -->
+	<delete id="deleteByLoanCode" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_uncleared_trade_financing
+		where loan_code = #{loanCode,jdbcType=VARCHAR}
+	</delete>
+</mapper>

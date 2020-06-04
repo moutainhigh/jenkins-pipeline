@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="      
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<context:component-scan base-package="com.creditharmony.ldap" />
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:ldapConfig.properties" />
+	<bean id="serviceLocator" class="com.creditharmony.ldap.ServiceLocator" scope="singleton" />
+	<bean id="contextSourceTarget" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${ldap.url}" />
+		<property name="base" value="${baseDN}" />
+		<property name="userDn" value="${java.naming.security.principal}" />
+		<property name="password" value="${java.naming.security.credentials}" />
+		<property name="referral" value="follow"/>
+	</bean>
+	<!-- enable pooling -->
+	<bean id="pooledContextSource"
+		class="org.springframework.ldap.pool.factory.PoolingContextSource">
+		<property name="contextSource" ref="contextSourceTarget" />
+		<property name="testOnBorrow" value="true" />
+		<property name="dirContextValidator" ref="dirContextValidator" />
+		<property name="testWhileIdle" value="true" />
+		<property name="maxActive" value="20" />  
+        <!--<property name="maxTotal" value="40" />  
+        <property name="maxIdle" value="10" />  
+        <property name="maxWait" value="5" />  
+		<property name="testWhileIdle" value="true" />  
+        <property name="testOnBorrow" value="true" />-->
+	</bean>
+	<!-- for pooled connection validation -->
+	<bean id="dirContextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator" />
+	<!-- wrap underlying context source with TX aware proxy -->
+	<bean id="contextSource"
+		class="org.springframework.ldap.transaction.compensating.manager.TransactionAwareContextSourceProxy">
+		<constructor-arg ref="pooledContextSource" />
+	</bean>
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+	</bean>
+	
+	<!-- 不包含事务的ldap操作类，用于登录时的用户验证  -->
+	<bean id="noTransactionLdapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSourceTarget" />
+	</bean>
+</beans>

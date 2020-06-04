@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.CarContractDao">
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.CarContract">
+		<id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="contract_code" property="contractCode" jdbcType="VARCHAR" />
+		<result column="contract_due_day" property="contractDueDay" jdbcType="DATE" />
+		<result column="contract_fact_day" property="contractFactDay" jdbcType="DATE" />
+		<result column="contract_replay_day" property="contractReplayDay" jdbcType="DATE" />
+		<result column="contract_end_day" property="contractEndDay" jdbcType="DATE" />
+		<result column="product_type" property="productType" jdbcType="VARCHAR" />
+		<result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+		<result column="audit_amount" property="auditAmount" jdbcType="NUMERIC" />
+		<result column="contract_months" property="contractMonths" jdbcType="INTEGER" />
+		<result column="mid_id" property="midId" jdbcType="VARCHAR" />
+		<result column="dict_repay_method" property="dictRepayMethod" jdbcType="VARCHAR" />
+		<result column="dict_fee_method" property="dictFeeMethod" jdbcType="VARCHAR" />
+		<result column="contract_amount" property="contractAmount" jdbcType="NUMERIC" />
+		<result column="contract_expect_amount" property="contractExpectAmount" jdbcType="NUMERIC" />
+		<result column="contract_month_repay_amount" property="contractMonthRepayAmount" jdbcType="NUMERIC" />
+		<result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+		<result column="contract_back_result" property="contractBackResult" jdbcType="VARCHAR" />
+		<result column="contract_version" property="contractVersion" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="gross_rate" property="grossRate" jdbcType="TIMESTAMP" />
+		<result column="extension_fee" property="extensionFee" jdbcType="NUMERIC" />
+		<result column="derate" property="derate" jdbcType="NUMERIC" />
+		<result column="mid_id_name" property="midIdName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		loan_code, c.id, contract_code, contract_due_day,
+		contract_fact_day,
+		contract_replay_day,
+		contract_end_day,
+		c.product_type, audit_amount, contract_months, mid_id,
+		dict_repay_method, dict_fee_method,
+		contract_amount,
+		contract_expect_amount, contract_month_repay_amount,
+		dict_check_status,
+		contract_back_result, contract_version, c.create_by,
+		c.create_time, c.modify_by,
+		c.modify_time, gross_rate, extension_fee,
+		derate
+	</sql>
+	<select id="selectByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select p.middle_name mid_id_name, jp.product_name product_type_name,
+		<include refid="Base_Column_List" />
+		from t_cj_contract c
+		left join t_jk_middle_person p on p.id = c.mid_id
+		left join t_gl_jk_product jp on jp.product_code = c.product_type
+		where
+		loan_code = #{loanCode,jdbcType=VARCHAR}
+	</select>
+	<delete id="delete" parameterType="com.creditharmony.approve.carloan.entity.CarContract">
+		delete from t_cj_contract
+		where loan_code =
+		#{loanCode,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.creditharmony.approve.carloan.entity.CarContract">
+		insert into t_cj_contract (loan_code, id, contract_code,
+		contract_due_day, contract_fact_day, contract_replay_day,
+		contract_end_day, product_type, audit_amount,
+		contract_months, mid_id,
+		dict_repay_method, dict_fee_method,
+		contract_amount,
+		contract_expect_amount, contract_month_repay_amount,
+		dict_check_status, contract_back_result, contract_version,
+		create_by,
+		create_time, modify_by,
+		modify_time, gross_rate, extension_fee, derate)
+		values (#{loanCode,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR},
+		#{contractCode,jdbcType=VARCHAR},
+		#{contractDueDay,jdbcType=DATE},
+		#{contractFactDay,jdbcType=DATE}, #{contractReplayDay,jdbcType=DATE},
+		#{contractEndDay,jdbcType=DATE}, #{productType,jdbcType=VARCHAR},
+		#{auditAmount,jdbcType=NUMERIC},
+		#{contractMonths,jdbcType=INTEGER},
+		#{midId,jdbcType=VARCHAR}, #{dictRepayMethod,jdbcType=VARCHAR},
+		#{dictFeeMethod,jdbcType=VARCHAR},
+		#{contractAmount,jdbcType=NUMERIC},
+		#{contractExpectAmount,jdbcType=NUMERIC},
+		#{contractMonthRepayAmount,jdbcType=NUMERIC},
+		#{dictCheckStatus,jdbcType=VARCHAR},
+		#{contractBackResult,jdbcType=VARCHAR},
+		#{contractVersion,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=TIMESTAMP}, #{grossRate,jdbcType=NUMERIC},
+		#{extensionFee,jdbcType=NUMERIC}, #{derate,jdbcType=NUMERIC})
+	</insert>
+
+	<update id="update" parameterType="com.creditharmony.approve.carloan.entity.CarContract">
+		update t_cj_contract
+		<set>
+			<if test="id != null">
+				id = #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractCode != null">
+				contract_code = #{contractCode,jdbcType=VARCHAR},
+			</if>
+			<if test="contractDueDay != null">
+				contract_due_day = #{contractDueDay,jdbcType=DATE},
+			</if>
+			<if test="contractFactDay != null">
+				contract_fact_day = #{contractFactDay,jdbcType=DATE},
+			</if>
+			<if test="contractReplayDay != null">
+				contract_replay_day = #{contractReplayDay,jdbcType=DATE},
+			</if>
+			<if test="contractEndDay != null">
+				contract_end_day = #{contractEndDay,jdbcType=DATE},
+			</if>
+			<if test="productType != null">
+				product_type = #{productType,jdbcType=VARCHAR},
+			</if>
+			<if test="auditAmount != null">
+				audit_amount = #{auditAmount,jdbcType=NUMERIC},
+			</if>
+			<if test="contractMonths != null">
+				contract_months = #{contractMonths,jdbcType=INTEGER},
+			</if>
+			<if test="midId != null">
+				mid_id = #{midId,jdbcType=VARCHAR},
+			</if>
+			<if test="dictRepayMethod != null">
+				dict_repay_method = #{dictRepayMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="dictFeeMethod != null">
+				dict_fee_method = #{dictFeeMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="contractAmount != null">
+				contract_amount = #{contractAmount,jdbcType=NUMERIC},
+			</if>
+			<if test="contractExpectAmount != null">
+				contract_expect_amount =
+				#{contractExpectAmount,jdbcType=NUMERIC},
+			</if>
+			<if test="contractMonthRepayAmount != null">
+				contract_month_repay_amount =
+				#{contractMonthRepayAmount,jdbcType=NUMERIC},
+			</if>
+			<if test="dictCheckStatus != null">
+				dict_check_status = #{dictCheckStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="contractBackResult != null">
+				contract_back_result =
+				#{contractBackResult,jdbcType=VARCHAR},
+			</if>
+			<if test="contractVersion != null">
+				contract_version = #{contractVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="grossRate != null">
+				gross_rate = #{grossRate,jdbcType=NUMERIC},
+			</if>
+			<if test="extensionFee != null">
+				extension_fee = #{extensionFee,jdbcType=NUMERIC},
+			</if>
+			<if test="derate != null">
+				derate = #{derate,jdbcType=NUMERIC},
+			</if>
+		</set>
+		where loan_code = #{loanCode,jdbcType=VARCHAR}
+	</update>
+	<select id="getLastByLoanCodeOfExtend" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select p.product_name product_type_name, c.*
+		from t_cj_contract c
+		left join t_cj_loan_info li1 on li1.loan_code = c.loan_code
+		left join t_cj_loan_info li2 on li2.loan_additional_applyid = li1.id
+		left join t_gl_jk_product p on p.product_type = 'products_type_car_credit' and p.product_code = c.product_type
+		where li2.loan_code = #{loanCode}
+	</select>
+</mapper>

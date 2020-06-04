@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditExternalGuaranteeRecordDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_guarantee_type" property="dictGuaranteeType" jdbcType="VARCHAR" />
+    <result column="warrantee" property="warrantee" jdbcType="VARCHAR" />
+    <result column="dict_cert_type" property="dictCertType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="dict_currency" property="dictCurrency" jdbcType="VARCHAR" />
+    <result column="guarantee_amount" property="guaranteeAmount" jdbcType="NUMERIC" />
+    <result column="dict_guarantee_form" property="dictGuaranteeForm" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, dict_guarantee_type, warrantee, dict_cert_type, customer_cert_num, 
+    dict_currency, guarantee_amount, dict_guarantee_form, operation, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_external_guarantee_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByGuaranteeInfo" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_credit_external_guarantee_record
+    where loan_code = #{loanCode}
+  </select>
+  
+  <delete id="deleteByLoanCode" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_external_guarantee_record
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_external_guarantee_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertExternalGuarantee" parameterType="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    insert into jk.t_jk_credit_external_guarantee_record (id, loan_code, dict_guarantee_type, 
+      warrantee, dict_cert_type, customer_cert_num, 
+      dict_currency, guarantee_amount, dict_guarantee_form, 
+      operation, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{dictGuaranteeType,jdbcType=VARCHAR}, 
+      #{warrantee,jdbcType=VARCHAR}, #{dictCertType,jdbcType=VARCHAR}, #{customerCertNum,jdbcType=VARCHAR}, 
+      #{dictCurrency,jdbcType=VARCHAR}, #{guaranteeAmount,jdbcType=NUMERIC}, #{dictGuaranteeForm,jdbcType=VARCHAR}, 
+      #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    insert into jk.t_jk_credit_external_guarantee_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="dictGuaranteeType != null" >
+        dict_guarantee_type,
+      </if>
+      <if test="warrantee != null" >
+        warrantee,
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type,
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num,
+      </if>
+      <if test="dictCurrency != null" >
+        dict_currency,
+      </if>
+      <if test="guaranteeAmount != null" >
+        guarantee_amount,
+      </if>
+      <if test="dictGuaranteeForm != null" >
+        dict_guarantee_form,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictGuaranteeType != null" >
+        #{dictGuaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="warrantee != null" >
+        #{warrantee,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCurrency != null" >
+        #{dictCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeAmount != null" >
+        #{guaranteeAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictGuaranteeForm != null" >
+        #{dictGuaranteeForm,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    update jk.t_jk_credit_external_guarantee_record
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictGuaranteeType != null" >
+        dict_guarantee_type = #{dictGuaranteeType,jdbcType=VARCHAR},
+      </if>
+      <if test="warrantee != null" >
+        warrantee = #{warrantee,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCertType != null" >
+        dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCertNum != null" >
+        customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCurrency != null" >
+        dict_currency = #{dictCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeAmount != null" >
+        guarantee_amount = #{guaranteeAmount,jdbcType=NUMERIC},
+      </if>
+      <if test="dictGuaranteeForm != null" >
+        dict_guarantee_form = #{dictGuaranteeForm,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.credit.entity.CreditExternalGuaranteeRecord" >
+    update jk.t_jk_credit_external_guarantee_record
+    set loan_code = #{loanCode,jdbcType=VARCHAR},
+      dict_guarantee_type = #{dictGuaranteeType,jdbcType=VARCHAR},
+      warrantee = #{warrantee,jdbcType=VARCHAR},
+      dict_cert_type = #{dictCertType,jdbcType=VARCHAR},
+      customer_cert_num = #{customerCertNum,jdbcType=VARCHAR},
+      dict_currency = #{dictCurrency,jdbcType=VARCHAR},
+      guarantee_amount = #{guaranteeAmount,jdbcType=NUMERIC},
+      dict_guarantee_form = #{dictGuaranteeForm,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.internet.dao.NetWorkConfigDao">
+	<!-- 根据ID获取申请 -->
+	<select id="findOutsideNetInfoEx" resultType="com.creditharmony.approve.internet.entity.NetWorkConfig">
+		SELECT ID
+  		FROM T_JK_PRIVATE_NETWORK_CONFIG
+		WHERE DICT_NETWORK_TYPE = #{type}
+	</select>	
+	<select id="findOutsideNet" resultType="java.util.Map">
+		SELECT A.ID,B.DICT_CUSTOMER_DIFF AS FLAG
+  		FROM T_JK_LOAN_CUSTOMER B
+  		INNER JOIN T_JK_PRIVATE_NETWORK_CONFIG A ON B.DICT_CUSTOMER_DIFF = A.DICT_NETWORK_TYPE
+		WHERE  B.id=#{relId}
+		UNION ALL
+		SELECT A.ID,B.DICT_CUSTOMER_DIFF AS FLAG
+  		FROM T_JK_LOAN_COBORROWER B
+  		INNER JOIN T_JK_PRIVATE_NETWORK_CONFIG A ON B.DICT_CUSTOMER_DIFF = A.DICT_NETWORK_TYPE
+		WHERE  B.id=#{relId}
+	</select>
+	<select id="findOutsideNetTelCom" resultType="java.util.Map">
+		SELECT A.ID
+  		FROM T_JK_PRIVATE_NETWORK_CONFIG A
+		WHERE A.DICT_NETWORK_TYPE = #{id}
+	</select>	
+</mapper>

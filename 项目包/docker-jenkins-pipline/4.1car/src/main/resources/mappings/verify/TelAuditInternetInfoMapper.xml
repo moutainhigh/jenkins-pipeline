@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.TelAuditInternetInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.TelAuditInternetInfo" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="check_type" property="checkType" jdbcType="VARCHAR" />
+    <result column="check_json" property="checkJson" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, dict_check_type, r_id, dict_customer_type, check_type, check_json, create_by, 
+    create_time, modify_by, modify_time
+  </sql>
+  <resultMap type="com.creditharmony.approve.internet.entity.ex.OutsideNetInfoParam" id="myMap">
+      <result column="customer_cert_num" property="certNum" jdbcType="VARCHAR" />
+      <collection property="workName" resultMap="subMap"></collection>
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.internet.entity.ex.WorkNameEx" id="subMap">
+  	<result column="work_unitname" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 刘燕军 获取所有的符合条件的信息 -->
+  <select id="findTelAuditInternetInfos" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+   select 
+	<include refid="Base_Column_List" />
+    from jk.t_jk_tel_audit_internet_info
+    where 1=1
+    <if test="loanCode != null" >
+       and loan_code = #{loanCode} 
+    </if>
+    <if test="checkType != null" >
+       and  dict_check_type=#{checkType}
+    </if>   
+    <if test="type != null" >
+     and dict_customer_type=#{type}
+    </if>
+    <if test="relId != null" >
+     and r_id=#{relId}
+    </if>
+    
+  </select>
+  <!-- 刘燕军  网查信息的插入 -->
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.TelAuditInternetInfo" >
+    insert into jk.t_jk_tel_audit_internet_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type,
+      </if>
+      <if test="checkType != null" >
+        check_type,
+      </if>
+      <if test="checkJson != null" >
+        check_json,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkJson != null" >
+        #{checkJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 通过id更新数据 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.verify.entity.TelAuditInternetInfo" >
+    update jk.t_jk_tel_audit_internet_info
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        r_id = #{rId,jdbcType=NUMERIC},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        check_type = #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkJson != null" >
+        check_json = #{checkJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewCarLoanCoborrowerDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.newCar.entity.NewCarLoanCoborrower" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="cobo_name" property="coboName" jdbcType="VARCHAR" />
+    <result column="dict_sex" property="dictSex" jdbcType="VARCHAR" />
+    <result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+    <result column="dict_household_province" property="dictHouseholdProvince" jdbcType="VARCHAR" />
+    <result column="dict_household_city" property="dictHouseholdCity" jdbcType="VARCHAR" />
+    <result column="dict_household_area" property="dictHouseholdArea" jdbcType="VARCHAR" />
+    <result column="household_address" property="householdAddress" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="family_tel" property="familyTel" jdbcType="VARCHAR" />
+    <result column="dict_marry_status" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="have_child_flag" property="haveChildFlag" jdbcType="VARCHAR" />
+    <result column="dict_live_province" property="dictLiveProvince" jdbcType="VARCHAR" />
+    <result column="dict_live_city" property="dictLiveCity" jdbcType="VARCHAR" />
+    <result column="dict_live_area" property="dictLiveArea" jdbcType="VARCHAR" />
+    <result column="now_address" property="nowAddress" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="contact_is_know" property="contactIsKnow" jdbcType="VARCHAR" />
+    <result column="dict_relation_type" property="dictRelationType" jdbcType="VARCHAR" />
+    <result column="dict_relation_customer" property="dictRelationCustomer" jdbcType="VARCHAR" />
+    <result column="house_other" property="houseOther" jdbcType="VARCHAR" />
+    <result column="dict_social_security" property="dictSocialSecurity" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <collection property="bContactPersons" resultMap="myContacts" ofType="com.creditharmony.approve.carloan.entity.CustomerContactPerson" />
+  </resultMap>
+  <resultMap id="myContacts" type="com.creditharmony.approve.newCar.entity.NewCustomerContactPerson">
+  	<id property="id" column="bCId"/>
+    <result column="bCLoanCode" property="loanCode" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="dict_contact_relation" property="dictContactRelation" jdbcType="VARCHAR" />
+    <result column="contact_uint" property="contactUint" jdbcType="VARCHAR" />
+    <result column="dict_contact_now_address" property="dictContactNowAddress" jdbcType="VARCHAR" />
+    <result column="contact_unit_tel" property="contactUnitTel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    lc.loan_code, lc.id, cobo_name, dict_sex, cert_num, dict_household_province, dict_household_city, 
+    dict_household_area, household_address, mobile, family_tel, dict_marry_status, have_child_flag, 
+    dict_live_province, dict_live_city, dict_live_area, now_address, email, contact_is_know, 
+    dict_relation_type, dict_relation_customer, house_other, dict_social_security, lc.create_by, 
+    lc.create_time, lc.modify_by, lc.modify_time
+  </sql>
+    
+  <select id="selectByLoanCodeAndLoanType" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT d1.label dict_sex, d2.label dict_marry_status, d3.label have_child_flag, d4.label dict_contact_relation,
+    cp.dict_contact_now_address, 
+    concat(p1.area_name, c1.area_name, a1.area_name, lc.household_address) dict_household_province, 
+    concat(p2.area_name, c2.area_name, a2.area_name, lc.now_address) dict_live_province, 
+    <include refid="Base_Column_List" />, 
+    cp.id bCId, cp.loan_code bCLoanCode, cp.contact_name, cp.dict_contact_relation, cp.contact_uint,
+    cp.dict_contact_now_address, cp.contact_unit_tel
+    FROM jk.t_cj_loan_coborrower lc
+    LEFT JOIN t_cj_customer_contact_person cp ON cp.loan_code = lc.loan_code AND cp.r_customer_coborrower_code = lc.id AND cp.loan_customter_type = #{loanType,jdbcType=VARCHAR}
+    LEFT JOIN t_gl_dict d1 ON d1.value = lc.dict_sex AND d1.type = 'jk_sex'
+    LEFT JOIN t_gl_dict d2 ON d2.value = lc.dict_marry_status AND d2.type = 'jk_marriage'
+    LEFT JOIN t_gl_dict d3 ON d3.value = lc.have_child_flag AND d3.type = 'jk_have_or_nohave'
+    LEFT JOIN t_gl_dict d4 ON d4.value = cp.dict_contact_relation AND d4.type = 'jk_relation_type'
+	LEFT JOIN (select * from t_gl_province_city where area_code not in ('310000', '120000', '500000', '110000')) p1 ON p1.area_code = lc.dict_household_province 
+	LEFT JOIN t_gl_province_city c1 ON c1.area_code = lc.dict_household_city
+	LEFT JOIN t_gl_province_city a1 ON a1.area_code = lc.dict_household_area
+	LEFT JOIN (select * from t_gl_province_city where area_code not in ('310000', '120000', '500000', '110000')) p2 ON p2.area_code = lc.dict_live_province 
+	LEFT JOIN t_gl_province_city c2 ON c2.area_code = lc.dict_live_city
+	LEFT JOIN t_gl_province_city a2 ON a2.area_code = lc.dict_live_area
+    WHERE lc.loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

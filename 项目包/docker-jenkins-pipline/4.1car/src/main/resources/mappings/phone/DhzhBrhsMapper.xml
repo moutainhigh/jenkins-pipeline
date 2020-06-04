@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.phone.dao.DhzhBrhsDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckBorrowerInfoEx" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="VARCHAR" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="brhs_unitname" property="brhsUnitname" jdbcType="VARCHAR" />
+    <result column="brhs_unit_tel" property="brhsUnitTel" jdbcType="VARCHAR" />
+    <result column="dict_unit_province" property="dictUnitProvince" jdbcType="VARCHAR" />
+    <result column="dict_unit_city" property="dictUnitCity" jdbcType="VARCHAR" />
+    <result column="dict_unit_arer" property="dictUnitArer" jdbcType="VARCHAR" />
+    <result column="brhs_unit_address" property="brhsUnitAddress" jdbcType="VARCHAR" />
+    <result column="brhs_professional_code" property="brhsProfessionalCode" jdbcType="VARCHAR" />
+    <result column="dict_comp_industry" property="dictCompIndustry" jdbcType="VARCHAR" />
+    <result column="product_months" property="productMonths" jdbcType="VARCHAR" />
+    <result column="apply_product_type" property="applyProductType" jdbcType="VARCHAR" />
+    <result column="brhs_loan_quota" property="brhsLoanQuota" jdbcType="NUMERIC" />
+    <result column="brhs_myself_months" property="brhsMyselfMonths" jdbcType="NUMERIC" />
+    <result column="brhs_month_repay_amount" property="brhsMonthRepayAmount" jdbcType="NUMERIC" />
+    <result column="dict_loan_use" property="dictLoanUse" jdbcType="VARCHAR" />
+    <result column="dict_customer_diff" property="dictCustomerDiff" jdbcType="VARCHAR" />
+    <result column="brhs_unit_scale" property="brhsUnitScale" jdbcType="NUMERIC" />
+    <result column="brhs_main_business" property="brhsMainBusiness" jdbcType="VARCHAR" />
+    <result column="other_loan_mark" property="otherLoanMark" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+    <result column="cert_net_assess_result" property="certNetAssessResult" jdbcType="VARCHAR" />
+    <result column="cert_check_remark" property="certCheckRemark" jdbcType="VARCHAR" />
+    <result column="risk_flag" property="riskFlag" jdbcType="VARCHAR" />  
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="dict_education" property="dictEducation" jdbcType="VARCHAR" />
+    <result column="hire_date" property="hireDate" jdbcType="TIMESTAMP" />     
+    <result column="dict_comp_industry_second" property="dictCompIndustrySecond" jdbcType="VARCHAR" />
+    <result column="dict_comp_industry_third" property="dictCompIndustryThird" jdbcType="VARCHAR" />
+    <result column="dict_unit_properties" property="dictUnitProperties" jdbcType="VARCHAR" />
+    <result column="unit_properties_remark" property="unitPropertiesRemark" jdbcType="VARCHAR" />
+    <result column="profession_remark" property="professionRemark" jdbcType="VARCHAR" />
+    <result column="industry_label" property="industryLabel" jdbcType="VARCHAR" />
+    <result column="industry_remark" property="industryRemark" jdbcType="VARCHAR" />
+    <result column="name_net_result" property="nameNetResult" jdbcType="VARCHAR" />
+   	<result column="name_net_remark" property="nameNetRemark" jdbcType="VARCHAR" />
+    <result column="is_ready" property="isReady" jdbcType="VARCHAR" />    
+    <result column="hire_month" property="hireMonth" jdbcType="INTEGER" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />
+    <result column="other_month_input" property="otherMonthInput" jdbcType="NUMERIC" />
+    <result column="other_month_input_ck" property="otherMonthInputCk" jdbcType="VARCHAR" />
+    <result column="family_month_output" property="familyMonthOutput" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="DICT_MARRY_STATUS" property="dictMarryStatus" jdbcType="VARCHAR" />
+    <result column="CUSTOMER_HOUSE_HOLD_PROPERTY" property="customerHouseHoldProperty" jdbcType="VARCHAR" />
+        
+    <result column="OTHER_INCOME_RESOURCE" property="otherIncomeResource" jdbcType="VARCHAR" />
+    <result column="OTHER_INCOME_RESOURCE_REMARK" property="otherIncomeResourceRemark" jdbcType="VARCHAR" />
+    <result column="average_month_turnover" property="averageMonthTurnover" jdbcType="NUMERIC" />
+    <result column="MONTH_PAYBACK_TOTAL_MONEY" property="monthPaybackTotalMoney" jdbcType="NUMERIC" />
+    <result column="COM_PAYBACK_COUNT" property="comPaybackCount" jdbcType="INTEGER" />
+    <result column="customer_house_hold_property_remark" property="customerHouseHoldPropertyRemark" jdbcType="VARCHAR" />
+    <result column="dict_loan_use_dict" property="dictLoanUseDict" jdbcType="VARCHAR" />
+    <result column="dict_loan_use_remark" property="dictLoanUseRemark" jdbcType="VARCHAR" />
+    <result column="brhs_loan_quota_new" property="brhsLoanQuotaNew" jdbcType="NUMERIC" />
+    <result column="data_sources" property="dataSources" jdbcType="VARCHAR" />
+    	
+    <collection property="otherLoanList" resultMap="otherLoans" javaType="java.util.ArrayList"></collection>  
+  </resultMap>
+    
+  <resultMap id="otherLoans" type="com.creditharmony.approve.phone.entity.DhzhBrhsJkje">
+    <id column="other_id" property="id" jdbcType="VARCHAR" />
+    <result column="r_brhs_id" property="checkId" jdbcType="VARCHAR" />
+    <result column="loan_amount" property="loanAmount" jdbcType="NUMERIC" />
+    <result column="loan_months" property="loanMonths" jdbcType="NUMERIC" />
+  </resultMap>  
+  
+  <sql id="Base_Column_List" >
+    id, loan_code, r_customer_coborrower_id, dict_customer_type,
+    brhs_unitname, brhs_unit_tel, dict_unit_province, dict_unit_city, 
+    dict_unit_arer, brhs_unit_address, brhs_professional_code, dict_comp_industry, apply_product_type,
+    brhs_loan_quota, brhs_myself_months, brhs_month_repay_amount, dict_loan_use, dict_customer_diff, 
+    brhs_unit_scale, brhs_main_business, other_loan_mark, dict_check_type,
+    customer_cert_num,cert_net_assess_result, cert_check_remark,
+    risk_flag,name, dict_education, hire_date, hire_month,create_by, create_time, modify_by, modify_time
+  </sql>
+  <select id="getFlag" resultType="java.lang.String" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  	SELECT risk_flag
+  	FROM jk.t_jk_dhzh_brhs
+  	WHERE 1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+  </select>
+  <!-- 外网  网查信息查询  ↓刘燕军 -->
+  <resultMap id="myMap" type="com.creditharmony.approve.internet.entity.ex.OutsideNetCheckEx">
+	   <id column="id" property="id" jdbcType="VARCHAR" />
+	   <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+	   <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+       <result column="cert_net_assess_result" property="certNetAssessResult" jdbcType="VARCHAR" />
+   	   <result column="cert_check_remark" property="certCheckRemark" jdbcType="VARCHAR" />
+	   <result column="customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />
+        <result column="dict_education" property="dictEducation" jdbcType="VARCHAR" />
+    	<result column="br_name" property="name" jdbcType="VARCHAR" />    	
+    	<result column="name_net_result" property="nameNetResult" jdbcType="VARCHAR" />
+    	<result column="name_net_remark" property="nameNetRemark" jdbcType="VARCHAR" />
+    	<result column="rel_id" property="relId" jdbcType="VARCHAR" />  
+    	<result column="DICT_CERT_TYPE" property="cardType" jdbcType="VARCHAR" />   
+    	<result column="cer_num" property="cerNum" jdbcType="VARCHAR" />   	
+    	<result column="result" property="result" jdbcType="VARCHAR" />
+    	<result column="remark" property="remark" jdbcType="VARCHAR" />
+    	<result column="L_NAME" property="mateName" jdbcType="VARCHAR" />   	
+    	<result column="L_RESULT" property="nameResult" jdbcType="VARCHAR" />
+    	<result column="L_REMARK" property="nameRemark" jdbcType="VARCHAR" />
+    	<result column="queryCity" property="queryCity" jdbcType="VARCHAR" />
+    	<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+    	<result column="mate_unitname_net_result" property="mateUnitnameNetResult" jdbcType="VARCHAR" />
+    	<result column="mate_unitname_net_remark" property="mateUnitnameNetRemark" jdbcType="VARCHAR" />
+    	<result column="COMP_LEGAL_ID" property="compLegalId" jdbcType="VARCHAR" />
+    	<result column="corporate_represent" property="comLegalMan" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_result" property="comLegalManResult" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_remark" property="comLegalManRemark" jdbcType="VARCHAR" />
+    	<result column="cert_num" property="comLegalManNum" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_num_result" property="comLegalManNumResult" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_num_remark" property="comLegalManNumRemark" jdbcType="VARCHAR" />
+    	<result column="corporate_represent_mobile" property="comLegalManMoblie" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_moblie_result" property="comLegalManMoblieResult" jdbcType="VARCHAR" />
+    	<result column="com_legal_man_moblie_remark" property="comLegalManMoblieRemark" jdbcType="VARCHAR" />
+    	<result column="comp_email" property="comEmail" jdbcType="VARCHAR" />
+    	<result column="com_email_net_result" property="comEmailNetResult" jdbcType="VARCHAR" />
+    	<result column="com_email_net_remark" property="comEmailNetRemark" jdbcType="VARCHAR" />
+    	<result column="mate_address_net_result" property="mateAddressNetResult" jdbcType="VARCHAR" />
+    	<result column="mate_address_net_remark" property="mateAddressNetRemark" jdbcType="VARCHAR" />
+    	<result column="province" property="province" jdbcType="VARCHAR" />
+    	<result column="city" property="city" jdbcType="VARCHAR" />
+    	<result column="arer" property="arer" jdbcType="VARCHAR" />
+    	<result column="address" property="address" jdbcType="VARCHAR" />
+    	<collection property="phoneInfo" resultMap="phoneMap"></collection>
+    	<collection property="workInof" resultMap="workMap"></collection>
+    	<collection property="contacts" resultMap="contatMap"></collection>
+    	<collection property="liveAddress" resultMap="liveAddress"></collection>
+    	<collection property="houseAdderss" resultMap="houseAdderss"></collection>
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.phone.entity.DhzhBrhsDhxx" id="phoneMap">
+  	 <result column="bid" property="id" jdbcType="VARCHAR" />
+    <result column="brhs_phone" property="brhsPhone" jdbcType="VARCHAR" />
+    <result column="b_result" property="workNetAssessResult" jdbcType="VARCHAR" />
+    <result column="b_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.phone.entity.ex.TelAuditWorkEx" id="workMap">
+  	 <id column="cid" property="id" jdbcType="VARCHAR" />
+  	 <result column="work_unitname" property="workUnitname" jdbcType="VARCHAR" />
+  	 <result column="c_result" property="workNetAssessResult" jdbcType="VARCHAR"/>  
+  	 <result column="c_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+  	 <result column="work_address" property="workAddress" jdbcType="VARCHAR" />
+  	 <result column="addr_result" property="netCheckResultAddr" jdbcType="VARCHAR"/>  
+  	 <result column="addr_remark" property="netCheckRemarkAddr" jdbcType="VARCHAR" />
+  	<collection property="workTelNums" resultMap="telMap"></collection>
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.phone.entity.DhzhDhgxbrshd" id="liveAddress">
+  	<result column="shd_id" property="id" jdbcType="VARCHAR" />
+   	<result column="brhs_live_address" property="liveAddress" jdbcType="VARCHAR" />
+    <result column="net_check_result" property="netCheckResult" jdbcType="VARCHAR" />
+    <result column="net_check_remark" property="netCheckRemark" jdbcType="VARCHAR" />  
+    <result column="LIVE_PROVINCE" property="liveProvince" jdbcType="VARCHAR" />  
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.phone.entity.DhzhDhgxsh" id="contatMap">
+  	<id column="eid" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="dhgxsh_Tel" property="telNum" jdbcType="VARCHAR" />
+    <result column="clan_customer_cert_num" property="customerCertNum" jdbcType="VARCHAR" />  
+    <result column="dict_relation_type" property="dictRelationType" jdbcType="VARCHAR" />
+    <result column="e_result" property="workNetAssessResult" jdbcType="VARCHAR" />
+    <result column="e_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+    <result column="clan_name_net_result" property="clanNameNetResult" jdbcType="VARCHAR" />  
+    <result column="clan_name_net_remark" property="clanNameNetRemark" jdbcType="VARCHAR" />
+    <result column="clan_certnum_net_result" property="clanCertnumNetResult" jdbcType="VARCHAR" />
+    <result column="clan_certnum_net_remark" property="clanCertnumNeRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap type="com.creditharmony.approve.phone.entity.WorkTelNum" id="telMap">
+  	<id column="did" property="id" jdbcType="VARCHAR" />
+  	<result column="work_unit_tel" property="workUnitTel" jdbcType="NUMERIC" />
+    <result column="d_result" property="workNetAssessResult" jdbcType="VARCHAR" />
+    <result column="d_remark" property="workCheckRemark" jdbcType="VARCHAR" />
+  </resultMap> 
+  <resultMap type="com.creditharmony.approve.document.entity.ZlshZczm" id="houseAdderss">
+  	<id column="house_id" property="id" jdbcType="VARCHAR" />
+  	<result column="house_province" property="dictProvince" jdbcType="VARCHAR" />
+    <result column="house_address" property="zczmHouseAddress" jdbcType="VARCHAR" />
+    <result column="house_result" property="netCheckResult" jdbcType="VARCHAR" />
+    <result column="house_remark" property="netCheckRemark" jdbcType="VARCHAR" />
+  </resultMap> 
+    <select id="checkExceptionOut" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+	SELECT SUM(NUM) FROM(
+	SELECT COUNT(1) AS NUM -- 专网核查判定
+	FROM JK.T_JK_PRIVATE_NETWORK_CHECK 
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND COALESCE(RESULT,'')=''
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 单位信息判定
+	FROM JK.T_JK_TEL_AUDIT_WORK 
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND (
+			(COALESCE(WORK_UNITNAME,'')&lt;&gt;'' AND COALESCE(WORK_NET_ASSESS_RESULT,'') ='') OR
+			(COALESCE(WORK_ADDRESS,'')&lt;&gt;'' AND COALESCE(NET_CHECK_RESULT_ADDR,'')='')
+		)
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 单位电话判定
+	FROM JK.T_JK_TEL_AUDIT_WORK A
+	INNER JOIN JK.T_JK_DHZH_WORK_TELNUM B ON A.ID=B.WORK_ID
+	WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode}  AND A.DICT_CUSTOMER_TYPE='0'
+	AND (COALESCE(B.WORK_UNIT_TEL,'')&lt;&gt;'' AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')='' AND B.WORK_TEL_SOURCE&lt;&gt;'02') 
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 本人核实
+	FROM JK.T_JK_DHZH_BRHS A
+	INNER JOIN JK.T_JK_DHZH_BRHS_DHXX B ON A.ID=B.R_BRHS_ID
+	LEFT JOIN JK.T_JK_DHZH_DHGXBRSHD C ON A.ID=C.R_CUSTOMER_COBORROWER_ID
+	WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode} AND A.DICT_CUSTOMER_TYPE='0'
+	AND (
+			(COALESCE(B.BRHS_PHONE)&lt;&gt;'' AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')='') OR
+			(COALESCE(A.CUSTOMER_CERT_NUM,'')&lt;&gt;'' AND COALESCE(A.CERT_NET_ASSESS_RESULT,'')='') OR
+			(	
+				COALESCE(C.LIVE_PROVINCE,'')&lt;&gt;'' AND COALESCE(C.LIVE_CITY,'')&lt;&gt;'' AND
+				COALESCE(C.LIVE_AREA,'')&lt;&gt;'' AND COALESCE(C.LIVE_ADDRESS,'')&lt;&gt;'' 
+				AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')=''
+			) OR
+			(COALESCE(A.NAME,'')&lt;&gt;'' AND COALESCE(A.NAME_NET_RESULT,'')='' )
+	)
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 联系人信息
+	FROM JK.T_JK_DHZH_DHGXSH 
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND (
+			COALESCE(DHGXSH_TEL,'')&lt;&gt;'' AND COALESCE(WORK_NET_ASSESS_RESULT,'')=''
+		)
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 房产信息
+	FROM JK.T_JK_ZLSH_ZCZM
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND (
+		COALESCE(DICT_PROVINCE,'')&lt;&gt;'' AND COALESCE(NET_CHECK_RESULT,'')=''
+	)
+)
+  </select>
+  <select id="checkExceptionOutNew" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+	SELECT SUM(NUM) FROM(
+	SELECT COUNT(1) AS NUM -- 专网核查判定
+	FROM JK.T_JK_PRIVATE_NETWORK_CHECK 
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND COALESCE(RESULT,'')=''
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 单位信息判定
+	FROM JK.T_JK_TEL_AUDIT_WORK 
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND (
+			(COALESCE(WORK_UNITNAME,'')&lt;&gt;'' AND COALESCE(WORK_NET_ASSESS_RESULT,'') ='') OR
+			(COALESCE(WORK_ADDRESS,'')&lt;&gt;'' AND COALESCE(NET_CHECK_RESULT_ADDR,'')='')
+		)
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 单位电话判定
+	FROM JK.T_JK_TEL_AUDIT_WORK A
+	INNER JOIN JK.T_JK_DHZH_WORK_TELNUM B ON A.ID=B.WORK_ID
+	WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode}  AND A.DICT_CUSTOMER_TYPE='0'
+	AND (COALESCE(B.WORK_UNIT_TEL,'')&lt;&gt;'' AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')='' AND B.WORK_TEL_SOURCE&lt;&gt;'02') 
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 本人核实
+	FROM JK.T_JK_DHZH_BRHS A
+	INNER JOIN JK.T_JK_DHZH_BRHS_DHXX B ON A.ID=B.R_BRHS_ID
+	LEFT JOIN JK.T_JK_DHZH_DHGXBRSHD C ON A.ID=C.R_CUSTOMER_COBORROWER_ID
+	WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode} AND A.DICT_CUSTOMER_TYPE='0'
+	AND (
+			(COALESCE(B.BRHS_PHONE)&lt;&gt;'' AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')='') OR
+			(COALESCE(A.CUSTOMER_CERT_NUM,'')&lt;&gt;'' AND COALESCE(A.CERT_NET_ASSESS_RESULT,'')='') OR
+			(	
+				COALESCE(C.LIVE_PROVINCE,'')&lt;&gt;'' AND COALESCE(C.LIVE_CITY,'')&lt;&gt;'' AND
+				COALESCE(C.LIVE_AREA,'')&lt;&gt;'' AND COALESCE(C.LIVE_ADDRESS,'')&lt;&gt;'' 
+				AND COALESCE(B.WORK_NET_ASSESS_RESULT,'')=''
+			) OR
+			(COALESCE(A.NAME,'')&lt;&gt;'' AND COALESCE(A.NAME_NET_RESULT,'')='' )
+	)
+	union all select count( 1 ) as NUM -- 联系人信息
+		from JK.T_JK_DHZH_DHGXSH x inner join jk.t_jk_dhzh_dhgxsh_dhxx y on x.id = y.r_dhgxsh_id
+		where
+			x.DICT_CHECK_TYPE = #{checkType}
+			and x.LOAN_CODE = #{loanCode}
+			and x.DICT_CUSTOMER_TYPE = '0'
+			and(
+				(coalesce(
+						y.brhs_phone,
+						''
+					)&lt;&gt; ''
+					and coalesce(
+						y.clan_phone_net_result,
+						''
+					)= ''
+				)
+				or(
+					coalesce(
+						x.name,
+						''
+					)&lt;&gt; ''
+					and coalesce(
+						x.net_check_result,
+						''
+					)= ''
+					and x.dict_relation_type = '0'
+				)
+				or(
+					coalesce(
+						x.unit_name,
+						''
+					)&lt;&gt; ''
+					and coalesce(
+						x.mate_unitname_net_result,
+						''
+					)= ''
+					and x.loan_man_relation = '2'
+				)
+				or(
+					coalesce(
+						x.address,
+						''
+					)&lt;&gt; ''
+					and coalesce(
+						x.mate_address_net_result,
+						''
+					)= ''
+					and x.loan_man_relation = '2'
+				)
+			) 
+	UNION ALL
+	SELECT COUNT(1) AS NUM -- 房产信息
+	FROM JK.T_JK_ZLSH_ZCZM
+	WHERE DICT_CHECK_TYPE=#{checkType} AND LOAN_CODE=#{loanCode} AND DICT_CUSTOMER_TYPE='0'
+	AND (
+		COALESCE(DICT_PROVINCE,'')&lt;&gt;'' AND COALESCE(NET_CHECK_RESULT,'')=''
+	)
+)
+  </select>
+  <select id="findOutsideNet" resultMap="myMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+	SELECT A.ID,A.CUSTOMER_CERT_NUM,B.TYPE,C.NET_CHECK_RESULT_ADDR AS ADDR_RESULT,C.NET_CHECK_REMARK_ADDR AS ADDR_REMARK,
+	CONCAT(M1.AREA_NAME,M2.AREA_NAME,M3.AREA_NAME,C.WORK_ADDRESS) AS WORK_ADDRESS,
+	A.DICT_EDUCATION,A.NAME AS BR_NAME,A.NAME_NET_RESULT,A.NAME_NET_REMARK,SHD.ID AS SHD_ID,
+	A.CERT_NET_ASSESS_RESULT,A.CERT_CHECK_REMARK,A.LOAN_CODE,SHD.NET_CHECK_RESULT,SHD.NET_CHECK_REMARK,
+	CONCAT(G.AREA_NAME,H.AREA_NAME,SHD.LIVE_ADDRESS) AS BRHS_LIVE_ADDRESS,
+	F.AREA_NAME AS LIVE_PROVINCE,
+	G.AREA_NAME AS queryCity,L.DICT_CERT_TYPE,
+	B.BRHS_PHONE,B.ID AS BID, B.WORK_NET_ASSESS_RESULT AS B_RESULT,B.WORK_CHECK_REMARK AS B_REMARK,
+	C.WORK_UNITNAME,C.ID AS CID,C.WORK_NET_ASSESS_RESULT AS C_RESULT,C.WORK_CHECK_REMARK AS C_REMARK,
+	D.WORK_UNIT_TEL,D.ID AS DID, D.WORK_NET_ASSESS_RESULT AS D_RESULT,D.WORK_CHECK_REMARK AS D_REMARK,
+	E.ID AS EID,E.NAME,E.DHGXSH_TEL,CONCAT(I.LABEL,'-',J.LABEL) AS DICT_RELATION_TYPE,E.WORK_NET_ASSESS_RESULT AS E_RESULT,
+	E.WORK_CHECK_REMARK AS E_REMARK,L.ID AS REL_ID,L.CUSTOMER_CERT_NUM AS CER_NUM,L.MATE_CERTNUM_NET_RESULT AS RESULT,
+	L.MATE_CERTNUM_NET_REMARK AS REMARK,L.NET_CHECK_RESULT AS L_RESULT,L.NET_CHECK_REMARK AS L_REMARK,L.NAME AS L_NAME,
+	k3.AREA_NAME AS HOUSE_PROVINCE,CONCAT(K2.AREA_NAME,K1.AREA_NAME,HOUSE.ZCZM_HOUSE_ADDRESS) AS HOUSE_ADDRESS,HOUSE.ID AS HOUSE_ID,
+	HOUSE.NET_CHECK_RESULT AS HOUSE_RESULT,HOUSE.NET_CHECK_REMARK AS HOUSE_REMARK
+	FROM (
+			SELECT A.ID,A.CUSTOMER_CERT_NUM,A.DICT_EDUCATION,A.NAME,A.NAME_NET_RESULT,A.NAME_NET_REMARK,
+			A.CERT_NET_ASSESS_RESULT,A.CERT_CHECK_REMARK,A.LOAN_CODE,A.DICT_CUSTOMER_TYPE,A.DICT_CHECK_TYPE,
+			A.R_CUSTOMER_COBORROWER_ID
+			FROM JK.T_JK_DHZH_BRHS A 
+			WHERE 
+			1=1 
+			<if test="loanCode != null and loanCode != ''">
+				AND A.LOAN_CODE = #{loanCode}
+			</if>
+			<if test="type != null and type != ''">
+				AND A.DICT_CUSTOMER_TYPE = #{type} 
+			</if>
+			<if test="checkType != null and checkType != ''">
+				AND A.DICT_CHECK_TYPE = #{checkType} 
+			</if>
+			<if test="relId != null and relId != ''">
+				AND A.R_CUSTOMER_COBORROWER_ID = #{relId} 
+			</if>
+		) A
+	LEFT JOIN JK.T_JK_ZLSH_ZCZM HOUSE ON  A.LOAN_CODE = HOUSE.LOAN_CODE AND HOUSE.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE 
+		AND HOUSE.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND HOUSE.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID 
+	LEFT JOIN JK.T_JK_DHZH_DHGXBRSHD SHD ON A.ID = SHD.R_CUSTOMER_COBORROWER_ID
+	LEFT JOIN JK.T_JK_DHZH_BRHS_DHXX B ON A.ID = B.R_BRHS_ID
+	LEFT JOIN JK.T_JK_TEL_AUDIT_WORK C ON A.LOAN_CODE = C.LOAN_CODE AND C.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE 
+		AND C.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND C.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID 
+	LEFT JOIN JK.T_JK_DHZH_DHGXSH L ON A.LOAN_CODE=L.LOAN_CODE AND L.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE  
+		AND L.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND L.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID
+		AND COALESCE(L.CUSTOMER_CERT_NUM,'')&lt;&gt;'' AND L.DICT_RELATION_TYPE='0' AND L.LOAN_MAN_RELATION='2'
+	LEFT JOIN JK.T_JK_DHZH_DHGXSH E ON A.LOAN_CODE=E.LOAN_CODE AND E.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE  
+		AND E.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND E.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID
+	LEFT JOIN JK.T_JK_DHZH_WORK_TELNUM D ON C.ID=D.WORK_ID AND D.WORK_TEL_SOURCE &lt;&gt; '02'
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K1 ON K1.AREA_CODE = HOUSE.DICT_ARER
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K2 ON K2.AREA_CODE = HOUSE.DICT_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K3 ON K3.AREA_CODE = HOUSE.DICT_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY F ON F.AREA_CODE = SHD.LIVE_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY G ON G.AREA_CODE = SHD.LIVE_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY H ON H.AREA_CODE = SHD.LIVE_AREA
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M1 ON M1.AREA_CODE = C.WORK_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M2 ON M2.AREA_CODE = C.WORK_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M3 ON M3.AREA_CODE = C.WORK_DISTRICT
+	LEFT JOIN JK.T_GL_DICT I ON I.TYPE='jk_relation_type' AND I.VALUE=E.DICT_RELATION_TYPE
+	LEFT JOIN JK.T_GL_DICT J ON J.VALUE=E.LOAN_MAN_RELATION AND J.PARENT_ID = I.ID
+		ORDER BY B.TYPE 
+  </select>
+  <select id="findOutsideNetNew" resultMap="myMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+	SELECT A.ID,A.CUSTOMER_CERT_NUM,B.TYPE,C.NET_CHECK_RESULT_ADDR AS ADDR_RESULT,C.NET_CHECK_REMARK_ADDR AS ADDR_REMARK,
+	CONCAT(M1.AREA_NAME,M2.AREA_NAME,M3.AREA_NAME,C.WORK_ADDRESS) AS WORK_ADDRESS,
+	A.DICT_EDUCATION,A.NAME AS BR_NAME,A.NAME_NET_RESULT,A.NAME_NET_REMARK,SHD.ID AS SHD_ID,
+	A.CERT_NET_ASSESS_RESULT,A.CERT_CHECK_REMARK,A.LOAN_CODE,SHD.NET_CHECK_RESULT,SHD.NET_CHECK_REMARK,
+	CONCAT(G.AREA_NAME,H.AREA_NAME,SHD.LIVE_ADDRESS) AS BRHS_LIVE_ADDRESS,
+	F.AREA_NAME AS LIVE_PROVINCE,
+	G.AREA_NAME AS queryCity,L.DICT_CERT_TYPE,
+	B.BRHS_PHONE,B.ID AS BID, B.WORK_NET_ASSESS_RESULT AS B_RESULT,B.WORK_CHECK_REMARK AS B_REMARK,
+	C.WORK_UNITNAME,C.ID AS CID,C.WORK_NET_ASSESS_RESULT AS C_RESULT,C.WORK_CHECK_REMARK AS C_REMARK,
+	D.WORK_UNIT_TEL,D.ID AS DID, D.WORK_NET_ASSESS_RESULT AS D_RESULT,D.WORK_CHECK_REMARK AS D_REMARK,
+	E.ID AS EID,E.NAME,E.customer_cert_num clan_customer_cert_num,
+	concat( decode( I.value, '0', '亲属', '1', '工作证明人', '2', '其他', '其他' ), '-', J.LABEL ) as DICT_RELATION_TYPE,
+	E.WORK_NET_ASSESS_RESULT AS E_RESULT,
+	E.WORK_CHECK_REMARK AS E_REMARK,L.ID AS REL_ID,L.CUSTOMER_CERT_NUM AS CER_NUM,L.MATE_CERTNUM_NET_RESULT AS RESULT,
+	L.MATE_CERTNUM_NET_REMARK AS REMARK,L.NET_CHECK_RESULT AS L_RESULT,L.NET_CHECK_REMARK AS L_REMARK,L.NAME AS L_NAME,
+	L.unit_name,L.mate_unitname_net_result,L.mate_unitname_net_remark,N1.area_name province,N2.area_name city,
+	N3.area_name arer,L.address,L.mate_address_net_result,L.mate_address_net_remark,
+	E.net_check_result as clan_name_net_result,E.net_check_remark as clan_name_net_remark,
+    E.mate_certnum_net_result as clan_certnum_net_result,E.mate_certnum_net_remark as clan_certnum_net_remark,
+	k3.AREA_NAME AS HOUSE_PROVINCE,CONCAT(K2.AREA_NAME,K1.AREA_NAME,HOUSE.ZCZM_HOUSE_ADDRESS) AS HOUSE_ADDRESS,HOUSE.ID AS HOUSE_ID,
+	HOUSE.NET_CHECK_RESULT AS HOUSE_RESULT,HOUSE.NET_CHECK_REMARK AS HOUSE_REMARK,
+	LC.ID as COMP_LEGAL_ID,
+	LC.corporate_represent,
+	LC.cert_num,
+	LC.corporate_represent_mobile,
+	LC.comp_email,
+	LC.com_legal_man_result,
+	LC.com_legal_man_remark,
+	LC.com_legal_man_num_result,
+	LC.com_legal_man_num_remark,
+	LC.com_legal_man_moblie_result,
+	LC.com_legal_man_moblie_remark,
+	LC.com_email_net_result,
+	LC.com_email_net_remark
+	FROM (
+			SELECT A.ID,A.CUSTOMER_CERT_NUM,A.DICT_EDUCATION,A.NAME,A.NAME_NET_RESULT,A.NAME_NET_REMARK,
+			A.CERT_NET_ASSESS_RESULT,A.CERT_CHECK_REMARK,A.LOAN_CODE,A.DICT_CUSTOMER_TYPE,A.DICT_CHECK_TYPE,
+			A.R_CUSTOMER_COBORROWER_ID
+			FROM JK.T_JK_DHZH_BRHS A 
+			WHERE 
+			1=1 
+			<if test="loanCode != null and loanCode != ''">
+				AND A.LOAN_CODE = #{loanCode}
+			</if>
+			<if test="type != null and type != ''">
+				AND A.DICT_CUSTOMER_TYPE = #{type} 
+			</if>
+			<if test="checkType != null and checkType != ''">
+				AND A.DICT_CHECK_TYPE = #{checkType} 
+			</if>
+			<if test="relId != null and relId != ''">
+				AND A.R_CUSTOMER_COBORROWER_ID = #{relId} 
+			</if>
+		) A
+	LEFT JOIN JK.T_JK_ZLSH_ZCZM HOUSE ON  A.LOAN_CODE = HOUSE.LOAN_CODE AND HOUSE.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE 
+		AND HOUSE.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND HOUSE.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID 
+	LEFT JOIN JK.T_JK_DHZH_DHGXBRSHD SHD ON A.ID = SHD.R_CUSTOMER_COBORROWER_ID
+	LEFT JOIN JK.T_JK_DHZH_BRHS_DHXX B ON A.ID = B.R_BRHS_ID
+	LEFT JOIN JK.T_JK_TEL_AUDIT_WORK C ON A.LOAN_CODE = C.LOAN_CODE AND C.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE 
+		AND C.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND C.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID 
+	LEFT JOIN JK.T_JK_DHZH_DHGXSH L ON A.LOAN_CODE=L.LOAN_CODE AND L.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE  
+		AND L.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND L.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID
+		AND COALESCE(L.CUSTOMER_CERT_NUM,'')&lt;&gt;'' AND L.DICT_RELATION_TYPE='0' AND L.LOAN_MAN_RELATION='2'
+	left join JK.t_gl_province_city N1 on
+	L.province = N1.area_code left join JK.t_gl_province_city N2 on
+	L.city = N2.area_code left join JK.t_gl_province_city N3 on
+	L.arer = N3.area_code LEFT JOIN JK.T_JK_DHZH_DHGXSH E ON A.LOAN_CODE=E.LOAN_CODE AND E.DICT_CUSTOMER_TYPE = A.DICT_CUSTOMER_TYPE  
+		AND E.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE AND E.R_CUSTOMER_COBORROWER_ID = A.R_CUSTOMER_COBORROWER_ID and E.loan_man_relation &lt;&gt; '2'
+	LEFT JOIN JK.T_JK_DHZH_WORK_TELNUM D ON C.ID=D.WORK_ID AND D.WORK_TEL_SOURCE &lt;&gt; '02'
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K1 ON K1.AREA_CODE = HOUSE.DICT_ARER
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K2 ON K2.AREA_CODE = HOUSE.DICT_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY K3 ON K3.AREA_CODE = HOUSE.DICT_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY F ON F.AREA_CODE = SHD.LIVE_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY G ON G.AREA_CODE = SHD.LIVE_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY H ON H.AREA_CODE = SHD.LIVE_AREA
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M1 ON M1.AREA_CODE = C.WORK_PROVINCE
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M2 ON M2.AREA_CODE = C.WORK_CITY
+	LEFT JOIN JK.T_GL_PROVINCE_CITY M3 ON M3.AREA_CODE = C.WORK_DISTRICT
+	LEFT JOIN JK.T_GL_DICT I ON I.TYPE='jk_relation_type' AND I.VALUE=E.DICT_RELATION_TYPE
+	LEFT JOIN JK.T_GL_DICT J ON J.VALUE=E.LOAN_MAN_RELATION AND J.PARENT_ID = I.ID left join JK.t_jk_wwsh_comp_manage LC on
+	A.LOAN_CODE = LC.LOAN_CODE AND A.DICT_CHECK_TYPE = lc.dict_check_type
+		ORDER BY B.TYPE 
+  </select> 
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_dhzh_brhs
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.phone.entity.DhzhBrhs" >
+    insert into jk.t_jk_dhzh_brhs (id, loan_code, r_customer_coborrower_id, 
+      dict_customer_type, brhs_unitname, brhs_unit_tel, dict_unit_province, 
+      dict_unit_city, dict_unit_arer, brhs_unit_address, brhs_professional_code, 
+      dict_comp_industry, apply_product_type, brhs_loan_quota, brhs_myself_months, 
+      brhs_month_repay_amount, dict_loan_use, dict_customer_diff, brhs_unit_scale, 
+      brhs_main_business, other_loan_mark, dict_check_type, customer_cert_num,
+      cert_net_assess_result, cert_check_remark, risk_flag, name, name_net_result, 
+      dict_education, hire_date, create_by, create_time, modify_by, modify_time, is_ready,
+      industry_label, industry_remark, profession_remark, unit_properties_remark, dict_unit_properties,
+      dict_comp_industry_third, dict_comp_industry_second, name_net_remark, dict_source_type, hire_month, 
+      dict_marry_status, customer_house_hold_property, other_month_input, other_month_input_ck, family_month_output
+      
+      ,
+      other_income_resource,
+      other_income_resource_remark,
+      average_month_turnover,
+      month_payback_total_money,
+      com_payback_count,
+      customer_house_hold_property_remark,
+      dict_loan_use_dict,
+      dict_loan_use_remark,
+      data_sources
+      )      
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=VARCHAR}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, 
+      #{brhsUnitname,jdbcType=VARCHAR}, #{brhsUnitTel,jdbcType=VARCHAR}, #{dictUnitProvince,jdbcType=VARCHAR}, 
+      #{dictUnitCity,jdbcType=VARCHAR}, #{dictUnitArer,jdbcType=VARCHAR}, #{brhsUnitAddress,jdbcType=VARCHAR}, 
+      #{brhsProfessionalCode,jdbcType=VARCHAR}, #{dictCompIndustry,jdbcType=VARCHAR}, #{applyProductType,jdbcType=VARCHAR},
+      #{brhsLoanQuota,jdbcType=NUMERIC}, #{brhsMyselfMonths,jdbcType=NUMERIC}, #{brhsMonthRepayAmount,jdbcType=NUMERIC}, 
+      #{dictLoanUse,jdbcType=VARCHAR}, #{dictCustomerDiff,jdbcType=VARCHAR}, #{brhsUnitScale,jdbcType=NUMERIC}, 
+      #{brhsMainBusiness,jdbcType=VARCHAR}, #{otherLoanMark,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR},
+      #{customerCertNum,jdbcType=VARCHAR},#{certNetAssessResult,jdbcType=VARCHAR}, #{certCheckRemark,jdbcType=VARCHAR},
+      #{riskFlag,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{nameNetResult,jdbcType=VARCHAR},#{dictEducation,jdbcType=VARCHAR},
+      #{hireDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{isReady,jdbcType=VARCHAR},
+      #{industryLabel,jdbcType=VARCHAR}, #{industryRemark,jdbcType=VARCHAR}, #{professionRemark,jdbcType=TIMESTAMP}, #{unitPropertiesRemark,jdbcType=VARCHAR},
+      #{dictUnitProperties,jdbcType=VARCHAR}, #{dictCompIndustryThird,jdbcType=TIMESTAMP}, #{dictCompIndustrySecond,jdbcType=VARCHAR},
+      #{nameNetRemark,jdbcType=VARCHAR}, #{dictSourceType,jdbcType=VARCHAR}, #{hireMonth,jdbcType=INTEGER}, #{dictMarryStatus,jdbcType=VARCHAR}, 
+      #{customerHouseHoldProperty,jdbcType=VARCHAR}, #{otherMonthInput,jdbcType=NUMERIC}, #{otherMonthInputCk,jdbcType=VARCHAR}, #{familyMonthOutput,jdbcType=NUMERIC}
+      ,
+      #{otherIncomeResource,jdbcType=VARCHAR},
+      #{otherIncomeResourceRemark,jdbcType=VARCHAR},
+      #{averageMonthTurnover,jdbcType=NUMERIC},
+      #{monthPaybackTotalMoney,jdbcType=NUMERIC},
+      #{comPaybackCount,jdbcType=NUMERIC},
+      #{customerHouseHoldPropertyRemark,jdbcType=NUMERIC},
+      #{dictLoanUseDict,jdbcType=NUMERIC},
+      #{dictLoanUseRemark,jdbcType=NUMERIC},
+      #{dataSources,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+	<select id="getBorrowerInfo" resultMap="BaseResultMap" parameterType="java.util.Map">    
+		select
+			a.id, a.loan_code, a.r_customer_coborrower_id, a.dict_customer_type,
+			a.brhs_unitname, a.brhs_unit_tel, g.area_name as dict_unit_province, 
+			h.area_name as dict_unit_city, i.area_name as dict_unit_arer, a.brhs_unit_address, 
+			a.brhs_professional_code, a.dict_comp_industry, j.product_months, info.loan_apply_amount as brhs_loan_quota,
+			a.brhs_myself_months, a.brhs_month_repay_amount, c.label as dict_loan_use, a.dict_customer_diff, 
+			a.brhs_unit_scale, a.brhs_main_business, a.other_loan_mark, 
+			a.dict_check_type, a.customer_cert_num, 
+			a.cert_net_assess_result, a.cert_check_remark, 
+			a.risk_flag, b.id as other_id, b.r_brhs_id, b.loan_amount, b.loan_months,
+			a.HIRE_DATE, a.dict_education,a.dict_comp_industry_second,a.dict_comp_industry_third,
+			a.dict_unit_properties,a.unit_properties_remark,a.profession_remark,
+			a.industry_label,a.industry_remark, a.hire_month,
+			a.other_month_input,a.other_month_input_ck,a.family_month_output,
+			a.DICT_MARRY_STATUS,a.CUSTOMER_HOUSE_HOLD_PROPERTY,
+			a.OTHER_INCOME_RESOURCE,
+			a.OTHER_INCOME_RESOURCE_REMARK,
+			a.average_month_turnover,
+			a.MONTH_PAYBACK_TOTAL_MONEY,
+			a.COM_PAYBACK_COUNT,
+			a.customer_house_hold_property_remark,
+			a.dict_loan_use_dict,
+			a.dict_loan_use_remark,
+			a.brhs_loan_quota as brhs_loan_quota_new,
+			a.apply_product_type,
+			a.data_sources
+		from jk.t_jk_dhzh_brhs a
+			left join jk.t_jk_dhzh_brhs_jkje b on a.id=b.r_brhs_id	
+			left join jk.t_gl_jk_product j on a.apply_product_type=j.product_code
+			left join jk.t_gl_province_city g on a.dict_unit_province = g.area_code 
+			left join jk.t_gl_province_city h on a.dict_unit_city = h.area_code 
+			left join jk.t_gl_province_city i on a.dict_unit_arer = i.area_code 
+			left join jk.t_jk_loan_info info on a.loan_code = info.loan_code
+			left join jk.t_gl_dict c on c.value=info.dict_loan_use and c.type='jk_loan_use'
+		where 1=1
+			<if test="loanCode != null and loanCode != ''">
+				and a.loan_Code = #{loanCode}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''">
+				and a.dict_customer_type = #{dictCustomerType}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId}
+			</if>
+			<if test="dictCheckType != null and dictCheckType != ''">
+				and a.dict_check_type = #{dictCheckType}
+			</if>
+	</select>
+    
+	<select id="getAllBorrowerInfo" resultMap="BaseResultMap" parameterType="java.util.Map">    
+		select
+			a.id, a.loan_code, a.r_customer_coborrower_id, a.dict_customer_type, a.brhs_unitname, 
+			a.brhs_unit_tel, a.dict_unit_province, a.dict_unit_city, a.dict_unit_arer, a.brhs_unit_address, 
+			a.brhs_professional_code, a.dict_comp_industry, a.apply_product_type, j.product_months, 
+			a.brhs_loan_quota, a.brhs_myself_months, a.brhs_month_repay_amount, a.dict_loan_use, 
+			a.dict_customer_diff, a.brhs_unit_scale, a.brhs_main_business, a.other_loan_mark, 
+			a.dict_check_type, a.customer_cert_num, a.cert_net_assess_result, a.cert_check_remark, 
+			a.risk_flag, a.name, a.name_net_result, a.HIRE_DATE, a.dict_education,a.dict_comp_industry_second, 
+			a.dict_comp_industry_third,	a.dict_unit_properties,a.unit_properties_remark, a.profession_remark, 
+			a.industry_label, a.industry_remark, a.is_ready, a.name_net_remark, a.industry_remark,
+			a.dict_source_type, a.hire_month,a.dict_marry_status,a.customer_house_hold_property,
+			a.other_month_input, a.other_month_input_ck, a.family_month_output,
+			b.id as other_id, 
+			b.r_brhs_id, 
+			b.loan_amount, 
+			b.loan_months,
+			a.OTHER_INCOME_RESOURCE,
+			a.OTHER_INCOME_RESOURCE_REMARK,
+			a.average_month_turnover,
+			a.MONTH_PAYBACK_TOTAL_MONEY,
+			a.COM_PAYBACK_COUNT,
+			a.customer_house_hold_property_remark,
+			a.dict_loan_use_dict,
+			a.dict_loan_use_remark,
+			a.brhs_loan_quota as brhs_loan_quota_new,
+			a.data_sources
+		from jk.t_jk_dhzh_brhs a
+			left join jk.t_jk_dhzh_brhs_jkje b on a.id=b.r_brhs_id	
+			left join jk.t_gl_jk_product j on a.apply_product_type=j.product_code
+		where 1=1
+			<if test="loanCode != null and loanCode != ''">
+				and a.loan_Code = #{loanCode}
+			</if>
+			<if test="dictCheckType != null and dictCheckType != ''">
+				and a.dict_check_type = #{dictCheckType}
+			</if>
+	</select>		
+  <!-- 刘燕军 --> 
+    <update id="updateById" parameterType="com.creditharmony.approve.internet.entity.ex.OutsideNetCheckEx" >
+    update jk.t_jk_dhzh_brhs
+    <set >
+       <if test="nameNetResult != null" >
+        name_net_result = #{nameNetResult,jdbcType=VARCHAR},
+      </if>
+      <if test="nameNetRemark != null" >
+        name_net_remark = #{nameNetRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="certNetAssessResult != null" >
+        cert_net_assess_result = #{certNetAssessResult,jdbcType=VARCHAR},
+      </if>
+      <if test="certCheckRemark != null" >
+        cert_check_remark = #{certCheckRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsUnitname != null" >
+        brhs_unitname = #{brhsUnitname,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsUnitTel != null" >
+        brhs_unit_tel = #{brhsUnitTel,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsUnitAddress != null" >
+        brhs_unit_address = #{brhsUnitAddress,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsProfessionalCode != null" >
+        brhs_professional_code = #{brhsProfessionalCode,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictCompIndustry != null" >
+        dict_comp_industry = #{dictCompIndustry,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsLoanQuota != null" >
+        brhs_loan_quota = #{brhsLoanQuota,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsMyselfMonths != null" >
+        brhs_myself_months = #{brhsMyselfMonths,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsMonthRepayAmount != null" >
+        brhs_month_repay_amount = #{brhsMonthRepayAmount,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictLoanUse != null" >
+        dict_loan_use = #{dictLoanUse,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerDiff != null" >
+        dict_customer_diff = #{dictCustomerDiff,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsUnitScale != null" >
+        brhs_unit_scale = #{brhsUnitScale,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsMainBusiness != null" >
+        brhs_main_business = #{brhsMainBusiness,jdbcType=VARCHAR},
+      </if>
+      <if test="otherLoanMark != null" >
+        other_loan_mark = #{otherLoanMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dictEducation != null" >
+        dict_education = #{dictEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="hireDate != null" >
+        hire_date = #{hireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if> 
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>   
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.phone.entity.DhzhBrhs" >
+    update jk.t_jk_dhzh_brhs
+    <set >
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rCustomerCoborrowerId != null" >
+        r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerType != null" >
+        dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsUnitname != null" >
+        brhs_unitname = #{brhsUnitname,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsUnitTel != null" >
+        brhs_unit_tel = #{brhsUnitTel,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitProvince != null" >
+        dict_unit_province = #{dictUnitProvince,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitCity != null" >
+        dict_unit_city = #{dictUnitCity,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictUnitArer != null" >
+        dict_unit_arer = #{dictUnitArer,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsUnitAddress != null" >
+        brhs_unit_address = #{brhsUnitAddress,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsProfessionalCode != null" >
+        brhs_professional_code = #{brhsProfessionalCode,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictCompIndustry != null" >
+        dict_comp_industry = #{dictCompIndustry,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsLoanQuota != null" >
+        brhs_loan_quota = #{brhsLoanQuota,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsMyselfMonths != null" >
+        brhs_myself_months = #{brhsMyselfMonths,jdbcType=VARCHAR},
+      </if> 
+      <if test="brhsMonthRepayAmount != null" >
+        brhs_month_repay_amount = #{brhsMonthRepayAmount,jdbcType=VARCHAR},
+      </if> 
+      <if test="dictLoanUse != null" >
+        dict_loan_use = #{dictLoanUse,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCustomerDiff != null" >
+        dict_customer_diff = #{dictCustomerDiff,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsUnitScale != null" >
+        brhs_unit_scale = #{brhsUnitScale,jdbcType=VARCHAR},
+      </if>
+      <if test="brhsMainBusiness != null" >
+        brhs_main_business = #{brhsMainBusiness,jdbcType=VARCHAR},
+      </if>
+      <if test="otherLoanMark != null" >
+        other_loan_mark = #{otherLoanMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckType != null" >
+        dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+      </if>
+      <if test="riskFlag != null" >
+        risk_flag = #{riskFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="hireDate != null" >
+        hire_date = #{hireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dictEducation != null" >
+        dict_education = #{dictEducation,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompIndustrySecond != null">
+        dict_comp_industry_second = #{dictCompIndustrySecond,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCompIndustryThird != null">
+        dict_comp_industry_third = #{dictCompIndustryThird,jdbcType=VARCHAR},
+      </if>
+      <if test="industryLabel != null">
+        industry_label = #{industryLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="industryRemark != null">
+        industry_remark = #{industryRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="professionRemark != null">
+        profession_remark = #{professionRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPropertiesRemark != null">
+        unit_properties_remark = #{unitPropertiesRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="dictUnitProperties != null">
+        dict_unit_properties = #{dictUnitProperties,jdbcType=VARCHAR},
+      </if>      
+       <if test="hireMonth != null">
+        hire_month = #{hireMonth,jdbcType=INTEGER},
+      </if>      
+      <if test="otherMonthInput != null ">
+        other_month_input = #{otherMonthInput,jdbcType=NUMERIC},
+      </if>
+      <if test="otherMonthInputCk != null">
+        other_month_input_ck = #{otherMonthInputCk,jdbcType=VARCHAR},
+      </if>
+      <if test="familyMonthOutput != null">
+        family_month_output = #{familyMonthOutput,jdbcType=NUMERIC},
+      </if>
+      <if test="dictMarryStatus != null">
+        DICT_MARRY_STATUS = #{dictMarryStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="customerHouseHoldProperty != null">
+        CUSTOMER_HOUSE_HOLD_PROPERTY = #{customerHouseHoldProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      
+      <if test="otherIncomeResource != null" >
+        OTHER_INCOME_RESOURCE = #{otherIncomeResource,jdbcType=VARCHAR},
+      </if>
+      <if test="otherIncomeResourceRemark != null" >
+        OTHER_INCOME_RESOURCE_REMARK = #{otherIncomeResourceRemark,jdbcType=VARCHAR},
+      </if> 
+      <if test="averageMonthTurnover != null" >
+        average_month_turnover = #{averageMonthTurnover,jdbcType=NUMERIC},
+      </if>
+      <if test="monthPaybackTotalMoney != null" >
+        MONTH_PAYBACK_TOTAL_MONEY = #{monthPaybackTotalMoney,jdbcType=NUMERIC},
+      </if> 
+      <if test="comPaybackCount != null" >
+        COM_PAYBACK_COUNT = #{comPaybackCount,jdbcType=NUMERIC},
+      </if> 
+      <if test="customerHouseHoldPropertyRemark != null" >
+        customer_house_hold_property_remark = #{customerHouseHoldPropertyRemark,jdbcType=NUMERIC},
+      </if> 
+      <if test="dictLoanUseDict != null" >
+        dict_loan_use_dict = #{dictLoanUseDict,jdbcType=NUMERIC},
+      </if> 
+      <if test="dictLoanUseRemark != null" >
+        dict_loan_use_remark = #{dictLoanUseRemark,jdbcType=NUMERIC},
+      </if> 
+      <if test="brhsLoanQuotaNew != null" >
+        brhs_loan_quota = #{brhsLoanQuotaNew,jdbcType=NUMERIC},
+      </if>
+      
+      
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update> 
+  
+  <!-- 获取风险标识 -->
+  <select id="getRiskFlag" resultType="java.lang.String" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  	SELECT 
+  		risk_flag 
+	FROM t_jk_dhzh_brhs
+	WHERE loan_code=#{loanCode} 
+	limit 1
+  </select>  
+  <!-- 获取单位信息 -->
+  <select id="getJzdzByRBorrowerInfoId" resultType="com.creditharmony.approve.phone.entity.DhzhDhgxbrshd" parameterType="java.lang.String">
+  	SELECT *
+  		from jk.t_jk_dhzh_dhgxbrshd where 
+  		r_customer_coborrower_id = #{rBorrowerInfoId} 
+  </select> 
+  <select id="checkMySelf" resultType="java.lang.Integer"  parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+  		SELECT COUNT(1) AS NUM
+		FROM JK.T_JK_DHZH_BRHS A
+		WHERE A.DICT_CHECK_TYPE=#{checkType} AND A.LOAN_CODE=#{loanCode} AND A.DICT_CUSTOMER_TYPE='0'
+		AND COALESCE(A.INDUSTRY_LABEL,'')=''
+  </select>
+  
+	<resultMap type="com.creditharmony.approve.internet.entity.ex.OutSideCheckConEx" id="phoneCheckResult">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="dict_relation_type" property="dictRelationType" jdbcType="VARCHAR" />
+		<result column="brhs_phone" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="clan_phone_net_result" property="clanPhoneNetResult" jdbcType="VARCHAR" />
+		<result column="clan_phone_net_remark" property="clanPhoneNetRemark" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findOutsideNetConNew" resultMap="phoneCheckResult" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+		select
+		a.id,a.brhs_phone,a.type,a.clan_phone_net_result,a.clan_phone_net_remark,b.name,
+		case
+			when c.value = '0' then concat( '亲属-', d.LABEL )
+			when c.value = '1' then concat( '工作证明人-', d.LABEL )
+			when c.value = '2' then concat( '其他-', b.loan_man_relation_remark )
+			else '其他-其他'
+		end as DICT_RELATION_TYPE
+		from
+		jk.t_jk_dhzh_dhgxsh_dhxx a left join jk.t_jk_dhzh_dhgxsh b on
+		a.r_dhgxsh_id = b.id left join jk.t_gl_dict c on
+		b.dict_relation_type = c.value left join jk.t_gl_dict d on
+		c.id = d.parent_id
+		and b.loan_man_relation = d.value
+		WHERE 1 = 1
+		<if test="loanCode != null and loanCode != ''">
+			AND B.LOAN_CODE = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			AND B.DICT_CUSTOMER_TYPE = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			AND B.DICT_CHECK_TYPE = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			AND B.R_CUSTOMER_COBORROWER_ID = #{relId} 
+		</if>
+		AND c.type = 'jk_relation_type'
+	</select>
+	<update id="updatePhoneCheckResult" parameterType="com.creditharmony.approve.internet.entity.ex.OutSideCheckConEx" >
+		update jk.t_jk_dhzh_dhgxsh_dhxx
+		<set >
+	    	<if test="clanPhoneNetResult != null" >
+	        	clan_phone_net_result = #{clanPhoneNetResult,jdbcType=VARCHAR},
+	   		</if>
+	    	<if test="clanPhoneNetRemark != null" >
+	      		clan_phone_net_remark = #{clanPhoneNetRemark,jdbcType=VARCHAR},
+	    	</if>
+	  	</set>
+	  	where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<resultMap id="productLimitResultMap" type="com.creditharmony.approve.phone.entity.ex.TelCheckBorrowerInfoEx" >
+    <result column="limit_upper" property="limitUpper" jdbcType="NUMERIC" />
+    <result column="limit_lower" property="limitLower" jdbcType="NUMERIC" />
+    </resultMap>
+  
+	<!-- 查询大纲上下限 -->
+	<select id="selectProductLimit" resultMap="productLimitResultMap" parameterType="java.util.Map">
+		select p.limit_upper, p.limit_lower
+		from jk.t_jk_loan_info l
+		left join jk.t_gl_jk_product p
+		on l.product_type = p.product_code
+		where 1 = 1
+		and l.loan_code = #{loanCode}
+	</select>
+	
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudRulesDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.antifraud.entity.AntifraudRules" >
+    <id column="rules_code" property="rulesCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="NUMERIC" />
+    <result column="rules_content" property="rulesContent" jdbcType="VARCHAR" />
+    <result column="rules_remark" property="rulesRemark" jdbcType="VARCHAR" />
+    <result column="rules_same_column" property="rulesSameColumn" jdbcType="VARCHAR" />
+    <result column="rules_relation" property="rulesRelation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rules_code, id, rules_content, rules_remark, rules_same_column, rules_relation, create_by, 
+    create_time, modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_antifraud_rules
+    where rules_code = #{rulesCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_antifraud_rules
+    where rules_code = #{rulesCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudRules" >
+    insert into jk.t_jk_antifraud_rules (rules_code, id, rules_content, 
+      rules_remark, rules_same_column, rules_relation, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{rulesCode,jdbcType=VARCHAR}, #{id,jdbcType=NUMERIC}, #{rulesContent,jdbcType=VARCHAR}, 
+      #{rulesRemark,jdbcType=VARCHAR}, #{rulesSameColumn,jdbcType=VARCHAR}, #{rulesRelation,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudRules" >
+    insert into jk.t_jk_antifraud_rules
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rulesCode != null" >
+        rules_code,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rulesContent != null" >
+        rules_content,
+      </if>
+      <if test="rulesRemark != null" >
+        rules_remark,
+      </if>
+      <if test="rulesSameColumn != null" >
+        rules_same_column,
+      </if>
+      <if test="rulesRelation != null" >
+        rules_relation,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rulesCode != null" >
+        #{rulesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rulesContent != null" >
+        #{rulesContent,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesRemark != null" >
+        #{rulesRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesSameColumn != null" >
+        #{rulesSameColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesRelation != null" >
+        #{rulesRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudRules" >
+    update jk.t_jk_antifraud_rules
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="rulesContent != null" >
+        rules_content = #{rulesContent,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesRemark != null" >
+        rules_remark = #{rulesRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesSameColumn != null" >
+        rules_same_column = #{rulesSameColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="rulesRelation != null" >
+        rules_relation = #{rulesRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where rules_code = #{rulesCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.antifraud.entity.AntifraudRules" >
+    update jk.t_jk_antifraud_rules
+    set id = #{id,jdbcType=NUMERIC},
+      rules_content = #{rulesContent,jdbcType=VARCHAR},
+      rules_remark = #{rulesRemark,jdbcType=VARCHAR},
+      rules_same_column = #{rulesSameColumn,jdbcType=VARCHAR},
+      rules_relation = #{rulesRelation,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where rules_code = #{rulesCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

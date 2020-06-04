@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditCycleRecordDao">
+	
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditCycleRecord" >
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+		<result column="relation_type" property="relationType" jdbcType="VARCHAR" />
+		<result column="cycle_no" property="cycleNo" jdbcType="VARCHAR" />
+		<result column="cycle_value" property="cycleValue" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 保存期数 -->
+	<insert id="insertData" parameterType="com.creditharmony.approve.credit.entity.CreditCycleRecord">
+		INSERT INTO jk.t_jk_credit_cycle_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			id,
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			relation_id, 
+			</if> 
+			<if test="relationType != null and relationType != ''" >
+			relation_type,
+			</if> 
+			<if test="cycleNo != null and cycleNo != ''" >
+			cycle_no,
+			</if> 
+			<if test="cycleValue != null and cycleValue != ''" >
+			cycle_value,
+			</if> 
+			<if test="createBy != null and createBy != ''" >
+			create_by,
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			create_time,
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			modify_by,
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			modify_time
+			</if> 
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			#{id},
+			</if>
+			<if test="relationId != null and relationId != ''" >
+			#{relationId}, 
+			</if> 
+			<if test="relationType != null and relationType != ''" >
+			#{relationType},
+			</if> 
+			<if test="cycleNo != null and cycleNo != ''" >
+			#{cycleNo},
+			</if> 
+			<if test="cycleValue != null and cycleValue != ''" >
+			#{cycleValue},
+			</if> 
+			<if test="createBy != null and createBy != ''" >
+			#{createBy},
+			</if> 
+			<if test="createTime != null and createTime != ''" >
+			#{createTime},
+			</if> 
+			<if test="modifyBy != null and modifyBy != ''" >
+			#{modifyBy},
+			</if> 
+			<if test="modifyTime != null and modifyTime != ''" >
+			#{modifyTime}
+			</if> 
+		</trim>
+	</insert>
+	
+	<select id="getAllByParam" parameterType="com.creditharmony.approve.credit.entity.CreditReportDetailed" resultType="com.creditharmony.approve.credit.entity.CreditCycleRecord">
+		SELECT 
+			c.id, 
+			c.relation_id, 
+			c.relation_type, 
+			c.cycle_no, 
+			c.cycle_value 
+		FROM 
+			jk.t_jk_credit_report_detailed a
+		left join 
+			jk.t_jk_credit_cpf_detailed b
+		on a.id = b.relation_id
+		left join 
+			jk.t_jk_credit_cycle_record c
+		on b.id = c.relation_id
+		where 
+			1=1
+			<if test="loanCode != null and loanCode != ''" >
+				and a.loan_Code = #{loanCode,jdbcType=VARCHAR}
+			</if>
+			<if test="dictCustomerType != null and dictCustomerType != ''" >
+				and a.dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR}
+			</if>
+			<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+				and a.r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 删除期数 -->
+	<delete id="deleteData" parameterType="com.creditharmony.approve.credit.entity.CreditCycleRecord">
+		delete 
+		from 
+			jk.t_jk_credit_cycle_record
+		where 
+			relation_id = #{relationId,jdbcType=VARCHAR}
+	</delete>
+	<!-- 贷款期数 -->
+	<select id="getLoanAllByParam" parameterType="map" resultType="com.creditharmony.approve.credit.entity.CreditCycleRecord">
+		SELECT 
+			c.id, 
+			c.relation_id, 
+			c.relation_type, 
+			c.cycle_no, 
+			c.cycle_value 
+		FROM 
+			jk.t_jk_credit_cycle_record c
+		where 
+			1=1
+			<if test="relationId != null and relationId != ''" >
+				and c.relation_Id in(select id from t_jk_credit_loan_detailed_one where relation_id=#{relationId,jdbcType=VARCHAR})
+			</if>
+			<if test="relationType != null and relationType != ''" >
+				and c.relation_Type = #{relationType,jdbcType=VARCHAR}
+			</if>
+		    
+	</select>
+	<!-- 信用卡期数 -->
+	<select id="getCardAllByParam" parameterType="map" resultType="com.creditharmony.approve.credit.entity.CreditCycleRecord">
+		SELECT 
+			c.id, 
+			c.relation_id, 
+			c.relation_type, 
+			c.cycle_no, 
+			c.cycle_value 
+		FROM 
+			jk.t_jk_credit_cycle_record c
+		where 
+			1=1
+			<if test="relationId != null and relationId != ''" >
+				and c.relation_Id in(select id from t_jk_credit_card_detailed_one where relation_id=#{relationId,jdbcType=VARCHAR})
+			</if>
+			<if test="relationType != null and relationType != ''" >
+				and c.relation_Type = #{relationType,jdbcType=VARCHAR}
+			</if>
+		    
+	</select>
+	
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.document.dao.ZlshJyzmDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.document.entity.ZlshJyzm" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="r_customer_coborrower_id" property="rCustomerCoborrowerId" jdbcType="NUMERIC" />
+    <result column="dict_customer_type" property="dictCustomerType" jdbcType="VARCHAR" />
+    <result column="jyzm_registered_capital" property="jyzmRegisteredCapital" jdbcType="NUMERIC" />
+    <result column="jyzm_registered_address" property="jyzmRegisteredAddress" jdbcType="VARCHAR" />
+    <result column="jyzm_registered_province" property="jyzmRegisteredProvince" jdbcType="VARCHAR" />
+    <result column="jyzm_registered_city" property="jyzmRegisteredCity" jdbcType="VARCHAR" />
+    <result column="jyzm_registered_area" property="jyzmRegisteredArea" jdbcType="VARCHAR" />
+    <result column="jyzm_set_up_time" property="jyzmSetUpTime" jdbcType="TIMESTAMP" />
+    <result column="jyzm_legal_man" property="jyzmLegalMan" jdbcType="VARCHAR" />
+    <result column="dict_enterprise_type" property="dictEnterpriseType" jdbcType="VARCHAR" />
+    <result column="jyzm_company_name" property="jyzmCompanyName" jdbcType="VARCHAR" />
+    <result column="change_flag" property="changeFlag" jdbcType="VARCHAR" />
+    <result column="jyzm_change_remark" property="jyzmChangeRemark" jdbcType="VARCHAR" />
+    <result column="dict_check_type" property="dictCheckType" jdbcType="VARCHAR" />
+    <result column="business_scope" property="businessScope" jdbcType="VARCHAR" />
+    <result column="regist_num_type" property="registNumType" jdbcType="VARCHAR" />
+    <result column="regist_num" property="registNum" jdbcType="VARCHAR" />
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+    <result column="dict_source_type" property="dictSourceType" jdbcType="VARCHAR" />    
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+    <result column="manage_province" property="manageProvince" jdbcType="VARCHAR" />
+    <result column="manage_city" property="manageCity" jdbcType="VARCHAR" />
+    <result column="manage_area" property="manageArea" jdbcType="VARCHAR" />
+    <result column="manage_address" property="manageAddress" jdbcType="VARCHAR" />
+    <result column="dict_sys_flag" property="dictSysFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     id, loan_code, r_customer_coborrower_id, 
+      dict_customer_type, jyzm_registered_capital,
+      jyzm_registered_province, jyzm_registered_city,jyzm_registered_area,       
+      jyzm_registered_address, jyzm_set_up_time, 
+      jyzm_legal_man, dict_enterprise_type, jyzm_company_name, 
+      change_flag, jyzm_change_remark, dict_check_type, 
+      BUSINESS_SCOPE,regist_num_type,regist_num, credit_code,dict_source_type,
+      create_by,create_time, modify_by, 
+      modify_time,cert_num,manage_province,manage_city,manage_area,manage_address,dict_sys_flag
+  </sql>
+  <resultMap type="com.creditharmony.approve.document.entity.ex.CompanyInfoEx" id="companyInfo">  
+        <id column="id" property="id"/>         
+        <result column="jyzm_company_name" property="jyzmCompanyName"/>  
+        <result column="jyzm_set_up_time" property="jyzmSetUpTime"/>  
+        <result column="jyzm_registered_address" property="jyzmRegisteredAddress"/>  
+        <result column="jyzm_registered_province" property="jyzmRegisteredProvince"/>  
+        <result column="jyzm_registered_city" property="jyzmRegisteredCity"/>  
+        <result column="jyzm_registered_area" property="jyzmRegisteredArea"/>  
+        <result column="jyzm_registered_capital" property="jyzmRegisteredCapital"/>  
+        <result column="jyzm_legal_man" property="jyzmLegalMan"/>  
+        <result column="change_flag" property="changeFlag"/>  
+        <result column="jyzm_change_remark" property="jyzmChangeRemark"/>  
+        <result column="jydzzm_expire_day" property="jydzzmExpireDay"/>  
+        <result column="brhs_main_business" property="brhsMainBusiness"/>  
+        <result column="brhs_main_business" property="brhsMainBusiness"/>  
+        <collection property="gdxx" resultMap="myResult" javaType="java.util.ArrayList"></collection>      
+        <collection property="jyzmAddress" resultMap="addressMap" javaType="java.util.ArrayList"></collection>     
+   </resultMap> 
+     <resultMap id="addressMap" type="com.creditharmony.approve.outvisit.entity.OutsideCheckInfo">
+        <result column="OPERATION_PROVINCE" property="operationProvince"/>  
+        <result column="OPERATION_CITY" property="operationCity"/>  
+        <result column="OPERATION_AREA" property="operationArea"/>  
+        <result column="OPERATION_ADDRESS" property="operationAddress"/>  
+    </resultMap>
+    <resultMap id="myResult" type="com.creditharmony.approve.document.entity.ZlshJyzmGdxx">
+        <result column="gdxx_gdname" property="gdxxGdname"/>
+        <result column="gdxx_relation" property="gdxxRelation"/>  
+        <result column="gdxx_ratio" property="gdxxRatio"/>  
+    </resultMap>
+    
+  <!-- 保存经营证明 -->
+  <insert id="insertJyzm" parameterType="com.creditharmony.approve.document.entity.ZlshJyzm" >
+    insert into jk.t_jk_zlsh_jyzm (id, loan_code, r_customer_coborrower_id, 
+      dict_customer_type, jyzm_registered_capital, 
+      jyzm_registered_address, jyzm_set_up_time, 
+      jyzm_registered_province, jyzm_registered_city,jyzm_registered_area,       
+      jyzm_legal_man, dict_enterprise_type, jyzm_company_name, 
+      change_flag, jyzm_change_remark, dict_check_type, BUSINESS_SCOPE,regist_num_type,regist_num,
+      credit_code, dict_source_type, create_by, create_time, modify_by, 
+      modify_time,cert_num,manage_province,manage_city,manage_area,manage_address,dict_sys_flag)
+    values (#{id,jdbcType=NUMERIC}, #{loanCode,jdbcType=VARCHAR}, #{rCustomerCoborrowerId,jdbcType=NUMERIC}, 
+      #{dictCustomerType,jdbcType=VARCHAR}, #{jyzmRegisteredCapital,jdbcType=NUMERIC}, 
+      #{jyzmRegisteredAddress,jdbcType=VARCHAR}, #{jyzmSetUpTime,jdbcType=TIMESTAMP},
+      #{jyzmRegisteredProvince,jdbcType=VARCHAR}, #{jyzmRegisteredCity,jdbcType=VARCHAR}, #{jyzmRegisteredArea,jdbcType=VARCHAR},
+      #{jyzmLegalMan,jdbcType=VARCHAR}, #{dictEnterpriseType,jdbcType=VARCHAR}, #{jyzmCompanyName,jdbcType=VARCHAR}, 
+      #{changeFlag,jdbcType=VARCHAR}, #{jyzmChangeRemark,jdbcType=VARCHAR}, #{dictCheckType,jdbcType=VARCHAR},#{businessScope,jdbcType=VARCHAR}, 
+      #{registNumType,jdbcType=VARCHAR},#{registNum,jdbcType=VARCHAR},
+      #{creditCode,jdbcType=VARCHAR}, #{dictSourceType,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP},#{certNum,jdbcType=VARCHAR},#{manageProvince,jdbcType=VARCHAR},
+      #{manageCity,jdbcType=VARCHAR},#{manageArea,jdbcType=VARCHAR},#{manageAddress,jdbcType=VARCHAR},#{dictSysFlag,jdbcType=VARCHAR})
+  </insert>
+  <!-- 修改经营证明 -->
+  <update id="updateJyzm" parameterType="com.creditharmony.approve.document.entity.ZlshJyzm" >
+    update jk.t_jk_zlsh_jyzm
+    <set>
+        <if test="rCustomerCoborrowerId != null" >
+		   r_customer_coborrower_id = #{rCustomerCoborrowerId,jdbcType=NUMERIC},
+		</if>
+          <if test="dictCustomerType != null" >
+			dict_customer_type = #{dictCustomerType,jdbcType=VARCHAR},
+		</if>
+		 <if test="jyzmRegisteredCapital != null" >
+			jyzm_registered_capital = #{jyzmRegisteredCapital,jdbcType=NUMERIC},
+		</if>
+		 <if test="jyzmRegisteredProvince != null" >
+			 jyzm_registered_province = #{jyzmRegisteredProvince,jdbcType=VARCHAR}, 
+		</if>
+		 <if test="jyzmRegisteredCity != null" >
+			jyzm_registered_city = #{jyzmRegisteredCity,jdbcType=VARCHAR},
+		</if>
+		 <if test="jyzmRegisteredArea != null" >
+			 jyzm_registered_area = #{jyzmRegisteredArea,jdbcType=VARCHAR},  
+		</if>
+		<if test="jyzmRegisteredAddress != null" >
+			jyzm_registered_address = #{jyzmRegisteredAddress,jdbcType=VARCHAR},
+		</if>	
+		 <if test="jyzmSetUpTime != null" >
+			 jyzm_set_up_time = #{jyzmSetUpTime,jdbcType=TIMESTAMP}, 
+		</if>
+         <if test="jyzmLegalMan != null" >
+			 jyzm_legal_man = #{jyzmLegalMan,jdbcType=VARCHAR}, 
+		</if>
+        <if test="dictEnterpriseType != null" >
+			 dict_enterprise_type = #{dictEnterpriseType,jdbcType=VARCHAR},
+		</if>
+         <if test="jyzmCompanyName != null" >
+			  jyzm_company_name = #{jyzmCompanyName,jdbcType=VARCHAR},
+		</if>
+		change_flag = #{changeFlag,jdbcType=VARCHAR},	
+		jyzm_change_remark = #{jyzmChangeRemark,jdbcType=VARCHAR},
+        <if test="dictCheckType != null" >
+			  dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+		</if>
+        <if test="businessScope != null" >
+			  business_scope = #{businessScope,jdbcType=VARCHAR},
+		</if>
+		 regist_num_type = #{registNumType,jdbcType=VARCHAR},	 	
+		 regist_num = #{registNum,jdbcType=VARCHAR},	
+		 credit_code = #{creditCode,jdbcType=VARCHAR},
+         <if test="modifyBy != null" >
+			  modify_by = #{modifyBy,jdbcType=VARCHAR},
+		</if>
+         <if test="modifyTime != null" >
+			   modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		</if>
+	     cert_num = #{certNum,jdbcType=VARCHAR},
+        <if test="manageProvince != null" >
+			 manage_province = #{manageProvince,jdbcType=VARCHAR},
+		</if>
+		 <if test="manageCity != null" >
+			 manage_city = #{manageCity,jdbcType=VARCHAR},
+		</if>
+		 <if test="manageArea != null" >
+			 manage_area = #{manageArea,jdbcType=VARCHAR},
+		</if>
+		 <if test="manageAddress != null" >
+			 manage_address = #{manageAddress,jdbcType=VARCHAR}
+		</if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <!-- 下载意见书 企业信息（主/共借人） -->  
+ <select id="findCompanyInfo" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx"  resultMap="companyInfo"> 
+ SELECT A.ID,A.JYZM_COMPANY_NAME,A.JYZM_SET_UP_TIME,A.JYZM_REGISTERED_PROVINCE,
+    A.JYZM_REGISTERED_CITY,A.JYZM_REGISTERED_AREA,
+ 	A.JYZM_REGISTERED_ADDRESS,F.LABEL AS DICT_CUSTOMER_TYPE,
+	A.JYZM_REGISTERED_CAPITAL,A.JYZM_LEGAL_MAN,A.CHANGE_FLAG,A.JYZM_CHANGE_REMARK,
+	B.OPERATION_PROVINCE,B.OPERATION_CITY,B.OPERATION_AREA,B.OPERATION_ADDRESS,
+	C.JYDZZM_EXPIRE_DAY,D.*,E.BRHS_MAIN_BUSINESS
+	FROM JK.T_JK_ZLSH_JYZM A
+	LEFT JOIN JK.T_JK_ZLSH_JYDZZM C
+	ON A.ID=C.R_JYZM_ID
+	LEFT JOIN JK.T_JK_ZLSH_JYZM_GDXX D
+	ON A.ID=D.R_JYZM_ID
+	LEFT JOIN JK.T_JK_DHZH_BRHS E 
+	ON E.R_CUSTOMER_COBORROWER_ID=A.R_CUSTOMER_COBORROWER_ID AND E.DICT_CUSTOMER_TYPE=A.DICT_CUSTOMER_TYPE AND  E.DICT_CHECK_TYPE=A.DICT_CHECK_TYPE AND A.LOAN_CODE=E.LOAN_CODE
+	LEFT JOIN JK.T_GL_DICT F
+	ON TYPE='jk_loan_man_flag' AND VALUE=A.DICT_CUSTOMER_TYPE
+	LEFT JOIN JK.T_JK_OUTSIDE_TASK_LIST G
+	ON G.LOAN_CODE=A.LOAN_CODE AND G.DICT_CHECK_TYPE = A.DICT_CHECK_TYPE
+	LEFT JOIN JK.T_JK_OUTSIDE_TASK_INFO B
+	ON  B.DICT_CUSTOMER_TYPE=A.DICT_CUSTOMER_TYPE AND B.TASK_ID=G.ID
+	WHERE  A.LOAN_CODe=#{loanCode}  AND A.DICT_CHECK_TYPE=#{checkType}
+  </select>
+  <select id="getCautioner" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+	    select
+			zj.ID,
+			zj.JYZM_LEGAL_MAN,
+			zj.JYZM_REGISTERED_ADDRESS,
+			zj.JYZM_COMPANY_NAME
+		from
+			JK.T_JK_ZLSH_JYZM zj
+		where
+			1 = 1
+    	<if test="loanCode != null and loanCode != ''">
+			and zj.loan_Code = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			and zj.dict_customer_type = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and zj.dict_check_type = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			and zj.R_CUSTOMER_COBORROWER_ID = #{relId} 
+		</if>
+	</select>
+	<!-- 获取保证人信息 -->
+  	<select id="getCautionerNew" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+	    select
+			zj.ID,
+			zj.JYZM_LEGAL_MAN,
+			zj.JYZM_REGISTERED_ADDRESS,
+			zj.JYZM_COMPANY_NAME,
+			m.cert_num
+		from
+			JK.T_JK_ZLSH_JYZM zj,
+			jk.t_jk_comp_manage m
+		where
+			1 = 1
+			and zj.loan_code = m.loan_code
+			and zj.JYZM_LEGAL_MAN = m.corporate_represent
+			AND ZJ.DICT_SYS_FLAG = '1'
+    	<if test="loanCode != null and loanCode != ''">
+			and zj.loan_Code = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			and zj.dict_customer_type = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and zj.dict_check_type = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			and zj.R_CUSTOMER_COBORROWER_ID = #{relId} 
+		</if>
+	</select>
+   
+  	<!-- 获取所有经营证明 -->
+	<select id="getListByLoanCode" parameterType="com.creditharmony.approve.document.entity.ZlshJyzm" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		from
+			jk.t_jk_zlsh_jyzm
+		WHERE
+		1=1
+		<if test="loanCode != null and loanCode != ''">
+			and loan_code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and dict_customer_type = #{dictCustomerType} 
+		</if>
+		<if test="rCustomerCoborrowerId != null and rCustomerCoborrowerId != ''">
+			and R_CUSTOMER_COBORROWER_ID = #{rCustomerCoborrowerId}
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and DICT_CHECK_TYPE = #{dictCheckType}
+		</if>
+	</select>
+      <!-- 删除经营证明-->                        
+  <delete id="deleteById" parameterType="java.lang.String" >
+	  DELETE 
+      from jk.t_jk_zlsh_jyzm
+	  WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <!-- 获取营证明 -->
+  <select id="getEntityById" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT 
+     <include refid="Base_Column_List" />
+      from jk.t_jk_zlsh_jyzm
+	  WHERE id = #{id}
+  </select>
+  
+  <!-- 获取营证明 -->
+  <select id="getEntityWithVisit" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT 
+      zm.id, zm.loan_code, zm.r_customer_coborrower_id, 
+      zm.dict_customer_type, zm.jyzm_registered_capital,zm.jyzm_set_up_time, 
+      zm.jyzm_legal_man, zm.dict_enterprise_type, zm.jyzm_company_name, 
+      zm.change_flag, zm.jyzm_change_remark, zm.dict_check_type, 
+      zm.BUSINESS_SCOPE, zm.regist_num_type, zm.regist_num, zm.credit_code, zm.dict_source_type,
+      oi.operation_province as jyzm_registered_province, oi.operation_city as jyzm_registered_city, 
+      oi.operation_area as jyzm_registered_area, oi.operation_address as jyzm_registered_address
+      from jk.t_jk_zlsh_jyzm zm
+      left join jk.t_jk_outside_task_list ol on zm.loan_code=ol.loan_code
+      left join jk.t_jk_outside_task_info oi on oi.task_id=ol.id           
+	  WHERE zm.id = #{id} 
+	  order by oi.modify_time desc 
+	  limit 1
+  </select>  
+  
+</mapper>

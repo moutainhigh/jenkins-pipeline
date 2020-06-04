@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.rule.dao.CrifOnlineDao" >  
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.rule.entity.CrifOnline" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="RET_CODE" property="retCode" jdbcType="VARCHAR" />
+    <result column="RET_MSG" property="retMsg" jdbcType="VARCHAR" />
+    <result column="DECISION" property="decision" jdbcType="VARCHAR" />
+    <result column="RATE" property="rate" jdbcType="VARCHAR" />
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR" />
+    <result column="QUOTA" property="quota" jdbcType="VARCHAR" />
+    <result column="SCORE" property="score" jdbcType="VARCHAR" />
+    <result column="ITEMS" property="items" jdbcType="VARCHAR" />
+    <result column="REASON_CODE" property="reasonCode" jdbcType="VARCHAR" />
+    <result column="REASON_DETAIL" property="reasonDetail" jdbcType="VARCHAR" />
+    <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_BY" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, RET_CODE, RET_MSG, DECISION, RATE, RISK_LEVEL, QUOTA, SCORE, ITEMS, REASON_CODE, 
+    REASON_DETAIL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_JK_CRIF_ONLINE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_JK_CRIF_ONLINE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.rule.entity.CrifOnline" >
+    insert into T_JK_CRIF_ONLINE (ID, RET_CODE, RET_MSG, 
+      DECISION, RATE, RISK_LEVEL, 
+      QUOTA, SCORE, ITEMS, REASON_CODE, REASON_DETAIL,
+      CREATE_BY, CREATE_TIME, MODIFY_BY, MODIFY_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{retCode,jdbcType=VARCHAR}, #{retMsg,jdbcType=VARCHAR}, 
+      #{decision,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, #{riskLevel,jdbcType=VARCHAR}, 
+      #{quota,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, #{items,jdbcType=VARCHAR}, 
+      #{reasonCode,jdbcType=VARCHAR}, #{reasonDetail,jdbcType=VARCHAR},#{createBy,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR},#{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.rule.entity.CrifOnline" >
+    insert into T_JK_CRIF_ONLINE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="retCode != null" >
+        RET_CODE,
+      </if>
+      <if test="retMsg != null" >
+        RET_MSG,
+      </if>
+      <if test="decision != null" >
+        DECISION,
+      </if>
+      <if test="rate != null" >
+        RATE,
+      </if>
+      <if test="riskLevel != null" >
+        RISK_LEVEL,
+      </if>
+      <if test="quota != null" >
+        QUOTA,
+      </if>
+      <if test="score != null" >
+        SCORE,
+      </if>
+      <if test="items != null" >
+        ITEMS,
+      </if>
+      <if test="reasonCode != null" >
+        REASON_CODE,
+      </if>
+      <if test="reasonDetail != null" >
+        REASON_DETAIL,
+      </if>
+      <if test="reasonDetail != null" >
+        CREATE_BY,
+      </if>
+      <if test="reasonDetail != null" >
+        CREATE_TIME,
+      </if>
+      <if test="reasonDetail != null" >
+        MODIFY_BY,
+      </if>
+      <if test="reasonDetail != null" >
+        MODIFY_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="retCode != null" >
+        #{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retMsg != null" >
+        #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="decision != null" >
+        #{decision,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=VARCHAR},
+      </if>
+      <if test="riskLevel != null" >
+        #{riskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="quota != null" >
+        #{quota,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="items != null" >
+        #{items,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonCode != null" >
+        #{reasonCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonDetail != null" >
+        #{reasonDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.rule.entity.CrifOnline" >
+    update T_JK_CRIF_ONLINE
+    <set >
+      <if test="retCode != null" >
+        RET_CODE = #{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retMsg != null" >
+        RET_MSG = #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="decision != null" >
+        DECISION = #{decision,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null" >
+        RATE = #{rate,jdbcType=VARCHAR},
+      </if>
+      <if test="riskLevel != null" >
+        RISK_LEVEL = #{riskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="quota != null" >
+        QUOTA = #{quota,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        SCORE = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="items != null" >
+        ITEMS = #{items,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonCode != null" >
+        REASON_CODE = #{reasonCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonDetail != null" >
+        REASON_DETAIL = #{reasonDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        CREATE_BY = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        MODIFY_BY = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if> 
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.rule.entity.CrifOnline" >
+    update T_JK_CRIF_ONLINE
+    set RET_CODE = #{retCode,jdbcType=VARCHAR},
+      RET_MSG = #{retMsg,jdbcType=VARCHAR},
+      DECISION = #{decision,jdbcType=VARCHAR},
+      RATE = #{rate,jdbcType=VARCHAR},
+      RISK_LEVEL = #{riskLevel,jdbcType=VARCHAR},
+      QUOTA = #{quota,jdbcType=VARCHAR},
+      SCORE = #{score,jdbcType=VARCHAR},
+      ITEMS = #{items,jdbcType=VARCHAR},
+      REASON_CODE = #{reasonCode,jdbcType=VARCHAR},
+      REASON_DETAIL = #{reasonDetail,jdbcType=VARCHAR},
+       CREATE_BY = #{createBy,jdbcType=VARCHAR},
+       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+       MODIFY_BY = #{modifyBy,jdbcType=VARCHAR},
+       MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

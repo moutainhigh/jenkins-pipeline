@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.newCar.dao.NewGrossSpreadDao" >
+  <!-- 复审-终审 总费率 -->
+  <resultMap id="BaseResultMapA" type="com.creditharmony.approve.newCar.entity.NewCarCustomerConsultation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+    <result column="manager_code" property="managerCode" jdbcType="VARCHAR" />
+    <result column="cons_team_manager_code" property="consTeamManagerCode" jdbcType="VARCHAR" />
+    <result column="cons_loan_amount" property="consLoanAmount" jdbcType="NUMERIC" />
+    <result column="dict_loan_use" property="dictLoanUse" jdbcType="VARCHAR" />
+    <result column="dict_loan_type" property="dictLoanType" jdbcType="VARCHAR" />
+    <result column="cons_loan_remarks" property="consLoanRemarks" jdbcType="VARCHAR" />
+    <result column="cons_communicate_date" property="consCommunicateDate" jdbcType="TIMESTAMP" />
+    <result column="plan_arrival_time" property="planArrivalTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_flag" property="consTelesalesFlag" jdbcType="VARCHAR" />
+    <result column="cons_service_user_code" property="consServiceUserCode" jdbcType="VARCHAR" />
+    <result column="cons_telesales_source" property="consTelesalesSource" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="cons_telesales_orgcode" property="consTelesalesOrgcode" jdbcType="VARCHAR" />
+    <result column="dict_oper_status" property="dictOperStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByLoanCode" resultMap="BaseResultMapA" parameterType="java.lang.String" >
+    select 
+    id, customer_code, manager_code, cons_team_manager_code, cons_loan_amount, dict_loan_use, 
+    dict_loan_type, cons_loan_remarks, cons_communicate_date, plan_arrival_time, cons_telesales_flag, 
+    cons_service_user_code, cons_telesales_source, create_by, modify_by, create_time, 
+    modify_time, cons_telesales_orgcode, dict_oper_status
+    from t_cj_customer_consultation
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByLoanCodeList" parameterType="java.lang.String" resultType="java.lang.String">
+  	select loan_code from jk.t_cj_loan_info
+		where loan_additional_applyid  
+			= (select loan_additional_applyid from jk.t_cj_loan_info
+				where loan_code = #{loanCode,jdbcType=VARCHAR})
+		and dict_loan_status = '43'
+		order by create_time asc
+  </select>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.ReconsiderApplyDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.ReconsiderApply" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_reconsider_type" property="dictReconsiderType" jdbcType="VARCHAR" />
+    <result column="second_reconsider_msg" property="secondReconsiderMsg" jdbcType="VARCHAR" />
+    <result column="apply_by" property="applyBy" jdbcType="VARCHAR" />
+    <result column="dict_check_status" property="dictCheckStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 更新复议表 -->
+  <update id="updateReconsiderApply" parameterType="com.creditharmony.approve.verify.entity.ReconsiderApply" >
+    update  jk.t_jk_reconsider_apply
+     <set>
+      <if test="id != null" >
+        id=#{id,jdbcType=NUMERIC},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictReconsiderType != null" >
+       dict_reconsider_type = #{dictReconsiderType,jdbcType=VARCHAR},
+      </if>
+      <if test="secondReconsiderMsg != null" >
+        second_reconsider_msg = #{secondReconsiderMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="applyBy != null" >
+       apply_by =  #{applyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+       org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictCheckStatus != null" >
+       dict_check_status =  #{dictCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+       create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+       modify_by =  #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="applyId != null" >
+       	apply_id =  #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="outsideFlag != null" >
+       	outside_flag =  #{outsideFlag,jdbcType=VARCHAR},
+      </if>
+     </set>
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </update>
+  <select id="getByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  select 
+    DICT_RECONSIDER_TYPE,
+    SECOND_RECONSIDER_MSG
+   from 
+    jk.T_JK_RECONSIDER_APPLY
+   where LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+  </select>
+  <select id="getByApplyId" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  	select 
+     ID,LOAN_CODE
+	from 
+     jk.T_JK_RECONSIDER_APPLY
+	where APPLY_ID = #{applyId,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.common.dao.RoeffRefeDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.RoeffRefe" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="months" property="months" jdbcType="NUMERIC" />
+    <result column="system_flag" property="systemFlag" jdbcType="VARCHAR" />
+    <result column="product_usable_rate" property="productUsableRate" jdbcType="NUMERIC" />
+    <result column="comprehensive_fee_coeff" property="comprehensiveFeeCoeff" jdbcType="NUMERIC" />
+    <result column="month_gather_ration" property="monthGatherRation" jdbcType="NUMERIC" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="risk_level" property="riskLevel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, months, system_flag, product_usable_rate, comprehensive_fee_coeff,month_gather_ration,risk_level
+  </sql>
+  <select id="getAllMonths" resultType="java.lang.Integer" parameterType="com.creditharmony.approve.common.entity.RoeffRefe">
+	SELECT DISTINCT MONTHS FROM JK.T_JK_COEFF_REFER
+	<where>
+		<if test="consultFlag != null and consultFlag == 'true'">
+			AND RISK_DEL_FLAG='0'
+		</if>
+	</where>
+  	ORDER BY MONTHS
+  </select>
+  <select id="getOneTypeRate" resultType="java.lang.Double" parameterType="java.lang.Integer">
+  	SELECT DISTINCT PRODUCT_USABLE_RATE FROM JK.T_JK_COEFF_REFER 
+  	WHERE MONTHS = #{months} AND (RISK_LEVEL IS NULL OR RISK_LEVEL='')
+  	ORDER BY PRODUCT_USABLE_RATE
+  </select>
+  <select id="getRateByRisk" resultType="java.lang.Double" parameterType="com.creditharmony.approve.common.entity.RoeffRefe">
+  	SELECT DISTINCT PRODUCT_USABLE_RATE FROM JK.T_JK_COEFF_REFER 
+  	WHERE MONTHS = #{months,jdbcType=NUMERIC} AND RISK_LEVEL=#{riskLevel,jdbcType=VARCHAR}
+  	ORDER BY PRODUCT_USABLE_RATE
+  </select>  
+  
+</mapper>

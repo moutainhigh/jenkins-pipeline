@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.common.dao.CreditReportDao">
+	
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.common.entity.CreditReportRisk" >
+	 	<result column="credit_json" property="creditJson" typeHandler="JSONTypeHandler" />
+	 </resultMap>
+	<!-- 查询个人征信报告详 -->
+	<select id="getPersonCreditReportDetailedByCode" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk" resultMap="BaseResultMap">
+		SELECT 
+			id, 
+			loan_code, 
+			loan_customer_code, 
+			r_id, dict_customer_type, 
+        	risk_search_time, 
+        	effective_flag, 
+        	risk_effective_remark, 
+        	risk_credit_version, 
+        	credit_json, 
+        	dict_check_type, 
+        	risk_check_opinion 
+        FROM t_jk_credit_risk
+        where
+        	1=1
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and dict_customer_type = #{dictCustomerType} 
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and dict_check_type = #{dictCheckType} 
+		</if>
+		<if test="rId != null and rId != ''">
+			and r_id = #{rId} 
+		</if>
+		<if test="riskCreditVersion != null and riskCreditVersion != ''">
+			and risk_credit_version = #{riskCreditVersion}
+		</if>
+		order by risk_credit_version nulls last
+	</select>
+		<!-- 根据时间修改时间，查询个人征信报告详 -->
+	<select id="getPersonCreditReportDetailedInfo" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk" resultMap="BaseResultMap">
+		SELECT 
+			id, 
+			loan_code, 
+			loan_customer_code, 
+			r_id, dict_customer_type, 
+        	risk_search_time, 
+        	effective_flag, 
+        	risk_effective_remark, 
+        	risk_credit_version, 
+        	credit_json, 
+        	dict_check_type, 
+        	risk_check_opinion 
+        FROM t_jk_credit_risk
+        where
+			(r_id,modify_time) in(
+			select r_id,max(modify_time) 
+			from
+			t_jk_credit_risk where 
+		<if test="loanCode != null and loanCode != ''">
+			loan_Code = #{loanCode}
+		</if>
+		<if test="riskCreditVersion != null and riskCreditVersion != ''">
+			and risk_credit_version = #{riskCreditVersion}
+		</if>
+			group by r_id)
+	</select>
+		<!-- 查询单条个人征信报告详版记录 -->
+	<select id="getSingleCreditDetailedByCustomer" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk" resultMap="BaseResultMap">
+		SELECT 
+			id, 
+			loan_code, 
+			loan_customer_code, 
+			r_id, dict_customer_type, 
+        	risk_search_time, 
+        	effective_flag, 
+        	risk_effective_remark, 
+        	risk_credit_version, 
+        	credit_json, 
+        	dict_check_type, 
+        	risk_check_opinion 
+        FROM t_jk_credit_risk, 
+        	(select max(id) maxId, r_id customerId from t_jk_credit_risk a
+        	where 1=1
+		<if test="loanCode != null and loanCode != ''">
+			and a.loan_Code = #{loanCode}
+		</if>
+		<if test="dictCustomerType != null and dictCustomerType != ''">
+			and a.dict_customer_type = #{dictCustomerType} 
+		</if>
+		<if test="dictCheckType != null and dictCheckType != ''">
+			and a.dict_check_type = #{dictCheckType} 
+		</if>
+		<if test="rId != null and rId != ''">
+			and a.r_id = #{rId} 
+		</if>
+		<if test="riskCreditVersion != null and riskCreditVersion != ''">
+			and a.risk_credit_version = #{riskCreditVersion}
+		</if>
+			group by a.r_id
+		) b
+		where id = b.maxId
+		order by risk_credit_version nulls last
+	</select>
+	
+	<!-- 添加征信报告风险点 -->
+	<insert id="asyncSaveCreditReportRiskInfo" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk">
+	insert into t_jk_credit_risk 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> 
+				id,
+			</if>
+			<if test="loanCode != null" >
+	        	loan_code,
+	     	</if>
+	     	<if test="effectiveFlag != null" >
+	        	effective_flag,
+	     	</if>
+	     	<if test="riskEffectiveRemark != null" >
+	        	risk_effective_remark,
+	     	</if>
+	     	<if test="creditJson != null" >
+	        	credit_json,
+	     	</if>
+	     	<if test="riskCreditVersion != null">
+	     		RISK_CREDIT_VERSION,
+	     	</if>
+	     	<if test="riskCheckOpinion != null" >
+	        	risk_check_opinion,
+	     	</if>
+	     	<if test="dictCustomerType != null">
+	     		dict_customer_type,
+	     	</if>
+	     	<if test="rId != null">
+	     		r_id,
+	     	</if>
+	     	<if test="dictCheckType != null">
+	     		dict_check_type,
+	     	</if>
+	     	<if test="createTime != null" >
+        		create_time,
+      		</if>
+      		<if test="createBy != null" >
+        		create_by,
+      		</if>
+     		<if test="modifyTime != null" >
+        		modify_time,
+      		</if>
+      		<if test="modifyBy != null" >
+        		modify_by
+      		</if>
+		</trim>
+	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> 
+			 	#{id},
+			</if>
+			<if test="loanCode != null"> 
+			 	#{loanCode},
+			</if>
+			<if test="effectiveFlag != null"> 
+			 	#{effectiveFlag},
+			</if>
+			<if test="riskEffectiveRemark != null"> 
+			 	#{riskEffectiveRemark},
+			</if>
+			<if test="creditJson != null" >
+	        	#{creditJson,typeHandler=JSONTypeHandler},
+	     	</if>
+			<if test="riskCreditVersion != null">
+	     		#{riskCreditVersion},
+	     	</if>
+			<if test="riskCheckOpinion != null"> 
+			 	#{riskCheckOpinion},
+			</if>
+			<if test="dictCustomerType != null">
+				#{dictCustomerType},
+			</if>
+			<if test="rId != null">
+	     		#{rId},
+	     	</if>
+			<if test="dictCheckType != null">
+	     		#{dictCheckType},
+	     	</if>
+			<if test="createTime != null" >
+        		#{createTime,jdbcType=TIMESTAMP},
+      		</if>
+      		<if test="createBy != null" >
+        		#{createBy,jdbcType=VARCHAR},
+      		</if>
+     		<if test="modifyTime != null" >
+        		#{modifyTime,jdbcType=TIMESTAMP},
+      		</if>
+      		<if test="modifyBy != null" >
+        		#{modifyBy,jdbcType=VARCHAR}
+      		</if>
+	</trim>
+	</insert>
+	
+	<!-- 根据ID更新数据 -->
+	<update id="updataById" parameterType="com.creditharmony.approve.common.entity.CreditReportRisk" >
+		update t_jk_credit_risk 
+		<set >
+	     	<if test="effectiveFlag != null" >
+	        	effective_flag = #{effectiveFlag,jdbcType=VARCHAR},
+	     	</if>
+	     	<if test="riskEffectiveRemark != null" >
+	        	risk_effective_remark = #{riskEffectiveRemark,jdbcType=VARCHAR},
+	     	</if>
+	     	<if test="creditJson != null" >
+	        	credit_json = #{creditJson,typeHandler=JSONTypeHandler},
+	     	</if>
+	     	<if test="riskCreditVersion != null">
+	     		RISK_CREDIT_VERSION = #{riskCreditVersion,jdbcType=VARCHAR},
+	     	</if>
+	     	<if test="riskCheckOpinion != null" >
+	        	risk_check_opinion = #{riskCheckOpinion,jdbcType=VARCHAR},
+	     	</if>
+	     	<if test="dictCheckType != null">
+	     		dict_check_type = #{dictCheckType,jdbcType=VARCHAR},
+	     	</if>
+	     	<if test="createTime != null" >
+        		create_time = #{createTime,jdbcType=TIMESTAMP},
+      		</if>
+      		<if test="createBy != null" >
+        		create_by = #{createBy,jdbcType=VARCHAR},
+      		</if>
+      		<if test="modifyTime != null" >
+        		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      		</if>
+      		<if test="modifyBy != null" >
+        		modify_by = #{modifyBy,jdbcType=VARCHAR}
+      		</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+  <!-- 刘燕军 -->
+   <select id="findCreditRisk" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx" >
+    select 
+    		id,dict_customer_type,
+	       loan_code,
+	       credit_json,
+	       risk_credit_version,
+	       risk_check_opinion,dict_check_type
+    FROM JK.T_JK_CREDIT_RISK
+    	where 1=1 
+		<if test="loanCode != null and loanCode != ''">
+			and loan_Code = #{loanCode}
+		</if>
+		<if test="type != null and type != ''">
+			and dict_customer_type = #{type} 
+		</if>
+		<if test="checkType != null and checkType != ''">
+			and dict_check_type = #{checkType} 
+		</if>
+		<if test="relId != null and relId != ''">
+			and r_id = #{relId} 
+		</if>
+  </select>
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_risk
+		where
+			id = #{id}
+	</delete>
+	<select id="getCreditList" parameterType="java.lang.String" resultType="com.creditharmony.approve.common.entity.CreditReportRisk" >
+		WITH PARAM AS
+		(
+			SELECT LOAN_CODE,'0' AS CHECK_TYPE
+			FROM JK.T_JK_LOAN_INFO WHERE APPLY_ID=#{0}
+			UNION 
+			SELECT LOAN_CODE,'1' AS CHECK_TYPE
+			FROM JK.T_JK_RECONSIDER_APPLY WHERE APPLY_ID=#{0}
+		)
+		SELECT A.LOAN_CODE loanCode,A.R_ID loanCustomerCode,A.DICT_CUSTOMER_TYPE dictCustomerType,
+			A.RISK_CREDIT_VERSION riskCreditVersion,A.DICT_CHECK_TYPE dictCheckType,
+			CASE WHEN A.DICT_CUSTOMER_TYPE='0' THEN B.CUSTOMER_NAME ELSE C.COBO_NAME END AS customerName
+		FROM
+		(
+			SELECT A.LOAN_CODE,A.R_ID,A.DICT_CUSTOMER_TYPE,A.RISK_CREDIT_VERSION,A.DICT_CHECK_TYPE,
+				   RANK() OVER(PARTITION BY A.LOAN_CODE,A.R_ID,A.DICT_CUSTOMER_TYPE,A.RISK_CREDIT_VERSION,A.DICT_CHECK_TYPE ORDER BY A.DICT_CHECK_TYPE DESC) CREDIT_NO
+			FROM JK.T_JK_CREDIT_RISK A
+			INNER JOIN PARAM B ON A.LOAN_CODE=B.LOAN_CODE AND A.DICT_CHECK_TYPE=B.CHECK_TYPE
+			WHERE RISK_CREDIT_VERSION IN ('1','2') 
+		) A LEFT JOIN JK.T_JK_LOAN_CUSTOMER B ON A.LOAN_CODE=B.LOAN_CODE AND A.DICT_CUSTOMER_TYPE='0'  AND A.R_ID=B.ID
+			LEFT JOIN JK.T_JK_LOAN_COBORROWER C ON A.LOAN_CODE=C.LOAN_CODE AND A.DICT_CUSTOMER_TYPE='1' AND A.R_ID=C.ID
+		WHERE A.CREDIT_NO=1
+		ORDER BY dictCustomerType
+	</select>
+</mapper>

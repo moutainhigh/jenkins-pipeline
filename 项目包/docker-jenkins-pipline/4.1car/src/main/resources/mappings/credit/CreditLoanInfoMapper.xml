@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditLoanInfoDao" >
+	<resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditLoanInfo" >
+	  <id column="id" property="id" jdbcType="VARCHAR" />
+	  <result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+	  <result column="account_status" property="accountStatus" jdbcType="VARCHAR" />
+	  <result column="currency" property="currency" jdbcType="VARCHAR" />
+	  <result column="is_overdue" property="isOverdue" jdbcType="VARCHAR" />
+	  <result column="issue_day" property="issueDay" jdbcType="DATE" />
+	  <result column="abort_day" property="abortDay" jdbcType="DATE" />
+	  <result column="actual_day" property="actualDay" jdbcType="DATE" />
+	  <result column="conteact_amount" property="conteactAmount" jdbcType="NUMERIC" />
+	  <result column="loan_balance" property="loanBalance" jdbcType="NUMERIC" />
+	  <result column="overdue_amount" property="overdueAmount" jdbcType="NUMERIC" />
+	  <result column="overdue_no" property="overdueNo" jdbcType="INTEGER" />
+	  <result column="overdue_for_no" property="overdueForNo" jdbcType="INTEGER" />
+	  <result column="settle_day" property="settleDay" jdbcType="DATE" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+	  id, relation_id, account_status, currency, is_overdue, issue_day, abort_day, actual_day, 
+	  conteact_amount, loan_balance, overdue_amount, overdue_no, overdue_for_no, settle_day
+	</sql>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+	  delete from jk.t_jk_credit_loan_info
+	  where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insertCreditLoanInfo" parameterType="com.creditharmony.approve.credit.entity.CreditLoanInfo" >
+	  insert into jk.t_jk_credit_loan_info (id, relation_id, account_status, 
+	    currency, is_overdue, issue_day, 
+	    abort_day, actual_day, conteact_amount, 
+	    loan_balance, overdue_amount, overdue_no, 
+	    overdue_for_no, settle_day,
+		create_by, 
+	    create_time, 
+	    modify_by,
+	    modify_time
+	    )
+	  values (#{id,jdbcType=VARCHAR}, #{relationId,jdbcType=VARCHAR}, #{accountStatus,jdbcType=VARCHAR}, 
+	    #{currency,jdbcType=VARCHAR}, #{isOverdue,jdbcType=VARCHAR}, #{issueDay,jdbcType=DATE}, 
+	    #{abortDay,jdbcType=DATE}, #{actualDay,jdbcType=DATE}, #{conteactAmount,jdbcType=NUMERIC}, 
+	    #{loanBalance,jdbcType=NUMERIC}, #{overdueAmount,jdbcType=NUMERIC}, #{overdueNo,jdbcType=INTEGER}, 
+	    #{overdueForNo,jdbcType=INTEGER}, #{settleDay,jdbcType=DATE},
+		#{createBy},
+		#{createTime}, 
+		#{modifyBy}, 
+		#{modifyTime}
+		)
+	</insert>
+	
+ 	<!-- 根据简版id查询贷款信息List -->
+	<select id="selectByCreditLoanInfo" resultMap="BaseResultMap"
+		parameterType="com.creditharmony.approve.credit.entity.CreditLoanInfo">
+		select
+		<include refid="Base_Column_List" />
+		from jk.t_jk_credit_loan_info
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据简版id删除贷款信息List -->
+	<delete id="deleteByRelationId" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_loan_info
+		where relation_id = #{relationId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

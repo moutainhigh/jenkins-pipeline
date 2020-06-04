@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flowInfos>
+<flowInfo>
+    <flowName>信借</flowName>
+    <flowConfigName>信借流程</flowConfigName>
+    <flowCode>loanflow</flowCode>
+    <flowType>HJ0001</flowType>
+    <transactionManagerName>loanTransactionManager</transactionManagerName>
+ </flowInfo>
+ <flowInfo>
+    <flowName>复议</flowName>
+    <flowConfigName>复议流程</flowConfigName>
+    <flowCode>reconsiderApply</flowCode>
+    <flowType>HJ0002</flowType>
+    <transactionManagerName>loanTransactionManager</transactionManagerName>
+ </flowInfo>
+ <flowInfo>
+    <flowName>车借流程</flowName>
+    <flowConfigName>车借流程</flowConfigName>
+    <flowCode>carLoanFlow</flowCode>
+    <flowType>HJ0003</flowType>
+    <transactionManagerName>loanTransactionManager</transactionManagerName>
+ </flowInfo>
+ <flowInfo>
+    <flowName>车借展期流程</flowName>
+    <flowConfigName>车借展期流程</flowConfigName>
+    <flowCode>loanExtendFlow</flowCode>
+    <flowType>HJ0004</flowType>
+    <transactionManagerName>loanTransactionManager</transactionManagerName>
+ </flowInfo>
+</flowInfos>

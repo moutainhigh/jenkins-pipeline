@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creditharmony.approve.common.dao.CompletedListDao">
+	<resultMap id="entityMap" type="com.creditharmony.approve.verify.entity.ex.VerifyListEx">
+		<result property="loanCode" column="LOAN_CODE" jdbcType="VARCHAR"/>
+		<result property="applyId" column="APPLY_ID" jdbcType="VARCHAR"/>
+		<result property="loanCustomerName" column="LOAN_CUSTOMER_NAME" jdbcType="VARCHAR"/>
+		<result property="customerCertNum" column="CUSTOMER_CERT_NUM" jdbcType="VARCHAR"/>
+		<result property="province" column="PROVINCE" jdbcType="VARCHAR"/>
+		<result property="provinceName" column="PROVINCENAME" jdbcType="VARCHAR"/>
+		<result property="city" column="CITY" jdbcType="VARCHAR"/>
+		<result property="cityName" column="CITYNAME" jdbcType="VARCHAR"/>
+		<result property="loanTermOrgId" column="LOANTERMORGID" jdbcType="VARCHAR"/>
+		<result property="orgName" column="ORG_NAME" jdbcType="VARCHAR"/>
+		<result property="productType" column="PRODUCT_TYPE" jdbcType="VARCHAR"/>
+		<result property="productTypeName" column="PRODUCTTYPENAME" jdbcType="VARCHAR"/>
+		<result property="loanUrgentFlag" column="LOAN_URGENT_FLAG" jdbcType="VARCHAR"/>
+		<result property="loanApplyAmount" column="LOAN_APPLY_AMOUNT" jdbcType="NUMERIC"/>
+		<result property="auditAmount" column="AUDIT_AMOUNT" jdbcType="NUMERIC"/>
+		<result property="outtoLoanTime" column="OUTTO_LOAN_TIME" jdbcType="TIMESTAMP"/>
+		<result property="transactorTime" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+		<result property="dictLoanStatus" column="DICT_LOAN_STATUS" jdbcType="VARCHAR"/>
+		<result property="transactorCode" column="TRANSACTOR_CODE" jdbcType="VARCHAR"/>
+		<result property="coborroweCount" column="COBORROWE_COUNT" jdbcType="VARCHAR"/>
+		<result property="dealType" column="dealType" jdbcType="VARCHAR"/>
+		<result property="offendSalesName" column="loan_managercode" jdbcType="VARCHAR"/>
+		<result property="loanTeamEmpcode" column="loan_team_managercode" jdbcType="VARCHAR"/>
+		<result property="checkType" column="checkType" jdbcType="VARCHAR"/>
+		<result property="result" column="RESULT" jdbcType="VARCHAR"/>
+		<result property="loanInfoOldOrNewFlag" column="loaninfo_oldornew_flag" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 查询个人已办列表 -->
+	<select id="getCompletedListDoneList" resultMap="entityMap">
+		SELECT AR.ID,USER1.NAME AS LOAN_MANAGERCODE,USER2.NAME AS LOAN_TEAM_MANAGERCODE,
+			   T.CREATE_TIME AS MODIFY_TIME,P.PRODUCT_NAME PRODUCTTYPENAME,D.LABEL LOAN_URGENT_FLAG,
+			   PC1.AREA_NAME PROVINCENAME,PC2.AREA_NAME CITYNAME,LCO.COUNT COBORROWE_COUNT,
+			   D4.LABEL AS DICT_LOAN_STATUS,
+			   CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,T.AUDIT_AMOUNT,
+			   O.NAME ORG_NAME,LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.TRANSACTOR_CODE,
+			   CASE WHEN #{checkType}='0' THEN LI.APPLY_ID ELSE LI2.APPLY_ID END APPLY_ID,
+			   LC.CUSTOMER_CERT_NUM,T.PRODUCT_TYPE,LI.LOAN_APPLY_AMOUNT,LI.OUTTO_LOAN_TIME,LI.loaninfo_oldornew_flag
+		FROM JK.T_JK_AUDIT_RECORD AR
+			LEFT JOIN JK.T_JK_LOAN_INFO LI ON AR.LOAN_CODE = LI.LOAN_CODE
+			LEFT JOIN JK.T_JK_AUDIT_RESULT T ON LI.RESULT_ID = T.ID
+			LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON LI.LOAN_CODE = LC.LOAN_CODE
+			LEFT JOIN JK.T_JK_LOAN_COBORROWER LCO ON LCO.LOAN_CODE = AR.LOAN_CODE
+			LEFT JOIN JK.T_JK_RECONSIDER_APPLY LI2 ON AR.LOAN_CODE = LI2.LOAN_CODE
+			LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID
+			LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+			LEFT JOIN JK.T_GL_DICT D ON D.VALUE = LI.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag'
+			LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = LI.APPROVE_RESULT AND D2.TYPE = 'jk_check_result'
+			LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = LI.APPROVE_STEP AND D3.TYPE = 'jk_check_type'
+			LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+			LEFT JOIN JK.T_GL_USER USER1 ON LI.LOAN_MANAGERCODE = USER1.ID
+			LEFT JOIN JK.T_GL_USER USER2 ON LI.LOAN_TEAM_MANAGERCODE = USER2.ID
+		<where>
+		    AR.TRANSACTOR_CODE = #{transactorCode}
+			<if test="loanCustomerName != null and loanCustomerName != ''">
+				AND LI.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+			</if>
+			<if test="customerCertNum != null and customerCertNum != ''">
+				AND LC.CUSTOMER_CERT_NUM like CONCAT(CONCAT('%',#{customerCertNum}),'%')
+			</if>
+			<if test="productType != null and productType != ''">
+				AND P.PRODUCT_CODE = #{productType}
+			</if>
+			<if test="dictLoanStatus != null and dictLoanStatus != ''">
+				AND  <![CDATA[ LI.APPROVE_RESULT LIKE CONCAT('%',#{dictLoanStatus}) ]]>
+				 <if test="dictLoanStatus == 2">
+				    AND LI.APPROVE_RESULT != '112' AND LI.APPROVE_RESULT != '82'
+				 </if>				 
+				 <if test="dictLoanStatus == 1">
+				     AND (LI.APPROVE_RESULT = '11' OR LI.APPROVE_RESULT = '51' OR LI.APPROVE_RESULT = '91')
+				 </if>
+			</if>
+			<if test="province != null and province != ''">
+				AND PC1.AREA_NAME = #{province}
+				<if test="city != null and city != ''">
+					AND PC2.AREA_NAME = #{city}
+				</if>
+			</if>
+			<if test="orgName != null and orgName != ''">
+					AND O.NAME = #{orgName}
+				</if>
+			<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+				AND <![CDATA[ LI.OUTTO_LOAN_TIME >= #{minCustomerIntoTime} ]]>
+			</if>
+			<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+				AND <![CDATA[ LI.OUTTO_LOAN_TIME  -1 < #{maxCustomerIntoTime} ]]>
+			</if>
+			<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+				AND <![CDATA[ T.CREATE_TIME >= #{minLoanAuditTime} ]]>
+			</if>
+			<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+				AND <![CDATA[ T.CREATE_TIME -1< #{maxLoanAuditTime} ]]>
+			</if>
+			<if test="offendSalesName != null and offendSalesName != ''">
+				AND  USER1.NAME LIKE CONCAT ('%',#{offendSalesName},'%')
+			</if>
+			<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+				AND USER2.NAME LIKE CONCAT ('%',#{loanTeamEmpcode},'%')
+			</if>
+		</where>
+		GROUP BY AR.ID,USER1.NAME,USER2.NAME,T.CREATE_TIME,P.PRODUCT_NAME,D.LABEL,D4.LABEL,
+			     PC1.AREA_NAME,PC2.AREA_NAME,T.AUDIT_AMOUNT,D3.LABEL,D2.LABEL,O.NAME,
+			     LI.LOAN_CUSTOMER_NAME,AR.LOAN_CODE,AR.TRANSACTOR_CODE,LC.CUSTOMER_CERT_NUM,
+			     T.PRODUCT_TYPE,LI.LOAN_APPLY_AMOUNT,LI.OUTTO_LOAN_TIME,LI.APPLY_ID,LI2.APPLY_ID,LI.loaninfo_oldornew_flag
+		ORDER BY 
+		<if test="orderBy != null and orderBy != ''">
+			${orderBy} NULLS LAST,
+		</if>
+		LOAN_CODE DESC	
+	</select>
+	<!-- 查询某部门之下的所有已办列表 -->
+	<select id="getAllCompleted" resultMap="entityMap">
+		SELECT PRODUCTTYPENAME,LOAN_URGENT_FLAG,PROVINCENAME,CITYNAME,ORG_NAME,DICT_LOAN_STATUS,LOAN_MANAGERCODE,
+		       LOAN_TEAM_MANAGERCODE,DEALTYPE,A.MODIFY_TIME,LOAN_CUSTOMER_NAME,A.LOAN_CODE,CUSTOMER_CERT_NUM,
+		       CASE WHEN A.OPERATE_STEP='5' THEN B.APPLY_ID ELSE A.APPLY_ID END APPLY_ID,C.COUNT COBORROWE_COUNT,
+		       TRANSACTOR_NAME,LOAN_APPLY_AMOUNT,A.OUTTO_LOAN_TIME,A.AUDIT_AMOUNT,RESULT,A.loaninfo_oldornew_flag
+		FROM (
+			SELECT P.PRODUCT_NAME PRODUCTTYPENAME,PC1.AREA_NAME PROVINCENAME,PC2.AREA_NAME CITYNAME,O.NAME ORG_NAME,D.LABEL LOAN_URGENT_FLAG,
+			       D4.LABEL AS DICT_LOAN_STATUS,
+			       CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,AR.LOAN_CODE,AR.OPERATE_STEP,AR.TRANSACTOR_CODE,LI.LOAN_CUSTOMER_NAME,
+			       USER1.NAME AS LOAN_MANAGERCODE,USER2.NAME AS LOAN_TEAM_MANAGERCODE,USER3.NAME AS TRANSACTOR_NAME,
+			       CASE WHEN AR.OPERATE_STEP='8' THEN '2' ELSE '1' END AS DEALTYPE,T.CREATE_TIME AS MODIFY_TIME,LI.APPLY_ID,
+			       LC.CUSTOMER_CERT_NUM,LI.LOAN_APPLY_AMOUNT,LI.OUTTO_LOAN_TIME,T.AUDIT_AMOUNT,LI.loaninfo_oldornew_flag
+			FROM JK.T_JK_AUDIT_RECORD AR LEFT JOIN JK.T_JK_LOAN_INFO LI ON AR.LOAN_CODE = LI.LOAN_CODE
+			      LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON AR.LOAN_CODE = LC.LOAN_CODE
+			      LEFT JOIN JK.T_JK_AUDIT_RESULT T ON LI.RESULT_ID = T.ID
+			      LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID
+			      LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE
+			      LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID
+			      LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+			      LEFT JOIN JK.T_GL_DICT D ON D.VALUE = LI.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag'
+			      LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = LI.APPROVE_RESULT AND D2.TYPE = 'jk_check_result'
+			      LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = LI.APPROVE_STEP AND D3.TYPE = 'jk_check_type'
+			      LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+			      LEFT JOIN JK.T_GL_USER USER1 ON LI.LOAN_MANAGERCODE = USER1.ID
+			      LEFT JOIN JK.T_GL_USER USER2 ON LI.LOAN_TEAM_MANAGERCODE = USER2.ID
+			      LEFT JOIN JK.T_GL_USER USER3 ON AR.TRANSACTOR_CODE = USER3.ID
+			<where>
+					AR.ORG_CODE IN
+					<foreach collection="orgIds" item="orgId" index="index" open="(" close=")" separator=",">
+            			#{orgId}
+       				</foreach>
+				<if test="loanCustomerName != null and loanCustomerName != ''">
+					AND LI.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+				</if>
+				<if test="customerCertNum != null and customerCertNum != ''">
+					AND LC.CUSTOMER_CERT_NUM like CONCAT(CONCAT('%',#{customerCertNum}),'%')
+				</if>
+				<if test="productType != null and productType != ''">
+					AND P.PRODUCT_CODE = #{productType}
+				</if>
+				<if test="dictLoanStatus != null and dictLoanStatus != ''">
+					AND  <![CDATA[ LI.APPROVE_RESULT like CONCAT('%',#{dictLoanStatus}) ]]>
+					<if test="dictLoanStatus == 2">
+				        AND LI.APPROVE_RESULT != '112' AND  LI.APPROVE_RESULT != '82'
+				    </if>
+				    <if test="dictLoanStatus == 1">
+				        AND (LI.APPROVE_RESULT = '11' OR LI.APPROVE_RESULT = '51' OR LI.APPROVE_RESULT = '91')
+				    </if>
+				</if>
+				<if test="province != null and province != ''">
+					AND PC1.AREA_NAME = #{province}
+					<if test="city != null and city != ''">
+						AND PC2.AREA_NAME = #{city}
+					</if>
+				</if>
+				<if test="orgName != null and orgName != ''">
+					AND O.NAME = #{orgName}
+				</if>
+				<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+					AND <![CDATA[ LI.OUTTO_LOAN_TIME >= #{minCustomerIntoTime} ]]>
+				</if>
+				<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+					AND <![CDATA[ LI.OUTTO_LOAN_TIME -1 < #{maxCustomerIntoTime} ]]>
+				</if>
+				<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+					AND <![CDATA[ T.CREATE_TIME >= #{minLoanAuditTime} ]]>
+				</if>
+				<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+					AND <![CDATA[ T.CREATE_TIME -1< #{maxLoanAuditTime} ]]>
+				</if>
+				<if test="offendSalesName != null and offendSalesName != ''">
+					AND USER1.NAME LIKE CONCAT ('%',#{offendSalesName},'%')
+				</if>
+				<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+					AND USER2.NAME LIKE CONCAT ('%',#{loanTeamEmpcode},'%')
+				</if>
+				<choose>
+				<when test="transactorCode != null and transactorCode != ''">
+					AND AR.TRANSACTOR_CODE = #{transactorCode,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					AND (AR.OPERATE_STEP = '1' OR AR.OPERATE_STEP='5' OR AR.OPERATE_STEP='8')
+				</otherwise>
+			</choose>
+			</where>
+			ORDER BY 
+				<if test="orderBy != null and orderBy != ''">
+					${orderBy} NULLS LAST,
+				</if>
+			LOAN_CODE DESC
+			<if test="pageSize != null and pageSize != ''">
+				LIMIT #{pageSize}
+			</if>
+			<if test="pageNo != null and pageNo != '' and pageNo != 0">
+				OFFSET #{pageSize}*(#{pageNo}-1)
+			</if>
+		) A LEFT JOIN JK.T_JK_RECONSIDER_APPLY B ON A.LOAN_CODE = B.LOAN_CODE
+		    LEFT JOIN JK.T_JK_LOAN_COBORROWER C ON A.LOAN_CODE = C.LOAN_CODE 
+		GROUP BY PRODUCTTYPENAME,LOAN_URGENT_FLAG,PROVINCENAME,CITYNAME,ORG_NAME,DICT_LOAN_STATUS,LOAN_MANAGERCODE,RESULT,
+			 LOAN_TEAM_MANAGERCODE,DEALTYPE,A.MODIFY_TIME,LOAN_CUSTOMER_NAME,A.LOAN_CODE,CUSTOMER_CERT_NUM,OPERATE_STEP,
+			 B.APPLY_ID,A.APPLY_ID,TRANSACTOR_CODE,TRANSACTOR_NAME,LOAN_APPLY_AMOUNT,A.OUTTO_LOAN_TIME,A.AUDIT_AMOUNT,
+			 A.loaninfo_oldornew_flag 
+		ORDER BY 
+			<if test="orderBy != null and orderBy != ''">
+				${orderBy},
+			</if>
+		LOAN_CODE DESC
+	</select>
+	<!-- 查询某部门之下的所有已办列表的总数 -->
+	<select id="getOrgCount" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM JK.T_JK_AUDIT_RECORD AR LEFT JOIN JK.T_JK_LOAN_INFO LI ON AR.LOAN_CODE = LI.LOAN_CODE
+		      LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON AR.LOAN_CODE = LC.LOAN_CODE
+		      LEFT JOIN JK.T_JK_AUDIT_RESULT T ON LI.RESULT_ID = T.ID
+		      LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID
+		      LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE
+		      LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID
+		      LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+		      LEFT JOIN JK.T_GL_USER USER1 ON LI.LOAN_MANAGERCODE = USER1.ID
+		      LEFT JOIN JK.T_GL_USER USER2 ON LI.LOAN_TEAM_MANAGERCODE = USER2.ID
+		      LEFT JOIN JK.T_GL_USER USER3 ON AR.TRANSACTOR_CODE = USER3.ID
+		      LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+		<where>
+				AR.ORG_CODE IN
+				<foreach collection="orgIds" item="orgId" index="index" open="(" close=")" separator=",">
+           			#{orgId}
+      			</foreach>
+			<if test="loanCustomerName != null and loanCustomerName != ''">
+				AND LI.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+			</if>
+			<if test="customerCertNum != null and customerCertNum != ''">
+				AND LC.CUSTOMER_CERT_NUM like CONCAT(CONCAT('%',#{customerCertNum}),'%')
+			</if>
+			<if test="productType != null and productType != ''">
+				AND P.PRODUCT_CODE = #{productType}
+			</if>
+			<if test="dictLoanStatus != null and dictLoanStatus != ''">
+				AND  <![CDATA[ LI.APPROVE_RESULT like CONCAT('%',#{dictLoanStatus}) ]]>
+				<if test="dictLoanStatus == 2">
+			        AND LI.APPROVE_RESULT != '112' AND LI.APPROVE_RESULT != '82'
+			    </if>
+			     <if test="dictLoanStatus == 1">
+				    AND (LI.APPROVE_RESULT = '11' OR LI.APPROVE_RESULT = '51' OR LI.APPROVE_RESULT = '91')
+				 </if>
+			</if>
+			<if test="province != null and province != ''">
+				AND PC1.AREA_NAME = #{province}
+				<if test="city != null and city != ''">
+					AND PC2.AREA_NAME = #{city}
+				</if>
+			</if>
+			<if test="orgName != null and orgName != ''">
+				AND O.NAME = #{orgName}
+			</if>
+			<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+				AND <![CDATA[ LI.OUTTO_LOAN_TIME >= #{minCustomerIntoTime} ]]>
+			</if>
+			<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+				AND <![CDATA[ LI.OUTTO_LOAN_TIME -1 < #{maxCustomerIntoTime} ]]>
+			</if>
+			<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+				AND <![CDATA[ T.CREATE_TIME >= #{minLoanAuditTime} ]]>
+			</if>
+			<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+				AND <![CDATA[ T.CREATE_TIME -1< #{maxLoanAuditTime} ]]>
+			</if>
+			<if test="offendSalesName != null and offendSalesName != ''">
+				AND USER1.NAME LIKE CONCAT ('%',#{offendSalesName},'%')
+			</if>
+			<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+				AND USER2.NAME LIKE CONCAT ('%',#{loanTeamEmpcode},'%')
+			</if>
+			<choose>
+				<when test="transactorCode != null and transactorCode != ''">
+					AND AR.TRANSACTOR_CODE = #{transactorCode,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					AND (AR.OPERATE_STEP = '1' OR AR.OPERATE_STEP='5' OR AR.OPERATE_STEP='8')
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+	<!-- 查询所有的已办列表 -->
+	<select id="getCompleted" resultMap="entityMap">
+		WITH LOAN_INFO AS (
+			SELECT  
+				A.LOAN_CUSTOMER_NAME,A.OUTTO_LOAN_TIME,A.LOAN_CODE,O.NAME AS ORG_NAME,A.DICT_LOAN_STATUS,
+				A.LOAN_STORE_ORGID,A.LOAN_URGENT_FLAG,A.RESULT_ID,A.APPROVE_RESULT,A.APPROVE_STEP,A.LOAN_APPLY_AMOUNT,A.APPLY_ID,
+				T.AUDIT_AMOUNT,T.CREATE_TIME AS MODIFY_TIME,P.PRODUCT_NAME AS PRODUCTTYPENAME,LC.CUSTOMER_CERT_NUM,
+				PC1.AREA_NAME PROVINCENAME, PC2.AREA_NAME CITYNAME,USER1.NAME AS LOAN_MANAGERCODE,USER2.NAME AS LOAN_TEAM_MANAGERCODE,
+				USER3.NAME AS TRANSACTOR_NAME,A.loaninfo_oldornew_flag
+			FROM JK.T_JK_LOAN_INFO A
+			LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON A.LOAN_CODE = LC.LOAN_CODE
+			LEFT JOIN JK.T_JK_AUDIT_RESULT T ON A.RESULT_ID=T.ID
+			LEFT JOIN JK.T_GL_JK_PRODUCT P ON A.PRODUCT_TYPE = P.PRODUCT_CODE 
+			LEFT JOIN JK.T_GL_ORG O ON A.LOAN_STORE_ORGID = O.ID 
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID 
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+			LEFT JOIN JK.T_GL_USER USER1 ON A.LOAN_MANAGERCODE = USER1.ID
+			LEFT JOIN JK.T_GL_USER USER2 ON A.LOAN_TEAM_MANAGERCODE = USER2.ID	
+			LEFT JOIN JK.T_GL_USER USER3 ON 
+			<choose> 
+				<when test="transactorCode != null and transactorCode != ''"> #{transactorCode} </when> 
+				<otherwise> T.CREATE_BY </otherwise> 
+			</choose> = USER3.ID 
+			<where>
+				A.RECORD_ID IS NOT NULL
+				<if test="loanCustomerName != null and loanCustomerName != ''">
+					AND A.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+				</if>
+				<if test="dictLoanStatus != null and dictLoanStatus != ''">
+					AND  <![CDATA[ A.APPROVE_RESULT like CONCAT('%',#{dictLoanStatus}) ]]>
+					<if test="dictLoanStatus == 2">
+				        AND A.APPROVE_RESULT != '112' AND A.APPROVE_RESULT != '82'
+				    </if>
+				     <if test="dictLoanStatus == 1">
+				        AND (A.APPROVE_RESULT = '11' OR A.APPROVE_RESULT = '51' OR A.APPROVE_RESULT = '91')
+				    </if>
+				</if>
+				<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+					AND <![CDATA[ A.OUTTO_LOAN_TIME >= #{minCustomerIntoTime} ]]>
+				</if>
+				<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+					AND <![CDATA[ A.OUTTO_LOAN_TIME - 1 < #{maxCustomerIntoTime} ]]>
+				</if>
+				<if test="productType != null and productType != ''">
+					AND P.PRODUCT_CODE = #{productType}
+				</if>
+				<if test="transactorCode != null and transactorCode != ''">
+					AND EXISTS(SELECT NULL FROM JK.T_JK_AUDIT_RECORD B WHERE A.LOAN_CODE=B.LOAN_CODE AND B.TRANSACTOR_CODE=#{transactorCode})
+				</if>
+				<if test="customerCertNum != null and customerCertNum != ''">
+					AND LC.CUSTOMER_CERT_NUM LIKE CONCAT(CONCAT('%',#{customerCertNum}),'%')
+				</if>
+				<if test="province != null and province != ''">
+					AND PC1.AREA_NAME = #{province}
+					<if test="city != null and city != ''">
+						AND PC2.AREA_NAME = #{city}
+					</if>
+				</if>
+				<if test="orgName != null and orgName != ''">
+						AND O.NAME = #{orgName}
+					</if>
+				<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+						AND <![CDATA[ T.CREATE_TIME >= #{minLoanAuditTime} ]]>
+				</if>
+				<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+						AND <![CDATA[ T.CREATE_TIME -1< #{maxLoanAuditTime} ]]>
+				</if>
+				<if test="offendSalesName != null and offendSalesName != ''">
+						AND  USER1.NAME LIKE CONCAT ('%',#{offendSalesName},'%')
+				</if>
+				<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+						AND USER2.NAME LIKE CONCAT ('%',#{loanTeamEmpcode},'%')
+				</if>
+			</where>
+			ORDER BY 
+			<if test="orderBy != null and orderBy != ''">
+				${orderBy} NULLS LAST,
+			</if>
+			LOAN_CODE DESC
+			<if test="pageSize != null and pageSize != ''">
+				LIMIT #{pageSize}
+			</if>
+			<if test="pageNo != null and pageNo != '' and pageNo != 0">
+				offset #{pageSize}*(#{pageNo}-1)
+			</if>	
+		)
+		SELECT 
+			A.LOAN_CUSTOMER_NAME,A.OUTTO_LOAN_TIME,A.LOAN_CODE,A.COUNT AS COBORROWE_COUNT,A.CUSTOMER_CERT_NUM,A.PROVINCENAME, A.CITYNAME,A.ORG_NAME,
+			A.LOAN_MANAGERCODE,A.LOAN_TEAM_MANAGERCODE,A.PRODUCTTYPENAME,A.LOAN_APPLY_AMOUNT,A.AUDIT_AMOUNT,A.MODIFY_TIME,D.LABEL LOAN_URGENT_FLAG,
+			D4.LABEL AS DICT_LOAN_STATUS,
+			CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,CASE WHEN LI2.APPLY_ID IS NULL THEN A.APPLY_ID ELSE LI2.APPLY_ID END APPLY_ID,
+			A.TRANSACTOR_NAME,A.loaninfo_oldornew_flag
+		FROM (
+				SELECT 
+					A.LOAN_CUSTOMER_NAME,A.DICT_LOAN_STATUS,A.OUTTO_LOAN_TIME,A.LOAN_CODE,B.COUNT,A.LOAN_MANAGERCODE,A.LOAN_TEAM_MANAGERCODE,
+					A.LOAN_STORE_ORGID,A.LOAN_URGENT_FLAG,A.RESULT_ID,A.APPROVE_RESULT,A.APPROVE_STEP,A.LOAN_APPLY_AMOUNT,A.APPLY_ID,
+					A.AUDIT_AMOUNT,A.MODIFY_TIME,A.CUSTOMER_CERT_NUM,A.PROVINCENAME, A.CITYNAME,A.ORG_NAME,A.PRODUCTTYPENAME,A.TRANSACTOR_NAME,A.loaninfo_oldornew_flag
+				FROM LOAN_INFO A 
+				LEFT JOIN JK.T_JK_LOAN_COBORROWER B ON  A.LOAN_CODE=B.LOAN_CODE 
+				GROUP BY 
+					A.LOAN_CUSTOMER_NAME,A.OUTTO_LOAN_TIME,A.LOAN_CODE,A.LOAN_MANAGERCODE,A.LOAN_TEAM_MANAGERCODE,A.AUDIT_AMOUNT,A.MODIFY_TIME,	    
+					A.LOAN_STORE_ORGID,A.LOAN_URGENT_FLAG,A.RESULT_ID,A.APPROVE_RESULT,A.APPROVE_STEP,A.LOAN_APPLY_AMOUNT,A.APPLY_ID, A.DICT_LOAN_STATUS,       	
+					A.CUSTOMER_CERT_NUM ,A.PROVINCENAME, A.CITYNAME,A.ORG_NAME,A.PRODUCTTYPENAME,A.TRANSACTOR_NAME,A.loaninfo_oldornew_flag
+		     ) A     
+			LEFT JOIN JK.T_GL_DICT D ON D.VALUE = A.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag'
+			LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = A.APPROVE_RESULT AND D2.TYPE = 'jk_check_result' 
+			LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = A.APPROVE_STEP AND D3.TYPE = 'jk_check_type'
+			LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = A.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+			LEFT JOIN JK.T_JK_RECONSIDER_APPLY LI2 ON A.LOAN_CODE = LI2.LOAN_CODE 
+		ORDER BY 
+			<if test="orderBy != null and orderBy != ''">
+				${orderBy},
+			</if>
+			LOAN_CODE DESC
+	</select>
+	<!-- 查询单条借款的状态 -->
+	<select id="getOneDone" resultMap="entityMap" parameterType="com.creditharmony.approve.verify.entity.ex.VerifyParamEx">
+		SELECT A.PRODUCTTYPENAME AS productTypeName,A.LOAN_URGENT_FLAG,A.PROVINCENAME AS provinceName,A.CITYNAME AS cityName,A.DICT_LOAN_STATUS,
+        A.ORG_NAME,A.LOAN_CUSTOMER_NAME,A.LOAN_CODE,A.APPLY_ID,A.CUSTOMER_CERT_NUM,A.PRODUCT_TYPE,RESULT,
+        A.LOAN_APPLY_AMOUNT,A.OUTTO_LOAN_TIME,A.MODIFY_TIME,A.AUDIT_AMOUNT,A.loaninfo_oldornew_flag,B.COUNT COBORROWE_COUNT
+		FROM
+		(SELECT LI.LOAN_CUSTOMER_NAME,LC.CUSTOMER_CERT_NUM,PC1.AREA_NAME PROVINCENAME, PC2.AREA_NAME CITYNAME,O.NAME ORG_NAME,
+		P.PRODUCT_NAME PRODUCTTYPENAME, D.LABEL LOAN_URGENT_FLAG,T.AUDIT_AMOUNT,LI.OUTTO_LOAN_TIME, T.MODIFY_TIME,
+		D4.LABEL AS DICT_LOAN_STATUS,
+		CONCAT(D3.LABEL,'(',D2.LABEL,')') RESULT,li.LOAN_CODE, 
+		CASE WHEN LI2.APPLY_ID IS NULL THEN LI.APPLY_ID ELSE LI2.APPLY_ID END APPLY_ID, 
+		T.PRODUCT_TYPE, LI.LOAN_APPLY_AMOUNT,LI.loaninfo_oldornew_flag
+		FROM JK.T_JK_LOAN_INFO LI 
+		LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON LI.LOAN_CODE = LC.LOAN_CODE 
+		LEFT JOIN JK.T_GL_ORG O ON LI.LOAN_STORE_ORGID = O.ID 
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID 
+		LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID 		
+		LEFT JOIN JK.T_GL_DICT D ON D.VALUE = LI.LOAN_URGENT_FLAG AND D.TYPE = 'jk_urgent_flag' 
+		LEFT JOIN JK.T_JK_AUDIT_RESULT T ON LI.result_id=T.ID
+		LEFT JOIN JK.T_GL_JK_PRODUCT P ON LI.PRODUCT_TYPE = P.PRODUCT_CODE 
+		LEFT JOIN JK.T_GL_DICT D2 ON D2.VALUE = LI.APPROVE_RESULT AND D2.TYPE = 'jk_check_result' 
+		LEFT JOIN JK.T_GL_DICT D3 ON D3.VALUE = LI.APPROVE_STEP AND D3.TYPE = 'jk_check_type'
+		LEFT JOIN JK.T_GL_DICT D4 ON D4.VALUE = LI.DICT_LOAN_STATUS AND D4.TYPE = 'jk_loan_apply_status'
+		LEFT JOIN JK.T_JK_RECONSIDER_APPLY LI2 ON LI.LOAN_CODE = LI2.LOAN_CODE 
+		<where>
+			1=1
+			<if test="loanCode != null and loanCode != ''">
+				AND LI.LOAN_CODE = #{loanCode}
+			</if>
+			<if test="customerName != null and customerName != ''">
+				AND LI.LOAN_CUSTOMER_NAME = #{customerName}
+			</if>
+			<if test="customerCertNum != null and customerCertNum != ''">
+				AND LC.CUSTOMER_CERT_NUM = #{customerCertNum}
+			</if>
+		</where>
+		) A  LEFT JOIN JK.T_JK_LOAN_COBORROWER B ON A.LOAN_CODE=B.LOAN_CODE		
+		GROUP BY A.PRODUCTTYPENAME,A.LOAN_URGENT_FLAG,A.PROVINCENAME,A.CITYNAME,A.DICT_LOAN_STATUS,
+		       A.ORG_NAME,A.LOAN_CUSTOMER_NAME,A.LOAN_CODE,A.APPLY_ID,A.CUSTOMER_CERT_NUM,A.PRODUCT_TYPE,
+		       A.LOAN_APPLY_AMOUNT,A.outto_loan_time,A.MODIFY_TIME,A.AUDIT_AMOUNT,A.loaninfo_oldornew_flag,RESULT
+		ORDER BY A.outto_loan_time DESC,A.LOAN_CODE DESC
+	</select>
+	<!-- 获取所有已办的总数 -->
+	<select id="getCount" resultType="java.lang.Integer">
+		SELECT COUNT(A.LOAN_CODE)
+			FROM JK.T_JK_LOAN_INFO A
+			LEFT JOIN JK.T_JK_LOAN_CUSTOMER LC ON A.LOAN_CODE = LC.LOAN_CODE
+			LEFT JOIN JK.T_JK_AUDIT_RESULT T ON A.RESULT_ID=T.ID
+			LEFT JOIN JK.T_GL_JK_PRODUCT P ON A.PRODUCT_TYPE = P.PRODUCT_CODE 
+			LEFT JOIN JK.T_GL_ORG O ON A.LOAN_STORE_ORGID = O.ID 
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC1 ON PC1.AREA_CODE = O.PROVINCE_ID 
+			LEFT JOIN JK.T_GL_PROVINCE_CITY PC2 ON PC2.AREA_CODE = O.CITY_ID
+			LEFT JOIN JK.T_GL_USER USER1 ON A.LOAN_MANAGERCODE = USER1.ID
+			LEFT JOIN JK.T_GL_USER USER2 ON A.LOAN_TEAM_MANAGERCODE = USER2.ID	
+			<where>
+				A.RECORD_ID IS NOT NULL
+				<if test="loanCustomerName != null and loanCustomerName != ''">
+					AND A.LOAN_CUSTOMER_NAME LIKE CONCAT('%',#{loanCustomerName},'%')  
+				</if>
+				<if test="dictLoanStatus != null and dictLoanStatus != ''">
+					AND  <![CDATA[ A.APPROVE_RESULT like CONCAT('%',#{dictLoanStatus}) ]]>
+					<if test="dictLoanStatus == 2">
+				        AND A.APPROVE_RESULT != '112' AND A.APPROVE_RESULT != '82'
+				    </if>
+				     <if test="dictLoanStatus == 1">
+				        AND (A.APPROVE_RESULT = '11' OR A.APPROVE_RESULT = '51' OR A.APPROVE_RESULT = '91')
+				    </if>
+				</if>
+				<if test="minCustomerIntoTime != null and minCustomerIntoTime != ''">
+					AND <![CDATA[ A.OUTTO_LOAN_TIME >= #{minCustomerIntoTime} ]]>
+				</if>
+				<if test="maxCustomerIntoTime != null and maxCustomerIntoTime != ''">
+					AND <![CDATA[ A.OUTTO_LOAN_TIME - 1 < #{maxCustomerIntoTime} ]]>
+				</if>
+				<if test="transactorCode != null and transactorCode != ''">
+					AND EXISTS(SELECT NULL FROM JK.T_JK_AUDIT_RECORD B WHERE A.LOAN_CODE=B.LOAN_CODE AND B.TRANSACTOR_CODE=#{transactorCode})
+				</if>
+				<if test="productType != null and productType != ''">
+					AND P.PRODUCT_CODE = #{productType}
+				</if>
+				<if test="customerCertNum != null and customerCertNum != ''">
+					AND LC.CUSTOMER_CERT_NUM LIKE CONCAT(CONCAT('%',#{customerCertNum}),'%')
+				</if>
+				<if test="province != null and province != ''">
+					AND PC1.AREA_CODE = #{province}
+					<if test="city != null and city != ''">
+						AND PC2.AREA_CODE = #{city}
+					</if>
+				</if>
+				<if test="orgName != null and orgName != ''">
+						AND O.NAME = #{orgName}
+					</if>
+				<if test="minLoanAuditTime != null and minLoanAuditTime != ''">
+						AND <![CDATA[ T.CREATE_TIME >= #{minLoanAuditTime} ]]>
+				</if>
+				<if test="maxLoanAuditTime != null and maxLoanAuditTime != ''">
+						AND <![CDATA[ T.CREATE_TIME -1< #{maxLoanAuditTime} ]]>
+				</if>
+				<if test="offendSalesName != null and offendSalesName != ''">
+						AND  USER1.NAME LIKE CONCAT ('%',#{offendSalesName},'%')
+				</if>
+				<if test="loanTeamEmpcode != null and loanTeamEmpcode != ''">
+						AND USER2.NAME LIKE CONCAT ('%',#{loanTeamEmpcode},'%')
+				</if>
+			</where>
+	
+	</select>
+	<select id="getOrgIds" resultType="java.lang.String"  parameterType="java.lang.String">
+		WITH RECURSIVE IDS AS
+		(
+			SELECT ID
+			FROM JK.T_GL_ORG
+			WHERE ID=#{orgId}
+			UNION 
+			SELECT A.ID FROM JK.T_GL_ORG A INNER JOIN IDS ON IDS.ID=A.PARENT_ID
+		)
+		SELECT ID FROM IDS
+	</select>
+	<!--获取这些部门 的id ("6300000001", "信借审批部"),("6300000003", "信借终审"),("6300000004", "信借高级终审"),("6300000005", "复议审批"),("6300000007", "复议终审"),("6300000008", "反欺诈排查部"),  -->
+	<select id="getCheckAfraudRecheckOrgIds" resultType="java.lang.String" >
+		WITH RECURSIVE IDS AS
+		(
+			SELECT ID
+			FROM JK.T_GL_ORG
+			WHERE type in  ('6300000001','6300000003','6300000004','6300000005','6300000007','6300000008')
+			UNION 
+			SELECT A.ID FROM JK.T_GL_ORG A INNER JOIN IDS ON IDS.ID=A.PARENT_ID
+		)
+		SELECT ID FROM IDS
+	</select>
+	<!-- 获取这些部门 下的用户 ("6300000001", "信借审批部"),("6300000003", "信借终审"),("6300000004", "信借高级终审"),("6300000005", "复议审批"),("6300000007", "复议终审"),("6300000008", "反欺诈排查部")-->
+	<select id="getApproveUserList" resultType="java.util.Map" >
+		SELECT 
+			name,id
+		FROM 
+			t_gl_user 
+		where 
+			department_id in 
+        <foreach collection="list" item="employeeId" index="index"
+            open="(" close=")" separator=",">
+            #{employeeId}
+        </foreach>
+	</select>
+</mapper>

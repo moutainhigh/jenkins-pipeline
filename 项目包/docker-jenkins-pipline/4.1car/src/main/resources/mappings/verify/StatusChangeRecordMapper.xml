@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.verify.dao.StatusChangeRecordDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+    <id column="id" property="id" jdbcType="NUMERIC" />
+    <result column="apply_id" property="applyId" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="dict_loan_status" property="dictLoanStatus" jdbcType="VARCHAR" />
+    <result column="operate_step" property="operateStep" jdbcType="VARCHAR" />
+    <result column="dict_sys_flag" property="dictSysFlag" jdbcType="VARCHAR" />
+    <result column="operate_result" property="operateResult" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="operate_role_id" property="operaterRoleId" jdbcType="VARCHAR" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, apply_id, loan_code, dict_loan_status, operate_step, dict_sys_flag, operate_result, 
+    operator, operate_role_id, org_code, operate_time, remark, create_by, create_time, 
+    modify_by, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_jk_loan_status_his
+    where id = #{id,jdbcType=NUMERIC}
+  </select>
+  
+  <select id="historyGetByLoanCode" resultMap="BaseResultMap" parameterType="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+	select
+		A.ID,
+		A.LOAN_CODE, 
+		A.OPERATOR,    
+		A.OPERATE_TIME,
+		A.OPERATE_STEP,
+		A.DICT_LOAN_STATUS,
+		A.DICT_SYS_FLAG,
+		A.OPERATE_RESULT,
+		A.REMARK
+	FROM JK.T_JK_LOAN_STATUS_HIS A
+	WHERE A.LOAN_CODE = #{loanCode,jdbcType=VARCHAR}
+	ORDER BY A.MODIFY_TIME DESC
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from jk.t_jk_loan_status_his
+    where id = #{id,jdbcType=NUMERIC}
+  </delete>
+  <insert id="insert" parameterType="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+    insert into jk.t_jk_loan_status_his (id, apply_id, loan_code, 
+      dict_loan_status, operate_step, dict_sys_flag, 
+      operate_result, operator, operate_role_id, 
+      org_code, operate_time, remark, 
+      create_by, create_time, modify_by, 
+      modify_time)
+    values (#{id,jdbcType=NUMERIC}, #{applyId,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, 
+      #{dictLoanStatus,jdbcType=VARCHAR}, #{operateStep,jdbcType=VARCHAR}, #{dictSysFlag,jdbcType=VARCHAR}, 
+      #{operateResult,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operaterRoleId,jdbcType=VARCHAR}, 
+      #{orgCode,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+    insert into jk.t_jk_loan_status_his
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="applyId != null" >
+        apply_id,
+      </if>
+      <if test="loanCode != null" >
+        loan_code,
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status,
+      </if>
+      <if test="operateStep != null" >
+        operate_step,
+      </if>
+      <if test="dictSysFlag != null" >
+        dict_sys_flag,
+      </if>
+      <if test="operateResult != null" >
+        operate_result,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="operaterRoleId != null" >
+        operate_role_id,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+      <if test="operateTime != null" >
+        operate_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=NUMERIC},
+      </if>
+      <if test="applyId != null" >
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="operateStep != null" >
+        #{operateStep,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSysFlag != null" >
+        #{dictSysFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operateResult != null" >
+        #{operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operaterRoleId != null" >
+        #{operaterRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+    update jk.t_jk_loan_status_his
+    <set >
+      <if test="applyId != null" >
+        apply_id = #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCode != null" >
+        loan_code = #{loanCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictLoanStatus != null" >
+        dict_loan_status = #{dictLoanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="operateStep != null" >
+        operate_step = #{operateStep,jdbcType=VARCHAR},
+      </if>
+      <if test="dictSysFlag != null" >
+        dict_sys_flag = #{dictSysFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operateResult != null" >
+        operate_result = #{operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operaterRoleId != null" >
+        operate_role_id = #{operaterRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null" >
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.creditharmony.approve.verify.entity.StatusChangeRecord" >
+    update jk.t_jk_loan_status_his
+    set apply_id = #{applyId,jdbcType=VARCHAR},
+      loan_code = #{loanCode,jdbcType=VARCHAR},
+      dict_loan_status = #{dictLoanStatus,jdbcType=VARCHAR},
+      operate_step = #{operateStep,jdbcType=VARCHAR},
+      dict_sys_flag = #{dictSysFlag,jdbcType=VARCHAR},
+      operate_result = #{operateResult,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operate_role_id = #{operaterRoleId,jdbcType=VARCHAR},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+  <select id="getFlag" parameterType="java.lang.String" resultType="java.lang.Integer">
+      SELECT COUNT(LOAN_CODE)
+  	  FROM JK.T_JK_LOAN_STATUS_HIS WHERE LOAN_CODE=#{loanCode} AND DICT_LOAN_STATUS='60'
+  </select>
+</mapper>

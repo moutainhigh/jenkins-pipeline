@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.carloan.dao.VehicleInfoDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.carloan.entity.VehicleInfo" >
+    <id column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="plate_numbers" property="plateNumbers" jdbcType="VARCHAR" />
+    <result column="suggest_loan_amount" property="suggestLoanAmount" jdbcType="NUMERIC" />
+    <result column="appraiser_name" property="appraiserName" jdbcType="VARCHAR" />
+    <result column="store_assess_amount" property="storeAssessAmount" jdbcType="NUMERIC" />
+    <result column="commercial_maturity_date" property="commercialMaturityDate" jdbcType="DATE" />
+    <result column="similar_market_price" property="similarMarketPrice" jdbcType="NUMERIC" />
+    <result column="factory_date" property="factoryDate" jdbcType="DATE" />
+    <result column="strong_risk_maturity_date" property="strongRiskMaturityDate" jdbcType="DATE" />
+    <result column="annual_check_date" property="annualCheckDate" jdbcType="DATE" />
+    <result column="frame_number" property="frameNumber" jdbcType="VARCHAR" />
+    <result column="vehicle_plant_model" property="vehiclePlantModel" jdbcType="VARCHAR" />
+    <result column="vehicle_brand_model" property="vehicleBrandModel" jdbcType="VARCHAR" />
+    <result column="mileage" property="mileage" jdbcType="NUMERIC" />
+    <result column="first_registration_date" property="firstRegistrationDate" jdbcType="DATE" />
+    <result column="displacemint" property="displacemint" jdbcType="NUMERIC" />
+    <result column="car_body_color" property="carBodyColor" jdbcType="VARCHAR" />
+    <result column="variator" property="variator" jdbcType="VARCHAR" />
+    <result column="engine_number" property="engineNumber" jdbcType="VARCHAR" />
+    <result column="change_num" property="changeNum" jdbcType="VARCHAR" />
+    <result column="ownership_certificate_number" property="ownershipCertificateNumber" jdbcType="VARCHAR" />
+    <result column="modified_situation" property="modifiedSituation" jdbcType="VARCHAR" />
+    <result column="outer_inspection" property="outerInspection" jdbcType="VARCHAR" />
+    <result column="illegal_accident" property="illegalAccident" jdbcType="VARCHAR" />
+    <result column="vehicle_assessment" property="vehicleAssessment" jdbcType="VARCHAR" />
+    <result column="dict_oper_status" property="dictOperStatus" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="extension_assess_amount" property="extensionAssessAmount" jdbcType="NUMERIC" />
+    <result column="extension_suggest_amount" property="extensionSuggestAmount" jdbcType="NUMERIC" />
+    <result column="clivta_company" property="clivtaCompany" jdbcType="VARCHAR" />
+    <result column="clivta_num" property="clivtaNum" jdbcType="VARCHAR" />
+    <result column="commericial_company" property="commericialCompany" jdbcType="VARCHAR" />
+    <result column="commericial_num" property="commericialNum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    loan_code, id, plate_numbers, suggest_loan_amount, appraiser_name, store_assess_amount, 
+    commercial_maturity_date, similar_market_price, factory_date, strong_risk_maturity_date, 
+    annual_check_date, frame_number, vehicle_plant_model, vehicle_brand_model, mileage, 
+    first_registration_date, displacemint, car_body_color, variator, engine_number, change_num, 
+    ownership_certificate_number, modified_situation, outer_inspection, illegal_accident, 
+    vehicle_assessment, dict_oper_status, remark, create_by, create_time, modify_by, 
+    modify_time, extension_assess_amount, extension_suggest_amount,clivta_company,clivta_num,commericial_company,commericial_num
+  </sql>
+  <select id="findByLoanCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jk.t_cj_vehicle_info
+    where loan_code = #{loanCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.antifraud.dao.AntifraudRepeatDao" >
+
+  <!--wanglidong+获取查重列表 -->
+  <select id="getAntifraudRepeat" parameterType="java.lang.String" resultType="com.creditharmony.approve.antifraud.entity.AntifraudRepeat" >
+		select 
+			repeat.id, 
+			repeat.rules_code, 
+			repeat.loan_code_now, 
+			repeat.loan_code, 
+			repeat.customer_name,  
+			repeat.repeat_into_time,  
+			repeat.repeat_result_msg, 
+			repeat.repeat_relation,
+			repeat.repeat_cert_num,
+			repeat.repeat_name_diff_flag,
+			c.label as repeat_result,	
+			to_afraud.to_afraud_flag
+		from 
+			(select * from jk.t_jk_antifraud_repeat where loan_code_now =  #{loanCode}  and rules_code = #{rulesCode} ) repeat
+		FULL JOIN 
+		(
+			select dict.label,a.dict_loan_status,a.loan_code from t_jk_audit_record a join 
+			(
+				SELECT  loan_code, MAX(modify_time) max_day  FROM t_jk_audit_record where loan_code in
+				(select loan_code from t_jk_antifraud_repeat where loan_code_now=#{loanCode} and rules_code=#{rulesCode})
+				group by loan_code
+			) b 
+			on a.loan_code=b.loan_code and a.modify_time=max_day 
+			left join
+				t_gl_dict dict
+			on
+				a.dict_loan_status = dict.value and dict.type = 'jk_loan_apply_status'
+		) as c
+		
+		on repeat.loan_code = c.loan_code
+		FULL JOIN 
+		(
+			
+			select 
+				rept.loan_code as acode,count(judge.loan_code) as to_afraud_flag
+			from 
+				(select loan_code from t_jk_antifraud_repeat where loan_code_now =  #{loanCode} and  rules_code =  #{rulesCode} ) rept
+			left join
+				t_jk_antifraud_judge judge 
+			on
+				rept.loan_code = judge.loan_code 
+			group by rept.loan_code
+			
+		) as to_afraud
+		on repeat.loan_code = to_afraud.acode
+		where  
+			repeat.rules_code = #{rulesCode}  and loan_code_now =  #{loanCode}
+
+  </select>  
+</mapper>

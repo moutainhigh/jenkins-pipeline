@@ -1,0 +1,7 @@
+From tomcat:7-jre7
+MAINTAINER djyesu@gmail.com
+ADD cluster/server.xml /usr/local/tomcat/conf/server.xml
+ADD cluster/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
+ADD cluster/ROOT /usr/local/tomcat/webapps/ROOT/test
+EXPOSE 8080
+ADD chp-approve.war /usr/local/tomcat/webapps/

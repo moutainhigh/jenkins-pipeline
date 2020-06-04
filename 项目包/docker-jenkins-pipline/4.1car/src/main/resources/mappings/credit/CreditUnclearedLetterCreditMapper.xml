@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.creditharmony.approve.credit.dao.CreditUnclearedLetterCreditDao" >
+  <resultMap id="BaseResultMap" type="com.creditharmony.approve.credit.entity.CreditUnclearedLetterCredit" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_code" property="loanCode" jdbcType="VARCHAR" />
+    <result column="loan_org" property="loanOrg" jdbcType="VARCHAR" />
+    <result column="transaction_count" property="transactionCount" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="NUMERIC" />
+    <result column="amount" property="amount" jdbcType="NUMERIC" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_code, loan_org, transaction_count, balance, amount, operation, create_by, 
+    create_time, modify_by, modify_time
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jk.t_jk_credit_uncleared_letter_credit
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertCreditUnclearedLetterCredit" parameterType="com.creditharmony.approve.credit.entity.CreditUnclearedLetterCredit" >
+    insert into jk.t_jk_credit_uncleared_letter_credit (id, loan_code, loan_org, 
+      transaction_count, balance, amount, 
+      operation, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=VARCHAR}, #{loanCode,jdbcType=VARCHAR}, #{loanOrg,jdbcType=VARCHAR}, 
+      #{transactionCount,jdbcType=INTEGER}, #{balance,jdbcType=NUMERIC}, #{amount,jdbcType=NUMERIC}, 
+      #{operation,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  
+    <!-- 根据借款编号查询数据 -->
+	<select id="selectByLoanCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			jk.t_jk_credit_uncleared_letter_credit
+		where 
+			loan_code = #{loanCode,jdbcType=VARCHAR}
+			order by modify_time desc
+	</select>
+	
+	<!-- 根据借款编码删除信息 -->
+	<delete id="deleteByLoanCode" parameterType="java.lang.String">
+		delete from jk.t_jk_credit_uncleared_letter_credit
+		where loan_code = #{loanCode,jdbcType=VARCHAR}
+	</delete>
+</mapper>
